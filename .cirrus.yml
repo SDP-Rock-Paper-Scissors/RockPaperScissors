@@ -29,5 +29,5 @@ check_android_task:
   check_script: ./gradlew check connectedCheck
   report_codeclimate_script: |
     export JACOCO_SOURCE_PATH=app/src/main/java/
-    ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
+    ./cc-test-reporter format-coverage ./app/build/reports/coverage/androidTest/debug/report.xml --input-type jacoco
     ./cc-test-reporter upload-coverage
