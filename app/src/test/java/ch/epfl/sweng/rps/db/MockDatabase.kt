@@ -1,8 +1,9 @@
 package ch.epfl.sweng.rps.db
 
-class MockDatabase : FirestoreDatabase() {
+class MockDatabase(val mockedCurrentUid: String) : FirestoreDatabase() {
+
 
     override fun getCurrentUid(): String {
-        return "this-is-my-uid"
+        return mockedCurrentUid
     }
 }

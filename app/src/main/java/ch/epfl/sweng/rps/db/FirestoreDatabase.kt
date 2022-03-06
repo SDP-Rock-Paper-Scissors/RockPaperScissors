@@ -41,7 +41,8 @@ open class FirestoreDatabase : Database {
         }
 
     override fun createUser(name: String, email: String?): Task<Void> {
-        return usersCollection.document(getCurrentUid()!!).set(
+        val uid = getCurrentUid()!!
+        return usersCollection.document(uid).set(
             User(
                 email = email,
                 username = name,
