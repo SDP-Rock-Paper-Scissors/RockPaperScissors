@@ -23,4 +23,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun displayPersonalStats(view: View){
+        val intent = Intent(this, PersonalStats::class.java)
+        startActivity(intent)
+
+    }
+
 }

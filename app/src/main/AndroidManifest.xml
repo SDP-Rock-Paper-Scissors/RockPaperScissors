@@ -10,9 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RockPaperScissors">
         <activity
-            android:name=".DisplayGreeting"
-            android:parentActivityName=".MainActivity"
+            android:name=".MatchDetail"
             android:exported="false" />
+        <activity
+            android:name=".PersonalStats"
+            android:exported="false" />
+        <activity
+            android:name=".DisplayGreeting"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
