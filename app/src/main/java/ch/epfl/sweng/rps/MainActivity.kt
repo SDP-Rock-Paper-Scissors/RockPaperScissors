@@ -23,4 +23,9 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun displayGame(view: View){
+        val intent = Intent(this, RPSBasic::class.java)
+        startActivity(intent)
+    }
+
 }
