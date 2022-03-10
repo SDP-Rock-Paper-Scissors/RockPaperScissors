@@ -1,9 +1,5 @@
 package ch.epfl.sweng.rps.models
 
-import ch.epfl.sweng.rps.serialization.Extensions.toJsonElement
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
 
 /**
  * Represents a game.
@@ -11,7 +7,6 @@ import kotlinx.serialization.json.JsonObject
  * @property players The
  * @property mode The time limit, if any, in seconds.
  */
-@Serializable
 data class Game(
     val uid: String,
     val players: List<Uid>,
@@ -27,25 +22,14 @@ data class Game(
      * @property type The type of opponents
      * @property time The time limit, if any, in seconds.
      */
-    @Serializable
     data class Mode(val playerCount: Int, val type: Type, val time: Int?, val rounds: Int) {
         enum class Type {
             LOCAL, ONLINE, PC
         }
     }
 
-    @Serializable
     data class Uid(
         val uid: String,
         val isComputer: Boolean = false
     )
-
-    companion object {
-        fun fromJson(map: Map<String, Any>) =
-            Json.decodeFromJsonElement(Game.serializer(), map.toJsonElement())
-    }
-
-    fun toJSON(): Map<String, Any> {
-        return Json.encodeToJsonElement(Game.serializer(), this) as JsonObject
-    }
 }
