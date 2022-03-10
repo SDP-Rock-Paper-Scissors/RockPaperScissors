@@ -20,6 +20,7 @@ class PersonalStats : AppCompatActivity() {
         val actionbar = supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
         addNewRow("0b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
+        addNewRow("12345","2022-03-10","Jinglun Pan", "3", "2:1")
     }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -38,12 +39,12 @@ class PersonalStats : AppCompatActivity() {
         row.isClickable
         row.setPadding(dpAsPixels.toInt())
         row.tag = uuid
-        row.setOnClickListener(View.OnClickListener { view ->
+        row.setOnClickListener {
             val intent = Intent(this, MatchDetail::class.java)
             intent.putExtra("matchUuid", row.tag as String)
             startActivity(intent)
 
-        })
+        }
         val params = LayoutParams(WRAP_CONTENT, WRAP_CONTENT, 1f)
         val dateBlank = TextView(this)
         val opponentBlank = TextView(this)
