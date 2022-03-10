@@ -4,7 +4,6 @@ import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
 
@@ -19,7 +18,7 @@ open class FirestoreRepository : Repository, FirebaseReferences {
 
     override suspend fun getUser(uid: String): User {
         val user = usersCollection.document(uid).get().await()
-        return user.toObject<User>() ?: throw Exception("No document found for uid $uid")
+        return User.fromJson(user.data ?: throw Exception("No document found for uid $uid"))
     }
 
     override suspend fun getUserProfilePictureUrl(uid: String): Uri? {
@@ -36,10 +35,10 @@ open class FirestoreRepository : Repository, FirebaseReferences {
                 email = email,
                 username = name,
                 friends = listOf(),
-                gamesHistoryPublic = true,
+                gamesHistoryPrivacy = User.Privacy.PUBLIC,
                 hasProfilePhoto = false,
                 uid = uid
-            )
+            ).toJSON()
         ).await()
     }
 

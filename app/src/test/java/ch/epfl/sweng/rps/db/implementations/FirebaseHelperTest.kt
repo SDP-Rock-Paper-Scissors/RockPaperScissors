@@ -12,12 +12,12 @@ internal class FirebaseHelperTest {
         val name = "Hamasaki"
         assertEquals(
             hashMapOf(
-                User.Field.gamesHistoryPublic.value to true,
-                User.Field.username.value to name,
+                User.Field.GAMES_HISTORY_POLICY.value to true,
+                User.Field.USERNAME.value to name,
             ),
             FirebaseHelper.processUserArguments(
-                User.Field.gamesHistoryPublic to true,
-                User.Field.username to name
+                User.Field.GAMES_HISTORY_POLICY to true,
+                User.Field.USERNAME to name
             )
         )
     }
