@@ -5,6 +5,10 @@ plugins {
 }
 apply plugin: 'com.google.gms.google-services'
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 android {
     compileSdk 31
 
@@ -65,6 +69,16 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:4.4.0'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { details ->
+            if ('org.jacoco' == details.requested.group) {
+                details.useVersion "0.8.7"
+            }
+        }
+    }
 }
 
 tasks.withType(Test) {
