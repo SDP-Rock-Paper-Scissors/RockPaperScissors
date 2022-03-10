@@ -20,15 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".main_activity"
-            android:exported="false"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
-        <activity
-            android:name=".DisplayGreeting"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
