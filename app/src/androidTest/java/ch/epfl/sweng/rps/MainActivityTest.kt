@@ -22,10 +22,6 @@ class MainActivityTest {
     @Test
     fun pressingGreetingButton() {
         val name = "John"
-        Espresso.onView(ViewMatchers.withId(R.id.nameInput)).perform(ViewActions.clearText())
-            .perform(ViewActions.typeText(name))
-        Espresso.closeSoftKeyboard()
-        Espresso.onView(ViewMatchers.withId(R.id.greetingButton)).perform(click())
-        Espresso.onView(ViewMatchers.withId(R.id.greetingText)).check(matches(withText(name)))
+
     }
 }
