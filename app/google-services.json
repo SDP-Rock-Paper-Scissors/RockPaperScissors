@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "896605409351",
+    "project_id": "rps-sdp",
+    "storage_bucket": "rps-sdp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896605409351:android:2e2400835d053e3463a162",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.rps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "896605409351-a1hlsfr6dkigthpbeul0ug46c8774uoa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdcohQUAuqHrgmKyTD8Tx2JOxuOXWBn6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896605409351-a1hlsfr6dkigthpbeul0ug46c8774uoa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
