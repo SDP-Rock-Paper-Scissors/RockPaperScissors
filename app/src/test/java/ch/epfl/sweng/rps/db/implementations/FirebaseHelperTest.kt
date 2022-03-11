@@ -9,7 +9,7 @@ import org.junit.Test
 internal class FirebaseHelperTest {
     @Test
     fun testProcessUserArgs() {
-        val name = "Hamasaki"
+        val name = "Rei"
         assertEquals(
             hashMapOf(
                 User.Field.GAMES_HISTORY_POLICY.value to true,
