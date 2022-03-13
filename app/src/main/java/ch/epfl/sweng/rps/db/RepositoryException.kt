@@ -11,4 +11,10 @@ class RepositoryException : Exception {
         constructor(uid: String?) : super("User $uid not logged in")
         constructor(cause: Throwable) : super("User not logged in", cause)
     }
+
+    class ForbiddenOperationException : Exception {
+        constructor() : super("Forbidden operation")
+        constructor(message: String) : super("Forbidden operation: $message")
+        constructor(cause: Throwable) : super(cause)
+    }
 }

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.db
 
 import android.net.Uri
+import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.User
 
 interface Repository {
@@ -14,8 +15,11 @@ interface Repository {
     suspend fun getUserProfilePictureUrl(uid: String): Uri?
 
     suspend fun createUser(name: String, email: String?): Unit
-    suspend fun addFriend(uid: String)
+    suspend fun sendFriendRequest(uid: String)
 
-
-    class NotLoggedInException
+    suspend fun listFriendRequests(): List<FriendRequest>
+    suspend fun getFriends(): List<String>
+    suspend fun acceptFriendRequest(userUid: String)
+    suspend fun acceptFriendRequest(friendRequest: FriendRequest) =
+        acceptFriendRequest(friendRequest.from)
 }
