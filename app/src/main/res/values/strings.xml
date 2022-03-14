@@ -1,8 +1,5 @@
 <resources>
-    <string name="app_name">MyFriendsPage</string>
-    <string name="friends">FRIENDS</string>
-
-     <string name="app_name">Rock Paper Scissors</string>
+    <string name="app_name">Rock Paper Scissors</string>
     <string name="title_activity_main">main_activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,5 +11,4 @@
     <string name="menu_home">Play</string>
     <string name="menu_leaderboard">Leaderboard</string>
     <string name="menu_statistics">Statistics</string>
-    
 </resources>
