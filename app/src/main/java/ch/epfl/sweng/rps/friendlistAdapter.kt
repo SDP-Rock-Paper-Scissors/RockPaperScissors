@@ -1,4 +1,4 @@
-package com.github.bhvrgav.myfriendspage
+package ch.epfl.sweng.rps
 
 import android.view.LayoutInflater
 import android.view.View

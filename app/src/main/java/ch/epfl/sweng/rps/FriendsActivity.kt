@@ -1,9 +1,10 @@
-package com.github.bhvrgav.myfriendspage
+package ch.epfl.sweng.rps
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ch.epfl.sweng.rps.R
 
 private lateinit var newRecyclerView : RecyclerView
 private lateinit var newArrayList: ArrayList<FriendsInfo>
