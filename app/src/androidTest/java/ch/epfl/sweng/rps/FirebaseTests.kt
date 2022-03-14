@@ -52,28 +52,26 @@ class FirebaseTests {
     private val isAnException: Matcher<Exception> = any(Exception::class.java)
 
     @Test
-    fun testThrowsWhenNotLoggedIn() {
-        runTest(UnconfinedTestDispatcher()) {
-            FirebaseAuth.getInstance().signOut()
+    fun testThrowsWhenNotLoggedIn() = runTest(UnconfinedTestDispatcher()) {
+        FirebaseAuth.getInstance().signOut()
 
-            assertEquals(false, db.isLoggedIn)
-            thrown.expect(Exception::class.java)
-            db.getCurrentUid();
+        assertEquals(false, db.isLoggedIn)
+        thrown.expect(Exception::class.java)
+        db.getCurrentUid();
 
-            thrown.expect(isAnException)
-            db.updateUser(User.Field.USERNAME to "test")
+        thrown.expect(isAnException)
+        db.updateUser(User.Field.USERNAME to "test")
 
-            thrown.expect(Exception::class.java)
-            db.createUser("user1", "test@example.com")
+        thrown.expect(Exception::class.java)
+        db.createUser("user1", "test@example.com")
 
-            thrown.expect(Exception::class.java)
-            db.sendFriendRequestTo("user1")
+        thrown.expect(Exception::class.java)
+        db.sendFriendRequestTo("user1")
 
-            thrown.expect(Exception::class.java)
-            db.listFriendRequests()
+        thrown.expect(Exception::class.java)
+        db.listFriendRequests()
 
-            thrown.expect(Exception::class.java)
-            db.acceptFriendRequest("user1")
-        }
+        thrown.expect(Exception::class.java)
+        db.acceptFriendRequest("user1")
     }
 }
