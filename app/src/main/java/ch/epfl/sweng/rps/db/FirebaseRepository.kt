@@ -8,7 +8,7 @@ import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
 
-open class FirestoreRepository : Repository, FirebaseReferences {
+open class FirebaseRepository(env: Env = Env.PROD) : Repository, FirebaseReferences(env) {
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         val arguments = FirebaseHelper.processUserArguments(*pairs)
 
@@ -38,7 +38,7 @@ open class FirestoreRepository : Repository, FirebaseReferences {
 
     override fun rawCurrentUid(): String? = FirebaseAuth.getInstance().currentUser?.uid
 
-    override suspend fun sendFriendRequest(uid: String) {
+    override suspend fun sendFriendRequestTo(uid: String) {
         usersFriendRequestOfUid(uid)
             .add(FriendRequest(from = getCurrentUid())).await()
     }
@@ -56,12 +56,18 @@ open class FirestoreRepository : Repository, FirebaseReferences {
             .map { it.toObject<FriendRequest>()!!.from }
     }
 
-    override suspend fun acceptFriendRequest(s: String) {
-        usersFriendRequestOfUid(s)
+    override suspend fun acceptFriendRequest(userUid: String) {
+        usersFriendRequestOfUid(userUid)
             .whereEqualTo("from", getCurrentUid()).limit(1)
             .get().await().documents.first().reference.update("accepted", true).await()
     }
 
+    suspend fun clearDevEnv() {
+        if (env != Env.DEV) {
+            throw UnsupportedOperationException("This method is only available in a dev environment")
+        }
+        root.delete().await()
+    }
 
 }
 

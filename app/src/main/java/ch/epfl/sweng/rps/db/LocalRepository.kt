@@ -7,7 +7,7 @@ import com.google.firebase.Timestamp
 
 class LocalRepository(private var uid: String? = null) : Repository {
 
-    fun setCurrentUid(newUid: String) {
+    fun setCurrentUid(newUid: String?) {
         uid = newUid
     }
 
@@ -15,20 +15,6 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
     private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
 
-    /*
-    * data class User(
-    val username: String?,
-
-    val uid: String,
-
-    val gamesHistoryPrivacy: Privacy,
-
-    val friends: List<String>,
-
-    val hasProfilePhoto: Boolean,
-
-    val email: String?
-) {*/
     @Suppress("UNCHECKED_CAST")
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         var user = getUser(getCurrentUid())
@@ -69,7 +55,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
         users[user.uid] = user
     }
 
-    override suspend fun sendFriendRequest(uid: String) {
+    override suspend fun sendFriendRequestTo(uid: String) {
         val map = (friendRequests[uid] ?: mutableMapOf())
         map[getCurrentUid()] = FriendRequest(getCurrentUid(), Timestamp.now())
         friendRequests[uid] = map
