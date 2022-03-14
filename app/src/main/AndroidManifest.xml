@@ -9,19 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RockPaperScissors">
-        <activity
+         <activity
             android:name=".MatchDetail"
             android:exported="false" />
         <activity
             android:name=".PersonalStats"
             android:exported="false" />
         <activity
-            android:name=".DisplayGreeting"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.RockPaperScissors.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
