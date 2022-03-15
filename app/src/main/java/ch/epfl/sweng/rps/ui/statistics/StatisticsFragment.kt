@@ -1,13 +1,21 @@
 package ch.epfl.sweng.rps.ui.statistics
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
+
 
 class StatisticsFragment : Fragment() {
 
@@ -16,25 +24,70 @@ class StatisticsFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(StatisticsViewModel::class.java)
+        val view: View  = inflater.inflate(R.layout.fragment_statistics, container, false)
 
-        _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textStatistics
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        addNewRow(view,"0b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
+
+    }
+
+    private fun addNewRow(view: View, uuid: String, date:String, opponent:String, mode:String, score: String ) {
+        val sizeInDp = 5
+        val statsTable = view.findViewById<TableLayout>(R.id.statsTable)
+        val row = TableRow(activity)
+        row.setBackgroundColor(
+            Color.parseColor("#F0F7F7"))
+        val scale = resources.displayMetrics.density
+        val dpAsPixels = (sizeInDp * scale + 0.5f)
+        row.isClickable
+        row.setPadding(dpAsPixels.toInt())
+        row.tag = uuid
+        /*
+        row.setOnClickListener {
+
+
+            val intent = Intent(this, MatchDetail::class.java)
+            intent.putExtra("matchUuid", row.tag as String)
+            startActivity(intent)
+
+        }*/
+        val params = TableRow.LayoutParams(
+            TableRow.LayoutParams.WRAP_CONTENT,
+            TableRow.LayoutParams.WRAP_CONTENT,
+            1f
+        )
+
+        val dateBlank = TextView(activity)
+        val opponentBlank = TextView(activity)
+        val modeBlank = TextView(activity)
+        val scoreBlank = TextView(activity)
+
+        dateBlank.text = date
+        opponentBlank.text = opponent
+        modeBlank.text = mode
+        scoreBlank.text = score
+
+        dateBlank.layoutParams = params
+        opponentBlank.layoutParams = params
+        modeBlank.layoutParams = params
+        scoreBlank.layoutParams = params
+
+        row.addView(dateBlank)
+        row.addView(opponentBlank)
+        row.addView(modeBlank)
+        row.addView(scoreBlank)
+        statsTable.addView(row)
+
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

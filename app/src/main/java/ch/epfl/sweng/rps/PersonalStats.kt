@@ -11,12 +11,13 @@ import android.widget.TableRow.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
+import ch.epfl.sweng.rps.ui.statistics.MatchDetail
 
 
 class PersonalStats : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_personal_stats)
+        setContentView(R.layout.fragment_statistics)
         val actionbar = supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
         addNewRow("0b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
@@ -67,14 +68,5 @@ class PersonalStats : AppCompatActivity() {
 
     }
 
-    fun displayMatchDetail(view: View) {
-        when(view.id) {
-            R.id.first_row_uuid -> {
-                println("good")
-
-            }
-        }
-
-    }
 }
 

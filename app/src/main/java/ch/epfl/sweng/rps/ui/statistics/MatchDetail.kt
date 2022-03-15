@@ -1,7 +1,8 @@
-package ch.epfl.sweng.rps
+package ch.epfl.sweng.rps.ui.statistics
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ch.epfl.sweng.rps.R
 
 class MatchDetail : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RockPaperScissors">
          <activity
-            android:name=".MatchDetail"
+            android:name=".ui.statistics.MatchDetail"
             android:exported="false" />
         <activity
             android:name=".PersonalStats"
