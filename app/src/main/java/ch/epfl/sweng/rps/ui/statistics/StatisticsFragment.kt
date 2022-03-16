@@ -1,7 +1,5 @@
 package ch.epfl.sweng.rps.ui.statistics
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -21,26 +19,25 @@ class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view: View  = inflater.inflate(R.layout.fragment_statistics, container, false)
 
-        return view
+        return inflater.inflate(R.layout.fragment_statistics, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addNewRow(view,"0b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
+        addPersonalStats(view,"0b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
 
     }
 
-    private fun addNewRow(view: View, uuid: String, date:String, opponent:String, mode:String, score: String ) {
+
+
+
+    private fun addPersonalStats(view: View, uuid: String, date:String, opponent:String, mode:String, score: String ) {
         val sizeInDp = 5
         val statsTable = view.findViewById<TableLayout>(R.id.statsTable)
         val row = TableRow(activity)
@@ -51,15 +48,20 @@ class StatisticsFragment : Fragment() {
         row.isClickable
         row.setPadding(dpAsPixels.toInt())
         row.tag = uuid
-        /*
         row.setOnClickListener {
 
-
-            val intent = Intent(this, MatchDetail::class.java)
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.nav_host_fragment_content_main,MatchDetails())
+            transaction.commit()
+            /*
+            val intent =  Intent()
+            intent.setClass(requireActivity(), MatchDetail::class.java)
             intent.putExtra("matchUuid", row.tag as String)
             startActivity(intent)
+            */
 
-        }*/
+
+        }
         val params = TableRow.LayoutParams(
             TableRow.LayoutParams.WRAP_CONTENT,
             TableRow.LayoutParams.WRAP_CONTENT,
