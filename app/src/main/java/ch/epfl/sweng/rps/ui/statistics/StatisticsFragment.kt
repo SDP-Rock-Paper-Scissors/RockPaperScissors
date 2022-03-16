@@ -49,10 +49,12 @@ class StatisticsFragment : Fragment() {
         row.setPadding(dpAsPixels.toInt())
         row.tag = uuid
         row.setOnClickListener {
+            // add new fragment
 
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.nav_host_fragment_content_main,MatchDetails())
             transaction.commit()
+            // add new activity
             /*
             val intent =  Intent()
             intent.setClass(requireActivity(), MatchDetail::class.java)
