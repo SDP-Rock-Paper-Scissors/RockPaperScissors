@@ -11,4 +11,12 @@
     <string name="menu_home">Play</string>
     <string name="menu_leaderboard">Leaderboard</string>
     <string name="menu_statistics">Statistics</string>
+
+    <string name="rock_image">rock image</string>
+    <string name="paper_image">paper image</string>
+    <string name="scissors_image">scissors image</string>
+    <string name="counter_value">3</string>
+    <string name="user_username">username</string>
+    <string name="user_rank">rank</string>
+    <string name="match_result">3:1</string>
 </resources>
