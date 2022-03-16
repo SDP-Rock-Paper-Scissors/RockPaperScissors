@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @SmallTest
-class RSPButtonsTest {
+class GameButtonsTest {
     @get:Rule
     val testRule = ActivityScenarioRule(MainActivity::class.java)
     @Test
@@ -33,13 +33,13 @@ class RSPButtonsTest {
         checkPressedButton(R.id.scissorsRB)
     }
     private fun checkPressedButton(radioButtonId: Int){
-        onView(withId(R.id.gameButton)).perform(click())
+        onView(withId(R.id.button_play_one_offline_game)).perform(click())
         onView(withId(radioButtonId)).perform(click())
         onView(withId(radioButtonId)).check(matches(isChecked()))
     }
     @Test
     fun pressedRockPaperRock(){
-        onView(withId(R.id.gameButton)).perform(click())
+        onView(withId(R.id.button_play_one_offline_game)).perform(click())
         onView(withId(R.id.rockRB)).perform(click())
         onView(withId(R.id.paperRB)).perform(click())
         onView(withId(R.id.rockRB)).perform(click())
