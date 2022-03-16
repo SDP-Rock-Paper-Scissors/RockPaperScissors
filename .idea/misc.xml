@@ -7,7 +7,10 @@
         <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
         <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/layout/activity_match_detail.xml" value="0.12132725430597771" />
         <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/layout/activity_personal_stats.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.24933319091796877" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.24895833333333334" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.21667022705078126" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.20038186532479746" />
+        <entry key="app/src/main/res/layout/content_login.xml" value="0.397534575285735" />
       </map>
     </option>
   </component>
