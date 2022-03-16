@@ -1,6 +1,5 @@
 package ch.epfl.sweng.rps.ui.statistics
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,13 +23,12 @@ class StatisticsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         return inflater.inflate(R.layout.fragment_statistics, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addPersonalStats(view,"0b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
+        addPersonalStats(view,"b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
 
     }
 
@@ -45,25 +43,24 @@ class StatisticsFragment : Fragment() {
             Color.parseColor("#F0F7F7"))
         val scale = resources.displayMetrics.density
         val dpAsPixels = (sizeInDp * scale + 0.5f)
-        row.isClickable
         row.setPadding(dpAsPixels.toInt())
+
+        row.isClickable
         row.tag = uuid
+
         row.setOnClickListener {
-            // add new fragment
-
+            // add new fragment with communication
+            val matchDetailFragment = MatchDetails()
+            val bundle = Bundle()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.nav_host_fragment_content_main,MatchDetails())
+            bundle.putString("uuid",uuid)
+            matchDetailFragment.arguments =  bundle
+            transaction.replace(R.id.fragment_statistics,matchDetailFragment)
+            transaction.addToBackStack(null)
             transaction.commit()
-            // add new activity
-            /*
-            val intent =  Intent()
-            intent.setClass(requireActivity(), MatchDetail::class.java)
-            intent.putExtra("matchUuid", row.tag as String)
-            startActivity(intent)
-            */
-
 
         }
+
         val params = TableRow.LayoutParams(
             TableRow.LayoutParams.WRAP_CONTENT,
             TableRow.LayoutParams.WRAP_CONTENT,

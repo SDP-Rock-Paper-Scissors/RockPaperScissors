@@ -5,22 +5,22 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_statistics"
     tools:context=".ui.statistics.MatchDetails">
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <TableLayout
+        android:id="@+id/statsTable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:id="@+id/statsTable"
-        tools:context=".ui.statistics.StatisticsFragment">
+        tools:context=".ui.statistics.StatisticsFragment"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Personal Match Statistics"
+            android:text="@string/personal_match_statistics"
             android:textSize="20dp"
             android:textStyle="bold">
 
@@ -35,25 +35,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Date" />
+                android:text="@string/date" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Opponent" />
+                android:text="@string/opponent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mode" />
+                android:text="@string/mode" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Score" />
+                android:text="@string/score" />
         </TableRow>
 
 

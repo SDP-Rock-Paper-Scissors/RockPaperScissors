@@ -1,10 +1,10 @@
 package ch.epfl.sweng.rps.ui.statistics
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import ch.epfl.sweng.rps.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -12,11 +12,6 @@ import ch.epfl.sweng.rps.R
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MatchDetails.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MatchDetails : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -37,11 +32,13 @@ class MatchDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        container?.removeAllViews();
+        container?.removeAllViews()
+        val matchUuid = this.arguments?.getString("uuid")
+
+        // fetch data according uuid for match details
+        println(matchUuid)
         return inflater.inflate(R.layout.fragment_match_details, container, false)
     }
-
-
 
 
 }
