@@ -40,6 +40,7 @@ class StatisticsFragment : Fragment() {
                 id: Long
             ) {
                 when (position) {
+                    //test for selector
                     1 -> println("x == 1")
                     2 -> println("x == 2")
                     else -> { // Note the block
@@ -76,6 +77,8 @@ class StatisticsFragment : Fragment() {
         row.setPadding(dpAsPixels.toInt())
         row.isClickable
         row.tag = uuid
+        //only for test
+        row.id = R.id.test_for_stats_row
 
         row.setOnClickListener {
             // add new fragment with communication
