@@ -15,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
-class FirebaseAuthenticator(val context: ComponentActivity, val callback: (String)->Unit):
+class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (String)->Unit):
     Authenticator(callback) {
     private var auth: FirebaseAuth = Firebase.auth
     private val resultLauncher =    context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->

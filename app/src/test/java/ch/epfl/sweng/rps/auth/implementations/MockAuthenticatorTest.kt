@@ -14,10 +14,6 @@ class MockAuthenticatorTest {
                 callback("google")
             }
 
-            override fun signInAnonymously() {
-                callback("anonymous")
-            }
-
         }
         authenticator.signInWithGoogle()
     }
