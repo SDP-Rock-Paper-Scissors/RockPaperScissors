@@ -43,7 +43,7 @@ class FirebaseAuthenticator(val context: ComponentActivity, val callback: (Strin
         resultLauncher.launch(mGoogleSignInClient.signInIntent)
     }
 
-    override fun signInAnonymously(): String {
+    override fun signInAnonymously() {
         TODO("Not yet implemented")
     }
 
