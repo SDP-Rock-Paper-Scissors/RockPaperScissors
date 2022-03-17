@@ -11,4 +11,15 @@
     <string name="menu_home">Play</string>
     <string name="menu_leaderboard">Leaderboard</string>
     <string name="menu_statistics">Statistics</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="personal_match_statistics">Personal Match Statistics</string>
+    <string name="date">Date</string>
+    <string name="mode">Mode</string>
+    <string name="score">Score</string>
+    <string name="match_detail">Match Detail</string>
+    <string name="player">Player</string>
+    <string name="opponent">Opponent</string>
+    <string name="outcome">Outcome</string>
+    <item name="test_for_stats_row" type="id"/>
 </resources>
