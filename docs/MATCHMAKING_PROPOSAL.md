@@ -2,46 +2,57 @@ This proposal details the specifications for the matchmaking in our app.
 ## Overview
 ### 1. Queue
 
-1. The user presses the PLAY button, making him join a queue for the chosen gamemode.
-2. We create a document in the `queue/` collection in Firestore, indicating the player is queuing up.
-The document needs to contain the gamemode as well as the `uid` of the player queuing up.
-```jsonc
-{
-  "player_uid": "my_user_uid",
-  "gamemode": "5P,PC,3R,0T", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
-  "timestamp": "2020-01-01T00:00:00.000Z",
-  "lobby": null
-}
-```
+The user presses the PLAY button, making him join a queue for the chosen gamemode.
 
+To indicate the server we are queueing for a game, we call the HTTPS endpoint `/queue` with the following parameters:
+
+* `game_mode`: the game mode we are queueing for
+
+*Note: We do not need to provide the user id, as HTTPS cloud functions authenticate the user with their already authenticated firebase identity, which allows to obtain the user uid without explicitly providing it. It also allows to have some security as only authenticated users can call this function. [Source](https://firebase.google.com/docs/functions/callable)*
 ### 2. The game - server-side
 
-The server consists of Firebase Functions listenning for creations of documents in the `queue/` collection.
-1. When a document is created, we check if there are enough players in the queue to start a game in the chosen gamemode.
-2. If there are enough players, we create a game document in the `games/` collection.
-3. The game document needs to contain the gamemode as well as the `uid` of the players in the game.
-4. We update the document in the `queue/` collection to indicate the game has started by setting the `lobby` field to the game document's `id`.
+Once the server receives a request to queue, it acts as follows:
 
-The game document `/game/{gameId}` should look like this:
+1. Looks for games that are not full and have the same game mode.
+2. If there are no such games, creates a new game with the same game mode.
+3. Adds the user to the game.
+4. If the game is full, starts the game.
+5. If the game is not full, waits for the other players to join.
+6. Either way, returns the game id to the user.
+
+The game document `/game/{gameId}` looks like this:
 ```jsonc
+// game.json
+
 {
   "mode": "5P,PC,3R,0T",
   "timestamp": "2020-01-01T00:00:00.000Z",
   "rounds": [],
-  "players": [/*players*/]
+  "players": [/*players*/],
+  "done": false,
+  "users_state": {
+    "user1": "ABSENT",
+    "user2": "READY",
+    "user3": "JOINED,
+  }
 }
 ```
 
+In the game document, the users can have 3 different states:
+* `ABSENT`: the user is not in the game
+* `JOINED`: the user has joined the game, but is not ready yet
+* `READY`: the user has joined the game and is ready to start the game
+
 ### 3. Game start - client-side
 
-Now that we have a game document, we can start the game.
-The client is aware the game has started as soon as the `lobby` field of the document in the `queue/` collection is set to the game document's `id`.
-It can now access the game document in the `games/` collection.
-The game document contains the gamemode as well as the `uid` of the players in the game, so the client can list the players in the game.
-
+Now that we have a game id, we can retrieve the game document:
+```
+/games/{gameId}
+```
+and listen to the game document for changes.
 ### 4. Ready check (Optional)
 To make sure players are ready, each player needs to press the READY button.
-This will update the `ready` map of the game document to `true` for the player. (The player's uid is the key.)
+This will update the `users_state` map of the game document to `READY` for the player. (The player's uid is the key.)
 
 If after a certain amount of time, the game is not ready, the game is cancelled:
 - The document in the queue is marked as done by setting the `done` field to `true`.
@@ -50,6 +61,8 @@ If after a certain amount of time, the game is not ready, the game is cancelled:
 ### 5. Round
 Once every player is ready, server adds a round document in the `rounds/` collection of the game document `/games/{gameId}/rounds/{roundId}`:
 ```jsonc
+// round.json
+
 {
   "uid": "round_uid",
   "timestamp": "2020-01-01T00:00:00.000Z",
@@ -63,6 +76,8 @@ It also adds the round's `id` to the `rounds` field of the game document.
 Each player pick their hand (`ROCK`, `PAPER` or `SCISSORS`). The client update the `hands` map of the round document to reflect the player's hand. Say `user1` picked `ROCK`, `user2` picked `PAPER` and `user3` picked `SCISSORS`:
 
 ```jsonc
+// round.json
+
 {
   "uid": "round_uid",
   "timestamp": "2020-01-01T00:00:00.000Z",
@@ -102,7 +117,15 @@ A list of a users past games can be thus obtained by querying the `games/` where
 ```kotlin
 val gamesPlayed = gamesCollection.whereArrayContains("players", user.uid).whereEqualTo("done", true).get()
 ```
+## States
 
+Games have 3 implicit states, which are:
+
+State       | Condition
+------------|---------------------------------------------------------
+NOT_STARTED | When not all players are ready
+PLAYING     | When players are all ready, and there's a round present.
+FINISHED    | When the `done` field is set to `true`.
 ## Security
 
 As a matter of good practice as well as security, we want to have strict access control on the data.
@@ -111,8 +134,6 @@ Here is the list of rules:
 
 Resource                            | Permission | Condition
 ------------------------------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-`queue/{doc_id}`                    | `Read`     | `doc.player_uid == user.uid`
-`queue/{doc_id}`                    | `Create`   | `isGameModeValid(doc.mode)`, `doc.done == false`
 `games/{doc_id}`                    | `Read`     | -
 `games/{game_id}/rounds/{round_id}` | `Read`     | -
 `games/{game_id}/rounds/{round_id}` | `Update`   | `doc.players.contains(user.uid)`, `doc.done == false`, `doc.hands.containsKey(user.uid) == false`, `request.update.data.hands.length == 1`, `request.update.data.hands.containsKey(user.uid)`
