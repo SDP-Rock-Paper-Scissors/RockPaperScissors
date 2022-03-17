@@ -140,6 +140,30 @@ Resource                            | Permission | Condition
 
 All other operations on the aforementioned resources are forbidden.
 
+## Playing with friends
+
+To play with friends in a game, we need to call the following endpoint: `/invite` with the following parameters:
+* `userId`: the user id of the user to invite
+
+Upon receiving the invitation, the user will be notified by a notification.
+
+### Server-side
+
+When the HTTPS request is received, a new document is created in the `users/{userId}/invitations/` collection:
+
+```jsonc
+{
+  "game": "game_uid",
+  "timestamp": "2020-01-01T00:00:00.000Z",
+  "inviter": "user_uid",
+  "invitation_id": "invitation_id"
+}
+```
+
+Upon receiving the invitation, the invited user will now be able to join the game by calling the following endpoint: `/join` with the following parameters:
+* `invitation_id`: the id of the invitation
+
+The server will then add the user to the game document.
 
 ## Notes
 - Using Firebase, we can listen for document changes, allowing us to essentially be "notified" by server for different events. That allows us to have a "real-time" experience even if we don't have a proper backend.
