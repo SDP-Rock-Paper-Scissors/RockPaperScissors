@@ -117,6 +117,10 @@ Resource                            | Permission | Condition
 `games/{game_id}/rounds/{round_id}` | `Read`     | -
 `games/{game_id}/rounds/{round_id}` | `Update`   | `doc.players.contains(user.uid)`, `doc.done == false`, `doc.hands.containsKey(user.uid) == false`, `request.update.data.hands.length == 1`, `request.update.data.hands.containsKey(user.uid)`
 
+All other operations on the aforementioned resources are forbidden.
+
 
 ## Notes
-Using Firebase, we can listen for document changes, allowing us to essentially be "notified" by server for different events. That allows us to have a "real-time" experience even if we don't have a proper backend.
+- Using Firebase, we can listen for document changes, allowing us to essentially be "notified" by server for different events. That allows us to have a "real-time" experience even if we don't have a proper backend.
+- When refering to players, we assume their might be more than two players in a game. We will start by supporting two players and then expand to more possibly.
+- To make it easier and avoid spreading users across a too high variety of gamemodes, we should choose a subset of gamemodes from combinations of options (number of players, number of rounds, time limit).
