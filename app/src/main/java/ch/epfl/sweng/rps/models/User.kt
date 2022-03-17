@@ -10,20 +10,27 @@ data class User(
 
     val gamesHistoryPrivacy: Privacy,
 
-    val friends: List<String>,
-
     val hasProfilePhoto: Boolean,
 
     val email: String?
 ) {
 
+    fun deepCopy(
+        username: String? = this.username,
+        uid: String = this.uid,
+        gamesHistoryPrivacy: Privacy = this.gamesHistoryPrivacy,
+        hasProfilePhoto: Boolean = this.hasProfilePhoto,
+        email: String? = this.email
+    ): User {
+        return User(username, uid, gamesHistoryPrivacy, hasProfilePhoto, email)
+    }
+
     enum class Field(val value: String) {
         USERNAME("username"),
-        GAMES_HISTORY_POLICY("games_history_privacy"),
+        GAMES_HISTORY_PRIVACY("games_history_privacy"),
         HAS_PROFILE_PHOTO("has_profile_photo"),
         EMAIL("email"),
-        FRIENDS("friends"),
-        UID("uid")
+        // UID("uid")
     }
 
     enum class Privacy {

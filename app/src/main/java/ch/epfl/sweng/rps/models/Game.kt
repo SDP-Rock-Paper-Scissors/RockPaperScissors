@@ -24,7 +24,7 @@ data class Game(
      */
     data class Mode(val playerCount: Int, val type: Type, val time: Int?, val rounds: Int) {
         enum class Type {
-            LOCAL, ONLINE, PC
+            LOCAL, PVP, PC
         }
     }
 
