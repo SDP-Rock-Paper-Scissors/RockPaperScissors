@@ -7,5 +7,17 @@ sealed class FirebaseHelper {
         fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
             return pairs.associate { t -> Pair(t.first.value, t.second) }
         }
+
+
+        fun userFrom(uid: String, name: String, email: String?): User {
+            return User(
+                email = email,
+                username = name,
+                gamesHistoryPrivacy = User.Privacy.PUBLIC,
+                hasProfilePhoto = false,
+                uid = uid
+            )
+
+        }
     }
 }
