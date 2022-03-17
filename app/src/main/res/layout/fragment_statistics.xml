@@ -6,10 +6,11 @@
     android:id="@+id/fragment_statistics"
     tools:context=".ui.statistics.MatchDetails">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="horizontal"
+        android:background="#FFFFFF"
 
         >
         <TextView
@@ -20,18 +21,20 @@
             android:textStyle="bold">
         </TextView>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
 
         <Spinner
+            android:layout_alignParentRight="true"
             android:id="@+id/modeSelect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-    </LinearLayout>
+            android:layout_gravity="end"
+            android:minHeight="32dp"
+            android:spinnerMode="dropdown"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            >
+        </Spinner>
+
+    </RelativeLayout>
 
     <TableLayout
         android:id="@+id/statsTable"

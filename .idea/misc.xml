@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/drawable/ic_arrow_drop_down_black_24dp.xml" value="0.2225" />
+        <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/drawable/ic_baseline_leaderboard_24.xml" value="0.216" />
+        <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/drawable/side_nav_bar.xml" value="0.234" />
+        <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/drawable/spinner_background.xml" value="0.234" />
         <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/layout/activity_match_detail.xml" value="0.1" />
         <entry key="..\:/Documents/MSc CSE/OneDrive - epfl.ch/EPFL/Software Devlopment Project/RockPaperScissors/app/src/main/res/layout/app_bar_main.xml" value="0.21195652173913043" />

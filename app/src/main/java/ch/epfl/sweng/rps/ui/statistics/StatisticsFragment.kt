@@ -22,10 +22,10 @@ class StatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val values = arrayOf(
-            "Filter Modes",
-            "3 matches",
-            "5 matches",
-            "12 matches",
+            "Mode Filter",
+            "3 Matches",
+            "5 Matches",
+            "12 Matches",
         )
         val newView = inflater.inflate(R.layout.fragment_statistics, container, false)
         val modeSpinner = newView.findViewById(R.id.modeSelect) as Spinner
@@ -74,7 +74,6 @@ class StatisticsFragment : Fragment() {
         val scale = resources.displayMetrics.density
         val dpAsPixels = (sizeInDp * scale + 0.5f)
         row.setPadding(dpAsPixels.toInt())
-
         row.isClickable
         row.tag = uuid
 
