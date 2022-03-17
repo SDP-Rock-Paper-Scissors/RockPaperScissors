@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import ch.epfl.sweng.rps.R
@@ -23,7 +21,39 @@ class StatisticsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_statistics, container, false)
+        val values = arrayOf(
+            "Filter Modes",
+            "3 matches",
+            "5 matches",
+            "12 matches",
+        )
+        val newView = inflater.inflate(R.layout.fragment_statistics, container, false)
+        val modeSpinner = newView.findViewById(R.id.modeSelect) as Spinner
+        val adapter = ArrayAdapter(this.requireActivity(), android.R.layout.simple_spinner_item, values)
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        modeSpinner.adapter = adapter
+        modeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    1 -> println("x == 1")
+                    2 -> println("x == 2")
+                    else -> { // Note the block
+                        println("x is neither 1 nor 2")
+                    }
+                }
+
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                // your code here
+            }
+        }
+        return newView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
