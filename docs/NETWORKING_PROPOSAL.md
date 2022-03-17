@@ -5,7 +5,7 @@ This proposal details the specifications for the matchmaking in our app.
 1. The user presses the PLAY button, making him join a queue for the chosen gamemode.
 2. We create a document in the `queue/` collection in Firestore, indicating the player is queuing up.
 The document needs to contain the gamemode as well as the `uid` of the player queuing up.
-```json
+```jsonc
 {
   "player_uid": "my_user_uid",
   "gamemode": "5P,PC,3R,0T", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
@@ -23,7 +23,7 @@ The server consists of Firebase Functions listenning for creations of documents 
 4. We update the document in the `queue/` collection to indicate the game has started by setting the `lobby` field to the game document's `id`.
 
 The game document `/game/{gameId}` should look like this:
-```json
+```jsonc
 {
   "mode": "5P,PC,3R,0T",
   "timestamp": "2020-01-01T00:00:00.000Z",
@@ -49,7 +49,7 @@ If after a certain amount of time, the game is not ready, the game is cancelled:
 
 ### 5. Round
 Once every player is ready, server adds a round document in the `rounds/` collection of the game document `/games/{gameId}/rounds/{roundId}`:
-```json
+```jsonc
 {
   "uid": "round_uid",
   "timestamp": "2020-01-01T00:00:00.000Z",
@@ -62,7 +62,7 @@ It also adds the round's `id` to the `rounds` field of the game document.
 
 Each player pick their hand (`ROCK`, `PAPER` or `SCISSORS`). The client update the `hands` map of the round document to reflect the player's hand. Say `user1` picked `ROCK`, `user2` picked `PAPER` and `user3` picked `SCISSORS`:
 
-```json
+```jsonc
 {
   "uid": "round_uid",
   "timestamp": "2020-01-01T00:00:00.000Z",
