@@ -74,11 +74,13 @@ class StatisticsFragment : Fragment() {
             Color.parseColor("#F0F7F7"))
         val scale = resources.displayMetrics.density
         val dpAsPixels = (sizeInDp * scale + 0.5f)
+
+        row.id = R.id.test_for_stats_row
         row.setPadding(dpAsPixels.toInt())
         row.isClickable
         row.tag = uuid
         //only for test
-        row.id = R.id.test_for_stats_row
+
 
         row.setOnClickListener {
             // add new fragment with communication
