@@ -30,7 +30,7 @@ class FirebaseAuthenticator(val context: ComponentActivity, val callback: (Strin
     }
      private fun signInWithToken(idToken:String){
          val credential = GoogleAuthProvider.getCredential(idToken, null)
-         auth.signInWithCredential(credential).addOnCompleteListener { res -> callback(auth.currentUser?.uid.orEmpty()) }
+         auth.signInWithCredential(credential).addOnCompleteListener { res -> callback(res.result.user!!.uid) }
 
     }
     override fun signInWithGoogle(){
@@ -43,9 +43,7 @@ class FirebaseAuthenticator(val context: ComponentActivity, val callback: (Strin
         resultLauncher.launch(mGoogleSignInClient.signInIntent)
     }
 
-    override fun signInAnonymously() {
-        TODO("Not yet implemented")
-    }
+
 
     companion object {
         private const val RC_SIGN_IN = 9001
