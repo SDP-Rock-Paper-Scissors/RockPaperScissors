@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
     <include
         android:id="@+id/app_bar_main"
         layout="@layout/app_bar_main"

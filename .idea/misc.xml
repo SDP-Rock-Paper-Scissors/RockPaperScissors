@@ -4,8 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_rps_basic.xml" value="0.13240740740740742" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.13240740740740742" />
+        <entry key="app/src/main/res/layout/content_main.xml" value="0.23308184588397002" />
+        <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25970232928240744" />
+        <entry key="app/src/main/res/layout/fragment_match_details.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/rps_buttons.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/rps_images.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/user_credentials.xml" value="0.1" />
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>
