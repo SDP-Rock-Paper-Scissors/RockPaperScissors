@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="ch.epfl.sweng.rps.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_leaderboard"
         android:name="ch.epfl.sweng.rps.ui.leaderboard.LeaderboardFragment"
@@ -20,4 +24,9 @@
         android:name="ch.epfl.sweng.rps.ui.statistics.StatisticsFragment"
         android:label="@string/menu_statistics"
         tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="ch.epfl.sweng.rps.ui.game.GameFragment"
+        android:label="@string/menu_game"
+        tools:layout="@layout/fragment_game" />
 </navigation>
