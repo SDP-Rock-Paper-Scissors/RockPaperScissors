@@ -3,7 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'jacoco'
 }
-apply plugin: 'com.google.gms.google-services'
+jacoco {
+    toolVersion = "0.8.7"
+}
 
 jacoco {
     toolVersion = "0.8.7"
@@ -82,6 +84,7 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-native-mt'
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-native-mt'
 }
+
 
 configurations.all {
     resolutionStrategy {
