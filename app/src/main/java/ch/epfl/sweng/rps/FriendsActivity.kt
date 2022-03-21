@@ -1,10 +1,12 @@
 package ch.epfl.sweng.rps
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.epfl.sweng.rps.R
 
 private lateinit var newRecyclerView : RecyclerView
 private lateinit var newArrayList: ArrayList<FriendsInfo>
@@ -15,9 +17,13 @@ lateinit var gamesWon : Array<String>
 lateinit var winRate : Array<String>
 
 class FriendsActivity : AppCompatActivity() {
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.friends_main)
+
+        val infoButton = findViewById<Button>(R.id.infoButton)
+        val playButton = findViewById<Button>(R.id.playButton)
 
         onlineImage = arrayOf(
             R.drawable.online_vector,
@@ -38,10 +44,10 @@ class FriendsActivity : AppCompatActivity() {
             "Narut0",
             "RockFirst",
             "JustGary",
-            "GreenSerpentXX",
+            "GreenSerp",
             "UrMom",
-            "GameMaster420",
-            "InsomniaxGamer"
+            "GameMastr",
+            "Insomniax"
         )
         gamesPlayed = arrayOf(
             "Games Played: 120",
@@ -88,6 +94,8 @@ class FriendsActivity : AppCompatActivity() {
 
         newArrayList = arrayListOf<FriendsInfo>()
         getFriendsInfo()
+
+        
     }
 
     private fun getFriendsInfo() {

@@ -11,7 +11,7 @@ class friendlistAdapter(private val friendList : ArrayList<FriendsInfo>) : Recyc
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.friend_card, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.friend_card2, parent, false)
         return MyViewHolder(itemView)
 
     }
