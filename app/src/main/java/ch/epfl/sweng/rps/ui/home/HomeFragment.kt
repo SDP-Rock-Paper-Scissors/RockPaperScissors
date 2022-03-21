@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -23,13 +24,14 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        _binding!!.buttonPlayOneOfflineGame.setOnClickListener { view: View ->
+            Navigation.findNavController(view).navigate(R.id.gameFragment)
+        }
 
-
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
