@@ -1,6 +1,12 @@
 package ch.epfl.sweng.rps
 
-data class FriendsInfo(var username : String, var gamesPlayed : String, var gamesWon : String, var winRate : String, var onlineImage : Int)
+data class FriendsInfo(
+    val username : String,
+    val gamesPlayed : Int,
+    val gamesWon : Int,
+    val winRate : Double,
+    val isOnline : Boolean
+    )
 
 
 

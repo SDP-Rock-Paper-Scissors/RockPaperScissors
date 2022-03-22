@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".FriendsActivity">
+    tools:context=".ui.friends.FriendList">
 
     <ImageButton
         android:id="@+id/addButton"
@@ -56,6 +56,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendListRecyclerView"
+        tools:listitem="@layout/friend_card2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
