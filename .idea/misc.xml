@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.346875" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/app_bar_main.xml" value="0.346875" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/content_main.xml" value="0.346875" />
@@ -17,6 +18,8 @@
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/menu/activity_main_drawer.xml" value="0.6" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/menu/main.xml" value="0.346875" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/menu/main_activity.xml" value="0.13333333333333333" />
+=======
+>>>>>>> parent of 207fa5c (Revert "Up to date with main")
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_rps_basic.xml" value="0.13240740740740742" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.13240740740740742" />

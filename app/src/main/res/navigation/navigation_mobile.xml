@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="ch.epfl.sweng.rps.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_leaderboard"
         android:name="ch.epfl.sweng.rps.ui.leaderboard.LeaderboardFragment"
@@ -21,8 +25,15 @@
         android:label="@string/menu_statistics"
         tools:layout="@layout/fragment_statistics" />
     <fragment
+<<<<<<< HEAD:app/src/main/res/navigation/mobile_navigation2.xml
         android:id="@+id/nav_friends"
         android:name="ch.epfl.sweng.rps.ui.friends.FriendList"
         android:label="fragment_friend_list"
         tools:layout="@layout/fragment_friend_list" />
+=======
+        android:id="@+id/gameFragment"
+        android:name="ch.epfl.sweng.rps.ui.game.GameFragment"
+        android:label="@string/menu_game"
+        tools:layout="@layout/fragment_game" />
+>>>>>>> parent of 207fa5c (Revert "Up to date with main"):app/src/main/res/navigation/navigation_mobile.xml
 </navigation>
