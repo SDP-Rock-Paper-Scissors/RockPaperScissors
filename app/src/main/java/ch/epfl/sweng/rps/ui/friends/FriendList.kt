@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.FriendListAdapter
-import ch.epfl.sweng.rps.FriendsInfo
 import ch.epfl.sweng.rps.R
 
 class FriendList : Fragment() {
@@ -38,7 +37,7 @@ class FriendList : Fragment() {
         )
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = FriendListAdapter(friends)
 
     }

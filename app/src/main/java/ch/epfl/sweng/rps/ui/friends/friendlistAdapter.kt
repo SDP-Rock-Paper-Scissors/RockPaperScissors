@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ch.epfl.sweng.rps.ui.friends.FriendsInfo
 
 class FriendListAdapter(private val friends : List<FriendsInfo>) : RecyclerView.Adapter<FriendListAdapter.CardViewHolder>(){
 
