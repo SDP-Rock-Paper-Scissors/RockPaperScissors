@@ -12,11 +12,7 @@ import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,16 +22,16 @@ class HomeFragment : Fragment() {
         val homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        _binding!!.buttonPlayOneOfflineGame.setOnClickListener { view: View ->
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.buttonPlayOneOfflineGame.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(R.id.gameFragment)
         }
 
         return binding.root
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    seems not needed!!!!ASK SILVIO!!!!
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        binding = null
+//    }
 }

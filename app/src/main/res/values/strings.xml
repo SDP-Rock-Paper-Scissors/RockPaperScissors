@@ -40,5 +40,11 @@
     <string name="player">Player</string>
     <string name="opponent">Opponent</string>
     <string name="outcome">Outcome</string>
-    <item name="test_for_stats_row" type="id"/>
+    <item name="test_for_stats_row" type="id" />
+
+    <!-- game -->
+    <string name="win">You win</string>
+    <string name="lose">You lose</string>
+    <string name="draw">Draw</string>
+
 </resources>
