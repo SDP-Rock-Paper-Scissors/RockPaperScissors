@@ -12,6 +12,7 @@
     <string name="menu_home">Play</string>
     <string name="menu_leaderboard">Leaderboard</string>
     <string name="menu_statistics">Statistics</string>
+    <string name="menu_friends">Friends</string>
 
     <string name="rock_image">rock image</string>
     <string name="paper_image">paper image</string>
@@ -42,5 +43,6 @@
     <string name="player">Player</string>
     <string name="opponent">Opponent</string>
     <string name="outcome">Outcome</string>
+
     <item name="test_for_stats_row" type="id"/>
 </resources>
