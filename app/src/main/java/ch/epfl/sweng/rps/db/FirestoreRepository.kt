@@ -8,7 +8,7 @@ import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
 
-open class FirebaseRepository(env: Env = Env.PROD) : Repository, FirebaseReferences(env) {
+open class FirestoreRepository : Repository, FirebaseReferences {
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         val arguments = FirebaseHelper.processUserArguments(*pairs)
 
@@ -32,41 +32,22 @@ open class FirebaseRepository(env: Env = Env.PROD) : Repository, FirebaseReferen
     override suspend fun createUser(name: String, email: String?) {
         val uid = getCurrentUid()
         usersCollection.document(uid).set(
-            FirebaseHelper.userFrom(uid, name, email)
+            User(
+                email = email,
+                username = name,
+                friends = listOf(),
+                gamesHistoryPrivacy = User.Privacy.PUBLIC,
+                hasProfilePhoto = false,
+                uid = uid
+            )
         ).await()
     }
 
     override fun rawCurrentUid(): String? = FirebaseAuth.getInstance().currentUser?.uid
 
-    override suspend fun sendFriendRequestTo(uid: String) {
+    override suspend fun addFriend(uid: String) {
         usersFriendRequestOfUid(uid)
             .add(FriendRequest(from = getCurrentUid())).await()
-    }
-
-    override suspend fun listFriendRequests(): List<FriendRequest> {
-        return usersFriendRequestOfUid(getCurrentUid()).get().await().documents.map {
-            it.toObject<FriendRequest>()!!
-        }
-    }
-
-    override suspend fun getFriends(): List<String> {
-        return usersFriendRequestOfUid(getCurrentUid())
-            .whereEqualTo("accepted", true)
-            .get().await().documents
-            .map { it.toObject<FriendRequest>()!!.from }
-    }
-
-    override suspend fun acceptFriendRequest(userUid: String) {
-        usersFriendRequestOfUid(userUid)
-            .whereEqualTo("from", getCurrentUid()).limit(1)
-            .get().await().documents.first().reference.update("accepted", true).await()
-    }
-
-    suspend fun clearDevEnv() {
-        if (env != Env.DEV) {
-            throw UnsupportedOperationException("This method is only available in a dev environment")
-        }
-        root.delete().await()
     }
 
 }
