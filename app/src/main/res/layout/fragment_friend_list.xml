@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context=".ui.friends.FriendList">
+
+    <ImageButton
+        android:id="@+id/addButton"
+        android:layout_width="73dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="@color/secondary"
+        android:src="@drawable/search_vector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/myFriends"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/myFriends"
+        android:layout_width="216dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="@color/tertiary2"
+        android:gravity="center"
+        android:text="@string/friends"
+        android:textColor="@color/secondary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/menuButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/menuButton"
+        android:layout_width="73dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="@color/secondary"
+        android:src="@drawable/menu_vector"
+        app:layout_constraintEnd_toStartOf="@+id/myFriends"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendListRecyclerView"
+        tools:listitem="@layout/friend_card2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myFriends" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
