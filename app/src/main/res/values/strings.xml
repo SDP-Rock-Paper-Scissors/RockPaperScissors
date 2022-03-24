@@ -40,5 +40,6 @@
     <string name="player">Player</string>
     <string name="opponent">Opponent</string>
     <string name="outcome">Outcome</string>
+    <string name="menu_friends">Friends</string>
     <item name="test_for_stats_row" type="id"/>
 </resources>

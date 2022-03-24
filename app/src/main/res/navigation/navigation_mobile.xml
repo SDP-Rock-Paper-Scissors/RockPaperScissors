@@ -25,8 +25,14 @@
         android:label="@string/menu_statistics"
         tools:layout="@layout/fragment_statistics" />
     <fragment
+        android:id="@+id/nav_friends"
+        android:name="ch.epfl.sweng.rps.ui.friends.FriendList"
+        android:label="fragment_friend_list"
+        tools:layout="@layout/fragment_friend_list" />
+    <fragment
         android:id="@+id/gameFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameFragment"
         android:label="@string/menu_game"
         tools:layout="@layout/fragment_game" />
+
 </navigation>
