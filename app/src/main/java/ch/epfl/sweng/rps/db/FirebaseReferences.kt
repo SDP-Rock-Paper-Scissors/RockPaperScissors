@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.db
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.storage.FirebaseStorage
 
 open class FirebaseReferences(val env: Env = Env.PROD) {
@@ -12,6 +13,6 @@ open class FirebaseReferences(val env: Env = Env.PROD) {
     fun usersFriendRequestOfUid(uid: String): CollectionReference =
         usersCollection.document(uid).collection("friend_requests")
 
-    val usersCollection = root.collection("users")
+    val usersCollection = FirebaseFirestore.getInstance().collection("users")
     val profilePicturesFolder = storageRoot.child("profile_pictures")
 }
