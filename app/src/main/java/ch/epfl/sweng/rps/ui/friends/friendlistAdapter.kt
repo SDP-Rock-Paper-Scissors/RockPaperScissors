@@ -1,19 +1,24 @@
 package ch.epfl.sweng.rps
 
 import android.annotation.SuppressLint
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.ui.friends.FriendsInfo
 
-class FriendListAdapter(private val friends : List<FriendsInfo>) : RecyclerView.Adapter<FriendListAdapter.CardViewHolder>(){
+class FriendListAdapter(
+    private val friends : List<FriendsInfo>,
+    private val listener : OnButtonClickListener
+) :
+    RecyclerView.Adapter<FriendListAdapter.CardViewHolder>(){
 
 
-    class CardViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
          return CardViewHolder(
@@ -25,14 +30,40 @@ class FriendListAdapter(private val friends : List<FriendsInfo>) : RecyclerView.
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val friend = friends[position]
 
-        holder.view.findViewById<TextView>(R.id.friendName).text = friend.username
-        holder.view.findViewById<TextView>(R.id.winRateText).text = "Win Rate: " + friend.winRate + "%"
-        holder.view.findViewById<TextView>(R.id.gamesPlayedText).text = "Games Played: " + friend.gamesPlayed
-        holder.view.findViewById<TextView>(R.id.gamesWonText).text = "Games Won: " + friend.gamesWon
-        holder.view.findViewById<ImageView>(R.id.onlineImage).visibility = if(friend.isOnline) View.VISIBLE else View.INVISIBLE
-        holder.view.findViewById<ImageView>(R.id.offlineImage).visibility = if(friend.isOnline) View.INVISIBLE else View.VISIBLE
+        holder.friendName.text = friend.username
+        holder.winRate.text = "Win Rate: " + friend.winRate + "%"
+        holder.gamesPlayed.text = "Games Played: " + friend.gamesPlayed
+        holder.gamesWon.text = "Games Won: " + friend.gamesWon
+        holder.onlineImage.visibility = if(friend.isOnline) View.VISIBLE else View.INVISIBLE
+        holder.offlineImage.visibility = if(friend.isOnline) View.INVISIBLE else View.VISIBLE
 
+    }
+    inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+    View.OnClickListener{
+        val friendName : TextView = itemView.findViewById(R.id.friendName)
+        val winRate : TextView = itemView.findViewById(R.id.winRateText)
+        val gamesPlayed : TextView = itemView.findViewById(R.id.gamesPlayedText)
+        val gamesWon : TextView = itemView.findViewById(R.id.gamesWonText)
+        val onlineImage : ImageView = itemView.findViewById(R.id.onlineImage)
+        val offlineImage : ImageView = itemView.findViewById(R.id.offlineImage)
+        val playButton : ImageButton = itemView.findViewById(R.id.playButton)
+        val infoButton : ImageButton = itemView.findViewById(R.id.infoButton)
 
+        init {
+            playButton.setOnClickListener(this)
+            infoButton.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onButtonClick(position, friends, view)
+            }
+        }
+    }
+
+    interface OnButtonClickListener {
+        fun onButtonClick(position: Int,friends: List<FriendsInfo>, view: View)
     }
 
     override fun getItemCount(): Int {

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".ui.friends.FriendList">
+    tools:context=".ui.friends.FriendsFragment">
 
     <ImageButton
         android:id="@+id/addButton"
@@ -14,8 +14,7 @@
         android:layout_marginStart="3dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="5dp"
-        android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/secondary"
+        android:background="@drawable/secondary_button_selector"
         android:src="@drawable/search_vector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/myFriends"
@@ -46,8 +45,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/secondary"
+        android:background="@drawable/secondary_button_selector"
         android:src="@drawable/menu_vector"
         app:layout_constraintEnd_toStartOf="@+id/myFriends"
         app:layout_constraintStart_toStartOf="parent"

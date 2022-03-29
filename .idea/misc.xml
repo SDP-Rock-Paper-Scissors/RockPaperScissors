@@ -3,10 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/drawable/button_selector.xml" value="0.161" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/drawable/rounded_corners.xml" value="0.153" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/drawable/secondary_button_selector.xml" value="0.161" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.346875" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/app_bar_main.xml" value="0.346875" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/content_main.xml" value="0.346875" />
-        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_friend_list.xml" value="0.14322916666666666" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_friend_list.xml" value="0.3333333333333333" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_friends.xml" value="0.22" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_home.xml" value="0.346875" />
         <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_leaderboard.xml" value="0.346875" />
