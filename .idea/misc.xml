@@ -3,6 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.127" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/drawable/nav_item_color_state.xml" value="0.1" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/drawable/selector.xml" value="0.2065" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/drawable/side_nav_bar.xml" value="0.1" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/drawable/spinner_background.xml" value="0.1" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/activity_login.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/app_bar_main.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/content_main.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/fragment_game.xml" value="0.30434782608695654" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/fragment_home.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/fragment_leaderboard.xml" value="0.12284701114488349" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/menu/activity_main_drawer.xml" value="0.3569230769230769" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18055555555555555" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/menu/main.xml" value="0.3472222222222222" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/menu/main_activity.xml" value="0.3472222222222222" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/menu/mobile_navigation.xml" value="0.3472222222222222" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_rps_basic.xml" value="0.13240740740740742" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.13240740740740742" />
