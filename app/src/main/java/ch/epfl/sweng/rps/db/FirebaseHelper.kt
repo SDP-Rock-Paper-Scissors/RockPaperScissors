@@ -13,9 +13,10 @@ sealed class FirebaseHelper {
             return User(
                 email = email,
                 username = name,
-                gamesHistoryPrivacy = User.Privacy.PUBLIC,
+                gamesHistoryPrivacy = "PUBLIC",
                 hasProfilePhoto = false,
-                uid = uid
+                uid = uid,
+                matchesList = listOf<String>()
             )
 
         }
