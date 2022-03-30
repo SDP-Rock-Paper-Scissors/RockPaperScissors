@@ -30,9 +30,9 @@ class StatisticsFragment : Fragment() {
     ): View {
         val values = arrayOf(
             "Mode Filter",
-            "3 Matches",
-            "5 Matches",
-            "12 Matches",
+            "Best of 3",
+            "Best of 5",
+            "Best of 12",
         )
         val newView = inflater.inflate(R.layout.fragment_statistics, container, false)
         val modeSpinner = newView.findViewById(R.id.modeSelect) as Spinner
@@ -67,23 +67,15 @@ class StatisticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // we should pass current userID here
         readStatsData("wwHIHq1zrZADupznqThr", object : FirebaseCallBack {
-            override fun onCallBack(allStatsResult: MutableList<List<String>>) {
-                for (data in allStatsResult){
+            override fun onCallBack(list: MutableList<List<String>>) {
+                for (data in list){
                     addPersonalStats(view, data[0],data[1],data[2],data[3],data[4])
 
                 }
             }
         })
-        
-        addPersonalStats(
-            view,
-            "b9d5384-9f1f-11ec-b909-0242ac120002",
-            "2022-03-09",
-            "test",
-            "12",
-            "4:8"
-        )
 
 
     }
@@ -166,8 +158,7 @@ class StatisticsFragment : Fragment() {
             .addOnSuccessListener { document ->
                 if (document != null) {
 
-                    var matchHistory: List<String> = ArrayList()
-                    matchHistory = document.data?.get("match_history") as List<String>
+                    val matchHistory: List<String> = document.data?.get("match_history") as List<String>
                     for (matchUUID in matchHistory) {
                         //retrieve match_uuid for next detail page query
                         statsResult.add(matchUUID)
@@ -199,32 +190,28 @@ class StatisticsFragment : Fragment() {
                                     val opponentScore = overallScore[statsResult[2]]
                                     val score = "$playerScore - $opponentScore"
                                     statsResult.add(score)
-                                    allStatsResult.add(statsResult)
-                                    firebaseCallBack.onCallBack(allStatsResult)
+                                    usersDB.document(statsResult[2]).get()
+                                        .addOnSuccessListener { result ->
+                                            val opponentName = result.data?.get("user_name")
+                                            statsResult[2] = opponentName as String
+                                            allStatsResult.add(statsResult)
+                                            firebaseCallBack.onCallBack(allStatsResult)
+                                        }
+
 
                                 } else {
-                                    Log.d(TAG, "No such document")
+                                    Log.d(TAG, "No such document in matchDB")
                                 }
                             }
                     }
                 } else {
-                    Log.d(TAG, "No such document")
+                    Log.d(TAG, "No such document in userDB.")
                 }
 
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "get failed with ", exception)
             }
-
-/*
-        usersDB.document(statsResult[2]).get()
-            .addOnSuccessListener { result ->
-                val opponentName = result.data?.get("user_name")
-                println(opponentName)
-                statsResult.add(opponentName as String)
-                println(statsResult)
-            }
-            */
 
 
 
