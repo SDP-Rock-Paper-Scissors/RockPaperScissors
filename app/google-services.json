@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "896605409351-3p9vl7asmio8n203nl3c5dvpltabqaef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.rps",
+            "certificate_hash": "42c8abab52db9fbe6d0b5ebecabfcb7b4789c3b9"
+          }
+        },
+        {
+          "client_id": "896605409351-grb5odgm0mdgd7gm4h5h63vsu1q20isq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.rps",
+            "certificate_hash": "0a546f684af290f83c0defd7aa90578ea66e64d8"
+          }
+        },
+        {
+          "client_id": "896605409351-t2onu1c6ifnkhqr99g5iq0sb3tfhuoeg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.rps",
+            "certificate_hash": "dd763a19fafbd8eee2200242b0c779c82dcbc587"
+          }
+        },
+        {
           "client_id": "896605409351-a1hlsfr6dkigthpbeul0ug46c8774uoa.apps.googleusercontent.com",
           "client_type": 3
         }
