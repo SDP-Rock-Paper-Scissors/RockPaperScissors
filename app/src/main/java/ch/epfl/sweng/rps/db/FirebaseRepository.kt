@@ -12,7 +12,6 @@ import kotlinx.coroutines.tasks.await
 open class FirebaseRepository(env: Env = Env.PROD) : Repository, FirebaseReferences(env) {
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         val arguments = FirebaseHelper.processUserArguments(*pairs)
-
         val uid = getCurrentUid()
         usersCollection.document(uid).update(arguments).await()
     }

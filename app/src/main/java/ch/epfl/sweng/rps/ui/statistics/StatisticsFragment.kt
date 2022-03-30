@@ -49,8 +49,14 @@ class StatisticsFragment : Fragment() {
             ) {
                 when (position) {
                     //test for selector
-                    1 -> println("x == 1")
-                    2 -> println("x == 2")
+                    1 -> {
+
+                    }
+                    2 -> {
+
+                    }
+                    3 ->{
+                    }
                     else -> { // Note the block
                         println("x is neither 1 nor 2")
                     }
@@ -68,7 +74,7 @@ class StatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // we should pass current userID here
-        readStatsData("wwHIHq1zrZADupznqThr", object : FirebaseCallBack {
+        readStatsData("cibVHZCGb0UNNnCg9dwO2VnkoBB2", object : FirebaseCallBack {
             override fun onCallBack(list: MutableList<List<String>>) {
                 for (data in list){
                     addPersonalStats(view, data[0],data[1],data[2],data[3],data[4])
@@ -158,7 +164,7 @@ class StatisticsFragment : Fragment() {
             .addOnSuccessListener { document ->
                 if (document != null) {
 
-                    val matchHistory: List<String> = document.data?.get("match_history") as List<String>
+                    val matchHistory: List<String> = document.data?.get("matchesList") as List<String>
                     for (matchUUID in matchHistory) {
                         //retrieve match_uuid for next detail page query
                         statsResult.add(matchUUID)
@@ -192,7 +198,7 @@ class StatisticsFragment : Fragment() {
                                     statsResult.add(score)
                                     usersDB.document(statsResult[2]).get()
                                         .addOnSuccessListener { result ->
-                                            val opponentName = result.data?.get("user_name")
+                                            val opponentName = result.data?.get("username")
                                             statsResult[2] = opponentName as String
                                             allStatsResult.add(statsResult)
                                             firebaseCallBack.onCallBack(allStatsResult)
