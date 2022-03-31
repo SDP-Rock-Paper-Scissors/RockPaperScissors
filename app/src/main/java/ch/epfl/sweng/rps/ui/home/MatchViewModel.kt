@@ -28,7 +28,7 @@ class MatchViewModel : ViewModel() {
         _game = Game(
             "toChangeGameId",
             "toChangeUserUid",
-            listOf(Game.Uid("computerNamesToFigureOut", isComputer = true)),
+            listOf(Game.Uid("computerNamesToFigureOut", isComputer = true), Game.Uid("me", isComputer = false)),
             Game.Mode(2, Game.Mode.Type.PC, -1, nEvents),
             null
         )

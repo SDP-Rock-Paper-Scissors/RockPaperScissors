@@ -21,7 +21,7 @@ data class Game(
     private var uidToScore: MutableMap<String, Int> = mutableMapOf()
 
     init {
-        assert((players.size + 1)== mode.playerCount) { "The number of players doesn't coincide with the gameMode !" }
+        assert(players.size == mode.playerCount) { "The number of players doesn't coincide with the gameMode !" }
         initializeScoreList()
     }
 

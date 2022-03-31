@@ -15,7 +15,7 @@ class RoundTest {
                 "player2" to Hand.SCISSORS
             ),
             timestamp = now,
-            uid = "uid",
+            roundId = "uid",
         )
         assertEquals(Hand.ROCK, round.hands["player1"])
         assertEquals(Hand.SCISSORS, round.hands["player2"])
@@ -33,7 +33,7 @@ class RoundTest {
                 "player4" to Hand.PAPER,
             ),
             timestamp = now,
-            uid = "uid",
+            roundId = "uid",
         )
 
         // player 2       | 2 win, 1 loss, 0 tie = 1
