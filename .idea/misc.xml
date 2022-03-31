@@ -9,9 +9,11 @@
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/drawable/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/drawable/spinner_background.xml" value="0.1" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/activity_login.xml" value="0.1762917933130699" />
-        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/activity_match_detail.xml" value="0.2234375" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/app_bar_main.xml" value="0.1762917933130699" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/content_main.xml" value="0.1762917933130699" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/fragment_blank.xml" value="0.2234375" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/fragment_game.xml" value="0.30434782608695654" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/fragment_home.xml" value="0.1762917933130699" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/fragment_leaderboard.xml" value="0.12284701114488349" />
