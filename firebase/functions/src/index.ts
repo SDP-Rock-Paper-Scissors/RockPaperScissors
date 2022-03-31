@@ -96,7 +96,7 @@ function createRound(game: Game): Round {
     id: randomUUID(),
     game_id: game.id,
     timestamp: Timestamp.now(),
-    hands: {}
+    hands: new Map<string, Hand>(),
   }
 }
 
