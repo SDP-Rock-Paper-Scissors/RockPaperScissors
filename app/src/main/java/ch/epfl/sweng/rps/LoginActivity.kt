@@ -18,6 +18,8 @@ class LoginActivity : AppCompatActivity() {
         startActivity(Intent(this,MainActivity::class.java))
     }
     private var authenticator: FirebaseAuthenticator = FirebaseAuthenticator(this,callback)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
