@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps
 
 import android.view.Gravity
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers.isClosed
@@ -25,42 +26,23 @@ class MainActivityTest {
     val testRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun clickOnStatistics_OpensStatisticFragment() {
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-            .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()) // Open Drawer
-
-        // Start the screen of your activity.
-        onView(withId(R.id.nav_view))
-            .perform(NavigationViewActions.navigateTo(R.id.nav_statistics))
-
-        // Check that you Activity was opened.
-        onView(withId(R.id.fragment_statistics)).check(matches(isDisplayed()))
+    fun checkFirstFragment(){
+        onView(withId(R.id.fragment_home)).check(matches(isDisplayed()))
     }
-
     @Test
-    fun clickOnLeaderboard_OpensLeaderboardFragment() {
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-            .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-            .perform(DrawerActions.open()) // Open Drawer
-
-        // Start the screen of your activity.
-        onView(withId(R.id.nav_view))
-            .perform(NavigationViewActions.navigateTo(R.id.nav_leaderboard))
-
-        // Check that you Activity was opened.
+    fun checkLeaderboard(){
+        onView(withId(R.id.nav_leaderboard)).perform(click())
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()))
     }
-
-    /* Basic implementation for the test of the action bar menu. Can be implemented when something is connected to settings
     @Test
-    fun openSettingsMenu() {
-        // Click menu
-        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
-        // Choose item "Settings"
-        onView(withId(R.id.action_settings)).perform(click());
-    } */
+    fun checkStatistics(){
+        onView(withId(R.id.nav_statistics)).perform(click())
+        onView(withId(R.id.fragment_statistics)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun checkBackHome(){
+        onView(withId(R.id.nav_statistics)).perform(click())
+        onView(withId(R.id.nav_home)).perform(click())
+        onView(withId(R.id.fragment_home)).check(matches(isDisplayed()))
+    }
 }
