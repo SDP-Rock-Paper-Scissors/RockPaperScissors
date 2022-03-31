@@ -20,7 +20,10 @@ export const queue = eu.https.onCall(async (data, context) => {
   const games = await prod.collection("games")
     .where("game_mode", "==", game_mode)
     .where("player_count", "<", game_mode.max_player_count)
+    .where("done", "==", false)
+    .orderBy("player_count", "desc")
     .orderBy("timestamp", 'asc')
+
     .get();
 
   let game: Game;
@@ -38,8 +41,8 @@ export const queue = eu.https.onCall(async (data, context) => {
   if (game.player_count === game_mode.max_player_count) {
     // start the game
     const round = createRound(game);
-    await prod.collection("games").doc(game.id).collection("rounds").doc(round.uid).set(round);
-    game.rounds.push(round.uid);
+    await prod.collection("games").doc(game.id).collection("rounds").doc(round.id).set(round);
+    game.rounds.push(round.id);
   } else if (game.player_count > game_mode.max_player_count) {
     throw new https.HttpsError("invalid-argument", "Too many players");
   }
@@ -90,8 +93,8 @@ function createGame(game_mode: GameMode): Game {
 
 function createRound(game: Game): Round {
   return {
-    uid: randomUUID(),
-    game: game.id,
+    id: randomUUID(),
+    game_id: game.id,
     timestamp: Timestamp.now(),
     hands: {}
   }
@@ -113,8 +116,12 @@ interface Game {
 }
 
 interface Round {
-  uid: string;
+  id: string;
   timestamp: Timestamp;
-  game: string;
-  hands: {};
+  game_id: string;
+  hands: Map<string, Hand>;
+}
+
+enum Hand {
+  ROCK, PAPER, SCISSORS, NONE
 }

@@ -1,5 +1,7 @@
 package ch.epfl.sweng.rps.models
 
+import com.google.firebase.Timestamp
+
 
 /**
  * Represents a game.
@@ -8,10 +10,13 @@ package ch.epfl.sweng.rps.models
  * @property mode The game mode
  */
 data class Game(
-    val uid: String,
-    val players: List<Uid>,
+    val id: String,
+    val players: List<String>,
     val rounds: List<String>,
-    val game_mode: String
+    val game_mode: String,
+    val done: Boolean,
+    val timestamp: Timestamp,
+    val player_count: Int
 ) {
     /**
      * Represents a game mode.
