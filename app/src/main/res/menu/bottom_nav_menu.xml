@@ -21,4 +21,11 @@
             android:enabled="true"
             android:title="@string/menu_statistics"
             app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_friends_icon"
+            android:enabled="true"
+            android:title="@string/menu_friends"
+            app:showAsAction="ifRoom" />
 </menu>
