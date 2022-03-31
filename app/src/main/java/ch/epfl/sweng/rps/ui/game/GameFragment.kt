@@ -6,23 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
 import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.ui.home.MatchViewModel
 
 class GameFragment : Fragment(){
 
-    private lateinit var binding: FragmentGameBinding
-    private val viewModel: GameViewModel by viewModels()
+    private var _binding: FragmentGameBinding? = null
+    private val binding get() = _binding!!
+    private val matchViewModel: MatchViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout XML file and return a binding object instance
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_game, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_game, container, false)
 
         return binding.root
     }
@@ -30,37 +34,43 @@ class GameFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rockRB.setOnClickListener{ rockPressed() }
-        binding.paperRB.setOnClickListener{ paperPressed(view)}
-        binding.scissorsRB.setOnClickListener{ scissorsPressed(view)}
+        binding.paperRB.setOnClickListener{ paperPressed()}
+        binding.scissorsRB.setOnClickListener{ scissorsPressed()}
 
     }
 
     private fun rockPressed() {
-        val result = viewModel.determineWinner(Hand.ROCK)
-        moveToWinLoseDraw(result)
+        val userResult = matchViewModel.determineRoundResults("toChangeroundId","toChangeUserUid", Hand.ROCK)
+        moveToWinLoseDraw(userResult)
     }
 
-    private fun paperPressed(view: View){
-        val result = viewModel.determineWinner(Hand.PAPER)
-        moveToWinLoseDraw(result)
+    private fun paperPressed(){
+        val userResult = matchViewModel.determineRoundResults("toChangeroundId","toChangeUserUid", Hand.PAPER)
+        moveToWinLoseDraw(userResult)
     }
 
-    private fun scissorsPressed(view: View){
-        val result = viewModel.determineWinner(Hand.SCISSORS)
-        moveToWinLoseDraw(result)
+    private fun scissorsPressed(){
+        val userResult = matchViewModel.determineRoundResults("toChangeroundId","toChangeUserUid", Hand.SCISSORS)
+        moveToWinLoseDraw(userResult)
     }
 
     private fun moveToWinLoseDraw(result: Hand.Result) {
+        //TODO: change findNavController
         when (result) {
             Hand.Result.WIN -> {
-                view?.findNavController()?.navigate(R.id.action_gameFragment_to_winFragment)
+                findNavController().navigate(R.id.action_gameFragment_to_winFragment)
             }
             Hand.Result.LOSE -> {
-                view?.findNavController()?.navigate(R.id.action_gameFragment_to_loseFragment)
+                findNavController().navigate(R.id.action_gameFragment_to_loseFragment)
             }
             else -> {
-                view?.findNavController()?.navigate(R.id.action_gameFragment_to_drawFragment)
+                findNavController().navigate(R.id.action_gameFragment_to_drawFragment)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

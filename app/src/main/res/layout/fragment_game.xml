@@ -5,8 +5,8 @@
     <!--TODO: check if everything with the data is correct -->
     <data>
         <variable
-            name="gameViewModel"
-            type="ch.epfl.sweng.rps.ui.game.GameViewModel" />
+            name="matchViewModel"
+            type="ch.epfl.sweng.rps.ui.home.MatchViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
