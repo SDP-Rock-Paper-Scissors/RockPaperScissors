@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +36,10 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
             FriendsInfo("ulose", 63, 28, 44.4, false),
             FriendsInfo("GameMstr", 90, 12, 13.3, false),
             FriendsInfo("Narut0", 312, 211, 67.6, false),
-            FriendsInfo("Insomnix", 166, 65, 39.2, false)
+            FriendsInfo("Insomnix", 166, 65, 39.2, false),
+            FriendsInfo("JustGary", 455, 343, 75.4, false),
+            FriendsInfo("RockFirst", 141, 118, 83.7, false),
+            FriendsInfo("ulose", 63, 28, 44.4, false)
         )
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
 
