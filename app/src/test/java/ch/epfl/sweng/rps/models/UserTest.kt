@@ -8,10 +8,10 @@ class UserTest {
     @Test
     fun testUser() {
         val user =
-            User("username", "uid", Privacy.PUBLIC, true, "email")
+            User("username", "uid", "PUBLIC", true, "email")
         assertEquals("username", user.username)
         assertEquals("uid", user.uid)
-        assertEquals(Privacy.PUBLIC, user.gamesHistoryPrivacy)
+        assertEquals("PUBLIC", user.gamesHistoryPrivacy)
         assertEquals(true, user.hasProfilePhoto)
         assertEquals("email", user.email)
     }

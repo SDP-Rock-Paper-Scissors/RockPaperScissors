@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.db
 
 import android.net.Uri
+import android.util.Log
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -17,22 +18,22 @@ open class FirebaseRepository(env: Env = Env.PROD) : Repository, FirebaseReferen
     }
 
 
-    override suspend fun getUser(uid: String): User {
-        val user = usersCollection.document(uid).get().await()
-        return user.toObject<User>()!!
+    override suspend fun getUser(uid: String): User? {
+        val user = usersCollection.document(uid).get().await() ?: return null
+        return user.toObject<User>()
     }
 
     override suspend fun getUserProfilePictureUrl(uid: String): Uri? {
-        return if (getUser(uid).hasProfilePhoto)
+        return if (getUser(uid)?.hasProfilePhoto == true)
             profilePicturesFolder.child(uid).downloadUrl.await()
         else
             null
     }
 
-    override suspend fun createUser(name: String, email: String?) {
+    override suspend fun createUser(name: String?,  email: String?) {
         val uid = getCurrentUid()
         usersCollection.document(uid).set(
-            FirebaseHelper.userFrom(uid, name, email)
+            FirebaseHelper.userFrom(uid, name.orEmpty(), email)
         ).await()
     }
 

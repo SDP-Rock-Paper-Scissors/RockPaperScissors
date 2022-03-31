@@ -13,7 +13,10 @@ const val EXTRA_MESSAGE = "ch.epfl.sweng.rps.MESSAGE"
 
 class LoginActivity : AppCompatActivity() {
 
-    private var callback = { user:String -> startActivity(Intent(this,MainActivity::class.java))}
+    private var callback = { user:String ->
+
+        startActivity(Intent(this,MainActivity::class.java))
+    }
     private var authenticator: FirebaseAuthenticator = FirebaseAuthenticator(this,callback)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
