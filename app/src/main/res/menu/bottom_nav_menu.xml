@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
-
-    <group android:checkableBehavior="single">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_baseline_play_circle_filled_24"
-            android:title="@string/menu_home" />
+            android:enabled="true"
+            android:title="@string/menu_home"
+            app:showAsAction="ifRoom" />
+
         <item
             android:id="@+id/nav_leaderboard"
             android:icon="@drawable/ic_baseline_leaderboard_24"
-            android:title="@string/menu_leaderboard" />
+            android:enabled="true"
+            android:title="@string/menu_leaderboard"
+            app:showAsAction="ifRoom" />
+
         <item
             android:id="@+id/nav_statistics"
             android:icon="@drawable/ic_baseline_info_24"
-            android:title="@string/menu_statistics" />
-        <item
-            android:id="@+id/nav_friends"
-            android:icon="@drawable/ic_baseline_info_24"
-            android:title="@string/menu_friends" />
-    </group>
+            android:enabled="true"
+            android:title="@string/menu_statistics"
+            app:showAsAction="ifRoom" />
 </menu>

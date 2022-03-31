@@ -13,5 +13,8 @@
     <color name="tertiary1">#C84B31</color>
     <color name="tertiary2">#ECDBBA</color>
     <color name="dark_tertiary2">#9e9177</color>
-
+    <color name="turquoise">#78D4F1</color>
+    <color name="turquoise_dark">#437d8f</color>
+    <color name="gray">#575757</color>
+    <color name="lightgray">#F1F0F0</color>
 </resources>
