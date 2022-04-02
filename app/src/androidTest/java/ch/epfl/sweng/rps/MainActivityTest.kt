@@ -46,10 +46,4 @@ class MainActivityTest {
         onView(withId(R.id.fragment_home)).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun checkBackHome() {
-        onView(withId(R.id.nav_friends)).perform(click())
-        onView(withId(R.id.nav_home)).perform(click())
-        onView(withId(R.id.fragment_friends)).check(matches(isDisplayed()))
-    }
 }

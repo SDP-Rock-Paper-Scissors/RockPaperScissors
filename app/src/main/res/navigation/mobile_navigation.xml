@@ -51,5 +51,10 @@
             android:id="@+id/action_infoPage_Fragment_to_nav_friends"
             app:destination="@id/nav_friends" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="ch.epfl.sweng.rps.ui.profile.profileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/profile_fragment" />
 
 </navigation>
