@@ -5,7 +5,7 @@ import org.junit.Assert.assertEquals
 class EnvTest {
     @org.junit.Test
     fun test() {
-        assertEquals("dev", Env.DEV.toString())
-        assertEquals("prod", Env.PROD.toString())
+        assertEquals("dev", Env.Dev.toString())
+        assertEquals("prod", Env.Prod.toString())
     }
 }

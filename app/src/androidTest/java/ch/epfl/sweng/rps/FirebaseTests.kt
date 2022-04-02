@@ -4,21 +4,21 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.Matcher
 import org.hamcrest.core.IsInstanceOf.any
-import org.junit.After
+import org.junit.*
 import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 
@@ -30,7 +30,7 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class FirebaseTests {
-    private val db = FirebaseRepository(Env.DEV)
+    private val db = FirebaseRepository(FirebaseReferences(env = Env.Dev))
 
     @Before
     fun setUp() {
@@ -39,9 +39,6 @@ class FirebaseTests {
 
     @After
     fun tearDown() {
-        runBlocking {
-            db.clearDevEnv()
-        }
         Log.d("FirebaseTests", "tearDown done")
     }
 
@@ -72,6 +69,30 @@ class FirebaseTests {
         db.listFriendRequests()
 
         thrown.expect(Exception::class.java)
-        db.acceptFriendRequest("user1")
+        db.acceptFriendRequestFrom("user1")
+    }
+
+    @Test
+    fun testServiceLocator() {
+        val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod)
+        assertEquals(Env.Prod, serviceLocatorProd.currentEnv())
+
+        val serviceLocatorDev = ServiceLocator.getInstance(env = Env.Dev)
+        assertEquals(Env.Dev, serviceLocatorDev.currentEnv())
+
+        assertEquals(Env.Dev, serviceLocatorDev.getFirebaseReferences().env)
+        assertEquals(Env.Prod, serviceLocatorProd.getFirebaseReferences().env)
+    }
+
+    @Test
+    fun testGameService() {
+        val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod)
+        assertEquals("1", serviceLocatorProd.getGameServiceForGame("1", listen = false).getGameId())
+        Assert.assertTrue(
+            serviceLocatorProd.getGameServiceForGame(
+                "1",
+                listen = false
+            ) === serviceLocatorProd.getGameServiceForGame("1", listen = false)
+        )
     }
 }

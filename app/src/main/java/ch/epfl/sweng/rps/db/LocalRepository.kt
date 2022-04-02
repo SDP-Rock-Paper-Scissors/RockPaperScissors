@@ -2,6 +2,8 @@ package ch.epfl.sweng.rps.db
 
 import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
+import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
 
@@ -72,10 +74,18 @@ class LocalRepository(private var uid: String? = null) : Repository {
             ?.toList() ?: emptyList()
     }
 
-    override suspend fun acceptFriendRequest(userUid: String) {
+    override suspend fun acceptFriendRequestFrom(userUid: String) {
         friendRequests[getCurrentUid()]?.set(
             userUid,
             friendRequests[getCurrentUid()]!![userUid]!!.copy(accepted = true)
         )
+    }
+
+    override suspend fun getGame(gameId: String): Game? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getRoundsOfGame(gameId: String): List<Round> {
+        TODO("Not yet implemented")
     }
 }

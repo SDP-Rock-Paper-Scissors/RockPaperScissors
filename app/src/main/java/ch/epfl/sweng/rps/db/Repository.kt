@@ -3,6 +3,8 @@ package ch.epfl.sweng.rps.db
 import android.net.Uri
 import ch.epfl.sweng.rps.db.RepositoryException.UserNotLoggedIn
 import ch.epfl.sweng.rps.models.FriendRequest
+import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.models.User
 
 interface Repository {
@@ -20,7 +22,11 @@ interface Repository {
 
     suspend fun listFriendRequests(): List<FriendRequest>
     suspend fun getFriends(): List<String>
-    suspend fun acceptFriendRequest(userUid: String)
-    suspend fun acceptFriendRequest(friendRequest: FriendRequest) =
-        acceptFriendRequest(friendRequest.from)
+    suspend fun acceptFriendRequestFrom(userUid: String)
+    suspend fun acceptFriendRequestFrom(friendRequest: FriendRequest) =
+        acceptFriendRequestFrom(friendRequest.from)
+
+    suspend fun getGame(gameId: String): Game?
+    suspend fun getRoundsOfGame(gameId: String): List<Round>
+    suspend fun getRoundsOfGame(game: Game): List<Round> = getRoundsOfGame(game.id)
 }

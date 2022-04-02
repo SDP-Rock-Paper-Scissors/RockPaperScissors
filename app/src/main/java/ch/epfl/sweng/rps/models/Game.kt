@@ -65,11 +65,4 @@ data class Game(
 
     val mode: GameMode
         get() = GameMode.fromString(game_mode)
-
-    val maxPlayerCount: Int
-        get() = mode.playerCount
-
-    val isPVP: Boolean
-        get() = mode.type == GameMode.Type.PVP
-
 }
