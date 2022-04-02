@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".ui.friends.FriendsFragment">
+    tools:context=".ui.friends.FriendsFragment"
+    android:id="@+id/fragment_friends">
 
     <ImageButton
         android:id="@+id/addButton"

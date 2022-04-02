@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.FriendListAdapter
@@ -15,10 +18,12 @@ import ch.epfl.sweng.rps.R
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_friends, container, false)
     }
@@ -54,10 +59,13 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         if (view == view.findViewById(R.id.infoButton)) {
             Log.i("Press info", "This is $username's info")
             Toast.makeText(activity, "This is $username's info", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_nav_friends_to_infoPage_Fragment)
+
         }
         else if (view == view.findViewById(R.id.playButton)){
             Log.i("Press info", "You will play a game with $username")
             Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_nav_friends_to_gameFragment)
         }
     }
 

@@ -43,5 +43,5 @@
     <string name="outcome">Outcome</string>
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
-    <item name="test_for_stats_row" type="id"/>
+    <item name="test_for_stats_row" type="id" />
 </resources>

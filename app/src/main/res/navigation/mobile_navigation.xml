@@ -29,11 +29,27 @@
         android:id="@+id/nav_friends"
         android:name="ch.epfl.sweng.rps.ui.friends.FriendsFragment"
         android:label="Friends"
-        tools:layout="@layout/fragment_friends" />
+        tools:layout="@layout/fragment_friends" >
+        <action
+            android:id="@+id/action_nav_friends_to_infoPage_Fragment"
+            app:destination="@id/infoPage_Fragment" />
+        <action
+            android:id="@+id/action_nav_friends_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
     <fragment
         android:id="@+id/gameFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameFragment"
         android:label="@string/menu_game"
         tools:layout="@layout/fragment_game" />
+    <fragment
+        android:id="@+id/infoPage_Fragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.InfoPage_Fragment"
+        android:label="fragment_info_page_"
+        tools:layout="@layout/fragment_info_page_" >
+        <action
+            android:id="@+id/action_infoPage_Fragment_to_nav_friends"
+            app:destination="@id/nav_friends" />
+    </fragment>
 
 </navigation>
