@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.models.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -16,7 +17,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
 
-class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (String)->Unit):
+class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (User)->Unit):
     Authenticator(callback) {
     private var auth: FirebaseAuth = Firebase.auth
     private val fbrepo: FirebaseRepository = FirebaseRepository(Env.PROD);
@@ -32,19 +33,24 @@ class FirebaseAuthenticator(private val context: ComponentActivity, val callback
     }
      private fun signInWithToken(idToken:String){
          val credential = GoogleAuthProvider.getCredential(idToken, null)
-         auth.signInWithCredential(credential).addOnCompleteListener {
-                 res -> callback(res.result.user!!.uid)
+         auth.signInWithCredential(credential).addOnCompleteListener { res ->
                  var user = res.result.user!!
+                 var userData:User
                  runBlocking{
-                     createOrGetUser(user.uid, user.displayName, user.email)
+                     userData = createOrGetUser(user.uid, user.displayName, user.email)
+                     callback(userData)
                  }
               }
          }
 
-    private suspend fun createOrGetUser(uid:String, displayName: String?, email: String?){
+    private suspend fun createOrGetUser(uid:String, displayName: String?, email: String?):User{
         Log.d("DsName", displayName.orEmpty())
-        if (fbrepo.getUser(uid) == null)
+        var user = fbrepo.getUser(uid)
+        if (user == null){
             fbrepo.createUser(displayName, email.orEmpty());
+            user = User(displayName,uid,"",false,email,null)
+        }
+        return user
     }
     override fun signInWithGoogle(){
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
