@@ -44,7 +44,7 @@
         tools:layout="@layout/fragment_game" />
     <fragment
         android:id="@+id/infoPage_Fragment"
-        android:name="ch.epfl.sweng.rps.ui.friends.InfoPage_Fragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.InfoPageFragment"
         android:label="fragment_info_page_"
         tools:layout="@layout/fragment_info_page_" >
         <action

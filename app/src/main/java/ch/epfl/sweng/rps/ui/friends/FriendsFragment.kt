@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.FriendListAdapter
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.models.FakeFriendsData
 
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
@@ -31,23 +30,11 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val friends = listOf(
-            FriendsInfo("RPSKing88", 120, 76, 63.3, true),
-            FriendsInfo("Meliodas19", 220, 110, 50.0, true),
-            FriendsInfo("Urtrash", 86, 32, 37.2, true),
-            FriendsInfo("Ben10", 14, 12, 85.7, true),
-            FriendsInfo("JustGary", 455, 343, 75.4, false),
-            FriendsInfo("RockFirst", 141, 118, 83.7, false),
-            FriendsInfo("ulose", 63, 28, 44.4, false),
-            FriendsInfo("GameMstr", 90, 12, 13.3, false),
-            FriendsInfo("Narut0", 312, 211, 67.6, false),
-            FriendsInfo("Insomnix", 166, 65, 39.2, false),
-            FriendsInfo("JustGary", 455, 343, 75.4, false),
-            FriendsInfo("RockFirst", 141, 118, 83.7, false),
-            FriendsInfo("ulose", 63, 28, 44.4, false)
-        )
+        val friends = FakeFriendsData.myFriendsData
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
 
+
+        //Get info from Fake Data object and display
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = FriendListAdapter(friends, this)
 
@@ -56,12 +43,15 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
     override fun onButtonClick(position: Int,friends: List<FriendsInfo>, view: View) {
         val username = friends[position].username
 
+
+        //if info button is clicked
         if (view == view.findViewById(R.id.infoButton)) {
             Log.i("Press info", "This is $username's info")
             Toast.makeText(activity, "This is $username's info", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_nav_friends_to_infoPage_Fragment)
 
         }
+        //if play button is clicked
         else if (view == view.findViewById(R.id.playButton)){
             Log.i("Press info", "You will play a game with $username")
             Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT).show()

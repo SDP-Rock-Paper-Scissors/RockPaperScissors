@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import ch.epfl.sweng.rps.R
 
 
-class InfoPage_Fragment : Fragment() {
+class InfoPageFragment : Fragment() {
 
 
     override fun onCreateView(
