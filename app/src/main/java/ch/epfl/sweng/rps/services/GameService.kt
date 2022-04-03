@@ -16,7 +16,7 @@ import java.util.*
 class GameService(
     private val firebase: FirebaseReferences,
     private val firebaseRepository: FirebaseRepository,
-    private val gameId: String,
+    val gameId: String,
 ) {
     private var game: Game? = null
     private var disposed = false
@@ -105,13 +105,7 @@ class GameService(
         disposed = true
     }
 
-    fun isGameOver(): Boolean {
-        return game?.done == true
-    }
-
-    fun getGameId(): String {
-        return gameId
-    }
+    fun isGameOver(): Boolean = game?.done == true
 
     private fun checkNotDisposed() {
         if (disposed) {
