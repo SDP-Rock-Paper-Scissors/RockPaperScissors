@@ -36,6 +36,7 @@ class FirebaseTests {
     @Before
     fun setUp() {
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
+        FirebaseAuth.getInstance().signInAnonymously()
     }
 
     @After
