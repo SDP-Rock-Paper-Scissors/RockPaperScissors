@@ -36,12 +36,10 @@ class FirebaseTests {
     @Before
     fun setUp() {
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
-        FirebaseAuth.getInstance().signInAnonymously()
     }
 
     @After
     fun tearDown() {
-        Log.d("FirebaseTests", "tearDown done")
     }
 
     @Test
@@ -113,7 +111,6 @@ class FirebaseTests {
         )
 
         val service = serviceLocatorProd.getGameServiceForGame("1234", start = false)
-        assertFalse(service.ready)
 
         serviceLocatorProd.getGameServiceForGame("1234", start = true)
         assertTrue(service.active)

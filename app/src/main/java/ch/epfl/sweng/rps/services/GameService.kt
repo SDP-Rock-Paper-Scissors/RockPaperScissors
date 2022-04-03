@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.services
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
+import com.google.firebase.firestore.FirebaseFirestoreException
 
 interface GameService {
     val gameId: String
@@ -13,9 +14,8 @@ interface GameService {
      *
      * In [FirebaseGameService] this listens to the game document.
      */
-    suspend fun startListening(): GameService
+    fun startListening(): GameService
 
-    val ready: Boolean
 
     val isGameFull: Boolean
 
@@ -33,5 +33,13 @@ interface GameService {
     val isGameOver: Boolean
 
     val isDisposed: Boolean
-    val active  : Boolean
+    val active: Boolean
+    fun stopListening()
+    val error: FirebaseFirestoreException?
+
+    class GameServiceException : Exception {
+        constructor(message: String) : super(message)
+        constructor(message: String, cause: Throwable) : super(message, cause)
+        constructor(cause: Throwable) : super(cause)
+    }
 }
