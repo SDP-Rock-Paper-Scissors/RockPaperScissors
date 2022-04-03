@@ -13,7 +13,7 @@ interface GameService {
      *
      * In [FirebaseGameService] this listens to the game document.
      */
-    fun startListening(): GameService
+    suspend fun startListening(): GameService
 
     val ready: Boolean
 

@@ -21,8 +21,11 @@ class FirebaseGameService(
     private lateinit var listenerRegistration: ListenerRegistration
     private var _active = false
 
-    override fun startListening(): FirebaseGameService {
+    override suspend fun startListening(): FirebaseGameService {
         checkNotDisposed()
+        gameRef.get().await().toObject<Game>()?.let {
+            game = it
+        }
         if (::listenerRegistration.isInitialized) {
             throw IllegalStateException("Listener already registered")
         }
