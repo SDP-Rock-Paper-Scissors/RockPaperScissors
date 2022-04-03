@@ -21,4 +21,12 @@
             android:enabled="true"
             android:title="@string/menu_statistics"
             app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_baseline_info_24"
+            android:title="@string/menu_profile"
+            android:enabled="true"
+            app:showAsAction="ifRoom"
+            />
+
 </menu>
