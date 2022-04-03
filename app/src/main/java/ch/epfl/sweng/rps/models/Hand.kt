@@ -23,7 +23,6 @@ enum class Hand(val id: Int) {
     }
 
     companion object {
-
         fun winner(hand1: Hand, hand2: Hand): Hand? {
             if (hand1 == hand2) return null
             if (hand1.losesTo(hand2)) return hand2

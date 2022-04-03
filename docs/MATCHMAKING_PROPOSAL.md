@@ -27,9 +27,11 @@ The game document `/game/{gameId}` looks like this:
 {
   "mode": "5P,PC,3R,0T",
   "timestamp": "2020-01-01T00:00:00.000Z",
-  "rounds": [],
+  "rounds": [{/*round object*/}, {/*round object*/}, {/*round object*/}],
+  "current_round": 0,
   "players": [/*players*/],
   "done": false,
+  "started": false,
   "users_state": {
     "user1": "ABSENT",
     "user2": "READY",
@@ -59,19 +61,16 @@ If after a certain amount of time, the game is not ready, the game is cancelled:
 - The game document is marked as done by setting the `done` field to `true`.
 
 ### 5. Round
-Once every player is ready, server adds a round document in the `rounds/` collection of the game document `/games/{gameId}/rounds/{roundId}`:
+Once every player is ready, sets the `started` field to `true`. The owner of the game is the first player in the `players` array.
+This player is the one who starts the rounds. Round objects look like this:
 ```jsonc
 // round.json
 
 {
-  "uid": "round_uid",
   "timestamp": "2020-01-01T00:00:00.000Z",
-  "players": [/*players*/],
-  "game": "game_uid",
   "hands": {}
 }
 ```
-It also adds the round's `id` to the `rounds` field of the game document.
 
 Each player pick their hand (`ROCK`, `PAPER` or `SCISSORS`). The client update the `hands` map of the round document to reflect the player's hand. Say `user1` picked `ROCK`, `user2` picked `PAPER` and `user3` picked `SCISSORS`:
 
@@ -79,10 +78,7 @@ Each player pick their hand (`ROCK`, `PAPER` or `SCISSORS`). The client update t
 // round.json
 
 {
-  "uid": "round_uid",
   "timestamp": "2020-01-01T00:00:00.000Z",
-  "players": [/*players*/],
-  "game": "game_uid",
   "hands": {
     "user1": "ROCK",
     "user2": "PAPER",
@@ -103,7 +99,7 @@ The winner of a round is determined by comparing the hands of the players. The w
 
 
 ### 6. Next Round
-Once a round is over, the server adds a new round document in the `rounds/` collection of the game document `/games/{gameId}/rounds/{roundId}`:
+Once a round is over, the owner of the game advances to the next round. By incrementing the `current_round` field by 1, the game document is updated.
 
 ### 7. Game Over
 Once all rounds are over, the game is over.
@@ -132,11 +128,10 @@ As a matter of good practice as well as security, we want to have strict access 
 
 Here is the list of rules:
 
-Resource                            | Permission | Condition
-------------------------------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-`games/{doc_id}`                    | `Read`     | -
-`games/{game_id}/rounds/{round_id}` | `Read`     | -
-`games/{game_id}/rounds/{round_id}` | `Update`   | `doc.players.contains(user.uid)`, `doc.done == false`, `doc.hands.containsKey(user.uid) == false`, `request.update.data.hands.length == 1`, `request.update.data.hands.containsKey(user.uid)`
+Resource          | Permission | Condition
+------------------|------------|----------
+`games/{game_id}` | `Read`     | -
+`games/{game_id}` | `Write`    | -
 
 All other operations on the aforementioned resources are forbidden.
 
@@ -152,6 +147,7 @@ Upon receiving the invitation, the user will be notified by a notification.
 When the HTTPS request is received, a new document is created in the `users/{userId}/invitations/` collection:
 
 ```jsonc
+// invitation.json
 {
   "game": "game_uid",
   "timestamp": "2020-01-01T00:00:00.000Z",

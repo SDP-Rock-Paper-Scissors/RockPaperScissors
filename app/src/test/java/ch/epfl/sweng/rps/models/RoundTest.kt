@@ -5,7 +5,6 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class RoundTest {
-
     @Test
     fun testProperties() {
         val now = Timestamp.now()
@@ -15,8 +14,6 @@ class RoundTest {
                 "player2" to Hand.SCISSORS
             ),
             timestamp = now,
-            id = "uid",
-            game_id = "game_id"
         )
         assertEquals(Hand.ROCK, round.hands["player1"])
         assertEquals(Hand.SCISSORS, round.hands["player2"])
@@ -34,8 +31,6 @@ class RoundTest {
                 "player4" to Hand.PAPER,
             ),
             timestamp = now,
-            id = "uid",
-            game_id = "game_id"
         )
 
         // player 2       | 2 win, 1 loss, 0 tie = 1
@@ -44,7 +39,7 @@ class RoundTest {
 
         val scores = round.computeScores()
         assertEquals("player2", scores[0].uid)
-        assertEquals(1, scores[0].score)
+        assertEquals(1, scores[0].points)
 
         assertTrue(scores[1].uid in listOf("player3", "player4"))
         assertTrue(scores[2].uid in listOf("player3", "player4"))

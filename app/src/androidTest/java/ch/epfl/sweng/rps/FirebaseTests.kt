@@ -19,6 +19,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.core.IsInstanceOf.any
 import org.junit.*
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 
@@ -42,34 +43,44 @@ class FirebaseTests {
         Log.d("FirebaseTests", "tearDown done")
     }
 
-    @get:Rule
-    val thrown: ExpectedException = ExpectedException.none()
-
-
-    private val isAnException: Matcher<Exception> = any(Exception::class.java)
-
     @Test
     fun testThrowsWhenNotLoggedIn() = runTest(UnconfinedTestDispatcher()) {
         FirebaseAuth.getInstance().signOut()
 
         assertEquals(false, db.isLoggedIn)
-        thrown.expect(Exception::class.java)
-        db.getCurrentUid();
+        assertThrows(Exception::class.java) {
+            db.getCurrentUid()
+        }
 
-        thrown.expect(isAnException)
-        db.updateUser(User.Field.USERNAME to "test")
+        assertThrows(Exception::class.java) {
+            runBlocking {
+                db.updateUser(User.Field.USERNAME to "test")
+            }
+        }
 
-        thrown.expect(Exception::class.java)
-        db.createUser("user1", "test@example.com")
+        assertThrows(Exception::class.java) {
+            runBlocking {
+                db.createUser("user1", "test@example.com")
+            }
+        }
 
-        thrown.expect(Exception::class.java)
-        db.sendFriendRequestTo("user1")
+        assertThrows(Exception::class.java) {
+            runBlocking {
+                db.sendFriendRequestTo("user1")
+            }
+        }
 
-        thrown.expect(Exception::class.java)
-        db.listFriendRequests()
+        assertThrows(Exception::class.java) {
+            runBlocking {
+                db.listFriendRequests()
+            }
+        }
 
-        thrown.expect(Exception::class.java)
-        db.acceptFriendRequestFrom("user1")
+        assertThrows(Exception::class.java) {
+            runBlocking {
+                db.acceptFriendRequestFrom("user1")
+            }
+        }
     }
 
     @Test
@@ -87,12 +98,12 @@ class FirebaseTests {
     @Test
     fun testGameService() {
         val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod)
-        assertEquals("1", serviceLocatorProd.getGameServiceForGame("1", listen = false).getGameId())
+        assertEquals("1", serviceLocatorProd.getGameServiceForGame("1", start = false).getGameId())
         Assert.assertTrue(
             serviceLocatorProd.getGameServiceForGame(
                 "1",
-                listen = false
-            ) === serviceLocatorProd.getGameServiceForGame("1", listen = false)
+                start = false
+            ) === serviceLocatorProd.getGameServiceForGame("1", start = false)
         )
     }
 }

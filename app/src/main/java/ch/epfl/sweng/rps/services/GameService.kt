@@ -17,7 +17,6 @@ class GameService(
     private val firebase: FirebaseReferences,
     private val firebaseRepository: FirebaseRepository,
     private val gameId: String,
-    val listen: Boolean = true
 ) {
     private var game: Game? = null
     private var disposed = false
@@ -26,19 +25,17 @@ class GameService(
 
     fun start(): GameService {
         checkNotDisposed()
-        if (listen) {
-            if (::listenerRegistration.isInitialized) {
-                throw IllegalStateException("Listener already registered")
-            }
-            listenerRegistration =
-                gameRef.addSnapshotListener { value, error ->
-                    if (error != null) {
-                        throw error
-                    } else {
-                        game = value?.toObject<Game>()
-                    }
-                }
+        if (::listenerRegistration.isInitialized) {
+            throw IllegalStateException("Listener already registered")
         }
+        listenerRegistration =
+            gameRef.addSnapshotListener { value, error ->
+                if (error != null) {
+                    throw error
+                } else {
+                    game = value?.toObject<Game>()
+                }
+            }
         return this
     }
 
@@ -60,46 +57,46 @@ class GameService(
 
     suspend fun addRound() {
         checkNotDisposed()
-        val game = currentGame()
-        val uuid = UUID.randomUUID().toString()
+        val game = refreshGame()
+        if (game.players.first() != firebaseRepository.getCurrentUid()) {
+            throw IllegalStateException("Only the first player can add a round")
+        }
         val round = Round(
-            id = uuid,
             hands = emptyMap(),
             timestamp = Timestamp.now(),
-            game_id = gameId
         )
 
         gameRef.update(
             mapOf(
-                "rounds" to arrayUnion(uuid)
+                "rounds.${game.current_round + 1}" to round,
+                "current_round" to game.current_round + 1,
             )
         ).await()
-        firebase.roundsOfGame(gameId).document(uuid).set(round).await()
     }
 
-    suspend fun refreshGame() {
+    suspend fun refreshGame(): Game {
         checkNotDisposed()
-        game = gameRef.get().await().toObject<Game>()
+        val g = gameRef.get().await().toObject<Game>()!!
+        game = g
+        return g
     }
 
-    suspend fun getCurrrentRound(): Round {
+    fun getCurrrentRound(): Round {
         checkNotDisposed()
         val game = currentGame()
         if (game.rounds.isEmpty()) {
             throw IllegalStateException("Game has no rounds")
         }
-        val roundId = game.rounds.last()
-        return firebase.roundsOfGame(gameId).document(roundId).get().await().toObject<Round>()!!
+        return game.rounds[game.current_round.toString()]!!
     }
 
     suspend fun playHand(hand: Hand) {
         checkNotDisposed()
-        val round = getCurrrentRound()
+        val game = refreshGame()
         val me = firebaseRepository.getCurrentUid()
-            ?: throw IllegalStateException("User is not logged in")
-        val handMap = round.hands.toMutableMap()
-        handMap[me] = hand
-        firebase.roundsOfGame(gameId).document(round.id).update(mapOf("hands" to handMap)).await()
+        firebase.gamesCollection.document(gameId)
+            .update(mapOf("rounds.${game.current_round}.${me}" to hand))
+            .await()
     }
 
     fun dispose() {
@@ -121,6 +118,4 @@ class GameService(
             throw IllegalStateException("GameService is disposed")
         }
     }
-
-
 }

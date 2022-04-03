@@ -5,14 +5,18 @@ import com.google.firebase.Timestamp
 
 /**
  * Represents a game.
- * @property uid Unique ID of the game
- * @property players The
+ * @property id Unique ID of the game
+ * @property players The players of the game
  * @property mode The game mode
+ * @property rounds an array of rounds (Note that this is a map, not an actual array)
+ * @property current_round This is the current round
+ * @property timestamp The timestamp of the game
  */
 data class Game(
     val id: String,
     val players: List<String>,
-    val rounds: List<String>,
+    val rounds: Map<String, Round>,
+    val current_round: Int,
     val game_mode: String,
     val done: Boolean,
     val timestamp: Timestamp,

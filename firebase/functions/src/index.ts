@@ -12,7 +12,7 @@ export const queue = eu.https.onCall(async (data, context) => {
 
   const gamemodes = await get_gamemodes();
 
-  if (!gamemodes.some(gm => gm.name === game_mode.name)) {
+  if (gamemodes.every(gm => gm.name === game_mode.name)) {
     throw new https.HttpsError("invalid-argument", `Provided gamemode \`${game_mode_s}\` is invalid`);
   }
   const game_mode = new GameMode(game_mode_s);
@@ -23,7 +23,6 @@ export const queue = eu.https.onCall(async (data, context) => {
     .where("done", "==", false)
     .orderBy("player_count", "desc")
     .orderBy("timestamp", 'asc')
-
     .get();
 
   let game: Game;
@@ -38,18 +37,95 @@ export const queue = eu.https.onCall(async (data, context) => {
 
   addPlayer(game, context.auth!.uid);
 
-  if (game.player_count === game_mode.max_player_count) {
-    // start the game
-    const round = createRound(game);
-    await prod.collection("games").doc(game.id).collection("rounds").doc(round.id).set(round);
-    game.rounds.push(round.id);
-  } else if (game.player_count > game_mode.max_player_count) {
+  if (game.player_count > game_mode.max_player_count) {
     throw new https.HttpsError("invalid-argument", "Too many players");
   }
 
+  game.started = game.player_count === game_mode.max_player_count;
+  //! TRANSACTION !!!
   await prod.collection("games").doc(game.id).set(game);
   return game.id;
 });
+
+
+/*
+to play with friends in a game, we need to call the following endpoint: /invite with the following parameters:
+
+userId: the user id of the user to invite
+Upon receiving the invitation, the user will be notified by a notification.
+
+Server-side
+When the HTTPS request is received, a new document is created in the users/{userId}/invitations/ collection:
+
+{
+  "game": "game_uid",
+  "timestamp": "2020-01-01T00:00:00.000Z",
+  "inviter": "user_uid",
+  "invitation_id": "invitation_id"
+}*/
+
+export const invite = eu.https.onCall(async (data, context) => {
+  const user_id = data.user_id as string | undefined;
+  const game_mode = data.game_mode as string | undefined;
+  if (user_id === undefined) {
+    throw new https.HttpsError("invalid-argument", "user_id is required");
+  }
+  if (game_mode === undefined) {
+    throw new https.HttpsError("invalid-argument", "game_mode is required");
+  }
+
+  const gamemodes = await get_gamemodes();
+
+  if (!gamemodes.some(gm => gm.name === game_mode)) {
+    throw new https.HttpsError("invalid-argument", `Provided gamemode \`${game_mode}\` is invalid`);
+  }
+
+  const user = await prod.collection("users").doc(user_id).get();
+  if (!user.exists) {
+    throw new https.HttpsError("not-found", "User not found");
+  }
+
+  const game = createGame(new GameMode(game_mode));
+  addPlayer(game, context.auth!.uid);
+
+  const invitation = {
+    game: game.id,
+    timestamp: Timestamp.now(),
+    inviter: context.auth!.uid,
+    invitation_id: randomUUID()
+  };
+
+  await prod.collection("users").doc(user_id).collection("invitations").doc(invitation.invitation_id).set(invitation);
+  return game.id;
+})
+
+
+export const join = eu.https.onCall(async (data, context) => {
+  const invitation_id = data.invitation_id as string | undefined;
+
+  if (invitation_id === undefined) {
+    throw new https.HttpsError("invalid-argument", "invitation_id is required");
+  }
+
+  const invitation = await prod.collection("users").doc(context.auth!.uid).collection("invitations").doc(invitation_id).get();
+  if (!invitation.exists) {
+    throw new https.HttpsError("not-found", "Invitation not found");
+  }
+
+  const game = await prod.collection("games").doc(invitation.data()!.game).get();
+  if (!game.exists) {
+    throw new https.HttpsError("not-found", "Game not found");
+  }
+
+  if (game.data()!.player_count >= new GameMode(game.data()!.game_mode).max_player_count) {
+    throw new https.HttpsError("invalid-argument", "Game is full");
+  }
+
+  addPlayer(game.data() as Game, context.auth!.uid);
+  //! TRANSACTION !!!
+  await prod.collection("games").doc(game.id).set(game.data() as Game);
+  await prod.collection("users").doc(context.auth!.uid).collection("invitations").doc(invitation_id).delete();
+})
 
 async function get_gamemodes(): Promise<GameMode[]> {
   const gamemodes = await prod.collection("global").doc("gamemodes").get();
@@ -78,26 +154,17 @@ enum GameType {
 
 const prod = getFirestore().doc('env/prod/');
 
-
-
 function createGame(game_mode: GameMode): Game {
   return {
     id: randomUUID(),
     game_mode: game_mode.name,
-    player_count: game_mode.max_player_count,
+    player_count: 0,
     timestamp: Timestamp.now(),
     players: [],
-    rounds: []
+    rounds: new Map<string, Round>(),
+    current_round: 0,
+    started: false
   };
-}
-
-function createRound(game: Game): Round {
-  return {
-    id: randomUUID(),
-    game_id: game.id,
-    timestamp: Timestamp.now(),
-    hands: new Map<string, Hand>(),
-  }
 }
 
 function addPlayer(game: Game, player: string) {
@@ -112,13 +179,13 @@ interface Game {
   player_count: number;
   timestamp: Timestamp;
   players: string[];
-  rounds: string[];
+  rounds: Map<string, Round>;
+  current_round: number;
+  started: boolean;
 }
 
 interface Round {
-  id: string;
   timestamp: Timestamp;
-  game_id: string;
   hands: Map<string, Hand>;
 }
 
