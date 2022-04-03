@@ -8,7 +8,7 @@ import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.models.User
 
 interface Repository {
-    suspend fun updateUser(vararg pairs: Pair<User.Field, Any>): Unit
+    suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
     fun rawCurrentUid(): String?
     fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn()
     val isLoggedIn get() = rawCurrentUid() != null
@@ -17,7 +17,7 @@ interface Repository {
 
     suspend fun getUserProfilePictureUrl(uid: String): Uri?
 
-    suspend fun createUser(name: String, email: String?): Unit
+    suspend fun createUser(name: String, email: String?)
     suspend fun sendFriendRequestTo(uid: String)
 
     suspend fun listFriendRequests(): List<FriendRequest>

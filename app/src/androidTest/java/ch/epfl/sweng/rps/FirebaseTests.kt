@@ -1,8 +1,8 @@
 package ch.epfl.sweng.rps
 
 import android.util.Log
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
@@ -12,15 +12,12 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.Matcher
-import org.hamcrest.core.IsInstanceOf.any
-import org.junit.*
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
-import org.junit.rules.ExpectedException
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
 import org.junit.runner.RunWith
 
 /**
@@ -98,8 +95,8 @@ class FirebaseTests {
     @Test
     fun testGameService() {
         val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod)
-        assertEquals("1", serviceLocatorProd.getGameServiceForGame("1", start = false).getGameId())
-        Assert.assertTrue(
+        assertEquals("1", serviceLocatorProd.getGameServiceForGame("1", start = false).gameId)
+        assertTrue(
             serviceLocatorProd.getGameServiceForGame(
                 "1",
                 start = false

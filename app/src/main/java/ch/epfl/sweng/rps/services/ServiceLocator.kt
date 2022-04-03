@@ -36,12 +36,12 @@ class ServiceLocator(private val env: Env) {
         return firebaseRepository
     }
 
-    private val gameServices = mutableMapOf<String, GameService>()
+    private val gameServices = mutableMapOf<String, FirebaseGameService>()
 
-    fun getGameServiceForGame(gameId: String, start: Boolean = true): GameService {
+    fun getGameServiceForGame(gameId: String, start: Boolean = true): FirebaseGameService {
         cleanUpServices()
         val service = gameServices.getOrPut(gameId) {
-            GameService(
+            FirebaseGameService(
                 firebase = getFirebaseReferences(),
                 firebaseRepository = getFirebaseRepository(),
                 gameId = gameId
@@ -49,14 +49,14 @@ class ServiceLocator(private val env: Env) {
 
         }
         if (start) {
-            service.start()
+            service.startListening()
         }
         return service
     }
 
     private fun cleanUpServices() {
         for (gameService in gameServices) {
-            if (gameService.value.isGameOver()) {
+            if (gameService.value.isGameOver) {
                 gameService.value.dispose()
                 gameServices.remove(gameService.key)
             }

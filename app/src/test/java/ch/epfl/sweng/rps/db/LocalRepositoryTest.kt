@@ -5,8 +5,8 @@ import ch.epfl.sweng.rps.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 @ExperimentalCoroutinesApi
 class LocalRepositoryTest {
@@ -87,7 +87,7 @@ class LocalRepositoryTest {
         assertEquals("user1", localRepository.rawCurrentUid())
         assertTrue(localRepository.isLoggedIn)
 
-        localRepository.setCurrentUid(null);
+        localRepository.setCurrentUid(null)
 
         assertEquals(null, localRepository.rawCurrentUid())
         assertThrows(UserNotLoggedIn::class.java) { localRepository.getCurrentUid() }
