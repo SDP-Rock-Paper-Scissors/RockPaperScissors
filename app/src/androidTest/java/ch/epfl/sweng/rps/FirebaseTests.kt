@@ -6,7 +6,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.services.FirebaseGameService
+import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -90,17 +93,72 @@ class FirebaseTests {
 
         assertEquals(Env.Dev, serviceLocatorDev.getFirebaseReferences().env)
         assertEquals(Env.Prod, serviceLocatorProd.getFirebaseReferences().env)
+
+        assertEquals(
+            serviceLocatorProd.getFirebaseRepository(),
+            serviceLocatorProd.getFirebaseRepository()
+        )
     }
 
     @Test
     fun testGameService() {
         val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod)
-        assertEquals("1", serviceLocatorProd.getGameServiceForGame("1", start = false).gameId)
+        assertEquals("1234", serviceLocatorProd.getGameServiceForGame("1234", start = false).gameId)
         assertTrue(
             serviceLocatorProd.getGameServiceForGame(
                 "1",
                 start = false
             ) === serviceLocatorProd.getGameServiceForGame("1", start = false)
         )
+
+        val service = serviceLocatorProd.getGameServiceForGame("1234", start = false)
+        assertFalse(service.ready)
+
+        serviceLocatorProd.getGameServiceForGame("1234", start = true)
+        assertTrue(service.active)
+
+        val throwingActions: List<suspend (service: FirebaseGameService) -> Unit> =
+            listOf(
+                { it.startListening() }, // We already listened
+                { it.refreshGame() },
+                { it.addRound() },
+                { it.playHand(Hand.PAPER) },
+            )
+
+        for (action in throwingActions) {
+            assertThrows(Exception::class.java) {
+                runBlocking {
+                    action(service)
+                }
+            }
+        }
+
+        service.dispose()
+
+        assertTrue(service.isDisposed)
+    }
+
+    @Test
+    fun disposingGameServices() {
+        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
+        val service = serviceLocator.getGameServiceForGame("1234", start = false)
+        assertEquals(listOf("1234"), serviceLocator.cachedGameServices)
+        assertFalse(service.isDisposed)
+        serviceLocator.disposeAllGameServices()
+        assertTrue(service.isDisposed)
+        assertEquals(emptyList<String>(), serviceLocator.cachedGameServices)
+    }
+
+    @Test
+    fun disposingGameServices2() {
+        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
+        val service = serviceLocator.getGameServiceForGame("1234", start = false)
+        assertEquals(listOf("1234"), serviceLocator.cachedGameServices)
+        assertFalse(service.isDisposed)
+        service.dispose()
+        assertTrue(service.isDisposed)
+        serviceLocator.disposeAllGameServices()
+        assertTrue(service.isDisposed)
+        assertEquals(emptyList<String>(), serviceLocator.cachedGameServices)
     }
 }

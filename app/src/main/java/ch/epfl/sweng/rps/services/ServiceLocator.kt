@@ -63,10 +63,16 @@ class ServiceLocator(private val env: Env) {
         }
     }
 
-    fun dispose() {
+    fun disposeAllGameServices() {
         for (gameService in gameServices.values) {
-            gameService.dispose()
+            if (!gameService.isDisposed) gameService.dispose()
         }
         gameServices.clear()
     }
+
+
+    val cachedGameServices: List<String>
+        get() {
+            return gameServices.keys.toList()
+        }
 }

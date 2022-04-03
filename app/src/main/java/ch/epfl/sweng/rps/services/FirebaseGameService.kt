@@ -16,9 +16,10 @@ class FirebaseGameService(
     override val gameId: String,
 ) : GameService {
     private var game: Game? = null
-    private var disposed = false
+    private var _disposed = false
     private var gameRef = firebase.gamesCollection.document(gameId)
     private lateinit var listenerRegistration: ListenerRegistration
+    private var _active = false
 
     override fun startListening(): FirebaseGameService {
         checkNotDisposed()
@@ -33,17 +34,16 @@ class FirebaseGameService(
                     game = value?.toObject<Game>()
                 }
             }
+        _active = true
         return this
     }
 
-    override fun isServiceReady(): Boolean {
-        return game != null
-    }
+    override val ready: Boolean get() = game != null
 
     override val currentGame: Game
         get() {
             checkNotDisposed()
-            if (!isServiceReady()) {
+            if (!ready) {
                 throw IllegalStateException("Game service has not received a game yet")
             }
             return game!!
@@ -102,14 +102,19 @@ class FirebaseGameService(
 
     override fun dispose() {
         checkNotDisposed()
-        listenerRegistration.remove()
-        disposed = true
+        if (::listenerRegistration.isInitialized) {
+            listenerRegistration.remove()
+        }
+        _disposed = true
     }
 
     override val isGameOver: Boolean get() = game?.done == true
+    override val isDisposed: Boolean get() = _disposed
+    override val active: Boolean
+        get() = _active
 
     private fun checkNotDisposed() {
-        if (disposed) {
+        if (_disposed) {
             throw IllegalStateException("GameService is disposed")
         }
     }

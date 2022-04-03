@@ -15,7 +15,7 @@ interface GameService {
      */
     fun startListening(): GameService
 
-    fun isServiceReady(): Boolean
+    val ready: Boolean
 
     val isGameFull: Boolean
 
@@ -31,4 +31,7 @@ interface GameService {
     fun dispose()
 
     val isGameOver: Boolean
+
+    val isDisposed: Boolean
+    val active  : Boolean
 }

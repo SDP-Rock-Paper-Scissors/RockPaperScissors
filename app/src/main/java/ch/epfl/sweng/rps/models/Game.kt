@@ -62,11 +62,5 @@ data class Game(
         }
     }
 
-    data class Uid(
-        val uid: String,
-        val isComputer: Boolean = false
-    )
-
-    val mode: GameMode
-        get() = GameMode.fromString(game_mode)
+    val mode: GameMode get() = GameMode.fromString(game_mode)
 }
