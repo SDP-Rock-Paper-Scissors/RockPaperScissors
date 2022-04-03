@@ -36,6 +36,9 @@ class FirebaseTests {
     @Before
     fun setUp() {
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
+        runBlocking {
+            FirebaseAuth.getInstance().signOut()
+        }
     }
 
     @After
@@ -112,12 +115,8 @@ class FirebaseTests {
 
         val service = serviceLocatorProd.getGameServiceForGame("1234", start = false)
 
-        serviceLocatorProd.getGameServiceForGame("1234", start = true)
-        assertTrue(service.active)
-
         val throwingActions: List<suspend (service: FirebaseGameService) -> Unit> =
             listOf(
-                { it.startListening() }, // We already listened
                 { it.refreshGame() },
                 { it.addRound() },
                 { it.playHand(Hand.PAPER) },
@@ -150,6 +149,7 @@ class FirebaseTests {
     @Test
     fun disposingGameServices2() {
         val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
+        serviceLocator.disposeAllGameServices()
         val service = serviceLocator.getGameServiceForGame("1234", start = false)
         assertEquals(listOf("1234"), serviceLocator.cachedGameServices)
         assertFalse(service.isDisposed)
