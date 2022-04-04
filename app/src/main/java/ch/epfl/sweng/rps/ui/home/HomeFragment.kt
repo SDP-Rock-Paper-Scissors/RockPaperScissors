@@ -30,6 +30,9 @@ class HomeFragment : Fragment() {
         _binding!!.buttonPlayOneOfflineGame.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(R.id.gameFragment)
         }
+        _binding!!.buttonActivateCamera.setOnClickListener { view: View ->
+            Navigation.findNavController(view).navigate(R.id.cameraFragment)
+        }
 
         return binding.root
     }
