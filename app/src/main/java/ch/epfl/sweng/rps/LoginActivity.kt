@@ -2,7 +2,9 @@ package ch.epfl.sweng.rps
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
 import ch.epfl.sweng.rps.models.User
@@ -20,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
             b.putString("email", user.email)
             b.putString("display_name", user.username)
             b.putString("uid",user.uid)
-            b.putString("privacy", user.games_history_privacy.toString())
+            b.putString("privacy", user.gamesHistoryPrivacy)
             intent.putExtra("User",b)
             startActivity(intent)
         }

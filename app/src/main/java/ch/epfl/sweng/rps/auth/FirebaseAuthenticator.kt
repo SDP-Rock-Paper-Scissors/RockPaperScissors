@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -17,44 +17,42 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
 
-class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (User) -> Unit) :
+class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (User)->Unit):
     Authenticator(callback) {
     private var auth: FirebaseAuth = Firebase.auth
-    private val fbrepo: FirebaseRepository = ServiceLocator.getInstance().getFirebaseRepository();
-    private val resultLauncher =
-        context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-            val data: Intent? = res.data
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)!!
-                signInWithToken(account.idToken!!)
-            } catch (e: ApiException) {
+    private val fbrepo: FirebaseRepository = FirebaseRepository(Env.PROD);
+    private val resultLauncher =    context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+        val data: Intent? = res.data
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val account = task.getResult(ApiException::class.java)!!
+            signInWithToken(account.idToken!!)
+        } catch (e: ApiException) {
 
-            }
-        }
-
-    private fun signInWithToken(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener { res ->
-            var user = res.result.user!!
-            var userData: User
-            runBlocking {
-                userData = createOrGetUser(user.uid, user.displayName, user.email)
-                callback(userData)
-            }
         }
     }
+     private fun signInWithToken(idToken:String){
+         val credential = GoogleAuthProvider.getCredential(idToken, null)
+         auth.signInWithCredential(credential).addOnCompleteListener { res ->
+                 var user = res.result.user!!
+                 var userData:User
+                 runBlocking{
+                     userData = createOrGetUser(user.uid, user.displayName, user.email)
+                     callback(userData)
+                 }
+              }
+         }
 
-    private suspend fun createOrGetUser(uid: String, displayName: String?, email: String?): User {
+    private suspend fun createOrGetUser(uid:String, displayName: String?, email: String?):User{
         Log.d("DsName", displayName.orEmpty())
         var user = fbrepo.getUser(uid)
-        if (user == null) {
-            user = fbrepo.createThisUser(displayName, email);
+        if (user == null){
+            fbrepo.createUser(displayName, email.orEmpty());
+            user = User(displayName,uid,"",false,email,null)
         }
         return user
     }
-
-    override fun signInWithGoogle() {
+    override fun signInWithGoogle(){
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id1))
             .requestEmail()
@@ -63,6 +61,7 @@ class FirebaseAuthenticator(private val context: ComponentActivity, val callback
         val mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
         resultLauncher.launch(mGoogleSignInClient.signInIntent)
     }
+
 
 
     companion object {

@@ -1,12 +1,12 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.db.Repository.UserNotLoggedIn
+import ch.epfl.sweng.rps.db.RepositoryException.UserNotLoggedIn
 import ch.epfl.sweng.rps.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import org.junit.Assert.*
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class LocalRepositoryTest {
@@ -17,7 +17,7 @@ class LocalRepositoryTest {
         localRepository.setCurrentUid("user1234")
         assertEquals("user1234", localRepository.getCurrentUid())
 
-        localRepository.createThisUser("User", "user@company.org")
+        localRepository.createUser("User", "user@company.org")
         val user = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
@@ -39,7 +39,7 @@ class LocalRepositoryTest {
         localRepository.setCurrentUid("user1234")
         assertEquals("user1234", localRepository.getCurrentUid())
 
-        localRepository.createThisUser("User", "user@company.org")
+        localRepository.createUser("User", "user@company.org")
         val user = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
@@ -55,7 +55,7 @@ class LocalRepositoryTest {
         localRepository.sendFriendRequestTo(u2)
 
         localRepository.setCurrentUid(u2)
-        localRepository.acceptFriendRequestFrom(u1)
+        localRepository.acceptFriendRequest(u1)
 
         assertTrue(localRepository.getFriends().contains(u1))
         assertEquals(1, localRepository.getFriends().size)
@@ -72,7 +72,7 @@ class LocalRepositoryTest {
 
         localRepository.setCurrentUid(u2)
         val friendRequest = localRepository.listFriendRequests().find { it.from == u1 }
-        localRepository.acceptFriendRequestFrom(friendRequest!!)
+        localRepository.acceptFriendRequest(friendRequest!!)
 
         assertTrue(localRepository.getFriends().contains(u1))
         assertEquals(1, localRepository.getFriends().size)
@@ -87,7 +87,7 @@ class LocalRepositoryTest {
         assertEquals("user1", localRepository.rawCurrentUid())
         assertTrue(localRepository.isLoggedIn)
 
-        localRepository.setCurrentUid(null)
+        localRepository.setCurrentUid(null);
 
         assertEquals(null, localRepository.rawCurrentUid())
         assertThrows(UserNotLoggedIn::class.java) { localRepository.getCurrentUid() }

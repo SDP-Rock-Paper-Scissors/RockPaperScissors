@@ -1,40 +1,31 @@
 package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Hand.Result
-import ch.epfl.sweng.rps.models.PointSystem.*
 import com.google.firebase.Timestamp
 
-/*
- * This file is part of rps-android
- * pa
- */
 data class Round(
     val hands: Map<String, Hand>,
     val timestamp: Timestamp,
+    val uid: String,
 ) {
-    fun computeScores(pointSystem: PointSystem = DefaultPointSystem()): List<Score> {
-        val points = hashMapOf<String, List<Result>>()
+    fun computeScores(pointSystem: PointSystem = PointSystem.DEFAULT): List<Score> {
+        val points = hashMapOf<String, Int>()
         for ((uid, hand) in hands) {
             for ((uid2, hand2) in hands) {
                 if (uid != uid2) {
-                    points[uid] = listOf(
-                        *(points[uid] ?: emptyList()).toTypedArray(),
-                        (hand vs hand2)
-                    )
+                    points[uid] = (points[uid] ?: 0) + when (hand vs hand2) {
+                        Result.WIN -> pointSystem.win
+                        Result.LOSE -> pointSystem.lose
+                        Result.DRAW -> pointSystem.draw
+                    }
                 }
             }
         }
-        return points.map { res ->
-            Score(
-                res.key,
-                results = res.value,
-                points = res.value.sumOf { pointSystem.getPoints(it) })
-        }.sortedByDescending { it.points }
+        return points.map { Score(it.key, it.value) }.sortedByDescending { it.score }
     }
 
-    class Score(
+    data class Score(
         val uid: String,
-        val results: List<Result>,
-        val points: Int
+        val score: Int
     )
 }

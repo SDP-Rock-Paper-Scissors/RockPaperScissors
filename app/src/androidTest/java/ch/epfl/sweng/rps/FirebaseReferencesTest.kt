@@ -18,16 +18,16 @@ class FirebaseReferencesTest {
     @Test
     fun usersFriendRequestOfUid() {
         assertEquals(
-            "env/dev/users/{uid}/friend_requests",
-            FirebaseReferences(Env.Dev).usersFriendRequestOfUid("{uid}").path
+            "users/{uid}/friend_requests",
+            FirebaseReferences(Env.DEV).usersFriendRequestOfUid("{uid}").path
         )
     }
 
     @Test
     fun getUsersCollection() {
         assertEquals(
-            "env/dev/users",
-            FirebaseReferences(Env.Dev).usersCollection.path
+            "users",
+            FirebaseReferences(Env.DEV).usersCollection.path
         )
     }
 
@@ -35,13 +35,13 @@ class FirebaseReferencesTest {
     fun getProfilePicturesFolder() {
         assertEquals(
             "/env/dev/profile_pictures",
-            FirebaseReferences(Env.Dev).profilePicturesFolder.path
+            FirebaseReferences(Env.DEV).profilePicturesFolder.path
         )
     }
 
     @Test
     fun getEnv() {
-        val repo = FirebaseReferences(Env.Dev)
-        assertEquals(Env.Dev, repo.env)
+        val repo = FirebaseReferences(Env.DEV)
+        assertEquals(Env.DEV, repo.env)
     }
 }

@@ -38,7 +38,7 @@ class profileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<TextView>(R.id.TextEmail).text = user.email
         view.findViewById<TextView>(R.id.TextDisplayName).text = user.username
-        view.findViewById<TextView>(R.id.TextPrivacy).text = user.games_history_privacy.toString()
+        view.findViewById<TextView>(R.id.TextPrivacy).text = user.gamesHistoryPrivacy
     }
 
 }
