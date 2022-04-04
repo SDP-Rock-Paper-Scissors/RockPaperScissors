@@ -6,15 +6,21 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class HandTest {
+
     @Test
-    fun table() {
+    fun `assert in match-up at one loses`() {
+        Hand.checkEveryHandLosesTo()
+    }
+
+    @Test
+    fun `make sure the basic wins`() {
         assertEquals(WIN, ROCK vs SCISSORS)
         assertEquals(WIN, PAPER vs ROCK)
         assertEquals(WIN, SCISSORS vs PAPER)
     }
 
     @Test
-    fun noneAlwaysLoses() {
+    fun `none always loses`() {
         assertEquals(LOSS, NONE vs ROCK)
         assertEquals(LOSS, NONE vs PAPER)
         assertEquals(LOSS, NONE vs SCISSORS)
@@ -27,7 +33,7 @@ class HandTest {
     }
 
     @Test
-    fun isCommutative() {
+    fun `check winner is commutative`() {
         for (a in Hand.values()) {
             for (b in Hand.values()) {
                 assertEquals(Hand.winner(a, b), Hand.winner(b, a))

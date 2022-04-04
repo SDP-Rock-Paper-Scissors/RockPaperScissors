@@ -126,7 +126,7 @@ class FirebaseGameService(
         _disposed = true
     }
 
-    override val isGameOver: Boolean get() = game?.done == true
+    override val isGameOver: Boolean get() = game?.done ?: false
     override val isDisposed: Boolean get() = _disposed
     override val active: Boolean
         get() = _active

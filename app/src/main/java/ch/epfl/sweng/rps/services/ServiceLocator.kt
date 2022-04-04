@@ -55,10 +55,10 @@ class ServiceLocator(private val env: Env) {
     }
 
     private fun cleanUpServices() {
-        for (gameService in gameServices) {
-            if (gameService.value.isGameOver) {
-                gameService.value.dispose()
-                gameServices.remove(gameService.key)
+        for (e in gameServices) {
+            if (e.value.isGameOver) {
+                if (!e.value.isDisposed) e.value.dispose()
+                gameServices.remove(e.key)
             }
         }
     }

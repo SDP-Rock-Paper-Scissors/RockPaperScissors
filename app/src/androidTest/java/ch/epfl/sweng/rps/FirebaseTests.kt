@@ -116,7 +116,8 @@ class FirebaseTests {
             ) === serviceLocatorProd.getGameServiceForGame("1", start = false)
         )
 
-        val service = serviceLocatorProd.getGameServiceForGame("1234", start = false)
+        val service: FirebaseGameService =
+            serviceLocatorProd.getGameServiceForGame("1234", start = false)
 
         val throwingActions: List<suspend (service: FirebaseGameService) -> Unit> =
             listOf(
@@ -141,7 +142,8 @@ class FirebaseTests {
     @Test
     fun disposingGameServices() {
         val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
-        val service = serviceLocator.getGameServiceForGame("1234", start = false)
+        val service: FirebaseGameService =
+            serviceLocator.getGameServiceForGame("1234", start = false)
         assertEquals(listOf("1234"), serviceLocator.cachedGameServices)
         assertFalse(service.isDisposed)
         serviceLocator.disposeAllGameServices()
@@ -153,7 +155,8 @@ class FirebaseTests {
     fun disposingGameServices2() {
         val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
         serviceLocator.disposeAllGameServices()
-        val service = serviceLocator.getGameServiceForGame("1234", start = false)
+        val service: FirebaseGameService =
+            serviceLocator.getGameServiceForGame("1234", start = false)
         assertEquals(listOf("1234"), serviceLocator.cachedGameServices)
         assertFalse(service.isDisposed)
         service.dispose()
@@ -166,7 +169,8 @@ class FirebaseTests {
     @Test
     fun usingAfterDisposedThrows() {
         val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
-        val service = serviceLocator.getGameServiceForGame("1234", start = false)
+        val service: FirebaseGameService =
+            serviceLocator.getGameServiceForGame("1234", start = false)
         service.dispose()
         assertTrue(service.isDisposed)
         val throwingActions: List<suspend (service: FirebaseGameService) -> Unit> =
