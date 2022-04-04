@@ -23,10 +23,9 @@ class LocalRepository(private var uid: String? = null) : Repository {
             user = when (it.first) {
                 User.Field.EMAIL -> user.copy(email = it.second as String)
                 User.Field.USERNAME -> user.copy(username = it.second as String)
-                User.Field.GAMES_HISTORY_PRIVACY -> user.copy(gamesHistoryPrivacy = it.second as String)
-                User.Field.HAS_PROFILE_PHOTO -> user.copy(hasProfilePhoto = it.second as Boolean)
+                User.Field.GAMES_HISTORY_PRIVACY -> user.copy(games_history_privacy = it.second as String)
+                User.Field.HAS_PROFILE_PHOTO -> user.copy(has_profile_photo = it.second as Boolean)
                 User.Field.UID -> user.copy(uid = it.second as String)
-                User.Field.MATCHESLIST -> user.copy(matchesList = it.second as List<String>)
             }
         }
         users[getCurrentUid()] = user
@@ -41,7 +40,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
     }
 
     override suspend fun getUserProfilePictureUrl(uid: String): Uri? {
-        val cond = getUser(getCurrentUid()).hasProfilePhoto
+        val cond = getUser(getCurrentUid()).has_profile_photo
         return if (cond) {
             Uri.parse("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
         } else {
@@ -49,13 +48,14 @@ class LocalRepository(private var uid: String? = null) : Repository {
         }
     }
 
-    override suspend fun createUser(name: String?, email: String?) {
+    override suspend fun createThisUser(name: String?, email: String?): User {
         val user = FirebaseHelper.userFrom(
             uid = getCurrentUid(),
             name = name.orEmpty(),
             email = email
         )
         users[user.uid] = user
+        return user
     }
 
     override suspend fun sendFriendRequestTo(uid: String) {

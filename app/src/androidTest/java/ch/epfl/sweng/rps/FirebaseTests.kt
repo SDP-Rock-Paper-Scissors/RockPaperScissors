@@ -8,7 +8,6 @@ import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
-import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
@@ -66,7 +65,7 @@ class FirebaseTests {
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                db.createUser("user1", "test@example.com")
+                db.createThisUser("user1", "test@example.com")
             }
         }
 

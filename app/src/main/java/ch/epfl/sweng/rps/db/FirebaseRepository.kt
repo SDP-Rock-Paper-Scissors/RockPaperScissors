@@ -1,10 +1,8 @@
 package ch.epfl.sweng.rps.db
 
 import android.net.Uri
-import android.util.Log
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.toObject
@@ -22,23 +20,23 @@ class FirebaseRepository(
         firebase.usersCollection.document(uid).update(arguments).await()
     }
 
-    override suspend fun getUser(uid: String): User {
+    override suspend fun getUser(uid: String): User? {
         val user = firebase.usersCollection.document(uid).get().await()
-        return user.toObject<User>()!!
+        return user?.toObject<User>()
     }
 
     override suspend fun getUserProfilePictureUrl(uid: String): Uri? {
-        return if (getUser(uid).hasProfilePhoto)
+        return if (getUser(uid)!!.has_profile_photo)
             firebase.profilePicturesFolder.child(uid).downloadUrl.await()
         else
             null
     }
 
-    override suspend fun createUser(name: String?,  email: String?) {
+    override suspend fun createThisUser(name: String?, email: String?): User {
         val uid = getCurrentUid()
-        firebase.usersCollection.document(uid).set(
-            FirebaseHelper.userFrom(uid, name, email)
-        ).await()
+        val user = FirebaseHelper.userFrom(uid, name, email)
+        firebase.usersCollection.document(uid).set(user).await()
+        return user
     }
 
     override fun rawCurrentUid(): String? = FirebaseAuth.getInstance().currentUser?.uid

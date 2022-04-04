@@ -9,14 +9,14 @@ import ch.epfl.sweng.rps.models.User
 interface Repository {
     suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
     fun rawCurrentUid(): String?
-    fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn("User not lo")
+    fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn()
     val isLoggedIn get() = rawCurrentUid() != null
 
     suspend fun getUser(uid: String): User?
 
     suspend fun getUserProfilePictureUrl(uid: String): Uri?
 
-    suspend fun createUser(name: String?, email: String?): Unit
+    suspend fun createThisUser(name: String?, email: String?): User
     suspend fun sendFriendRequestTo(uid: String)
 
     suspend fun listFriendRequests(): List<FriendRequest>

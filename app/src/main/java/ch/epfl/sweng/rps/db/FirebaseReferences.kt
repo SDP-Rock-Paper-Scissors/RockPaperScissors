@@ -11,7 +11,7 @@ class FirebaseReferences(val env: Env = Env.Prod) {
     fun usersFriendRequestOfUid(uid: String) =
         usersCollection.document(uid).collection("friend_requests")
 
-    val usersCollection = FirebaseFirestore.getInstance().collection("users")
+    val usersCollection = root.collection("users")
     val profilePicturesFolder = storageRoot.child("profile_pictures")
 
     val gamesCollection = root.collection("games")

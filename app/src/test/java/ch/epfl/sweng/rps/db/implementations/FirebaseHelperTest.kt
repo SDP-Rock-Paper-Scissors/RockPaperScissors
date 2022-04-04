@@ -39,7 +39,7 @@ internal class FirebaseHelperTest {
             email = "example@example.com"
         )
         assertEquals(name, user.username)
-        assertEquals(User.Privacy.PUBLIC, user.gamesHistoryPrivacy)
+        assertEquals(User.Privacy.PUBLIC.name, user.games_history_privacy)
         assertEquals("123", user.uid)
         assertEquals("example@example.com", user.email)
     }

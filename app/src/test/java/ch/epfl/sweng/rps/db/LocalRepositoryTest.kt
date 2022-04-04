@@ -17,7 +17,7 @@ class LocalRepositoryTest {
         localRepository.setCurrentUid("user1234")
         assertEquals("user1234", localRepository.getCurrentUid())
 
-        localRepository.createUser("User", "user@company.org")
+        localRepository.createThisUser("User", "user@company.org")
         val user = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
@@ -39,7 +39,7 @@ class LocalRepositoryTest {
         localRepository.setCurrentUid("user1234")
         assertEquals("user1234", localRepository.getCurrentUid())
 
-        localRepository.createUser("User", "user@company.org")
+        localRepository.createThisUser("User", "user@company.org")
         val user = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
