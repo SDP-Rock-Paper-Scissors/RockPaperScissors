@@ -1,6 +1,5 @@
 package ch.epfl.sweng.rps
 
-import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import ch.epfl.sweng.rps.db.Env
@@ -10,6 +9,7 @@ import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService
+import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +35,9 @@ class FirebaseTests {
 
     @Before
     fun setUp() {
+        for (env in Env.values()) {
+            ServiceLocator.getInstance(env).disposeAllGameServices()
+        }
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
         runBlocking {
             FirebaseAuth.getInstance().signOut()
@@ -43,6 +46,7 @@ class FirebaseTests {
 
     @After
     fun tearDown() {
+
     }
 
     @Test
@@ -158,6 +162,35 @@ class FirebaseTests {
         serviceLocator.disposeAllGameServices()
         assertTrue(service.isDisposed)
         assertEquals(emptyList<String>(), serviceLocator.cachedGameServices)
+    }
+
+    @Test
+    fun usingAfterDisposedThrows() {
+        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
+        val service = serviceLocator.getGameServiceForGame("1234", start = false)
+        service.dispose()
+        assertTrue(service.isDisposed)
+        val throwingActions: List<suspend (service: FirebaseGameService) -> Unit> =
+            listOf(
+                { it.refreshGame() },
+                { it.addRound() },
+                { it.playHand(Hand.PAPER) },
+                { it.currentRound },
+                { it.currentGame },
+                { it.startListening() },
+                { it.stopListening() },
+            )
+
+        for (action in throwingActions) {
+            assertThrows(GameServiceException::class.java) {
+                runBlocking {
+                    action(service)
+                }
+            }
+        }
+
+        assertNull(service.error)
+
     }
 
     @Test
