@@ -15,6 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
+import ch.epfl.sweng.rps.models.User
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,12 +24,15 @@ class ProfileFragmentTest {
     val i: Intent = Intent()
     val b: Bundle = Bundle()
     val data = mapOf<String, String>(
-        "email" to "asd@gmail.com", "display_name" to "asdino", "uid" to "123", "privacy" to "None"
+        "email" to "asd@gmail.com",
+        "display_name" to "asdino",
+        "uid" to "123",
+        "privacy" to User.Privacy.PUBLIC.toString()
     )
 
     @Before
     fun setUpIntent() {
-        data.forEach{ b.putString(it.key, it.value)}
+        data.forEach { b.putString(it.key, it.value) }
         i.putExtra("User", b)
     }
 

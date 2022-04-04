@@ -2,8 +2,8 @@ package ch.epfl.sweng.rps.db.implementations
 
 import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.models.User
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 
 internal class FirebaseHelperTest {
@@ -20,5 +20,27 @@ internal class FirebaseHelperTest {
                 User.Field.USERNAME to name
             )
         )
+    }
+
+    @Test
+    fun testProcessUserArgs_empty() {
+        assertEquals(
+            hashMapOf<String, Any>(),
+            FirebaseHelper.processUserArguments()
+        )
+    }
+
+    @Test
+    fun testCreateUser() {
+        val name = "Rei"
+        val user = FirebaseHelper.userFrom(
+            uid = "123",
+            name = name,
+            email = "example@example.com"
+        )
+        assertEquals(name, user.username)
+        assertEquals(User.Privacy.PUBLIC.name, user.games_history_privacy)
+        assertEquals("123", user.uid)
+        assertEquals("example@example.com", user.email)
     }
 }
