@@ -48,15 +48,9 @@ class StatisticsFragment : Fragment() {
                 id: Long
             ) {
                 when (position) {
-                    //test for selector
-                    1 -> {
-
-                    }
-                    2 -> {
-
-                    }
-                    3 ->{
-                    }
+                    //test for nav_item_color_state.xml
+                    1 -> println("x == 1")
+                    2 -> println("x == 2")
                     else -> { // Note the block
                         println("x is neither 1 nor 2")
                     }
