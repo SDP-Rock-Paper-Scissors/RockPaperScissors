@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.db
 
 import android.net.Uri
-import ch.epfl.sweng.rps.db.RepositoryException.UserNotLoggedIn
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Round
@@ -10,7 +9,7 @@ import ch.epfl.sweng.rps.models.User
 interface Repository {
     suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
     fun rawCurrentUid(): String?
-    fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn()
+    fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn("User not lo")
     val isLoggedIn get() = rawCurrentUid() != null
 
     suspend fun getUser(uid: String): User
@@ -27,6 +26,11 @@ interface Repository {
         acceptFriendRequestFrom(friendRequest.from)
 
     suspend fun getGame(gameId: String): Game?
-    suspend fun getRoundsOfGame(gameId: String): List<Round>
-    suspend fun getRoundsOfGame(game: Game): List<Round> = getRoundsOfGame(game.id)
+
+    class UserNotLoggedIn : Exception {
+        constructor() : super("User not logged in")
+        constructor(uid: String?) : super("User $uid not logged in")
+        constructor(cause: Throwable) : super("User not logged in", cause)
+        constructor(message: String, cause: Throwable) : super(message, cause)
+    }
 }

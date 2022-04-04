@@ -46,4 +46,13 @@ class RoundTest {
         assertNotEquals(scores[1].uid, scores[2].uid)
         assertEquals(scores[3].uid, "player1")
     }
+
+    @Test
+    fun testScoringSystem() {
+        val pointSystem = PointSystem.DefaultPointSystem()
+
+        assertEquals(1, pointSystem.getPoints(Hand.Result.WIN))
+        assertEquals(-1, pointSystem.getPoints(Hand.Result.LOSS))
+        assertEquals(0, pointSystem.getPoints(Hand.Result.TIE))
+    }
 }

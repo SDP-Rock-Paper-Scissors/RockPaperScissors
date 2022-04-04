@@ -14,7 +14,4 @@ class FirebaseReferences(val env: Env = Env.Prod) {
     val profilePicturesFolder = storageRoot.child("profile_pictures")
 
     val gamesCollection = root.collection("games")
-
-    fun roundsOfGame(gameId: String) =
-        gamesCollection.document(gameId).collection("rounds")
 }

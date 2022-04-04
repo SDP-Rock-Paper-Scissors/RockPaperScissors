@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Hand.Result
+import ch.epfl.sweng.rps.models.PointSystem.*
 import com.google.firebase.Timestamp
 
 /*

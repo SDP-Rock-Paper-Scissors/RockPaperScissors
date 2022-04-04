@@ -15,15 +15,15 @@ class HandTest {
 
     @Test
     fun noneAlwaysLoses() {
-        assertEquals(LOSE, NONE vs ROCK)
-        assertEquals(LOSE, NONE vs PAPER)
-        assertEquals(LOSE, NONE vs SCISSORS)
+        assertEquals(LOSS, NONE vs ROCK)
+        assertEquals(LOSS, NONE vs PAPER)
+        assertEquals(LOSS, NONE vs SCISSORS)
 
         assertEquals(WIN, ROCK vs NONE)
         assertEquals(WIN, PAPER vs NONE)
         assertEquals(WIN, SCISSORS vs NONE)
 
-        assertEquals(DRAW, NONE vs NONE)
+        assertEquals(TIE, NONE vs NONE)
     }
 
     @Test

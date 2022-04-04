@@ -159,4 +159,13 @@ class FirebaseTests {
         assertTrue(service.isDisposed)
         assertEquals(emptyList<String>(), serviceLocator.cachedGameServices)
     }
+
+    @Test
+    fun firebaseReferences() {
+        val firebase = ServiceLocator.getInstance(env = Env.Prod).getFirebaseReferences()
+        assertEquals(Env.Prod, firebase.env)
+        assertEquals("env/prod/games", firebase.gamesCollection.path)
+
+        assertEquals("/env/prod/profile_pictures", firebase.profilePicturesFolder.path)
+    }
 }

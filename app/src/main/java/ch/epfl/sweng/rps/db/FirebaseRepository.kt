@@ -73,14 +73,8 @@ class FirebaseRepository(
     suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains("players", uid).get()
             .await().documents.map {
-            it.toObject<Game>()!!
-        }
-    }
-
-    override suspend fun getRoundsOfGame(gameId: String): List<Round> {
-        return firebase.roundsOfGame(gameId).get().await().documents.map {
-            it.toObject<Round>()!!
-        }
+                it.toObject<Game>()!!
+            }
     }
 
     suspend fun clearDevEnv() {

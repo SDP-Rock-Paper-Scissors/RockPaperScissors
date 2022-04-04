@@ -3,25 +3,23 @@ package ch.epfl.sweng.rps.models
 import ch.epfl.sweng.rps.models.Hand.Result
 
 interface PointSystem {
-    val draw: Int
-    val lose: Int
+    val tie: Int
+    val loss: Int
     val win: Int
-
-    companion object {
-        val DEFAULT = DefaultPointSystem()
-    }
 
     fun getPoints(result: Result): Int {
         return when (result) {
-            Result.DRAW -> draw
-            Result.LOSE -> lose
+            Result.TIE -> tie
+            Result.LOSS -> loss
             Result.WIN -> win
         }
     }
+
+    class DefaultPointSystem : PointSystem {
+        override val tie: Int = 0
+        override val loss: Int = -1
+        override val win: Int = 1
+    }
 }
 
-class DefaultPointSystem : PointSystem {
-    override val draw: Int = 0
-    override val lose: Int = -1
-    override val win: Int = 1
-}
+

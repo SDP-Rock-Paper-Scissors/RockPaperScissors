@@ -21,4 +21,26 @@ internal class FirebaseHelperTest {
             )
         )
     }
+
+    @Test
+    fun testProcessUserArgs_empty() {
+        assertEquals(
+            hashMapOf<String, Any>(),
+            FirebaseHelper.processUserArguments()
+        )
+    }
+
+    @Test
+    fun testCreateUser() {
+        val name = "Rei"
+        val user = FirebaseHelper.userFrom(
+            uid = "123",
+            name = name,
+            email = "example@example.com"
+        )
+        assertEquals(name, user.username)
+        assertEquals(User.Privacy.PUBLIC, user.gamesHistoryPrivacy)
+        assertEquals("123", user.uid)
+        assertEquals("example@example.com", user.email)
+    }
 }

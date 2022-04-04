@@ -3,7 +3,6 @@ package ch.epfl.sweng.rps.db
 import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
 
@@ -85,7 +84,4 @@ class LocalRepository(private var uid: String? = null) : Repository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getRoundsOfGame(gameId: String): List<Round> {
-        TODO("Not yet implemented")
-    }
 }

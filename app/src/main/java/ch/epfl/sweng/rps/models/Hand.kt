@@ -6,8 +6,8 @@ enum class Hand(val id: Int) {
     infix fun vs(other: Hand): Result {
         return when (winner(this, other)) {
             this -> Result.WIN
-            other -> Result.LOSE
-            null -> Result.DRAW
+            other -> Result.LOSS
+            null -> Result.TIE
             else -> throw IllegalStateException("Impossible")
         }
     }
@@ -32,6 +32,6 @@ enum class Hand(val id: Int) {
     }
 
     enum class Result {
-        WIN, LOSE, DRAW
+        WIN, LOSS, TIE
     }
 }
