@@ -7,28 +7,218 @@
     android:id="@+id/fragment_info_page"
     tools:context=".ui.friends.InfoPageFragment">
 
+
+    <ImageButton
+        android:id="@+id/infoPage_playButton"
+        android:layout_width="73dp"
+        android:layout_height="54dp"
+        android:background="@drawable/secondary_button_selector"
+        android:src="@drawable/playgame_vector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/displayPicture_infoPage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/displayPicture_infoPage"
         android:layout_width="198dp"
         android:layout_height="146dp"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/display_picture"
+        app:layout_constraintBottom_toTopOf="@id/userName_infoPage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/infoPage_backButton"
+        android:layout_width="73dp"
+        android:layout_height="54dp"
+        android:background="@drawable/secondary_button_selector"
+        android:src="@drawable/back_vector"
+        app:layout_constraintEnd_toStartOf="@+id/displayPicture_infoPage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/userName_infoPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:text="Username"
         android:textColor="@color/primary"
         android:textSize="24dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/statsText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/displayPicture_infoPage" />
+
+    <ImageView
+        android:id="@+id/onlineImage_infoPage"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/online_vector"
+        app:layout_constraintEnd_toEndOf="@+id/offlineImage_infoPage"
+        app:layout_constraintStart_toEndOf="@+id/userName_infoPage"
+        app:layout_constraintTop_toBottomOf="@+id/displayPicture_infoPage" />
+
+    <ImageView
+        android:id="@+id/offlineImage_infoPage"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="6dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/onlineImage_infoPage"
+        app:layout_constraintStart_toEndOf="@+id/userName_infoPage"
+        app:layout_constraintTop_toBottomOf="@+id/displayPicture_infoPage"
+        app:srcCompat="@drawable/offline_vector" />
+
+    <TextView
+        android:id="@+id/statsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:text="Stats"
+        android:textColor="@color/primary"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/statsCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userName_infoPage"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/statsCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/historyText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statsText">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/winRateText_infoPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Win Rate"
+                android:textColor="@color/primary"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/globalRankingText_infoPage"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gamesWonText_infoPage" />
+
+            <TextView
+                android:id="@+id/globalRankingText_infoPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Ranking(Global)"
+                android:textColor="@color/primary"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/localRankingText_infoPage"
+                app:layout_constraintTop_toBottomOf="@+id/localRankingText_infoPage" />
+
+            <TextView
+                android:id="@+id/localRankingText_infoPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Ranking(Local)"
+                android:textColor="@color/primary"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/globalRankingText_infoPage"
+                app:layout_constraintStart_toStartOf="@+id/tournamentWonText_infoPage"
+                app:layout_constraintTop_toBottomOf="@+id/tournamentWonText_infoPage" />
+
+            <TextView
+                android:id="@+id/tournamentWonText_infoPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:text="Tournaments Won"
+                android:textColor="@color/primary"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/gamesPlayedText_infoPage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/gamesWonText_infoPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Games Won"
+                android:textColor="@color/primary"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/winRateText_infoPage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gamesPlayedText_infoPage" />
+
+            <TextView
+                android:id="@+id/gamesPlayedText_infoPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="4dp"
+                android:text="Games Played"
+                android:textColor="@color/primary"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/gamesWonText_infoPage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/historyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:text="Match History"
+        android:textColor="@color/primary"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/matchHistoryScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statsCardView" />
+
+
+    <ScrollView
+        android:id="@+id/matchHistoryScrollView"
+        android:layout_width="409dp"
+        android:layout_height="549dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/historyText">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

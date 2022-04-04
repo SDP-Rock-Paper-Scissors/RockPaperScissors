@@ -42,19 +42,33 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
    //Button Click Listeners
     override fun onButtonClick(position: Int,friends: List<FriendsInfo>, view: View) {
         val username = friends[position].username
+        val gamesPlayed = friends[position].gamesPlayed
+        val gamesWon = friends[position].gamesWon
+        val winRate = friends[position].winRate
+        val isOnline = friends[position].isOnline
 
 
         //if info button is clicked
         if (view == view.findViewById(R.id.infoButton)) {
             Log.i("Press info", "This is $username's info")
             Toast.makeText(activity, "This is $username's info", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_nav_friends_to_infoPage_Fragment)
+            //Move to infoPage on button click
+            findNavController().navigate(R.id.action_nav_friends_to_infoPage_Fragment, Bundle().apply {
+                //Passing all the info to be displayed in the Info Page
+                putString("userName", username)
+                putString("gamesPlayed", "Games Played: $gamesPlayed")
+                putString("gamesWon", "Games Won: $gamesWon")
+                putString("winRate", "Win Rate: $winRate%")
+                putBoolean("isOnline", isOnline)
+            })
 
         }
         //if play button is clicked
         else if (view == view.findViewById(R.id.playButton)){
             Log.i("Press info", "You will play a game with $username")
             Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT).show()
+
+            //Move to game fragment on button click
             findNavController().navigate(R.id.action_nav_friends_to_gameFragment)
         }
     }

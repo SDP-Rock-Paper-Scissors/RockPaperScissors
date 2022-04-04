@@ -36,6 +36,21 @@
         <action
             android:id="@+id/action_nav_friends_to_gameFragment"
             app:destination="@id/gameFragment" />
+        <argument
+            android:name="userName"
+            app:argType="string" />
+        <argument
+            android:name="winRateText"
+            app:argType="string" />
+        <argument
+            android:name="gamesPlayedText"
+            app:argType="string" />
+        <argument
+            android:name="gamesWonText"
+            app:argType="string" />
+        <argument
+            android:name="isOnline"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
@@ -50,6 +65,9 @@
         <action
             android:id="@+id/action_infoPage_Fragment_to_nav_friends"
             app:destination="@id/nav_friends" />
+        <action
+            android:id="@+id/action_infoPage_Fragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_profile"
