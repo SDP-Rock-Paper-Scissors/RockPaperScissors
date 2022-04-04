@@ -1,16 +1,18 @@
 package ch.epfl.sweng.rps.auth.implementations
 
 import ch.epfl.sweng.rps.auth.Authenticator
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import ch.epfl.sweng.rps.models.User
+import org.junit.Test
+import org.junit.Assert
+import org.mockito.Mockito
 
 class MockAuthenticatorTest {
     @Test
     fun MockedAuthenticatorCallbackIsCalled(){
-        val callback = {res:String -> assertEquals(res, "google")}
+        val callback = {res:User -> Assert.assertEquals(res.username, "username")}
         val authenticator:Authenticator = object : Authenticator(callback) {
             override fun signInWithGoogle() {
-                callback("google")
+                callback(User("username","uid","PRIVATE",false,"rps@epfl.ch",null))
             }
 
         }

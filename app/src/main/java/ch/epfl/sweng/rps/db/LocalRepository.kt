@@ -23,8 +23,10 @@ class LocalRepository(private var uid: String? = null) : Repository {
             user = when (it.first) {
                 User.Field.EMAIL -> user.copy(email = it.second as String)
                 User.Field.USERNAME -> user.copy(username = it.second as String)
-                User.Field.GAMES_HISTORY_PRIVACY -> user.copy(gamesHistoryPrivacy = it.second as User.Privacy)
+                User.Field.GAMES_HISTORY_PRIVACY -> user.copy(gamesHistoryPrivacy = it.second as String)
                 User.Field.HAS_PROFILE_PHOTO -> user.copy(hasProfilePhoto = it.second as Boolean)
+                User.Field.UID -> user.copy(uid = it.second as String)
+                User.Field.MATCHESLIST -> user.copy(matchesList = it.second as List<String>)
             }
         }
         users[getCurrentUid()] = user
@@ -47,10 +49,10 @@ class LocalRepository(private var uid: String? = null) : Repository {
         }
     }
 
-    override suspend fun createUser(name: String, email: String?) {
+    override suspend fun createUser(name: String?, email: String?) {
         val user = FirebaseHelper.userFrom(
             uid = getCurrentUid(),
-            name = name,
+            name = name.orEmpty(),
             email = email
         )
         users[user.uid] = user

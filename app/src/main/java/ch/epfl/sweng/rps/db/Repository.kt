@@ -12,11 +12,11 @@ interface Repository {
     fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn("User not lo")
     val isLoggedIn get() = rawCurrentUid() != null
 
-    suspend fun getUser(uid: String): User
+    suspend fun getUser(uid: String): User?
 
     suspend fun getUserProfilePictureUrl(uid: String): Uri?
 
-    suspend fun createUser(name: String, email: String?)
+    suspend fun createUser(name: String?, email: String?): Unit
     suspend fun sendFriendRequestTo(uid: String)
 
     suspend fun listFriendRequests(): List<FriendRequest>

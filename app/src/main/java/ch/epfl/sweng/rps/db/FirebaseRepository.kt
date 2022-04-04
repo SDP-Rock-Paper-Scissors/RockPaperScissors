@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.db
 
 import android.net.Uri
+import android.util.Log
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Round
@@ -33,7 +34,7 @@ class FirebaseRepository(
             null
     }
 
-    override suspend fun createUser(name: String, email: String?) {
+    override suspend fun createUser(name: String?,  email: String?) {
         val uid = getCurrentUid()
         firebase.usersCollection.document(uid).set(
             FirebaseHelper.userFrom(uid, name, email)
