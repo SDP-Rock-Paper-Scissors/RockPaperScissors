@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_statistics"
+    android:background="@color/lightgray"
     tools:context=".ui.statistics.MatchDetails">
 
     <RelativeLayout
