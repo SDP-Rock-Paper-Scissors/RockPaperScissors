@@ -10,11 +10,15 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
+import ch.epfl.sweng.rps.db.FirebaseHelper
+import ch.epfl.sweng.rps.db.FirebaseRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,14 +72,17 @@ class StatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // we should pass current userID here
-        readStatsData("cibVHZCGb0UNNnCg9dwO2VnkoBB2", object : FirebaseCallBack {
-            override fun onCallBack(list: MutableList<List<String>>) {
-                for (data in list){
-                    addPersonalStats(view, data[0],data[1],data[2],data[3],data[4])
-
-                }
+        val currentUserID = FirebaseRepository().getCurrentUid()
+       viewLifecycleOwner.lifecycleScope.launch {
+        val statsDataList = FirebaseHelper.getStatsData(currentUserID)
+            for(statsData in statsDataList){
+                addPersonalStats(view, statsData[0],statsData[1],statsData[2],statsData[3],statsData[4])
             }
-        })
+        }
+
+
+
+
 
 
     }
@@ -148,6 +155,9 @@ class StatisticsFragment : Fragment() {
     }
 
 
+
+
+    /*
     private fun readStatsData(userID: String, firebaseCallBack: FirebaseCallBack) {
         val usersDB = Firebase.firestore.collection("users")
         val matchesDB = Firebase.firestore.collection("matches")
@@ -216,6 +226,8 @@ class StatisticsFragment : Fragment() {
 
 
     }
+
+     */
 
 
     override fun onDestroyView() {
