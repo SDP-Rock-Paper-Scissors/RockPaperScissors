@@ -1,5 +1,7 @@
 package ch.epfl.sweng.rps.models
 
+import android.util.Log
+
 /**
  *
  */
@@ -14,10 +16,6 @@ data class User(
 
     val email: String? = "",
 ) {
-    init {
-        assert(games_history_privacy in Privacy.values().map { it.name })
-    }
-
     enum class Field(val value: String) {
         USERNAME("username"),
         GAMES_HISTORY_PRIVACY("games_history_privacy"),
@@ -30,7 +28,6 @@ data class User(
         PUBLIC, PRIVATE, FRIENDS_ONLY
     }
 
-    val gamesHistoryPrivacyEnum: Privacy
-        get() = Privacy.valueOf(games_history_privacy)
+    fun gamesHistoryPrivacyEnum(): Privacy = Privacy.valueOf(games_history_privacy)
 }
 
