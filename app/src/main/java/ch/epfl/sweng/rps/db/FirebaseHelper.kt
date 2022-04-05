@@ -21,7 +21,7 @@ sealed class FirebaseHelper {
             )
         }
 
-        suspend fun getStatsData (uid: String): MutableList<List<String>> {
+        suspend fun getStatsData (uid: String, selectMode: Int): MutableList<List<String>> {
             val userGameList = FirebaseRepository().gamesOfUser(uid)
             val statsResult: MutableList<String> = ArrayList()
             val allStatsResult: MutableList<List<String>> = java.util.ArrayList()
@@ -40,16 +40,41 @@ sealed class FirebaseHelper {
                 }?.sum()
 
                 val roundMode = game?.mode?.rounds
+                //by default 1v1 here
                 val opponentScore = roundMode?.minus(userScore!!)
+                // should be shown like "3 -2 "
                 val score = "$userScore - $opponentScore"
                 val date = SimpleDateFormat("yyyy-MM-dd").format(game?.timestamp?.toDate())
-                statsResult.add(date)
-                statsResult.add(opponents.toString())
-                statsResult.add(roundMode.toString())
-                statsResult.add(score)
-                allStatsResult.add(statsResult)
+
+                    statsResult.add(date)
+                    statsResult.add(opponents.toString())
+                    statsResult.add(roundMode.toString())
+                    statsResult.add(score)
+                //mode filter, selectMode = 0 means by default to fetch all result
+                if(roundMode == selectMode || selectMode == 0) {
+                    allStatsResult.add(statsResult)
+                }
             }
             return allStatsResult
+
+
+        }
+
+        suspend fun getMatchDetailData(uid: String,gid: String){
+            val matchDetail: MutableList<String> = ArrayList()
+            val game = FirebaseRepository().getGame(gid)
+            val opponent = game?.players
+            val handsList = game?.rounds?.map { it.value.hands }
+            for (hands in handsList!!){
+                matchDetail.add(hands[uid]!!.id.toString())
+                matchDetail.add(hands[opponent?.get(0)]!!.id.toString())
+                //TODO: how can I get the result of each round?
+                // Note： if the user get win, the opponent side should show fail.
+
+
+            }
+
+
 
 
         }

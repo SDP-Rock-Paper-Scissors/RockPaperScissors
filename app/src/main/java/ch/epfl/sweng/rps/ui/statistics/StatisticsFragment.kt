@@ -1,9 +1,9 @@
 package ch.epfl.sweng.rps.ui.statistics
 
-import android.content.ContentValues.TAG
+
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +15,15 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
 import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.db.FirebaseRepository
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+
 
 
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
+    private val currentUserID = FirebaseRepository().getCurrentUid()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,14 +49,30 @@ class StatisticsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                when (position) {
-                    //test for nav_item_color_state.xml
-                    1 -> println("x == 1")
-                    2 -> println("x == 2")
-                    else -> { // Note the block
-                        println("x is neither 1 nor 2")
-                    }
+                // delete all rows except the title
+                val statsTableLayout = view?.findViewById<TableLayout>(R.id.statsTable)
+                while( statsTableLayout?.childCount!! > 1){
+                    statsTableLayout.removeView(statsTableLayout.getChildAt(statsTableLayout.childCount -1 ))
+
                 }
+
+                println(position)
+                //filter function
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    println("I have called this function")
+                    val statsDataList = FirebaseHelper.getStatsData(currentUserID,position)
+                    for(statsData in statsDataList){
+                        addPersonalStats(view!!, statsData[0],statsData[1],statsData[2],statsData[3],statsData[4])
+                    }
+                    //test by default
+                    if(position == 0){
+                        addPersonalStats(view!!,currentUserID,"2022-04-05","Jinglun Pan","3","2 - 1")
+                    }
+
+                }
+
+
 
             }
 
@@ -72,15 +86,6 @@ class StatisticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // we should pass current userID here
-        val currentUserID = FirebaseRepository().getCurrentUid()
-       viewLifecycleOwner.lifecycleScope.launch {
-        val statsDataList = FirebaseHelper.getStatsData(currentUserID)
-            for(statsData in statsDataList){
-                addPersonalStats(view, statsData[0],statsData[1],statsData[2],statsData[3],statsData[4])
-            }
-        }
-
-
 
 
 
@@ -150,7 +155,7 @@ class StatisticsFragment : Fragment() {
         row.addView(opponentBlank)
         row.addView(modeBlank)
         row.addView(scoreBlank)
-        statsTable.addView(row)
+        statsTable?.addView(row)
 
     }
 
@@ -237,9 +242,5 @@ class StatisticsFragment : Fragment() {
 
 
 
-    private interface FirebaseCallBack {
-        fun onCallBack(list: MutableList<List<String>>) {
 
-        }
-    }
 }
