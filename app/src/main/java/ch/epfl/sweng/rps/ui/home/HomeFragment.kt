@@ -27,12 +27,8 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        _binding!!.buttonPlayOneOfflineGame.setOnClickListener { view: View ->
-            Navigation.findNavController(view).navigate(R.id.gameFragment)
-        }
-        _binding!!.buttonActivateCamera.setOnClickListener { view: View ->
-            Navigation.findNavController(view).navigate(R.id.cameraFragment)
-        }
+        setNavigationOnButton(R.id.gameFragment)
+        setNavigationOnButton(R.id.cameraFragment)
 
         return binding.root
     }
@@ -40,5 +36,10 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun setNavigationOnButton(fragmentID: Int){
+        _binding!!.buttonActivateCamera.setOnClickListener { view: View ->
+            Navigation.findNavController(view).navigate(fragmentID)
+        }
     }
 }
