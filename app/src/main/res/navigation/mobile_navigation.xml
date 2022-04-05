@@ -42,5 +42,9 @@
         android:id="@+id/cameraFragment"
         android:name="ch.epfl.sweng.rps.ui.camera.CameraFragment"
         android:label="Camera"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>
