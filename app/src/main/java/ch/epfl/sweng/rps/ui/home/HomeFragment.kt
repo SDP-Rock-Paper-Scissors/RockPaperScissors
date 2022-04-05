@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
@@ -23,13 +23,10 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        setNavigationOnButton(R.id.gameFragment)
-        setNavigationOnButton(R.id.cameraFragment)
-
+        setNavigationOnButton(_binding!!.buttonPlayOneOfflineGame, R.id.gameFragment)
+        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
         return binding.root
     }
 
@@ -37,8 +34,8 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun setNavigationOnButton(fragmentID: Int){
-        _binding!!.buttonActivateCamera.setOnClickListener { view: View ->
+    private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int){
+        buttonToBind.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(fragmentID)
         }
     }
