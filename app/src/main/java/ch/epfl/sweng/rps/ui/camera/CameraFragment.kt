@@ -1,13 +1,16 @@
 package ch.epfl.sweng.rps.ui.camera
 
-import android.R
+import android.Manifest
+
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import ch.epfl.sweng.rps.databinding.FragmentCameraBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 
 class CameraFragment : Fragment() {
@@ -18,6 +21,21 @@ class CameraFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        // returns boolean representind whether the
+        // permission is granted or not
+        if (isGranted) {
+            // permission granted continue the normal workflow of app
+            Log.i("DEBUG", "permission granted")
+        } else {
+            // if permission denied then check whether never ask
+            // again is selected or not by making use of
+            // !ActivityCompat.shouldShowRequestPermissionRationale(
+            // requireActivity(), Manifest.permission.CAMERA)
+            Log.i("DEBUG", "permission denied")
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,22 +45,11 @@ class CameraFragment : Fragment() {
         _binding = FragmentCameraBinding.inflate(inflater, container, false);
         val root: View = binding.root
 
-        val navBar: BottomNavigationView = requireActivity().findViewById(R.id.)
+        requestPermission.launch(Manifest.permission.CAMERA)
 
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-        }
 
         return root
     }
-
-    private fun startCamera() {
-        TODO("Not yet implemented")
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
