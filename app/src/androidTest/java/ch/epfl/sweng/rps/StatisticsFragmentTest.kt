@@ -1,24 +1,16 @@
 package ch.epfl.sweng.rps
 
-import android.view.Gravity
 import android.view.View
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.contrib.DrawerActions
-import androidx.test.espresso.contrib.DrawerMatchers
-import androidx.test.espresso.contrib.NavigationViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import org.hamcrest.Matcher
 import org.junit.Rule
-import org.junit.Test
 import java.util.concurrent.TimeoutException
 
 

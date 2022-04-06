@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.android.gms.oss-licenses-plugin'
     id 'kotlin-android'
     id 'jacoco'
 }
@@ -11,6 +12,14 @@ jacoco {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('key.jks')
+            storePassword '123456'
+            keyPassword '123456'
+            keyAlias 'key0'
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -21,12 +30,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             testCoverageEnabled true
@@ -69,10 +80,11 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
-    androidTestImplementation 'org.jetbrains.kotlin:kotlin-test'
-    androidTestImplementation(platform("org.junit:junit-bom:5.8.2"))
-    androidTestImplementation("org.junit.jupiter:junit-jupiter")
+    // androidTestImplementation 'org.jetbrains.kotlin:kotlin-test'
+    // androidTestImplementation(platform("org.junit:junit-bom:5.8.2"))
+    // androidTestImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation 'org.jetbrains.kotlin:kotlin-test'
     implementation(platform("org.junit:junit-bom:5.8.2"))
@@ -106,6 +118,10 @@ dependencies {
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-native-mt'
 
     testImplementation 'org.mockito:mockito-core:4.4.0'
+
+    implementation 'com.google.android.material:material:1.5.0'
+
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 }
 
 
