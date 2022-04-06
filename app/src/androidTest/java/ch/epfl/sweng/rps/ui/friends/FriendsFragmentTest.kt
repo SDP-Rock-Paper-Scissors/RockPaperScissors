@@ -129,7 +129,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
 
         onView(withId(R.id.infoPage_backButton)).perform(click())
 
@@ -141,7 +141,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
 
         onView(withId(R.id.infoPage_playButton)).perform(click())
 
