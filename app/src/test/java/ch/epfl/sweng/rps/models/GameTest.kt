@@ -1,23 +1,39 @@
 package ch.epfl.sweng.rps.models
 
-import ch.epfl.sweng.rps.models.Game.Mode
-import ch.epfl.sweng.rps.models.Game.Uid
+import ch.epfl.sweng.rps.models.Game.GameMode
+import com.google.firebase.Timestamp
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 
 class GameTest {
     @Test
-    fun test() {
-        assertThrows(AssertionError::class.java) {
-            Game("1", listOf(Uid("1"), Uid("2")), Mode(0, Mode.Type.PVP, null, 5))
-        }
-        val game = Game("1", listOf(Uid("1"), Uid("2")), Mode(2, Mode.Type.PVP, null, 5))
-        assertEquals(game.uid, "1")
-        assertEquals(game.players.size, 2)
-        assertEquals(game.mode.playerCount, 2)
-        assertEquals(game.mode.type, Mode.Type.PVP)
-        assertEquals(game.mode.time, null)
-        assertEquals(game.mode.rounds, 5)
+    fun testGameMode() {
+        val m1 =
+            GameMode(playerCount = 2, type = GameMode.Type.PVP, rounds = 3, timeLimit = 10)
+        val m2 = GameMode.fromString(m1.toGameModeString())
+
+        assertEquals(m1.playerCount, m2.playerCount)
+        assertEquals(m1.rounds, m2.rounds)
+        assertEquals(m1.type, m2.type)
+        assertEquals(m1.timeLimit, m2.timeLimit)
+
+        val g = Game(
+            game_mode = m1.toGameModeString(),
+            players = listOf("player1", "player2"),
+            current_round = 0,
+            done = false,
+            timestamp = Timestamp.now(),
+            player_count = 2,
+            id = "id",
+            rounds = mapOf()
+        )
+
+        assertEquals(g.game_mode, m1.toGameModeString())
+        val m3 = g.mode
+
+        assertEquals(m1.playerCount, m3.playerCount)
+        assertEquals(m1.rounds, m3.rounds)
+        assertEquals(m1.type, m3.type)
+        assertEquals(m1.timeLimit, m3.timeLimit)
     }
 }

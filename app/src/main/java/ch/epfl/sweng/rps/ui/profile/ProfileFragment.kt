@@ -34,7 +34,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<TextView>(R.id.TextEmail).text = user.email
         view.findViewById<TextView>(R.id.TextDisplayName).text = user.username
-        view.findViewById<TextView>(R.id.TextPrivacy).text = user.gamesHistoryPrivacy
+        view.findViewById<TextView>(R.id.TextPrivacy).text = user.games_history_privacy
 
         view.findViewById<MaterialToolbar>(R.id.profile_top_toolbar)
             .setOnMenuItemClickListener { menuItem ->
