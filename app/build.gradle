@@ -82,9 +82,9 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
-    androidTestImplementation 'org.jetbrains.kotlin:kotlin-test'
-    androidTestImplementation(platform("org.junit:junit-bom:5.8.2"))
-    androidTestImplementation("org.junit.jupiter:junit-jupiter")
+    // androidTestImplementation 'org.jetbrains.kotlin:kotlin-test'
+    // androidTestImplementation(platform("org.junit:junit-bom:5.8.2"))
+    // androidTestImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation 'org.jetbrains.kotlin:kotlin-test'
     implementation(platform("org.junit:junit-bom:5.8.2"))

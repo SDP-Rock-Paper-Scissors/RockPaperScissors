@@ -20,10 +20,9 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Rule
+import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.Callable
 import java.util.concurrent.FutureTask
 import java.util.concurrent.TimeoutException
 
@@ -86,13 +85,6 @@ class SettingsPageTest {
         activity.runOnUiThread(futureResult)
 
         return futureResult.get()
-    }
-
-    fun <T> runOnUiThreadBlocking(runnable: Callable<T>): T {
-        val activity = getActivityInstance<SettingsActivity>()
-        val future = FutureTask(runnable)
-        activity.runOnUiThread(future)
-        return future.get()
     }
 
     @Test
