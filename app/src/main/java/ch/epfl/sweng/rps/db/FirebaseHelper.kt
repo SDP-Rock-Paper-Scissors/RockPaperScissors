@@ -1,6 +1,8 @@
 package ch.epfl.sweng.rps.db
 
+import ch.epfl.sweng.rps.models.RoundStat
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.UserStat
 import java.text.SimpleDateFormat
 
 sealed class FirebaseHelper {
@@ -20,13 +22,20 @@ sealed class FirebaseHelper {
             )
         }
 
-        suspend fun getStatsData (selectMode: Int): MutableList<List<String>> {
-            val userGameList = FirebaseRepository().gamesOfUser(FirebaseRepository().getCurrentUid())
-            val statsResult: MutableList<String> = ArrayList()
-            val allStatsResult: MutableList<List<String>> = java.util.ArrayList()
+        suspend fun getStatsData (selectMode: Int): MutableList<UserStat> {
+            val userid = FirebaseRepository().getCurrentUid()
+            val userGameList = FirebaseRepository().gamesOfUser(userid)
+            val allStatsResult = mutableListOf<UserStat>()
             for(userGame in userGameList){
+                val userStat: UserStat? = null
+                var opponentId: String? = null
                 val game = FirebaseRepository().getGame(userGame.id)
-                val opponents = game?.players
+                val players = game?.players
+                if (players != null) {
+                    for (player in players){
+                        if (player!= userid){ opponentId = player}
+                    }
+                }
                 val gameRounds = game?.rounds
                 val allRoundScores = gameRounds?.map {it.value.computeScores() }
                 val userScore= allRoundScores?.asSequence()?.map { scores ->
@@ -39,20 +48,22 @@ sealed class FirebaseHelper {
                 }?.sum()
 
                 val roundMode = game?.mode?.rounds
-                //by default 1v1 here
+                //by default 1v1 here, so just use overall rounds minus his score
                 val opponentScore = roundMode?.minus(userScore!!)
-                // should be shown like "3 -2 "
+                // should be shown like "3 - 2 "
                 val score = "$userScore - $opponentScore"
                 val date = SimpleDateFormat("yyyy-MM-dd").format(game?.timestamp?.toDate())
-                    statsResult.add(game!!.id)
-                    statsResult.add(date)
-                    statsResult.add(opponents.toString())
-                    statsResult.add(roundMode.toString())
-                    statsResult.add(score)
+                userStat!!.gameId = game!!.id
+                userStat.date = date
+                // Pass the id temporarily since I am not sure how to get name from id
+                userStat.opponents = opponentId.toString()
+                userStat.roundMode = roundMode.toString()
+                userStat.score = score
+
                 //mode filter, selectMode = 0 means by default to fetch all result
                 // todo: map selectMode (best of X) in UI to Game round number
                 if(roundMode == selectMode || selectMode == 0) {
-                    allStatsResult.add(statsResult)
+                    allStatsResult.add(userStat)
                 }
             }
             return allStatsResult
@@ -60,12 +71,10 @@ sealed class FirebaseHelper {
 
         }
 
-        suspend fun getMatchDetailData(gid: String): MutableList<List<String>> {
+        suspend fun getMatchDetailData(gid: String): MutableList<RoundStat> {
             val userid = FirebaseRepository().getCurrentUid()
             var opponentId: String? = null
-            val matchDetail: MutableList<String> = ArrayList()
-            // return @matchDetail List: [user hand, opponent hand, round outcome, index]
-            val allDetailsList: MutableList<List<String>> = java.util.ArrayList()
+            val allDetailsList = mutableListOf<RoundStat>()
             val game = FirebaseRepository().getGame(gid)
             val players = game?.players
             // note: 1 v 1 logic, if we support pvp mode, the table should be iterated to change as well.
@@ -78,24 +87,26 @@ sealed class FirebaseHelper {
             val rounds = game?.rounds
             rounds?.forEach { round ->
                 var index = 0
+                val roundStat: RoundStat? = null
                 val hand = round.value.hands
                 val score = round.value.computeScores()
                 // id means choice ()
-                matchDetail.add(hand[userid]?.id.toString())
-                matchDetail.add(hand[opponentId]?.id.toString())
+                roundStat!!.userHand = hand[userid]!!.id.toString()
+                roundStat!!.opponentHand = hand[opponentId]!!.id.toString()
                 when {
                     score[0].uid == userid -> {
-                        matchDetail.add("win")
+                        roundStat.outcome = "win"
                     }
                     score[0].points == 0 -> {
-                        matchDetail.add("tie")
+                        roundStat.outcome = "tie"
                     }
-                    else -> matchDetail.add("lose")
+                    else -> roundStat.outcome = "lose"
                 }
                 index ++
-                matchDetail.add(index.toString())
+                roundStat.index = index.toString()
+                allDetailsList.add(roundStat)
             }
-            allDetailsList.add(matchDetail)
+
 
         return allDetailsList
         }

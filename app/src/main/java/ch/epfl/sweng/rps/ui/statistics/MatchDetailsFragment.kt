@@ -47,14 +47,14 @@ class MatchDetails : Fragment() {
         val newView = inflater.inflate(R.layout.fragment_match_details, container, false)
         //for test
         addDetailRow(newView,"3","paper","rock","win")
-/*
+
         viewLifecycleOwner.lifecycleScope.launch {
             val matchDetailsList = FirebaseHelper.getMatchDetailData(matchUuid!!)
             for (matchDetails in matchDetailsList){
-                addDetailRow(newView,matchDetails[3],matchDetails[0],matchDetails[1],matchDetails[2])
+                addDetailRow(newView,matchDetails.index,matchDetails.userHand,matchDetails.opponentHand,matchDetails.outcome)
             }
         }
-*/
+
 
 
         return newView
