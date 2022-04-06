@@ -1,9 +1,14 @@
 package ch.epfl.sweng.rps.models
 
-interface ComputerPlayer{
+abstract class ComputerPlayer (
+    private val _computerPlayerId: String,
+    private val _numberOfPossibleMoves: Int){
+    val computerPlayerId: String
+        get() = _computerPlayerId
+    val numberOfPossibleMoves: Int
+        get() = _numberOfPossibleMoves
     /**
-     * @param numberOfPossibleMoves - total number of moves possible in a game
      * @return number representing a move from possible range [0, ..., numberOfMoves - 1]
      */
-    fun makeMove(numberOfPossibleMoves: Int): Hand
+    abstract fun makeMove(): Hand
 }
