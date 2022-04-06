@@ -41,7 +41,35 @@
     <string name="player">Player</string>
     <string name="opponent">Opponent</string>
     <string name="outcome">Outcome</string>
+
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
     <item name="test_for_stats_row" type="id" />
+    <item name="test_for_stats_row" type="id" />
+    <!-- Preference Titles -->
+    <string name="appearance_header">Appearance</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="system_mode">System theme</string>
+    <string name="system_mode_summary">Use the system theme</string>
+    <string name="theme_mode">Theme</string>
+    <string name="theme_mode_summary">Use the dark theme</string>
+    <string name="theme_pref_key">theme_mode</string>
+    <string name="online">Online</string>
+    <string name="play_one_game">Play one game</string>
+    <string name="play_five_games">Play five games</string>
+    <string name="offline">Offline</string>
+    <string name="profile_picture_desc">Profile picture</string>
+    <string name="show_license_key">show_licence</string>
+    <string name="license_title">License</string>
 </resources>

@@ -53,6 +53,11 @@
             app:argType="boolean" />
     </fragment>
     <fragment
+        android:id="@+id/nav_profile"
+        android:name="ch.epfl.sweng.rps.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/profile_fragment" />
+    <fragment
         android:id="@+id/gameFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameFragment"
         android:label="@string/menu_game"

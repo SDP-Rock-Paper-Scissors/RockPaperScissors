@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test
 
 class GameTest {
     @Test
-    fun testGamemode() {
-        val m1 = GameMode(playerCount = 2, type = GameMode.Type.PVP, rounds = 3, timeLimit = 10)
+    fun testGameMode() {
+        val m1 =
+            GameMode(playerCount = 2, type = GameMode.Type.PVP, rounds = 3, timeLimit = 10)
         val m2 = GameMode.fromString(m1.toGameModeString())
 
         assertEquals(m1.playerCount, m2.playerCount)

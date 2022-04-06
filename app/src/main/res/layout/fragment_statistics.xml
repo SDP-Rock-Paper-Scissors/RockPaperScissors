@@ -1,39 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_statistics"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_statistics"
-    android:background="@color/lightgray"
     tools:context=".ui.statistics.MatchDetails">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="horizontal"
-        android:background="#FFFFFF"
+        android:orientation="horizontal">
 
-        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/personal_match_statistics"
             android:textSize="20dp"
-            android:textStyle="bold">
-        </TextView>
+            android:textStyle="bold"></TextView>
 
 
         <Spinner
-            android:layout_alignParentRight="true"
             android:id="@+id/modeSelect"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_gravity="end"
             android:minHeight="32dp"
-            android:spinnerMode="dropdown"
-            style="@style/Widget.AppCompat.DropDownItem.Spinner"
-            >
-        </Spinner>
+            android:spinnerMode="dropdown"></Spinner>
 
     </RelativeLayout>
 
@@ -46,8 +40,9 @@
         android:paddingRight="5dp"
         tools:context=".ui.statistics.StatisticsFragment"
         tools:ignore="UselessParent">
+
         <TableRow
-            android:background="#51B435"
+            android:background="#0F51B435"
             android:padding="10dp">
 
             <TextView

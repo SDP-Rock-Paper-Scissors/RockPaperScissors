@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_match_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_match_details"
-    android:background="@color/lightgray"
     tools:context=".ui.statistics.MatchDetails">
 
     <TableLayout
+        android:id="@+id/matchDetailTable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:id="@+id/matchDetailTable"
         tools:context=".ui.statistics.MatchDetails"
         tools:ignore="UselessParent">
 
@@ -29,7 +28,7 @@
 
 
         <TableRow
-            android:background="#51B435"
+            android:background="#0F51B435"
             android:padding="10dp">
 
             <TextView
@@ -57,7 +56,7 @@
         </TableRow>
 
         <TableRow
-            android:background="#F0F7F7"
+            android:background="#0FF0F7F7"
             android:padding="5dp">
 
             <TextView
@@ -86,7 +85,7 @@
         </TableRow>
 
         <TableRow
-            android:background="#F0F7F7"
+            android:background="#0FF0F7F7"
             android:padding="5dp">
 
             <TextView
