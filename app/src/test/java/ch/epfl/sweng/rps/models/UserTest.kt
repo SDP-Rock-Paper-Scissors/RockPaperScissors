@@ -13,5 +13,6 @@ class UserTest {
         assertEquals("PUBLIC", user.games_history_privacy)
         assertEquals(true, user.has_profile_photo)
         assertEquals("email", user.email)
+        assertEquals(User.Privacy.PUBLIC, user.gamesHistoryPrivacyEnum())
     }
 }
