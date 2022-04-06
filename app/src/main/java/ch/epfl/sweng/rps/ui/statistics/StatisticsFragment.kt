@@ -3,7 +3,6 @@ package ch.epfl.sweng.rps.ui.statistics
 
 import android.graphics.Color
 import android.os.Bundle
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
 import ch.epfl.sweng.rps.db.FirebaseHelper
-import ch.epfl.sweng.rps.db.FirebaseRepository
-
 import kotlinx.coroutines.launch
-
 
 
 class StatisticsFragment : Fragment() {
@@ -29,6 +25,7 @@ class StatisticsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // for filter
         val values = arrayOf(
             "Mode Filter",
             "Best of 3",
@@ -58,19 +55,16 @@ class StatisticsFragment : Fragment() {
                 println(position)
                 //filter function
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val currentUserID = FirebaseRepository().getCurrentUid()
                     val statsDataList = FirebaseHelper.getStatsData(position)
                     for(statsData in statsDataList){
                         addPersonalStats(view!!, statsData[0],statsData[1],statsData[2],statsData[3],statsData[4])
                     }
                     //test by default
                     if(position == 0){
-                        addPersonalStats(view!!,currentUserID,"2022-04-05","Jinglun Pan","3","2 - 1")
+                        addPersonalStats(view!!,"000000","2022-04-05","Jinglun Pan","3","2 - 1")
                     }
 
                 }
-
-
 
             }
 

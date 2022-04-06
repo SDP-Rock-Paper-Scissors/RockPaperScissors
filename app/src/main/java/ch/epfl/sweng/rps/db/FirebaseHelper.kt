@@ -31,7 +31,7 @@ sealed class FirebaseHelper {
                 val allRoundScores = gameRounds?.map {it.value.computeScores() }
                 val userScore= allRoundScores?.asSequence()?.map { scores ->
                     val max = scores.maxOf { it.points }
-                    if (scores.any {it.points == max &&  it.uid == FirebaseRepository().getCurrentUid() && !scores.all { it -> it.points ==max }})
+                    if (scores.any {it.points == max &&  it.uid == FirebaseRepository().getCurrentUid() && !scores.all { it.points ==max }})
                         1
                     else
                         0
@@ -44,7 +44,7 @@ sealed class FirebaseHelper {
                 // should be shown like "3 -2 "
                 val score = "$userScore - $opponentScore"
                 val date = SimpleDateFormat("yyyy-MM-dd").format(game?.timestamp?.toDate())
-
+                    statsResult.add(game!!.id)
                     statsResult.add(date)
                     statsResult.add(opponents.toString())
                     statsResult.add(roundMode.toString())
@@ -60,23 +60,44 @@ sealed class FirebaseHelper {
 
         }
 
-        suspend fun getMatchDetailData(uid: String,gid: String){
+        suspend fun getMatchDetailData(gid: String): MutableList<List<String>> {
+            val userid = FirebaseRepository().getCurrentUid()
+            var opponentId: String? = null
             val matchDetail: MutableList<String> = ArrayList()
+            // return @matchDetail List: [user hand, opponent hand, round outcome, index]
+            val allDetailsList: MutableList<List<String>> = java.util.ArrayList()
             val game = FirebaseRepository().getGame(gid)
-            val opponent = game?.players
-            val handsList = game?.rounds?.map { it.value.hands }
-            for (hands in handsList!!){
-                matchDetail.add(hands[uid]!!.id.toString())
-                matchDetail.add(hands[opponent?.get(0)]!!.id.toString())
-                //TODO: how can I get the result of each round?
-                // Note： if the user get win, the opponent side should show fail.
-
-
+            val players = game?.players
+            // note: 1 v 1 logic, if we support pvp mode, the table should be iterated to change as well.
+            // get opponent user id from player list
+            if (players != null) {
+                for (player in players){
+                    if (player!= userid){ opponentId = player}
+                }
             }
+            val rounds = game?.rounds
+            rounds?.forEach { round ->
+                var index = 0
+                val hand = round.value.hands
+                val score = round.value.computeScores()
+                // id means choice ()
+                matchDetail.add(hand[userid]?.id.toString())
+                matchDetail.add(hand[opponentId]?.id.toString())
+                when {
+                    score[0].uid == userid -> {
+                        matchDetail.add("win")
+                    }
+                    score[0].points == 0 -> {
+                        matchDetail.add("tie")
+                    }
+                    else -> matchDetail.add("lose")
+                }
+                index ++
+                matchDetail.add(index.toString())
+            }
+            allDetailsList.add(matchDetail)
 
-
-
-
+        return allDetailsList
         }
 
 
