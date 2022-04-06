@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        _binding!!.buttonPlayOneOfflineGame.setOnClickListener { view: View ->
+        _binding!!.buttonPlay1GamesOffline.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(R.id.gameFragment)
         }
 

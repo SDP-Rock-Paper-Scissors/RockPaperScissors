@@ -3,14 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/drawable/nav_item_color_state.xml" value="0.2235" />
-        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.22282608695652173" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/drawable/ic_baseline_leaderboard_24.xml" value="0.2365" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/activity_match_detail.xml" value="0.21331521739130435" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/fragment_game.xml" value="0.21331521739130435" />
         <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/fragment_home.xml" value="0.18541666666666667" />
-        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/fragment_match_details.xml" value="0.22282608695652173" />
-        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/fragment_statistics.xml" value="0.18541666666666667" />
-        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/profile_fragment.xml" value="0.33" />
-        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/menu/bottom_nav_menu.xml" value="0.16197916666666667" />
-        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/xml/root_preferences.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/fragment_leaderboard.xml" value="0.21331521739130435" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/profile_app_bar.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/layout/settings_activity.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/menu/profile_actions.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/xml/header_preferences.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/xml/messages_preferences.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/xml/root_preferences.xml" value="0.16197916666666667" />
+        <entry key="..\:/Users/Gaetan/Developer/Projects/RockPaperScissors/app/src/main/res/xml/sync_preferences.xml" value="0.16197916666666667" />
       </map>
     </option>
   </component>

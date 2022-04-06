@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profile_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".ui.profile.ProfileFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/profile_top_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/profile_actions"
+            app:title="Profile" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +32,7 @@
             android:layout_width="413dp"
             android:layout_height="149dp"
             android:layout_marginTop="76dp"
-            android:contentDescription="Profile picture"
+            android:contentDescription="@string/profile_picture_desc"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,9 +45,7 @@
             android:layout_width="106dp"
             android:layout_height="48dp"
             android:layout_marginTop="32dp"
-            android:autoText="false"
             android:ems="10"
-            android:inputType="textPersonName"
             android:text="Email"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -46,9 +59,7 @@
             android:layout_width="331dp"
             android:layout_height="51dp"
             android:layout_marginTop="32dp"
-            android:autoText="false"
             android:ems="10"
-            android:inputType="textPersonName"
             android:text="Display Name"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -62,7 +73,6 @@
             android:layout_height="48dp"
             android:layout_marginTop="40dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:text="Privacy:"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -104,19 +114,5 @@
             app:layout_constraintHorizontal_bias="0.518"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/LabelPrivacy" />
-
-        <Button
-            android:id="@+id/elevatedButton"
-            style="@style/Widget.AppTheme.Button.IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:icon="@android:drawable/ic_menu_manage"
-            app:iconTint="@color/material_on_background_emphasis_high_type"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

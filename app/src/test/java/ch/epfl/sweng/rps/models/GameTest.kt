@@ -2,9 +2,8 @@ package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Game.Mode
 import ch.epfl.sweng.rps.models.Game.Uid
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
 
 class GameTest {
     @Test
