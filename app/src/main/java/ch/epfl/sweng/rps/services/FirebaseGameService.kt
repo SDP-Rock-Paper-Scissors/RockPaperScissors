@@ -79,7 +79,7 @@ class FirebaseGameService(
             throw GameServiceException("Only the first player can add a round")
         }
         val round = Round(
-            hands = emptyMap(),
+            hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
 

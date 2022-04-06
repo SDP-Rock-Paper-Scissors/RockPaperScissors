@@ -15,8 +15,8 @@ import com.google.firebase.Timestamp
 data class Game(
     val id: String,
     val players: List<String>,
-    val rounds: Map<String, Round>,
-    val current_round: Int,
+    val rounds: MutableMap<String, Round>,
+    var current_round: Int,
     val game_mode: String,
     val done: Boolean,
     val timestamp: Timestamp,

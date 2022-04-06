@@ -73,6 +73,7 @@ dependencies {
     implementation 'androidx.databinding:databinding-runtime:7.1.2'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
     testImplementation 'junit:junit:4.13.2'
+
     androidTestImplementation 'org.jetbrains.kotlin:kotlin-test'
     androidTestImplementation(platform("org.junit:junit-bom:5.8.2"))
     androidTestImplementation("org.junit.jupiter:junit-jupiter")
@@ -109,6 +110,7 @@ dependencies {
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-native-mt'
 
     testImplementation 'org.mockito:mockito-core:4.4.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 
@@ -160,8 +162,4 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 
 connectedCheck {
     finalizedBy jacocoTestReport
-}
-
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 }

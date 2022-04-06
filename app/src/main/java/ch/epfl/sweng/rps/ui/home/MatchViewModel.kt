@@ -20,7 +20,7 @@ class MatchViewModel : ViewModel() {
 
     fun startOfflineGameService(nEvents: Int, computerPlayer: ComputerPlayer) {
         //better way to get uid is needed
-        _gameService = OfflineGameService("0111", computerPlayer, nEvents)
+        _gameService = OfflineGameService("0111", listOf(computerPlayer), nEvents)
     }
 
     /**
@@ -28,11 +28,14 @@ class MatchViewModel : ViewModel() {
      */
     fun createGame() {
         _gameService?.createGame()
+
     }
 
-    fun determineRoundResults(userHand: Hand) {
+    fun playHand(userHand: Hand) {
         viewModelScope.launch {
-            currentUserResult = _gameService?.determineRoundResult(userHand)
+            _gameService?.addRound()
+            _gameService?.playHand(userHand)
+            currentUserResult = ??
         }
     }
 }
