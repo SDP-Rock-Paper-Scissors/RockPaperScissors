@@ -36,26 +36,12 @@
         android:label="@string/menu_game"
         tools:layout="@layout/fragment_game" >
         <action
-            android:id="@+id/action_gameFragment_to_winFragment"
-            app:destination="@id/winFragment" />
-        <action
-            android:id="@+id/action_gameFragment_to_loseFragment"
-            app:destination="@id/loseFragment" />
-        <action
-            android:id="@+id/action_gameFragment_to_drawFragment"
-            app:destination="@id/drawFragment" />
+            android:id="@+id/action_gameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
     </fragment>
     <fragment
-        android:id="@+id/winFragment"
-        android:name="ch.epfl.sweng.rps.ui.game.WinFragment"
+        android:id="@+id/gameResultFragment"
+        android:name="ch.epfl.sweng.rps.ui.game.GameResultFragment"
         android:label="fragment_win"
-        tools:layout="@layout/fragment_win" />
-    <fragment
-        android:id="@+id/loseFragment"
-        android:name="ch.epfl.sweng.rps.ui.game.LoseFragment"
-        android:label="LoseFragment" />
-    <fragment
-        android:id="@+id/drawFragment"
-        android:name="ch.epfl.sweng.rps.ui.game.DrawFragment"
-        android:label="DrawFragment" />
+        tools:layout="@layout/fragment_game_result" />
 </navigation>
