@@ -45,7 +45,6 @@
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
     <item name="test_for_stats_row" type="id" />
-    <item name="test_for_stats_row" type="id" />
     <!-- Preference Titles -->
     <string name="appearance_header">Appearance</string>
     <string name="sync_header">Sync</string>
