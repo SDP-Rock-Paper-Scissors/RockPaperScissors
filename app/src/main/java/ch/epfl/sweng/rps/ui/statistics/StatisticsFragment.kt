@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
-    private val currentUserID = FirebaseRepository().getCurrentUid()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,10 +57,9 @@ class StatisticsFragment : Fragment() {
 
                 println(position)
                 //filter function
-
                 viewLifecycleOwner.lifecycleScope.launch {
-                    println("I have called this function")
-                    val statsDataList = FirebaseHelper.getStatsData(currentUserID,position)
+                    val currentUserID = FirebaseRepository().getCurrentUid()
+                    val statsDataList = FirebaseHelper.getStatsData(position)
                     for(statsData in statsDataList){
                         addPersonalStats(view!!, statsData[0],statsData[1],statsData[2],statsData[3],statsData[4])
                     }
@@ -81,15 +79,6 @@ class StatisticsFragment : Fragment() {
             }
         }
         return newView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // we should pass current userID here
-
-
-
-
     }
 
 

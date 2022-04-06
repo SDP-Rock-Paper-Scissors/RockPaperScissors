@@ -1,6 +1,5 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.User
 import java.text.SimpleDateFormat
 
@@ -21,8 +20,8 @@ sealed class FirebaseHelper {
             )
         }
 
-        suspend fun getStatsData (uid: String, selectMode: Int): MutableList<List<String>> {
-            val userGameList = FirebaseRepository().gamesOfUser(uid)
+        suspend fun getStatsData (selectMode: Int): MutableList<List<String>> {
+            val userGameList = FirebaseRepository().gamesOfUser(FirebaseRepository().getCurrentUid())
             val statsResult: MutableList<String> = ArrayList()
             val allStatsResult: MutableList<List<String>> = java.util.ArrayList()
             for(userGame in userGameList){
@@ -32,7 +31,7 @@ sealed class FirebaseHelper {
                 val allRoundScores = gameRounds?.map {it.value.computeScores() }
                 val userScore= allRoundScores?.asSequence()?.map { scores ->
                     val max = scores.maxOf { it.points }
-                    if (scores.any {it.points == max &&  it.uid == uid && !scores.all { it -> it.points ==max }})
+                    if (scores.any {it.points == max &&  it.uid == FirebaseRepository().getCurrentUid() && !scores.all { it -> it.points ==max }})
                         1
                     else
                         0
@@ -51,6 +50,7 @@ sealed class FirebaseHelper {
                     statsResult.add(roundMode.toString())
                     statsResult.add(score)
                 //mode filter, selectMode = 0 means by default to fetch all result
+                // todo: map selectMode (best of X) in UI to Game round number
                 if(roundMode == selectMode || selectMode == 0) {
                     allStatsResult.add(statsResult)
                 }
