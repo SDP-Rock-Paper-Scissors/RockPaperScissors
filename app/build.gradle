@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.android.gms.oss-licenses-plugin'
     id 'kotlin-android'
     id 'jacoco'
-    id 'com.google.android.gms.oss-licenses-plugin'
 }
 
 apply plugin: 'com.google.gms.google-services'
@@ -137,6 +137,7 @@ configurations.all {
 
 
 tasks.withType(Test) {
+    useJUnitPlatform()
     jacoco.includeNoLocationClasses = true
     jacoco.excludes = ['jdk.internal.*']
 }

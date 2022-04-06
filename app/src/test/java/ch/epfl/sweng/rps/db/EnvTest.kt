@@ -1,9 +1,11 @@
 package ch.epfl.sweng.rps.db
 
-import org.junit.Assert.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+
 
 class EnvTest {
-    @org.junit.Test
+    @Test
     fun test() {
         assertEquals("dev", Env.DEV.toString())
         assertEquals("prod", Env.PROD.toString())

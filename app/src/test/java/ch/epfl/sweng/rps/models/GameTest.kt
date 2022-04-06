@@ -2,8 +2,9 @@ package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Game.Mode
 import ch.epfl.sweng.rps.models.Game.Uid
-import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 
 class GameTest {
     @Test

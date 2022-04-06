@@ -1,8 +1,8 @@
 package ch.epfl.sweng.rps.models
 
 import com.google.firebase.Timestamp
-import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 class RoundTest {
 

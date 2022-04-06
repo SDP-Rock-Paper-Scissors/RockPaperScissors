@@ -4,15 +4,12 @@ import android.app.Activity
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.test.espresso.Espresso.*
-import androidx.test.espresso.PerformException
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.espresso.util.HumanReadables
-import androidx.test.espresso.util.TreeIterables
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -23,12 +20,12 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.Callable
 import java.util.concurrent.FutureTask
 import java.util.concurrent.TimeoutException
-import kotlin.test.assertEquals
 
 
 @RunWith(AndroidJUnit4::class)
@@ -64,14 +61,14 @@ class SettingsPageTest {
 
     private inline fun <reified T : Activity> getActivityInstance(): T {
         var activity: Activity? = null
-        getInstrumentation().runOnMainSync(Runnable {
+        getInstrumentation().runOnMainSync {
             val resumedActivities: Collection<Activity> =
                 ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
             Log.i("SettingsPageTest", "resumedActivities: $resumedActivities")
             if (resumedActivities.iterator().hasNext()) {
                 activity = resumedActivities.iterator().next()
             }
-        })
+        }
         if (activity == null) {
             throw TimeoutException("No activity found")
         }

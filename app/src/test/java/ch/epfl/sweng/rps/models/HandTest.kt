@@ -2,8 +2,8 @@ package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Hand.*
 import ch.epfl.sweng.rps.models.Hand.Result.WIN
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class HandTest {
     @Test
