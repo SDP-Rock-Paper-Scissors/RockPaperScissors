@@ -1,36 +1,31 @@
 package ch.epfl.sweng.rps
 
-import android.app.Activity
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import androidx.test.runner.lifecycle.Stage
+import ch.epfl.sweng.rps.TestUtils.getActivityInstance
+import ch.epfl.sweng.rps.TestUtils.waitFor
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
-import java.util.concurrent.TimeoutException
 
 
 @RunWith(AndroidJUnit4::class)
 class SettingsPageTest {
     @get:Rule
-    val testRule = ActivityScenarioRule(SettingsActivity::class.java)
+    val scenarioRule = ActivityScenarioRule(SettingsActivity::class.java)
 
     private fun computeThemeMap(): List<Map.Entry<String, String>> {
         val targetContext = getInstrumentation().targetContext
@@ -58,24 +53,6 @@ class SettingsPageTest {
         return filtered.first().key
     }
 
-    private inline fun <reified T : Activity> getActivityInstance(): T {
-        var activity: Activity? = null
-        getInstrumentation().runOnMainSync {
-            val resumedActivities: Collection<Activity> =
-                ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
-            Log.i("SettingsPageTest", "resumedActivities: $resumedActivities")
-            if (resumedActivities.iterator().hasNext()) {
-                activity = resumedActivities.iterator().next()
-            }
-        }
-        if (activity == null) {
-            throw TimeoutException("No activity found")
-        }
-        if (activity !is T) {
-            throw IllegalStateException("Activity is not of type ${T::class.java.simpleName}")
-        }
-        return activity!! as T
-    }
 
     private fun getCurrentNightMode(): Int {
         val activity = getActivityInstance<SettingsActivity>()
@@ -90,6 +67,11 @@ class SettingsPageTest {
     @Test
     fun testSettingsPage() {
         onView(withId(R.id.settings)).check(matches(isDisplayed()))
+
+        // the activity's onCreate, onStart and onResume methods have been called at this point
+        scenarioRule.scenario.moveToState(Lifecycle.State.STARTED)
+        // the activity's onPause method has been called at this point
+        scenarioRule.scenario.moveToState(Lifecycle.State.RESUMED)
 
         for (entry in computeThemeMap()) {
             Log.i("SettingsPageTest", "Testing theme ${entry.key}")
@@ -110,15 +92,6 @@ class SettingsPageTest {
         }
     }
 
-    private fun waitFor(delay: Long): ViewAction {
-        return object : ViewAction {
-            override fun getConstraints(): Matcher<View> = isRoot()
-            override fun getDescription(): String = "wait for $delay milliseconds"
-            override fun perform(uiController: UiController, v: View?) {
-                uiController.loopMainThreadForAtLeast(delay)
-            }
-        }
-    }
 
     @Test
     fun testSettingsPageLicense() {

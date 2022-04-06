@@ -3,10 +3,11 @@ package ch.epfl.sweng.rps
 import android.content.Intent
 import android.os.Bundle
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.models.User
@@ -47,5 +48,14 @@ class ProfileFragmentTest {
         onView(withId(R.id.TextDisplayName)).check(matches(withText(bundle.getString("display_name"))))
         onView(withId(R.id.TextEmail)).check(matches(withText(bundle.getString("email"))))
         onView(withId(R.id.TextPrivacy)).check(matches(withText(bundle.getString("privacy"))))
+    }
+
+    @Test
+    fun tapSettings() {
+        onView(withId(R.id.nav_profile)).perform(click())
+        onView(withId(R.id.profile_appbar_settings_btn)).perform(click())
+        onView(withId(R.id.settings)).check(matches(isDisplayed()))
+        pressBack()
+        onView(withId(R.id.profile_appbar_settings_btn)).check(matches(isDisplayed()))
     }
 }
