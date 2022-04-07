@@ -23,7 +23,9 @@ android {
         }
     }
     compileSdk 31
-
+    testOptions{
+        animationsDisabled = true
+    }
     defaultConfig {
         applicationId "ch.epfl.sweng.rps"
         minSdk 23
@@ -55,6 +57,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
