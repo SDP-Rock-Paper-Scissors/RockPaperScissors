@@ -35,9 +35,9 @@ class GameFragment : Fragment() {
     }
 
     private fun rpsPressed(hand: Hand) {
-        matchViewModel.playHand(hand)
-        matchViewModel.determineResult()
-        findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
+        matchViewModel.playHand(hand){
+            findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
+        }
     }
 
     override fun onDestroyView() {

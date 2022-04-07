@@ -40,7 +40,6 @@ class HomeFragment : Fragment() {
     private fun playNRoundsWithComputer(nEvents: Int) {
         val randomPlayer = RandomPlayer(listOf(Hand.ROCK, Hand.PAPER, Hand.SCISSORS))
         matchViewModel.startOfflineGameService(nEvents, randomPlayer)
-        matchViewModel.createGame()
         findNavController().navigate(R.id.gameFragment)
     }
 

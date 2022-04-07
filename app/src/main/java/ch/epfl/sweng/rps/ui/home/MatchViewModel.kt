@@ -2,10 +2,17 @@ package ch.epfl.sweng.rps.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.ComputerPlayer
+import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.services.OfflineGameService
+import ch.epfl.sweng.rps.services.ServiceLocator
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * Shared ViewModel among HomeFragment and GameFragment.
@@ -17,26 +24,25 @@ class MatchViewModel : ViewModel() {
 
     private var _gameService: OfflineGameService? = null
     var currentUserResult: Hand.Result? = null
-    private val userId = "userId"
-
+    private val uid = ServiceLocator.getInstance().getFirebaseRepository().getCurrentUid()
     fun startOfflineGameService(nEvents: Int, computerPlayer: ComputerPlayer) {
-        //better way to get uid is needed and gameId
-        _gameService = OfflineGameService("0111", userId, listOf(computerPlayer), nEvents)
+        val gameId = UUID.randomUUID().toString()
+        _gameService = OfflineGameService(
+            gameId,
+            ServiceLocator.getInstance().getFirebaseRepository(),
+            listOf(computerPlayer),
+            Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0)
+        )
+        _gameService?.startListening()
     }
 
-    /**
-     * param nEvents: number of Wins or Rounds depending on the game implementation
-     */
-    fun createGame() {
-        _gameService?.createGame()
-    }
 
-    fun determineResult() {
+    private fun determineResult() {
         val scores = _gameService?.currentRound!!.computeScores()
         val best = scores[0]
         val bestPoints = best.points
         val bestUid = best.uid
-        currentUserResult = if (userId == bestUid) {
+        currentUserResult = if (uid == bestUid) {
             val secondBestPoints = scores[1].points
             if (bestPoints > secondBestPoints) {
                 Hand.Result.WIN
@@ -48,10 +54,13 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    fun playHand(userHand: Hand) {
+    fun playHand(userHand: Hand, callback: () -> Unit) {
         viewModelScope.launch {
-            _gameService?.addRound()
+            //add proper round adding when supporting the multiround
             _gameService?.playHand(userHand)
+            determineResult()
+            callback()
+
         }
     }
 }

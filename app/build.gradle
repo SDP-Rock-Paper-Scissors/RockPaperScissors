@@ -84,6 +84,7 @@ dependencies {
     implementation 'androidx.databinding:databinding-runtime:7.1.2'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
     implementation 'org.jetbrains.kotlin:kotlin-test'

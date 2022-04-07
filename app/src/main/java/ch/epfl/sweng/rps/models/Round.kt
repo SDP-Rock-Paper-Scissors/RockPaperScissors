@@ -6,7 +6,7 @@ import com.google.firebase.Timestamp
 
 
 data class Round(
-    val hands: MutableMap<String, Hand>,
+    val hands: Map<String, Hand>,
     val timestamp: Timestamp,
 ) {
     fun computeScores(pointSystem: PointSystem = DefaultPointSystem()): List<Score> {
