@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.FriendListAdapter
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.FakeFriendsData
+import ch.epfl.sweng.rps.models.FriendsInfo
 
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
@@ -40,7 +41,7 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
 
     }
    //Button Click Listeners
-    override fun onButtonClick(position: Int,friends: List<FriendsInfo>, view: View) {
+    override fun onButtonClick(position: Int, friends: List<FriendsInfo>, view: View) {
         val username = friends[position].username
         val gamesPlayed = friends[position].gamesPlayed
         val gamesWon = friends[position].gamesWon

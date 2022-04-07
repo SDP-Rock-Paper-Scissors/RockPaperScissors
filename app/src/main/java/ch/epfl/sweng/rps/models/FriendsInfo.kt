@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.ui.friends
+package ch.epfl.sweng.rps.models
 
 data class FriendsInfo(
     val username : String,

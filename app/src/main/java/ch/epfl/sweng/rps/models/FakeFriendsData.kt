@@ -1,7 +1,5 @@
 package ch.epfl.sweng.rps.models
 
-import ch.epfl.sweng.rps.ui.friends.FriendsInfo
-
 object FakeFriendsData {
     val myFriendsData = listOf(
     FriendsInfo("RPSKing88", 120, 76, 63.3, true),

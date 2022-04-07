@@ -8,7 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ch.epfl.sweng.rps.ui.friends.FriendsInfo
+import ch.epfl.sweng.rps.models.FriendsInfo
 
 class FriendListAdapter(
     private val friends : List<FriendsInfo>,
@@ -61,7 +61,7 @@ class FriendListAdapter(
     }
 
     interface OnButtonClickListener {
-        fun onButtonClick(position: Int,friends: List<FriendsInfo>, view: View)
+        fun onButtonClick(position: Int, friends: List<FriendsInfo>, view: View)
     }
 
     override fun getItemCount(): Int {
