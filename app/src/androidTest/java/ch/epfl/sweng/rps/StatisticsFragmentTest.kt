@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.rule.ActivityTestRule
 import org.hamcrest.Matcher
 import org.junit.Rule
 import java.util.concurrent.TimeoutException
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeoutException
 
 class StatisticsFragmentTest {
     @get:Rule
-    val testRule = ActivityScenarioRule(MainActivity::class.java)
+    val testRule = ActivityTestRule(MainActivity::class.java)
 
 
     /** Perform action of waiting for a specific view id.  */
