@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var currentUser: User
+  
     override fun onCreate(savedInstanceState: Bundle?) {
         var userData: Bundle? = intent.extras?.getBundle("User")
         if (userData != null) {
@@ -48,7 +50,28 @@ class MainActivity : AppCompatActivity() {
         SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
     }
 
+
     fun getUserDetails(): User {
         return currentUser
+    }
+
+    private fun setupNav() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val navView: BottomNavigationView = binding.navView
+        navView.setupWithNavController(navController)
+
+        //removes botttomNavView for specified fragments.
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.cameraFragment -> setBottomNavigationVisibility(View.GONE)
+                R.id.gameFragment -> setBottomNavigationVisibility(View.GONE)
+                else -> setBottomNavigationVisibility(View.VISIBLE)
+            }
+        }
+    }
+
+    fun setBottomNavigationVisibility(visibility: Int) {
+        // get the reference of the bottomNavigationView and set the visibility.
+        binding.navView.visibility = visibility
     }
 }
