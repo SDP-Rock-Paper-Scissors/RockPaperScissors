@@ -9,14 +9,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import java.util.*
 
 class OfflineGameService(
+    private val gameId_: String,
     private val uid: String,
     private val computerPlayers: List<ComputerPlayer>,
     private var roundCount: Int
 ) : GameService {
 
     private var _game: Game? = null
-    private val currentGameResults: List<Round.Score>? = null
-    private var computerCurrentHand: Hand? = null
+
 
     /**
      * Initialises the game after the game choice and play again button.
@@ -27,7 +27,7 @@ class OfflineGameService(
         // done in not clear
         // player count hardcoded, no support for different modes now
         _game = Game(
-            uid,
+            gameId_,
             computerPlayers.map { it.computerPlayerId },
             mutableMapOf(),
             0,
@@ -40,26 +40,11 @@ class OfflineGameService(
 
     //TODO: change when support with db is added
     override val gameId: String
-        get() = _game!!.current_round.toString()
+        get() = _game!!.id
 
     override val isGameOver: Boolean
         get() = _game?.current_round == roundCount
 
-
-//    suspend fun determineRoundResult(userHand: Hand): Hand.Result {
-//        userCurrentHand = userHand
-//        computerCurrentHand = computerPlayer.makeMove()
-//        _round = addRound()
-//        val scoreList = _round!!.computeScores()
-//        var currentUserResult: Hand.Result? = null
-//        for (scoreRes in scoreList) {
-//            if (scoreRes.uid == uid) {
-//                currentUserResult = scoreRes.results[0]
-//                break
-//            }
-//        }
-//        return currentUserResult!!
-//    }
 
     override suspend fun addRound(): Round {
         val round = Round(

@@ -12,7 +12,7 @@ import ch.epfl.sweng.rps.databinding.FragmentGameBinding
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
 
-class GameFragment : Fragment(){
+class GameFragment : Fragment() {
 
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
@@ -28,13 +28,15 @@ class GameFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rockRB.setOnClickListener{ rpsPressed(Hand.ROCK) }
-        binding.paperRB.setOnClickListener{ rpsPressed(Hand.PAPER)}
-        binding.scissorsRB.setOnClickListener{ rpsPressed(Hand.SCISSORS)}
+        binding.rockRB.setOnClickListener { rpsPressed(Hand.ROCK) }
+        binding.paperRB.setOnClickListener { rpsPressed(Hand.PAPER) }
+        binding.scissorsRB.setOnClickListener { rpsPressed(Hand.SCISSORS) }
 
     }
-    private fun rpsPressed(hand: Hand){
+
+    private fun rpsPressed(hand: Hand) {
         matchViewModel.playHand(hand)
+        matchViewModel.determineResult()
         findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
     }
 

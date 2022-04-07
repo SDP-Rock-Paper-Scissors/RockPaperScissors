@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
+import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.RandomPlayer
 
 class HomeFragment : Fragment() {
@@ -37,8 +38,7 @@ class HomeFragment : Fragment() {
      * @param nEvents: number of Wins or Rounds depending on the game implementation
      */
     private fun playNRoundsWithComputer(nEvents: Int) {
-        val numberOfPossibleMoves = 3 //it's a simple rps format
-        val randomPlayer = RandomPlayer(numberOfPossibleMoves)
+        val randomPlayer = RandomPlayer(listOf(Hand.ROCK, Hand.PAPER, Hand.SCISSORS))
         matchViewModel.startOfflineGameService(nEvents, randomPlayer)
         matchViewModel.createGame()
         findNavController().navigate(R.id.gameFragment)
