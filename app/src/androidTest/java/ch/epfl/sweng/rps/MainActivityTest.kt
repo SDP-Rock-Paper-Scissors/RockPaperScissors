@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps
 
 
+import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -22,6 +23,10 @@ class MainActivityTest {
 
     @get:Rule
     val testRule = ActivityTestRule(MainActivity::class.java)
+    @Before
+    fun launch(){
+        testRule.launchActivity(Intent())
+    }
     @Test
     fun checkFirstFragment(){
         onView(withId(R.id.fragment_home)).check(matches(isDisplayed()))
@@ -38,6 +43,7 @@ class MainActivityTest {
     }
     @Test
     fun checkBackHome(){
+
         onView(withId(R.id.nav_statistics)).perform(click())
         onView(withId(R.id.nav_home)).perform(click())
         onView(withId(R.id.fragment_home)).check(matches(isDisplayed()))

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps
 
+import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -18,7 +19,10 @@ import org.junit.runner.RunWith
 class GameButtonsTest {
     @get:Rule
     val testRule = ActivityTestRule(MainActivity::class.java)
-
+    @Before
+    fun launch(){
+        testRule.launchActivity(Intent())
+    }
     @Test
     fun pressedRock() {
         checkPressedButton(R.id.rockRB)
