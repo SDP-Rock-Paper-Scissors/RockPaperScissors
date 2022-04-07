@@ -71,4 +71,6 @@
     <string name="profile_picture_desc">Profile picture</string>
     <string name="show_license_key">show_licence</string>
     <string name="license_title">License</string>
+    <string name="settings_show_uid_text">settings_show_uid_text</string>
+    <string name="add_artificial_game_settings">add_artificial_game_settings</string>
 </resources>

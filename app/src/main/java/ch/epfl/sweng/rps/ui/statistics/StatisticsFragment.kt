@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.ui.statistics
 
+
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +9,11 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
+import ch.epfl.sweng.rps.db.FirebaseHelper
+import kotlinx.coroutines.launch
 
 
 class StatisticsFragment : Fragment() {
@@ -21,15 +25,12 @@ class StatisticsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val values = arrayOf(
-            "Mode Filter",
-            "3 Matches",
-            "5 Matches",
-            "12 Matches",
-        )
+        val modes = getGameModes()
+
         val newView = inflater.inflate(R.layout.fragment_statistics, container, false)
         val modeSpinner = newView.findViewById(R.id.modeSelect) as Spinner
-        val adapter = ArrayAdapter(this.requireActivity(), android.R.layout.simple_spinner_item, values)
+        val adapter =
+            ArrayAdapter(this.requireActivity(), android.R.layout.simple_spinner_item, modes)
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         modeSpinner.adapter = adapter
         modeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -39,15 +40,30 @@ class StatisticsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                when (position) {
-                    //test for nav_item_color_state.xml
-                    1 -> println("x == 1")
-                    2 -> println("x == 2")
-                    else -> { // Note the block
-                        println("x is neither 1 nor 2")
-                    }
+                // delete all rows except the title
+                val statsTableLayout = view?.findViewById<TableLayout>(R.id.statsTable)
+                while (statsTableLayout?.childCount!! > 1) {
+                    statsTableLayout.removeView(statsTableLayout.getChildAt(statsTableLayout.childCount - 1))
+
                 }
 
+                println(position)
+                //filter function
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val statsDataList = FirebaseHelper.getStatsData(position)
+
+                    for (statsData in statsDataList) {
+                        addPersonalStats(
+                            view!!,
+                            statsData.gameId,
+                            statsData.date,
+                            statsData.opponents,
+                            statsData.roundMode,
+                            statsData.score
+                        )
+                    }
+                }
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -57,21 +73,21 @@ class StatisticsFragment : Fragment() {
         return newView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        addPersonalStats(view,"b9d5384-9f1f-11ec-b909-0242ac120002","2022-03-09","test","12", "4:8")
 
-    }
-
-
-
-
-    private fun addPersonalStats(view: View, uuid: String, date:String, opponent:String, mode:String, score: String ) {
+    private fun addPersonalStats(
+        view: View,
+        uuid: String,
+        date: String,
+        opponent: String,
+        mode: String,
+        score: String
+    ) {
         val sizeInDp = 5
         val statsTable = view.findViewById<TableLayout>(R.id.statsTable)
         val row = TableRow(activity)
         row.setBackgroundColor(
-            Color.parseColor("#0FF0F7F7"))
+            Color.parseColor("#0FF0F7F7")
+        )
         val scale = resources.displayMetrics.density
         val dpAsPixels = (sizeInDp * scale + 0.5f)
 
@@ -79,17 +95,15 @@ class StatisticsFragment : Fragment() {
         row.setPadding(dpAsPixels.toInt())
         row.isClickable
         row.tag = uuid
-        //only for test
-
 
         row.setOnClickListener {
             // add new fragment with communication
-            val matchDetailFragment = MatchDetails()
+            val matchDetailFragment = MatchDetailsFragment()
             val bundle = Bundle()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            bundle.putString("uuid",uuid)
-            matchDetailFragment.arguments =  bundle
-            transaction.replace(R.id.fragment_statistics,matchDetailFragment)
+            bundle.putString("uuid", uuid)
+            matchDetailFragment.arguments = bundle
+            transaction.replace(R.id.fragment_statistics, matchDetailFragment)
             transaction.addToBackStack(null)
             transaction.commit()
 
@@ -120,11 +134,26 @@ class StatisticsFragment : Fragment() {
         row.addView(opponentBlank)
         row.addView(modeBlank)
         row.addView(scoreBlank)
-        statsTable.addView(row)
+        statsTable?.addView(row)
 
     }
+
+    private fun getGameModes(): Array<String> {
+
+        return arrayOf(
+            "Mode Filter",
+            "1 round",
+            "Best of 3",
+            "Best of 5",
+        )
+
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
