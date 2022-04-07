@@ -6,12 +6,12 @@ check_android_task:
     ARCH: x86
     CC_TEST_REPORTER_ID: ENCRYPTED[!d9c0a23b73b7bfa56aa4e07466ebd05d752e064876b8d60d6df2988f55ba7efd8f2de1780c35fe843d7a310d638e9181!]
   container:
-    image: cirrusci/android-sdk:$API_LEVEL
+    image: reactivecircus/android-emulator-$API_LEVEL:latest
     kvm: "true"
     cpu: 8
-    memory: 12G
+    memory: 10G
   create_device_script: echo no | avdmanager create avd --force --name test --abi "$TARGET/$ARCH" --package "system-images;android-$API_LEVEL;$TARGET;$ARCH"
-  start_emulator_background_script: $ANDROID_HOME/emulator/emulator -avd test -no-window -gpu swiftshader_indirect -no-snapshot -no-audio -no-boot-anim -camera-back virtualscene
+  start_emulator_background_script: $ANDROID_SDK_ROOT/emulator/emulator -avd test -no-window -gpu swiftshader_indirect -no-snapshot -no-audio -no-boot-anim -camera-back virtualscene
   build_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
