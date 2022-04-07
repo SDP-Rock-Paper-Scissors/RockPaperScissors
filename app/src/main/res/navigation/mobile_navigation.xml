@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_nav_home_to_gameFragment"
             app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_leaderboard"
@@ -44,4 +47,13 @@
         android:name="ch.epfl.sweng.rps.ui.game.GameResultFragment"
         android:label="fragment_win"
         tools:layout="@layout/fragment_game_result" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="ch.epfl.sweng.rps.ui.camera.CameraFragment"
+        android:label="Camera"
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>
