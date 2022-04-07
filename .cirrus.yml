@@ -1,7 +1,7 @@
 check_android_task:
   name: Run Android tests
   env:
-    API_LEVEL: "31"
+    API_LEVEL: "30"
     TARGET: google_apis
     ARCH: x86
     CC_TEST_REPORTER_ID: ENCRYPTED[!d9c0a23b73b7bfa56aa4e07466ebd05d752e064876b8d60d6df2988f55ba7efd8f2de1780c35fe843d7a310d638e9181!]
@@ -16,7 +16,8 @@ check_android_task:
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
   wait_for_emulator_script: |
-    adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 3; done; input keyevent 82'
+    adb wait-for-device
+    adb shell input keyevent 82
   disable_animations_script: |
     adb shell settings put global window_animation_scale 0
     adb shell settings put global transition_animation_scale 0
