@@ -6,7 +6,7 @@ check_android_task:
     ARCH: x86
     CC_TEST_REPORTER_ID: ENCRYPTED[!d9c0a23b73b7bfa56aa4e07466ebd05d752e064876b8d60d6df2988f55ba7efd8f2de1780c35fe843d7a310d638e9181!]
   container:
-    image: reactivecircus/android-emulator-$API_LEVEL:latest
+    image: cimg/android:2022.03
     kvm: "true"
     cpu: 8
     memory: 10G
