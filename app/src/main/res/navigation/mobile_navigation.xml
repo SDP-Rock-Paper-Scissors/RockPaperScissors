@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_statistics" />
     <fragment
         android:id="@+id/nav_profile"
-        android:name="ch.epfl.sweng.rps.ui.profile.profileFragment"
+        android:name="ch.epfl.sweng.rps.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
         tools:layout="@layout/profile_fragment" />
     <fragment
