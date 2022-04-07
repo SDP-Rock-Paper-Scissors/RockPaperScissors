@@ -25,7 +25,6 @@ class StatisticsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // for filter
         val modes = getGameModes()
 
         val newView = inflater.inflate(R.layout.fragment_statistics, container, false)
@@ -43,8 +42,8 @@ class StatisticsFragment : Fragment() {
             ) {
                 // delete all rows except the title
                 val statsTableLayout = view?.findViewById<TableLayout>(R.id.statsTable)
-                while( statsTableLayout?.childCount!! > 1){
-                    statsTableLayout.removeView(statsTableLayout.getChildAt(statsTableLayout.childCount -1 ))
+                while (statsTableLayout?.childCount!! > 1) {
+                    statsTableLayout.removeView(statsTableLayout.getChildAt(statsTableLayout.childCount - 1))
 
                 }
 
@@ -53,17 +52,18 @@ class StatisticsFragment : Fragment() {
 
                 viewLifecycleOwner.lifecycleScope.launch {
                     val statsDataList = FirebaseHelper.getStatsData(position)
-                    for(statsData in statsDataList){
-                        addPersonalStats(view!!, statsData.gameId,statsData.date,statsData.opponents,statsData.roundMode,statsData.score)
-                    }
-                    //test and present by default
-                    if(position == 0){
-                        addPersonalStats(view!!,"000000","2022-04-05","Jinglun Pan","3","2 - 1")
-                    }
 
+                    for (statsData in statsDataList) {
+                        addPersonalStats(
+                            view!!,
+                            statsData.gameId,
+                            statsData.date,
+                            statsData.opponents,
+                            statsData.roundMode,
+                            statsData.score
+                        )
+                    }
                 }
-
-
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -86,7 +86,8 @@ class StatisticsFragment : Fragment() {
         val statsTable = view.findViewById<TableLayout>(R.id.statsTable)
         val row = TableRow(activity)
         row.setBackgroundColor(
-            Color.parseColor("#0FF0F7F7"))
+            Color.parseColor("#0FF0F7F7")
+        )
         val scale = resources.displayMetrics.density
         val dpAsPixels = (sizeInDp * scale + 0.5f)
 
@@ -94,12 +95,10 @@ class StatisticsFragment : Fragment() {
         row.setPadding(dpAsPixels.toInt())
         row.isClickable
         row.tag = uuid
-        //only for test
-
 
         row.setOnClickListener {
             // add new fragment with communication
-            val matchDetailFragment = MatchDetails()
+            val matchDetailFragment = MatchDetailsFragment()
             val bundle = Bundle()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             bundle.putString("uuid", uuid)
@@ -143,23 +142,18 @@ class StatisticsFragment : Fragment() {
 
         return arrayOf(
             "Mode Filter",
+            "1 round",
             "Best of 3",
             "Best of 5",
-            "Best of 12",
         )
 
     }
-
-
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
-
 
 
 }

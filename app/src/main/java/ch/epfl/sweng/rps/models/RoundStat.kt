@@ -1,9 +1,11 @@
 package ch.epfl.sweng.rps.models
 
+import java.util.*
+
 data class RoundStat(
-    var index: String = "",
-    var date: String = "",
-    var userHand: String = "",
-    var opponentHand: String = "",
-    var outcome: String = ""
+    val index: Int,
+    val date: Date,
+    val userHand: Hand,
+    val opponentHand: Hand,
+    val outcome: Hand.Result
 )

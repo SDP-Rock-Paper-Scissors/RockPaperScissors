@@ -2,6 +2,7 @@ package ch.epfl.sweng.rps.ui.statistics
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,16 +16,18 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.db.FirebaseHelper
 import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-class MatchDetails : Fragment() {
+class MatchDetailsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    companion object {
+        // TODO: Rename parameter arguments, choose names that match
+        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -46,12 +49,19 @@ class MatchDetails : Fragment() {
 
         val newView = inflater.inflate(R.layout.fragment_match_details, container, false)
         //for test
-        addDetailRow(newView,"3","paper","rock","win")
+        // addDetailRow(newView, "3", "paper", "rock", "win")
 
         viewLifecycleOwner.lifecycleScope.launch {
             val matchDetailsList = FirebaseHelper.getMatchDetailData(matchUuid!!)
-            for (matchDetails in matchDetailsList){
-                addDetailRow(newView,matchDetails.index,matchDetails.userHand,matchDetails.opponentHand,matchDetails.outcome)
+            Log.i("matchDetailsList", matchDetailsList.toString())
+            for (matchDetails in matchDetailsList) {
+                addDetailRow(
+                    newView,
+                    matchDetails.index.toString(),
+                    matchDetails.userHand.asHandEmoji(),
+                    matchDetails.opponentHand.asHandEmoji(),
+                    matchDetails.outcome.asEmoji()
+                )
             }
         }
 
@@ -70,9 +80,7 @@ class MatchDetails : Fragment() {
         val sizeInDp = 5
         val matchDetailTable = view.findViewById<TableLayout>(R.id.matchDetailTable)
         val row = TableRow(activity)
-        row.setBackgroundColor(
-            Color.parseColor("#F0F7F7")
-        )
+        row.setBackgroundColor(Color.parseColor("#0FF0F7F7"))
         val scale = resources.displayMetrics.density
         val dpAsPixels = (sizeInDp * scale + 0.5f)
         row.setPadding(dpAsPixels.toInt())
@@ -89,7 +97,7 @@ class MatchDetails : Fragment() {
         val opponentChoiceBlank = TextView(activity)
         val outcomeBlank = TextView(activity)
 
-        roundIndexBlank.text = roundIndex.toString()
+        roundIndexBlank.text = roundIndex
         userChoiceBlank.text = userChoice
         opponentChoiceBlank.text = opponentChoice
         outcomeBlank.text = outcome
@@ -104,8 +112,5 @@ class MatchDetails : Fragment() {
         row.addView(opponentChoiceBlank)
         row.addView(outcomeBlank)
         matchDetailTable?.addView(row)
-
     }
-
-
 }
