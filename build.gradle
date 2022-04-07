@@ -6,8 +6,11 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20'
         classpath 'com.google.gms:google-services:4.3.10'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.2"
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
+
     }
 }
 task clean(type: Delete) {
