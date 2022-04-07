@@ -1,7 +1,7 @@
 check_android_task:
   name: Run Android tests
   env:
-    API_LEVEL: "30"
+    API_LEVEL: "31"
     TARGET: google_apis
     ARCH: x86
     CC_TEST_REPORTER_ID: ENCRYPTED[!d9c0a23b73b7bfa56aa4e07466ebd05d752e064876b8d60d6df2988f55ba7efd8f2de1780c35fe843d7a310d638e9181!]
@@ -9,15 +9,14 @@ check_android_task:
     image: reactivecircus/android-emulator-$API_LEVEL:latest
     kvm: "true"
     cpu: 8
-    memory: 10G
+    memory: 12G
   create_device_script: echo no | avdmanager create avd --force --name test --abi "$TARGET/$ARCH" --package "system-images;android-$API_LEVEL;$TARGET;$ARCH"
   start_emulator_background_script: $ANDROID_SDK_ROOT/emulator/emulator -avd test -no-window -gpu swiftshader_indirect -no-snapshot -no-audio -no-boot-anim -camera-back virtualscene
   build_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
   wait_for_emulator_script: |
-    adb wait-for-device
-    adb shell input keyevent 82
+    adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 3; done; input keyevent 82'
   disable_animations_script: |
     adb shell settings put global window_animation_scale 0
     adb shell settings put global transition_animation_scale 0
