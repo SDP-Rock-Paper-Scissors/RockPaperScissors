@@ -1,16 +1,23 @@
 package ch.epfl.sweng.rps.ui.settings
 
-import android.content.Intent
-import android.content.SharedPreferences
+import android.R.attr.label
+import android.content.*
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.firebase.Timestamp
+import kotlin.math.round
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -107,9 +114,59 @@ class SettingsActivity : AppCompatActivity(),
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
 
-            val button: Preference = findPreference(getString(R.string.show_license_key))!!
-            button.setOnPreferenceClickListener {
+            val button = findPreference<Preference>(getString(R.string.show_license_key))
+            button?.setOnPreferenceClickListener {
                 startActivity(Intent(view.context, OssLicensesMenuActivity::class.java))
+                true
+            }
+            val uidPreference =
+                findPreference<Preference>(getString(R.string.settings_show_uid_text))
+            uidPreference?.setSummaryProvider {
+                ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()
+            }
+            uidPreference?.setOnPreferenceClickListener {
+                val clipboard: ClipboardManager? =
+                    context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                val clip = ClipData.newPlainText(
+                    "Copied uid",
+                    ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()
+                )
+                clipboard?.setPrimaryClip(clip)
+                true
+            }
+            findPreference<Preference>(getString(R.string.add_artificial_game_settings))?.setOnPreferenceClickListener {
+                val id = "artificial_game_1"
+                val uid = ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()!!
+                val uid2 = "RquV8FkGInaPnyUnqncOZGJjSKJ3"
+                ServiceLocator.getInstance().getFirebaseReferences().gamesCollection.document(id)
+                    .set(
+                        Game(
+                            id = id,
+                            players = listOf(
+                                uid,
+                                uid2
+                            ),
+                            rounds = mapOf(
+                                "0" to Round(
+                                    hands = mapOf(
+                                        uid to Hand.PAPER,
+                                        uid2 to Hand.ROCK
+                                    ),
+                                    timestamp = Timestamp.now()
+                                )
+                            ),
+                            game_mode = Game.GameMode(
+                                playerCount = 2,
+                                type = Game.GameMode.Type.PVP,
+                                rounds = 1,
+                                timeLimit = 0
+                            ).toGameModeString(),
+                            current_round = 0,
+                            done = true,
+                            timestamp = Timestamp.now(),
+                            player_count = 2
+                        )
+                    )
                 true
             }
         }

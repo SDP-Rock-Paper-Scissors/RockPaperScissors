@@ -15,7 +15,6 @@ class FirebaseRepository(
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         val arguments = FirebaseHelper.processUserArguments(*pairs)
-
         val uid = getCurrentUid()
         firebase.usersCollection.document(uid).update(arguments).await()
     }
