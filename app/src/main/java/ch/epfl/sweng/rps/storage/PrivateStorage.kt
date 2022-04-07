@@ -17,10 +17,6 @@ class PrivateStorage constructor(context: Context) : Storage {
         return File(context.filesDir, file.file).delete()
     }
 
-    override fun fileExists(file: Storage.FILES): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun getUserDetails(): User? {
         if (user != null) return user
         val userFile = getFile(Storage.FILES.USERINFO)

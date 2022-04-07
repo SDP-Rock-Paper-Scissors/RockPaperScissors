@@ -34,11 +34,11 @@ class MainActivityTest {
         onView(withId(R.id.nav_leaderboard)).perform(click())
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()))
     }
-//    @Test
-//    fun checkStatistics(){
-//        onView(withId(R.id.nav_statistics)).perform(click())
-//        onView(withId(R.id.fragment_statistics)).check(matches(isDisplayed()))
-//    }
+    @Test
+    fun checkStatistics(){
+        onView(withId(R.id.nav_statistics)).perform(click())
+        onView(withId(R.id.fragment_statistics)).check(matches(isDisplayed()))
+    }
     @Test
     fun checkBackHome(){
         onView(withId(R.id.nav_statistics)).perform(click())

@@ -6,7 +6,6 @@ import java.io.File
 interface Storage {
     fun getFile(file : FILES) : File
     fun removeFile(file : FILES) : Boolean
-    fun fileExists(file : FILES) : Boolean
     fun getUserDetails() : User?
     fun getUserSettings()
     fun getMatchesDetails()
