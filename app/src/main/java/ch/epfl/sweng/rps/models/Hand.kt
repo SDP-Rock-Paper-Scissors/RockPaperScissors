@@ -12,6 +12,21 @@ enum class Hand(val id: Int) {
         }
     }
 
+    fun asEmoji(): String = when (this) {
+        Hand.NONE -> "❌"
+        Hand.ROCK -> "🪨"
+        Hand.PAPER -> "📄"
+        Hand.SCISSORS -> "✂️"
+    }
+
+    fun asHandEmoji(): String = when (this) {
+        Hand.NONE -> "❔"
+        Hand.ROCK -> "✊"
+        Hand.PAPER -> "🤚"
+        Hand.SCISSORS -> "✌️"
+    }
+
+
     private fun losesTo(hand: Hand): Boolean {
         val loss = when (this) {
             ROCK -> listOf(PAPER)
@@ -44,6 +59,12 @@ enum class Hand(val id: Int) {
     }
 
     enum class Result {
-        WIN, LOSS, TIE
+        WIN, LOSS, TIE;
+
+        fun asEmoji(): String = when (this) {
+            WIN -> "🏆"
+            LOSS -> "😢"
+            TIE -> "🤝"
+        }
     }
 }

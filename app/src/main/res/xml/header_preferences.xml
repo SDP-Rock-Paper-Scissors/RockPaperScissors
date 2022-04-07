@@ -30,4 +30,14 @@
         app:summary="Show the license of the app"
         app:title="@string/license_title" />
 
+    <Preference
+        app:icon="@drawable/ic_baseline_person_24"
+        app:key="@string/settings_show_uid_text"
+        app:title="Firebase Uid" />
+
+    <Preference
+        app:icon="@drawable/sync"
+        app:key="@string/add_artificial_game_settings"
+        app:title="Add game" />
+
 </PreferenceScreen>

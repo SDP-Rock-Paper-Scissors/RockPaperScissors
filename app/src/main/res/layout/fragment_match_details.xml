@@ -4,7 +4,7 @@
     android:id="@+id/fragment_match_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.statistics.MatchDetails">
+    tools:context=".ui.statistics.MatchDetailsFragment">
 
     <TableLayout
         android:id="@+id/matchDetailTable"
@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        tools:context=".ui.statistics.MatchDetails"
+        tools:context=".ui.statistics.MatchDetailsFragment"
         tools:ignore="UselessParent">
 
         <TextView
@@ -54,66 +54,5 @@
                 android:layout_weight="1"
                 android:text="Outcome" />
         </TableRow>
-
-        <TableRow
-            android:background="#0FF0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="✋" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="👊" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="🏆" />
-        </TableRow>
-
-        <TableRow
-            android:background="#0FF0F7F7"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="2" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="👊" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="✌" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="😞" />
-
-        </TableRow>
-
     </TableLayout>
-
 </FrameLayout>
