@@ -4,11 +4,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.databinding.ActivityMainBinding
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    private val sharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(this)
+    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var currentUser: User
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,11 +30,17 @@ class MainActivity : AppCompatActivity() {
             )
         }
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val navView: BottomNavigationView = binding.navView
+
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
         navView.setupWithNavController(navController)
+
+        SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
     }
 
     fun getUserDetails(): User {

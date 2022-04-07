@@ -71,7 +71,7 @@ class StatisticsFragment : Fragment() {
         val statsTable = view.findViewById<TableLayout>(R.id.statsTable)
         val row = TableRow(activity)
         row.setBackgroundColor(
-            Color.parseColor("#F0F7F7"))
+            Color.parseColor("#0FF0F7F7"))
         val scale = resources.displayMetrics.density
         val dpAsPixels = (sizeInDp * scale + 0.5f)
 

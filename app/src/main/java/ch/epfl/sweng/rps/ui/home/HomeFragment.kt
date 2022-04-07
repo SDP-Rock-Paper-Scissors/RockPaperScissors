@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            buttonPlayOneOfflineGame.setOnClickListener { playNRoundsWithComputer(1) }
+            buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
         }
     }
 

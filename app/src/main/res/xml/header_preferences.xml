@@ -1,0 +1,33 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ListPreference
+        app:defaultValue="system"
+        app:entries="@array/theme_entries"
+        app:entryValues="@array/theme_values"
+
+        app:icon="@drawable/ic_baseline_palette_24"
+        app:key="@string/theme_pref_key"
+        app:title="@string/theme_mode"
+        app:useSimpleSummaryProvider="true" />
+
+    <!-- <Preference
+         app:fragment="ch.epfl.sweng.rps.ui.settings.SettingsActivity$AppearanceFragment"
+         app:icon="@drawable/ic_baseline_palette_24"
+         app:key="appearance_header"
+         app:title="@string/appearance_header" />
+
+     <Preference
+         app:fragment="ch.epfl.sweng.rps.ui.settings.SettingsActivity$SyncFragment"
+         app:icon="@drawable/sync"
+         app:key="sync_header"
+         app:title="@string/sync_header" />-->
+
+
+    <Preference
+        app:icon="@drawable/ic_baseline_text_snippet_24"
+        app:key="@string/show_license_key"
+        app:summary="Show the license of the app"
+        app:title="@string/license_title" />
+
+</PreferenceScreen>
