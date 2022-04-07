@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/drawable/button_selector.xml" value="0.161" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/drawable/rounded_corners.xml" value="0.153" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/drawable/secondary_button_selector.xml" value="0.161" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/activity_login.xml" value="0.28442028985507245" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/activity_match_detail.xml" value="0.14322916666666666" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/app_bar_main.xml" value="0.346875" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/content_main.xml" value="0.346875" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_blank.xml" value="0.14322916666666666" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_friend_game.xml" value="0.14322916666666666" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_friend_list.xml" value="0.3333333333333333" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_friends.xml" value="0.22" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_game.xml" value="0.28442028985507245" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_home.xml" value="0.346875" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_info_page_.xml" value="0.22" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_leaderboard.xml" value="0.346875" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/fragment_statistics.xml" value="0.346875" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/friend_card.xml" value="0.14322916666666666" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/friend_card2.xml" value="0.3333333333333333" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/friends_main.xml" value="0.28442028985507245" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/nav_header_main.xml" value="0.346875" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/layout/profile_fragment.xml" value="0.175" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/menu/activity_main_drawer.xml" value="0.6" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/menu/bottom_nav_menu.xml" value="0.14322916666666666" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/menu/main.xml" value="0.346875" />
+        <entry key="..\:/UniStuff/AndroidStudioProjects/RockPaperScissors/app/src/main/res/menu/main_activity.xml" value="0.13333333333333333" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_rps_basic.xml" value="0.13240740740740742" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.13240740740740742" />
+        <entry key="app/src/main/res/layout/content_main.xml" value="0.23308184588397002" />
+        <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25970232928240744" />
+        <entry key="app/src/main/res/layout/fragment_match_details.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/rps_buttons.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/rps_images.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/user_credentials.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>

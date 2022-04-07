@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context=".ui.friends.FriendsFragment"
+    android:id="@+id/fragment_friends">
+
+    <ImageButton
+        android:id="@+id/addButton"
+        android:layout_width="73dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/secondary_button_selector"
+        android:src="@drawable/search_vector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/myFriends"
+        android:layout_width="329dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="@color/tertiary2"
+        android:gravity="center"
+        android:text="@string/friends"
+        android:textColor="@color/secondary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendListRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myFriends"
+        tools:listitem="@layout/friend_card2" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
