@@ -14,7 +14,7 @@ class PrivateStorage constructor(context: Context) : Storage {
     }
 
     override fun removeFile(file: Storage.FILES): Boolean {
-        TODO("Not yet implemented")
+        return File(context.filesDir, file.file).delete()
     }
 
     override fun fileExists(file: Storage.FILES): Boolean {

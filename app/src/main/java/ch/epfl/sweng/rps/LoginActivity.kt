@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.storage.PrivateStorage
+import ch.epfl.sweng.rps.storage.Storage
 
 
 const val EXTRA_MESSAGE = "ch.epfl.sweng.rps.MESSAGE"
@@ -41,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         store = PrivateStorage(this)
         user = store.getUserDetails()
+        user?.let { Log.d("STORE", it.uid) }
         if (user != null)
            launchMain(user!!)
     }
