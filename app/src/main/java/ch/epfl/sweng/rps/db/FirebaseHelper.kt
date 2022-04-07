@@ -56,9 +56,10 @@ sealed class FirebaseHelper {
 
                 val gameRounds = game.rounds
                 val allRoundScores = gameRounds.map { it.value.computeScores() }
+
                 val userScore = allRoundScores.asSequence().map { scores ->
                     val max = scores.maxOf { it.points }
-                    if (scores.any { it.points == max && it.uid == FirebaseRepository().getCurrentUid() && !scores.all { it.points == max } })
+                    if (scores.any { it.points == max && it.uid == userid && !scores.all { it.points == max } })
                         1
                     else
                         0
@@ -91,16 +92,18 @@ sealed class FirebaseHelper {
         }
 
         suspend fun getMatchDetailData(gid: String): List<RoundStat> {
-            val userid = FirebaseRepository().rawCurrentUid() ?: return listOf(
-                RoundStat(
-                    index = 0,
-                    date = Date(),
-                    userHand = Hand.PAPER,
-                    opponentHand = Hand.SCISSORS,
-                    outcome = Hand.Result.LOSS
+            val userid = ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()
+                ?: return listOf(
+                    RoundStat(
+                        index = 0,
+                        date = Date(),
+                        userHand = Hand.PAPER,
+                        opponentHand = Hand.SCISSORS,
+                        outcome = Hand.Result.LOSS
+                    )
                 )
-            )
-            val game = FirebaseRepository().getGame(gid) ?: throw Exception("Game not found")
+            val game = ServiceLocator.getInstance().getFirebaseRepository().getGame(gid)
+                ?: throw Exception("Game not found")
             // note: 1 v 1 logic, if we support pvp mode, the table should be iterated to change as well.
             // get opponent user id from player list
             val opponentId: String = game.players.first { it != userid }

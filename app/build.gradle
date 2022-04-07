@@ -84,21 +84,14 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
-    // androidTestImplementation 'org.jetbrains.kotlin:kotlin-test'
-    // androidTestImplementation(platform("org.junit:junit-bom:5.8.2"))
-    // androidTestImplementation("org.junit.jupiter:junit-jupiter")
-
     implementation 'org.jetbrains.kotlin:kotlin-test'
     implementation(platform("org.junit:junit-bom:5.8.2"))
     implementation("org.junit.jupiter:junit-jupiter")
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
-    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0') {
-        exclude module: "protobuf-lite"
-    }
+
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:29.3.0')
 
