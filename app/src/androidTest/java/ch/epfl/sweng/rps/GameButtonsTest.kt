@@ -35,13 +35,7 @@ class GameButtonsTest {
     private fun checkPressedButton(radioButtonId: Int) {
         onView(withId(R.id.button_play_1_games_offline)).perform(click())
         onView(withId(radioButtonId)).perform(click())
-        onView(
-            anyOf(
-                withText(R.string.win),
-                withText(R.string.lose),
-                withText(R.string.draw)
-            )
-        ).check(matches(isDisplayed()))
+        onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
 
     }
 }
