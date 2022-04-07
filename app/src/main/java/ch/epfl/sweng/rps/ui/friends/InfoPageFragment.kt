@@ -32,25 +32,25 @@ class InfoPageFragment : Fragment() {
         val gamesPlayed = view.findViewById<TextView>(R.id.gamesPlayedText_infoPage)
         val gamesWon = view.findViewById<TextView>(R.id.gamesWonText_infoPage)
         val winRate = view.findViewById<TextView>(R.id.winRateText_infoPage)
-        val isOnline = requireArguments().getBoolean("isOnline")
+        val isOnline = InfoPageFragmentArgs.fromBundle(requireArguments()).isOnline
 
         onlineImage.visibility = if(isOnline) View.VISIBLE else View.INVISIBLE
         offlineImage.visibility = if(isOnline) View.INVISIBLE else View.VISIBLE
 
-        username.text = requireArguments().getString("userName")
-        gamesPlayed.text = requireArguments().getString("gamesPlayed")
-        gamesWon.text = requireArguments().getString("gamesWon")
-        winRate.text = requireArguments().getString("winRate")
+        username.text = InfoPageFragmentArgs.fromBundle(requireArguments()).username
+        gamesPlayed.text = InfoPageFragmentArgs.fromBundle(requireArguments()).gamesPlayedText
+        gamesWon.text = InfoPageFragmentArgs.fromBundle(requireArguments()).gamesWonText
+        winRate.text = InfoPageFragmentArgs.fromBundle(requireArguments()).winRateText
 
         val backButton = view.findViewById<ImageButton>(R.id.infoPage_backButton)
         val playButton = view.findViewById<ImageButton>(R.id.infoPage_playButton)
 
         backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_infoPage_Fragment_to_nav_friends)
+            findNavController().navigate(InfoPageFragmentDirections.actionInfoPageFragmentToNavFriends2())
         }
 
         playButton.setOnClickListener {
-            findNavController().navigate(R.id.action_infoPage_Fragment_to_gameFragment)
+            findNavController().navigate(InfoPageFragmentDirections.actionInfoPageFragmentToGameFragment2())
         }
 
     }

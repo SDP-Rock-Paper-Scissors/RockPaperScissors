@@ -53,14 +53,14 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
             Log.i("Press info", "This is $username's info")
             Toast.makeText(activity, "This is $username's info", Toast.LENGTH_SHORT).show()
             //Move to infoPage on button click
-            findNavController().navigate(R.id.action_nav_friends_to_infoPage_Fragment, Bundle().apply {
+            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToInfoPageFragment3(
                 //Passing all the info to be displayed in the Info Page
-                putString("userName", username)
-                putString("gamesPlayed", "Games Played: $gamesPlayed")
-                putString("gamesWon", "Games Won: $gamesWon")
-                putString("winRate", "Win Rate: $winRate%")
-                putBoolean("isOnline", isOnline)
-            })
+                username,
+                "Games Played: $gamesPlayed",
+                "Games Won: $gamesWon",
+                "Win Rate: $winRate%",
+                isOnline))
+
 
         }
         //if play button is clicked
@@ -69,7 +69,7 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
             Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT).show()
 
             //Move to game fragment on button click
-            findNavController().navigate(R.id.action_nav_friends_to_gameFragment)
+            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameFragment2())
         }
     }
 
