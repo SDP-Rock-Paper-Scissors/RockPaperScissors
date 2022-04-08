@@ -10,7 +10,7 @@ import kotlinx.coroutines.tasks.await
 
 
 class FirebaseRepository(
-    private val firebase: FirebaseReferences = FirebaseReferences(Env.Prod)
+    private val firebase: FirebaseReferences = FirebaseReferences()
 ) : Repository {
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
@@ -68,18 +68,11 @@ class FirebaseRepository(
         return firebase.gamesCollection.document(gameId).get().await().toObject<Game>()
     }
 
-    suspend fun gamesOfUser(uid: String): List<Game> {
+    override suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains("players", uid).get()
             .await().documents.map {
                 it.toObject<Game>()!!
             }
-    }
-
-    suspend fun clearDevEnv() {
-        if (firebase.env != Env.Dev) {
-            throw UnsupportedOperationException("This method is only available in a dev environment")
-        }
-        firebase.root.delete().await()
     }
 }
 

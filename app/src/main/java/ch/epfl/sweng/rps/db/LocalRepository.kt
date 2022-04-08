@@ -86,4 +86,8 @@ class LocalRepository(private var uid: String? = null) : Repository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun gamesOfUser(uid: String): List<Game> {
+        TODO("Not yet implemented")
+    }
+
 }

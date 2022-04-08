@@ -7,7 +7,6 @@ import ch.epfl.sweng.rps.models.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.Exception
 
 sealed class FirebaseHelper {
     companion object {
@@ -28,7 +27,7 @@ sealed class FirebaseHelper {
         private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
 
         suspend fun getStatsData(selectMode: Int): List<UserStat> {
-            val firebaseRepository = ServiceLocator.getInstance().getFirebaseRepository()
+            val firebaseRepository = ServiceLocator.getInstance().repository
             val userid = firebaseRepository.rawCurrentUid()
                 ?: return listOf(
                     UserStat(
@@ -92,7 +91,7 @@ sealed class FirebaseHelper {
         }
 
         suspend fun getMatchDetailData(gid: String): List<RoundStat> {
-            val userid = ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()
+            val userid = ServiceLocator.getInstance().repository.rawCurrentUid()
                 ?: return listOf(
                     RoundStat(
                         index = 0,
@@ -102,7 +101,7 @@ sealed class FirebaseHelper {
                         outcome = Hand.Result.LOSS
                     )
                 )
-            val game = ServiceLocator.getInstance().getFirebaseRepository().getGame(gid)
+            val game = ServiceLocator.getInstance().repository.getGame(gid)
                 ?: throw Exception("Game not found")
             // note: 1 v 1 logic, if we support pvp mode, the table should be iterated to change as well.
             // get opponent user id from player list

@@ -9,8 +9,8 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.times
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import ch.epfl.sweng.rps.storage.PrivateStorage
@@ -25,7 +25,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class LoginPageTest {
     @get:Rule
-    val testRule = ActivityTestRule(LoginActivity::class.java,false,false)
+    val testRule = ActivityTestRule(LoginActivity::class.java, false, false)
 
     @Before
     fun setUp() {

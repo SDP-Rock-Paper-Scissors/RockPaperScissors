@@ -3,7 +3,6 @@ package ch.epfl.sweng.rps.db
 import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.models.User
 
 interface Repository {
@@ -26,6 +25,7 @@ interface Repository {
         acceptFriendRequestFrom(friendRequest.from)
 
     suspend fun getGame(gameId: String): Game?
+    suspend fun gamesOfUser(uid: String): List<Game>
 
     class UserNotLoggedIn : Exception {
         constructor() : super("User not logged in")

@@ -2,9 +2,10 @@ package ch.epfl.sweng.rps.db
 
 import ch.epfl.sweng.rps.db.Repository.UserNotLoggedIn
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
-internal class UserNotLoggedInTest {
-    @org.junit.jupiter.api.Test
+class UserNotLoggedInTest {
+    @Test
     fun testRepositoryException() {
         assertThrows(UserNotLoggedIn::class.java) {
             throw UserNotLoggedIn("test")
