@@ -7,6 +7,7 @@ import ch.epfl.sweng.rps.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
+import java.net.URI
 
 
 class FirebaseRepository(
@@ -24,9 +25,9 @@ class FirebaseRepository(
         return user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): Uri? {
+    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
         return if (getUser(uid)!!.has_profile_photo)
-            firebase.profilePicturesFolder.child(uid).downloadUrl.await()
+            firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
         else
             null
     }
@@ -74,5 +75,8 @@ class FirebaseRepository(
                 it.toObject<Game>()!!
             }
     }
+
+    private fun Uri.toURI(): URI = URI(toString())
 }
+
 

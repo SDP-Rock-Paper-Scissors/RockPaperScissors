@@ -33,11 +33,11 @@
     <Preference
         app:icon="@drawable/ic_baseline_person_24"
         app:key="@string/settings_show_uid_text"
-        app:title="Firebase Uid" />
+        app:title="@string/copy_fb_uid" />
 
     <Preference
         app:icon="@drawable/sync"
         app:key="@string/add_artificial_game_settings"
-        app:title="Add game" />
+        app:title="@string/add_artificial_game" />
 
 </PreferenceScreen>

@@ -73,4 +73,6 @@
     <string name="license_title">License</string>
     <string name="settings_show_uid_text">settings_show_uid_text</string>
     <string name="add_artificial_game_settings">add_artificial_game_settings</string>
+    <string name="copy_fb_uid">Copy Firebase Uid</string>
+    <string name="add_artificial_game">Add artificial game</string>
 </resources>

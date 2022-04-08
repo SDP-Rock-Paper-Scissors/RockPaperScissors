@@ -137,7 +137,10 @@ class SettingsActivity : AppCompatActivity(),
                 val id = "artificial_game_1"
                 val uid = ServiceLocator.getInstance().repository.rawCurrentUid()!!
                 val uid2 = "RquV8FkGInaPnyUnqncOZGJjSKJ3"
-                (ServiceLocator.getInstance(env = Env.Prod) as ProdServiceLocator).firebaseReferences.gamesCollection.document(
+                val repo = ServiceLocator.getInstance()
+                if (repo !is ProdServiceLocator) return@setOnPreferenceClickListener true
+
+                repo.firebaseReferences.gamesCollection.document(
                     id
                 )
                     .set(
@@ -173,17 +176,17 @@ class SettingsActivity : AppCompatActivity(),
         }
     }
 
-    class AppearanceFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
-        }
-    }
-
-    class SyncFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
-        }
-    }
+//    class AppearanceFragment : PreferenceFragmentCompat() {
+//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+//            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
+//        }
+//    }
+//
+//    class SyncFragment : PreferenceFragmentCompat() {
+//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+//            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()

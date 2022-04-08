@@ -10,7 +10,9 @@ interface ServiceLocator {
     companion object {
         private val instances = mutableMapOf<Env, ServiceLocator>()
 
-        fun getInstance(env: Env = Env.Prod): ServiceLocator {
+        private var currentEnv: Env = Env.Prod
+
+        fun getInstance(env: Env = currentEnv): ServiceLocator {
             return instances.getOrPut(env) {
                 when (env) {
                     Env.Prod -> ProdServiceLocator()
@@ -19,8 +21,12 @@ interface ServiceLocator {
             }
         }
 
-        fun getProdInstance(): ProdServiceLocator {
-            return getInstance(Env.Prod) as ProdServiceLocator
+        fun setCurrentEnv(env: Env) {
+            currentEnv = env
+        }
+
+        fun getCurrentEnv(): Env {
+            return currentEnv
         }
     }
 
@@ -36,7 +42,7 @@ interface ServiceLocator {
 
     class TestServiceLocator : ServiceLocator {
 
-        override val repository: LocalRepository = LocalRepository()
+        override val repository = LocalRepository()
 
         override fun dispose() {
         }

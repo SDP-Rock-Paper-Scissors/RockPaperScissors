@@ -4,6 +4,7 @@ import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.User
+import java.net.URI
 
 interface Repository {
     suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
@@ -13,7 +14,7 @@ interface Repository {
 
     suspend fun getUser(uid: String): User?
 
-    suspend fun getUserProfilePictureUrl(uid: String): Uri?
+    suspend fun getUserProfilePictureUrl(uid: String): URI?
 
     suspend fun createThisUser(name: String?, email: String?): User
     suspend fun sendFriendRequestTo(uid: String)
