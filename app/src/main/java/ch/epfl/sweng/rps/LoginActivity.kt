@@ -13,7 +13,6 @@ import ch.epfl.sweng.rps.storage.Storage
 
 class LoginActivity : AppCompatActivity() {
 
-
     private var callback =
         { user: User ->
             Log.d("Here", "HERASDASDA")
@@ -21,8 +20,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
     private fun launchMain(user: User) {
-        val intent: Intent = Intent(this, MainActivity::class.java)
-        val b: Bundle = Bundle()
+        val intent = Intent(this, MainActivity::class.java)
+        val b = Bundle()
         store.writeBackUser(user)
         b.putString("email", user.email)
         b.putString("display_name", user.username)
