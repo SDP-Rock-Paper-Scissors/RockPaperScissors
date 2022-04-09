@@ -1,0 +1,58 @@
+package ch.epfl.sweng.rps.services
+
+import ch.epfl.sweng.rps.db.*
+
+/*
+* ServiceLocator is a singleton class that provides access to the different services
+* Services: FirebaseRepository, LocalRepository
+* */
+class ProdServiceLocator() : ServiceLocator {
+
+    val firebaseReferences by lazy { FirebaseReferences() }
+
+    override val repository by lazy { FirebaseRepository(firebaseReferences) }
+
+    override fun dispose() {
+    }
+
+    override val env: Env = Env.Prod
+
+    private val gameServices = mutableMapOf<String, FirebaseGameService>()
+
+    fun getGameServiceForGame(gameId: String, start: Boolean = true): FirebaseGameService {
+        cleanUpServices()
+        val service = gameServices.getOrPut(gameId) {
+            FirebaseGameService(
+                firebase = firebaseReferences,
+                firebaseRepository = repository,
+                gameId = gameId
+            )
+        }
+        if (start) {
+            service.startListening()
+        }
+        return service
+    }
+
+    private fun cleanUpServices() {
+        for (e in gameServices) {
+            if (e.value.isGameOver) {
+                if (!e.value.isDisposed) e.value.dispose()
+                gameServices.remove(e.key)
+            }
+        }
+    }
+
+    override fun disposeAllGameServices() {
+        for (gameService in gameServices.values) {
+            if (!gameService.isDisposed) gameService.dispose()
+        }
+        gameServices.clear()
+    }
+
+
+    override val cachedGameServices: List<String>
+        get() = gameServices.keys.toList()
+
+
+}

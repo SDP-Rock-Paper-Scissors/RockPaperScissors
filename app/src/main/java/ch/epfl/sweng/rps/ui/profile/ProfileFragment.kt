@@ -25,13 +25,13 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        user = (activity as MainActivity).getUserDetails()
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         return inflater.inflate(R.layout.profile_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        user = (activity as MainActivity).getUserDetails()
         view.findViewById<TextView>(R.id.TextEmail).text = user.email
         view.findViewById<TextView>(R.id.TextDisplayName).text = user.username
         view.findViewById<TextView>(R.id.TextPrivacy).text = user.games_history_privacy

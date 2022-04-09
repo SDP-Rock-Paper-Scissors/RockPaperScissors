@@ -1,23 +1,22 @@
 package ch.epfl.sweng.rps.ui.settings
 
-import android.R.attr.label
 import android.content.*
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
-import kotlin.math.round
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -122,23 +121,28 @@ class SettingsActivity : AppCompatActivity(),
             val uidPreference =
                 findPreference<Preference>(getString(R.string.settings_show_uid_text))
             uidPreference?.setSummaryProvider {
-                ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()
+                ServiceLocator.getInstance().repository.rawCurrentUid()
             }
             uidPreference?.setOnPreferenceClickListener {
                 val clipboard: ClipboardManager? =
                     context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
                 val clip = ClipData.newPlainText(
                     "Copied uid",
-                    ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()
+                    ServiceLocator.getInstance().repository.rawCurrentUid()
                 )
                 clipboard?.setPrimaryClip(clip)
                 true
             }
             findPreference<Preference>(getString(R.string.add_artificial_game_settings))?.setOnPreferenceClickListener {
                 val id = "artificial_game_1"
-                val uid = ServiceLocator.getInstance().getFirebaseRepository().rawCurrentUid()!!
+                val uid = ServiceLocator.getInstance().repository.rawCurrentUid()!!
                 val uid2 = "RquV8FkGInaPnyUnqncOZGJjSKJ3"
-                ServiceLocator.getInstance().getFirebaseReferences().gamesCollection.document(id)
+                val repo = ServiceLocator.getInstance()
+                if (repo !is ProdServiceLocator) return@setOnPreferenceClickListener true
+
+                repo.firebaseReferences.gamesCollection.document(
+                    id
+                )
                     .set(
                         Game(
                             id = id,
@@ -172,17 +176,17 @@ class SettingsActivity : AppCompatActivity(),
         }
     }
 
-    class AppearanceFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
-        }
-    }
-
-    class SyncFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
-        }
-    }
+//    class AppearanceFragment : PreferenceFragmentCompat() {
+//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+//            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
+//        }
+//    }
+//
+//    class SyncFragment : PreferenceFragmentCompat() {
+//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+//            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()

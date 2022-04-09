@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,7 +20,7 @@ import kotlinx.coroutines.runBlocking
 class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (User) -> Unit) :
     Authenticator(callback) {
     private var auth: FirebaseAuth = Firebase.auth
-    private val fbrepo: FirebaseRepository = ServiceLocator.getInstance().getFirebaseRepository();
+    private val repo = ServiceLocator.getInstance().repository;
     private val resultLauncher =
         context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
             val data: Intent? = res.data
@@ -47,9 +47,9 @@ class FirebaseAuthenticator(private val context: ComponentActivity, val callback
 
     private suspend fun createOrGetUser(uid: String, displayName: String?, email: String?): User {
         Log.d("DsName", displayName.orEmpty())
-        var user = fbrepo.getUser(uid)
+        var user = repo.getUser(uid)
         if (user == null) {
-            user = fbrepo.createThisUser(displayName, email);
+            user = repo.createThisUser(displayName, email);
         }
         return user
     }
