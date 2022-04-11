@@ -62,7 +62,7 @@ class CameraXLivePreviewActivity :
   private var needUpdateGraphicOverlayImageSourceInfo = false
   private var lensFacing = CameraSelector.LENS_FACING_BACK
   private var cameraSelector: CameraSelector? = null
-  private var targetResolution: Size = Size(800, 600)
+  private var targetResolution: Size = Size(960, 1280)
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -155,7 +155,7 @@ class CameraXLivePreviewActivity :
     imageProcessor =
       try {
         Log.i(TAG, "Using Custom Image Label (Birds) Detector Processor")
-        val localClassifier =:
+        val localClassifier =
           LocalModel.Builder().setAssetFilePath("model_1.tflite").build()
         val customImageLabelerOptions =
           CustomImageLabelerOptions.Builder(localClassifier).build()

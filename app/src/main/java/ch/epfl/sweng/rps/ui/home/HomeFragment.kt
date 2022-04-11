@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         setNavigationOnButton(_binding!!.buttonPlay1GamesOffline, R.id.gameFragment)
-        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.activity_camera)
+        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraXLivePreviewActivity)
 
         return binding.root
     }
