@@ -8,7 +8,6 @@ import ch.epfl.sweng.rps.models.Round
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.delay
-import java.util.*
 
 class OfflineGameService(
     override val gameId: String,
@@ -46,7 +45,13 @@ class OfflineGameService(
     }
 
     override suspend fun playHand(hand: Hand) {
-        val me = firebaseRepository.getCurrentUid()
+        var me = ""
+        me = if (firebaseRepository.rawCurrentUid() != null){
+            firebaseRepository.rawCurrentUid()!!
+        } else{
+            " "
+        }
+
         ((currentGame.rounds as MutableMap)[currentGame.current_round.toString()]!!.hands as MutableMap)[me] =
             hand
         makeComputerMoves()
@@ -55,8 +60,7 @@ class OfflineGameService(
 
     private suspend fun makeComputerMoves() {
         for (pc in computerPlayers) {
-//                uncomment when the proper tests with coroutines implemented
-//            delay(1_000)
+            delay(1_000)
             (currentGame.rounds[currentGame.current_round.toString()]!!.hands as MutableMap)[pc.computerPlayerId] =
                 pc.makeMove()
         }
@@ -66,7 +70,8 @@ class OfflineGameService(
         get() {
             checkNotDisposed()
             if (_game == null) {
-                throw error ?: GameService.GameServiceException("Game service has not received a game yet")
+                throw error
+                    ?: GameService.GameServiceException("Game service has not received a game yet")
             } else {
                 return _game!!
             }

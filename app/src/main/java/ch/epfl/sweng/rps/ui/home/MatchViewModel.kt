@@ -2,15 +2,14 @@ package ch.epfl.sweng.rps.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.ComputerPlayer
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.services.OfflineGameService
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -24,12 +23,12 @@ class MatchViewModel : ViewModel() {
 
     private var _gameService: OfflineGameService? = null
     var currentUserResult: Hand.Result? = null
-    private val uid = ServiceLocator.getInstance().getFirebaseRepository().getCurrentUid()
+    private val uid = FirebaseAuth.getInstance().currentUser?.uid
     fun startOfflineGameService(nEvents: Int, computerPlayer: ComputerPlayer) {
         val gameId = UUID.randomUUID().toString()
         _gameService = OfflineGameService(
             gameId,
-            ServiceLocator.getInstance().getFirebaseRepository(),
+            ServiceLocator.getInstance().repository as FirebaseRepository,
             listOf(computerPlayer),
             Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0)
         )
@@ -57,6 +56,7 @@ class MatchViewModel : ViewModel() {
     fun playHand(userHand: Hand, callback: () -> Unit) {
         viewModelScope.launch {
             //add proper round adding when supporting the multiround
+            ensureActive()
             _gameService?.playHand(userHand)
             determineResult()
             callback()
