@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        var userData: Bundle? = intent.extras?.getBundle("User")
+        super.onCreate(savedInstanceState)
+        val userData: Bundle? = intent.extras?.getBundle("User")
         if (userData != null) {
             currentUser = User(
                 userData.getString("display_name"),
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity() {
                 userData.getString("email")
             )
         }
-        super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -50,22 +50,22 @@ class MainActivity : AppCompatActivity() {
         return currentUser
     }
 
-    private fun setupNav() {
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val navView: BottomNavigationView = binding.navView
-        navView.setupWithNavController(navController)
+    /*  private fun setupNav() {
+          val navController = findNavController(R.id.nav_host_fragment_activity_main)
+          val navView: BottomNavigationView = binding.navView
+          navView.setupWithNavController(navController)
 
-        //removes botttomNavView for specified fragments.
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.cameraFragment -> setBottomNavigationVisibility(View.GONE)
-                R.id.gameFragment -> setBottomNavigationVisibility(View.GONE)
-                else -> setBottomNavigationVisibility(View.VISIBLE)
-            }
-        }
-    }
+          //removes botttomNavView for specified fragments.
+          navController.addOnDestinationChangedListener { _, destination, _ ->
+              when (destination.id) {
+                  R.id.cameraFragment -> setBottomNavigationVisibility(View.GONE)
+                  R.id.gameFragment -> setBottomNavigationVisibility(View.GONE)
+                  else -> setBottomNavigationVisibility(View.VISIBLE)
+              }
+          }
+      }*/
 
-    fun setBottomNavigationVisibility(visibility: Int) {
+    private fun setBottomNavigationVisibility(visibility: Int) {
         // get the reference of the bottomNavigationView and set the visibility.
         binding.navView.visibility = visibility
     }

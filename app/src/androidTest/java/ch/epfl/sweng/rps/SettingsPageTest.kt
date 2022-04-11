@@ -1,5 +1,8 @@
 package ch.epfl.sweng.rps
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Lifecycle
@@ -9,17 +12,25 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import ch.epfl.sweng.rps.TestUtils.getActivityInstance
 import ch.epfl.sweng.rps.TestUtils.waitFor
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.LocalRepository
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.instanceOf
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
+import kotlin.test.assertNotNull
 
 
 @RunWith(AndroidJUnit4::class)
@@ -64,6 +75,7 @@ class SettingsPageTest {
         return futureResult.get()
     }
 
+
     @Test
     fun testSettingsPage() {
         onView(withId(R.id.settings)).check(matches(isDisplayed()))
@@ -101,5 +113,43 @@ class SettingsPageTest {
         val currentActivity = getActivityInstance<OssLicensesMenuActivity>()
         assertThat(currentActivity, instanceOf(OssLicensesMenuActivity::class.java))
         onView(withText(R.string.oss_license_title)).check(matches(isDisplayed()))
+    }
+
+    private var text: String? = null
+
+    @Before
+    fun setUp() {
+        val clipboard: ClipboardManager? =
+            getInstrumentation().context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+        text = clipboard?.primaryClip?.getItemAt(0)?.text?.toString()
+        ServiceLocator.setCurrentEnv(Env.Test)
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid("player1")
+        repo.games.clear()
+        repo.users.clear()
+    }
+
+    @After
+    fun tearDown() {
+        val clipboard: ClipboardManager? =
+            getInstrumentation().context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+        val data = ClipData.newPlainText("text", text)
+        clipboard?.setPrimaryClip(data)
+        ServiceLocator.setCurrentEnv(Env.Prod)
+    }
+
+    @Test
+    fun testCopyToClipboard() {
+        onView(withId(R.id.settings)).check(matches(isDisplayed()))
+        onView(withText(R.string.copy_fb_uid)).perform(click())
+    }
+
+    @Test
+    fun testAddGame() {
+        runBlocking {
+            assertEquals(Env.Test, ServiceLocator.getCurrentEnv())
+            onView(withId(R.id.settings)).check(matches(isDisplayed()))
+            onView(withText(R.string.add_artificial_game)).perform(click())
+        }
     }
 }

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.ui.settings
 
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.services.ProdServiceLocator
+import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.firebase.Timestamp
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -107,25 +113,80 @@ class SettingsActivity : AppCompatActivity(),
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
 
-            val button: Preference = findPreference(getString(R.string.show_license_key))!!
-            button.setOnPreferenceClickListener {
+            val button = findPreference<Preference>(getString(R.string.show_license_key))
+            button?.setOnPreferenceClickListener {
                 startActivity(Intent(view.context, OssLicensesMenuActivity::class.java))
+                true
+            }
+            val uidPreference =
+                findPreference<Preference>(getString(R.string.settings_show_uid_text))
+            uidPreference?.setSummaryProvider {
+                ServiceLocator.getInstance().repository.rawCurrentUid()
+            }
+            uidPreference?.setOnPreferenceClickListener {
+                val clipboard: ClipboardManager? =
+                    context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                val clip = ClipData.newPlainText(
+                    "Copied uid",
+                    ServiceLocator.getInstance().repository.rawCurrentUid()
+                )
+                clipboard?.setPrimaryClip(clip)
+                true
+            }
+            findPreference<Preference>(getString(R.string.add_artificial_game_settings))?.setOnPreferenceClickListener {
+                val id = "artificial_game_1"
+                val uid = ServiceLocator.getInstance().repository.rawCurrentUid()!!
+                val uid2 = "RquV8FkGInaPnyUnqncOZGJjSKJ3"
+                val repo = ServiceLocator.getInstance()
+                if (repo !is ProdServiceLocator) return@setOnPreferenceClickListener true
+
+                repo.firebaseReferences.gamesCollection.document(
+                    id
+                )
+                    .set(
+                        Game(
+                            id = id,
+                            players = listOf(
+                                uid,
+                                uid2
+                            ),
+                            rounds = mapOf(
+                                "0" to Round(
+                                    hands = mapOf(
+                                        uid to Hand.PAPER,
+                                        uid2 to Hand.ROCK
+                                    ),
+                                    timestamp = Timestamp.now()
+                                )
+                            ),
+                            game_mode = Game.GameMode(
+                                playerCount = 2,
+                                type = Game.GameMode.Type.PVP,
+                                rounds = 1,
+                                timeLimit = 0
+                            ).toGameModeString(),
+                            current_round = 0,
+                            done = true,
+                            timestamp = Timestamp.now(),
+                            player_count = 2
+                        )
+                    )
                 true
             }
         }
     }
 
-    class AppearanceFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
-        }
-    }
-
-    class SyncFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
-        }
-    }
+//    class AppearanceFragment : PreferenceFragmentCompat() {
+//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+//            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
+//        }
+//    }
+//
+//    class SyncFragment : PreferenceFragmentCompat() {
+//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+//            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
+//        }
+//    }
 
     override fun onResume() {
         super.onResume()

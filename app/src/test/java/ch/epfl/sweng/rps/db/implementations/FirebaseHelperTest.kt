@@ -2,9 +2,8 @@ package ch.epfl.sweng.rps.db.implementations
 
 import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.models.User
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-
 
 internal class FirebaseHelperTest {
     @Test

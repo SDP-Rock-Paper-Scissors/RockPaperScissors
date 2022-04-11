@@ -45,8 +45,48 @@
     <fragment
         android:id="@+id/gameResultFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameResultFragment"
-        android:label="fragment_win"
+        android:label="result_fragment"
         tools:layout="@layout/fragment_game_result" />
+    <fragment
+        android:id="@+id/nav_friends"
+        android:name="ch.epfl.sweng.rps.ui.friends.FriendsFragment"
+        android:label="Friends"
+        tools:layout="@layout/fragment_friends" >
+        <action
+            android:id="@+id/action_nav_friends_to_infoPage_Fragment3"
+            app:destination="@id/infoPage_Fragment" />
+        <action
+            android:id="@+id/action_nav_friends_to_gameFragment2"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    
+    <fragment
+        android:id="@+id/infoPage_Fragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.InfoPageFragment"
+        android:label="fragment_info_page_"
+        tools:layout="@layout/fragment_info_page_" >
+        <action
+            android:id="@+id/action_infoPage_Fragment_to_nav_friends2"
+            app:destination="@id/nav_friends" />
+        <action
+            android:id="@+id/action_infoPage_Fragment_to_gameFragment2"
+            app:destination="@id/gameFragment" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="gamesPlayedText"
+            app:argType="string" />
+        <argument
+            android:name="gamesWonText"
+            app:argType="string" />
+        <argument
+            android:name="winRateText"
+            app:argType="string" />
+        <argument
+            android:name="isOnline"
+            app:argType="boolean" />
+    </fragment>
     <fragment
         android:id="@+id/cameraFragment"
         android:name="ch.epfl.sweng.rps.ui.camera.CameraFragment"
@@ -56,4 +96,5 @@
             android:id="@+id/action_cameraFragment_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
+
 </navigation>

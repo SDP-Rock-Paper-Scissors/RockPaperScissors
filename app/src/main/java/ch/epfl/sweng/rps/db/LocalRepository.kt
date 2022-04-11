@@ -1,10 +1,10 @@
 package ch.epfl.sweng.rps.db
 
-import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
+import java.net.URI
 
 class LocalRepository(private var uid: String? = null) : Repository {
 
@@ -12,11 +12,10 @@ class LocalRepository(private var uid: String? = null) : Repository {
         uid = newUid
     }
 
-    private val users = mutableMapOf<String, User>()
+    val users = mutableMapOf<String, User>()
 
     private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
 
-    @Suppress("UNCHECKED_CAST")
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         var user = getUser(getCurrentUid())
         pairs.forEach {
@@ -25,7 +24,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
                 User.Field.USERNAME -> user.copy(username = it.second as String)
                 User.Field.GAMES_HISTORY_PRIVACY -> user.copy(games_history_privacy = it.second as String)
                 User.Field.HAS_PROFILE_PHOTO -> user.copy(has_profile_photo = it.second as Boolean)
-                User.Field.UID -> user.copy(uid = it.second as String)
+                User.Field.UID -> throw IllegalArgumentException("Cannot change uid")
             }
         }
         users[getCurrentUid()] = user
@@ -39,10 +38,10 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return users[uid]!!
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): Uri? {
+    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
         val cond = getUser(getCurrentUid()).has_profile_photo
         return if (cond) {
-            Uri.parse("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
+            URI("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
         } else {
             null
         }
@@ -82,8 +81,14 @@ class LocalRepository(private var uid: String? = null) : Repository {
         )
     }
 
+    val games = mutableMapOf<String, Game>()
+
     override suspend fun getGame(gameId: String): Game? {
-        TODO("Not yet implemented")
+        return games[gameId]
+    }
+
+    override suspend fun gamesOfUser(uid: String): List<Game> {
+        return games.values.filter { uid in it.players }
     }
 
 }

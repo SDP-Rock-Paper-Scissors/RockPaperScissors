@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.db
 
 enum class Env(val value: String) {
-    Dev("dev"),
+    Test("test"),
     Prod("prod");
 }

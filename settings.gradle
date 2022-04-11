@@ -9,7 +9,7 @@ rootProject.name = "Rock Paper Scissors"
 include ':app'
 
 ext.isCiServer = System.getenv().containsKey("CIRRUS_CI")
-ext.isDefaultBranch = System.getenv()["CIRRUS_BRANCH"] == "master"
+ext.isDefaultBranch = System.getenv()["CIRRUS_BRANCH"] == "main"
 ext.buildCacheHost = System.getenv().getOrDefault("CIRRUS_HTTP_CACHE_HOST", "localhost:12321")
 
 buildCache {

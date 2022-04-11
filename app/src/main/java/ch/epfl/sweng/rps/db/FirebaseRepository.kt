@@ -7,15 +7,15 @@ import ch.epfl.sweng.rps.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
+import java.net.URI
 
 
 class FirebaseRepository(
-    private val firebase: FirebaseReferences = FirebaseReferences(Env.Prod)
+    private val firebase: FirebaseReferences = FirebaseReferences()
 ) : Repository {
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         val arguments = FirebaseHelper.processUserArguments(*pairs)
-
         val uid = getCurrentUid()
         firebase.usersCollection.document(uid).update(arguments).await()
     }
@@ -25,9 +25,9 @@ class FirebaseRepository(
         return user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): Uri? {
+    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
         return if (getUser(uid)!!.has_profile_photo)
-            firebase.profilePicturesFolder.child(uid).downloadUrl.await()
+            firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
         else
             null
     }
@@ -69,18 +69,14 @@ class FirebaseRepository(
         return firebase.gamesCollection.document(gameId).get().await().toObject<Game>()
     }
 
-    suspend fun gamesOfUser(uid: String): List<Game> {
+    override suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains("players", uid).get()
             .await().documents.map {
                 it.toObject<Game>()!!
             }
     }
 
-    suspend fun clearDevEnv() {
-        if (firebase.env != Env.Dev) {
-            throw UnsupportedOperationException("This method is only available in a dev environment")
-        }
-        firebase.root.delete().await()
-    }
+    private fun Uri.toURI(): URI = URI(toString())
 }
+
 

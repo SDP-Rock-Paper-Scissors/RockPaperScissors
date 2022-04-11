@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
@@ -9,6 +9,7 @@ import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
+import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -17,9 +18,10 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.runner.RunWith
 
 /**
@@ -30,7 +32,7 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class FirebaseTests {
-    private val db = FirebaseRepository(FirebaseReferences(env = Env.Dev))
+    private val db = FirebaseRepository(FirebaseReferences())
 
     @Before
     fun setUp() {
@@ -91,23 +93,20 @@ class FirebaseTests {
     @Test
     fun testServiceLocator() {
         val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod)
-        assertEquals(Env.Prod, serviceLocatorProd.currentEnv())
+        assertEquals(Env.Prod, serviceLocatorProd.env)
 
-        val serviceLocatorDev = ServiceLocator.getInstance(env = Env.Dev)
-        assertEquals(Env.Dev, serviceLocatorDev.currentEnv())
-
-        assertEquals(Env.Dev, serviceLocatorDev.getFirebaseReferences().env)
-        assertEquals(Env.Prod, serviceLocatorProd.getFirebaseReferences().env)
+        val serviceLocatorDev = ServiceLocator.getInstance(env = Env.Test)
+        assertEquals(Env.Test, serviceLocatorDev.env)
 
         assertEquals(
-            serviceLocatorProd.getFirebaseRepository(),
-            serviceLocatorProd.getFirebaseRepository()
+            serviceLocatorProd.repository,
+            serviceLocatorProd.repository
         )
     }
 
     @Test
     fun testGameService() {
-        val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod)
+        val serviceLocatorProd = ServiceLocator.getInstance(env = Env.Prod) as ProdServiceLocator
         assertEquals("1234", serviceLocatorProd.getGameServiceForGame("1234", start = false).gameId)
         assertTrue(
             serviceLocatorProd.getGameServiceForGame(
@@ -141,7 +140,7 @@ class FirebaseTests {
 
     @Test
     fun disposingGameServices() {
-        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
+        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod) as ProdServiceLocator
         val service: FirebaseGameService =
             serviceLocator.getGameServiceForGame("1234", start = false)
         assertEquals(listOf("1234"), serviceLocator.cachedGameServices)
@@ -153,7 +152,7 @@ class FirebaseTests {
 
     @Test
     fun disposingGameServices2() {
-        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
+        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod) as ProdServiceLocator
         serviceLocator.disposeAllGameServices()
         val service: FirebaseGameService =
             serviceLocator.getGameServiceForGame("1234", start = false)
@@ -168,7 +167,7 @@ class FirebaseTests {
 
     @Test
     fun usingAfterDisposedThrows() {
-        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod)
+        val serviceLocator = ServiceLocator.getInstance(env = Env.Prod) as ProdServiceLocator
         val service: FirebaseGameService =
             serviceLocator.getGameServiceForGame("1234", start = false)
         service.dispose()
@@ -198,10 +197,10 @@ class FirebaseTests {
 
     @Test
     fun firebaseReferences() {
-        val firebase = ServiceLocator.getInstance(env = Env.Prod).getFirebaseReferences()
-        assertEquals(Env.Prod, firebase.env)
-        assertEquals("env/prod/games", firebase.gamesCollection.path)
+        val firebase =
+            (ServiceLocator.getInstance(env = Env.Prod) as ProdServiceLocator).firebaseReferences
+        assertEquals("games", firebase.gamesCollection.path)
 
-        assertEquals("/env/prod/profile_pictures", firebase.profilePicturesFolder.path)
+        assertEquals("/profile_pictures", firebase.profilePicturesFolder.path)
     }
 }

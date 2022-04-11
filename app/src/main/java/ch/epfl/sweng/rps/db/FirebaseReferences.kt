@@ -1,12 +1,11 @@
 package ch.epfl.sweng.rps.db
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.storage.FirebaseStorage
 
-class FirebaseReferences(val env: Env = Env.Prod) {
-    val root = FirebaseFirestore.getInstance().document("env/${env.value}")
-    private val storageRoot = FirebaseStorage.getInstance().getReference("env/${env.value}")
+class FirebaseReferences {
+    val root = FirebaseFirestore.getInstance()
+    private val storageRoot = FirebaseStorage.getInstance().reference
 
     fun usersFriendRequestOfUid(uid: String) =
         usersCollection.document(uid).collection("friend_requests")

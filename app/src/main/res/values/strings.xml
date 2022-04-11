@@ -41,6 +41,9 @@
     <string name="player">Player</string>
     <string name="opponent">Opponent</string>
     <string name="outcome">Outcome</string>
+
+    <string name="menu_friends">Friends</string>
+    <string name="friends">FRIENDS</string>
     <item name="test_for_stats_row" type="id" />
 
     <!-- game -->
@@ -59,8 +62,7 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_settings">Settings</string>
     <string name="system_mode">System theme</string>
@@ -75,4 +77,8 @@
     <string name="profile_picture_desc">Profile picture</string>
     <string name="show_license_key">show_licence</string>
     <string name="license_title">License</string>
+    <string name="settings_show_uid_text">settings_show_uid_text</string>
+    <string name="add_artificial_game_settings">add_artificial_game_settings</string>
+    <string name="copy_fb_uid">Copy Firebase Uid</string>
+    <string name="add_artificial_game">Add artificial game</string>
 </resources>
