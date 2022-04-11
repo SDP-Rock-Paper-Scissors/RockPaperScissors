@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ch.epfl.sweng.rps.vision;
+package ch.epfl.sweng.rps.ui.camera;
 
 import android.app.Application;
 import android.os.Build.VERSION_CODES;

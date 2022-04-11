@@ -40,12 +40,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupNav()
 
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-
-        navView.setupWithNavController(navController)
 
         SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
     }
@@ -55,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         return currentUser
     }
 
-    /*  private fun setupNav() {
+    private fun setupNav() {
           val navController = findNavController(R.id.nav_host_fragment_activity_main)
           val navView: BottomNavigationView = binding.navView
           navView.setupWithNavController(navController)
@@ -63,12 +59,11 @@ class MainActivity : AppCompatActivity() {
           //removes botttomNavView for specified fragments.
           navController.addOnDestinationChangedListener { _, destination, _ ->
               when (destination.id) {
-                  R.id.cameraFragment -> setBottomNavigationVisibility(View.GONE)
                   R.id.gameFragment -> setBottomNavigationVisibility(View.GONE)
                   else -> setBottomNavigationVisibility(View.VISIBLE)
               }
           }
-      }*/
+      }
 
     private fun setBottomNavigationVisibility(visibility: Int) {
         // get the reference of the bottomNavigationView and set the visibility.

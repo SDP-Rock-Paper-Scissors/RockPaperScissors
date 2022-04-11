@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.mlkit.vision.demo.kotlin.labeldetector
+package ch.epfl.sweng.rps.vision
 
 import android.content.Context
 import android.util.Log
+import ch.epfl.sweng.rps.ui.camera.LabelGraphic
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.demo.GraphicOverlay
-import com.google.mlkit.vision.demo.kotlin.VisionProcessorBase
 import com.google.mlkit.vision.label.ImageLabel
 import com.google.mlkit.vision.label.ImageLabeler
 import com.google.mlkit.vision.label.ImageLabelerOptionsBase
@@ -50,9 +49,9 @@ class LabelDetectorProcessor(context: Context, options: ImageLabelerOptionsBase)
     return imageLabeler.process(image)
   }
 
-  override fun onSuccess(labels: List<ImageLabel>, graphicOverlay: GraphicOverlay) {
-    graphicOverlay.add(LabelGraphic(graphicOverlay, labels))
-    logExtrasForTesting(labels)
+  override fun onSuccess(results: List<ImageLabel>, graphicOverlay: GraphicOverlay) {
+    graphicOverlay.add(LabelGraphic(graphicOverlay, results))
+    logExtrasForTesting(results)
   }
 
   override fun onFailure(e: Exception) {
