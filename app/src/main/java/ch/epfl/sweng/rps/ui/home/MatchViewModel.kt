@@ -27,7 +27,7 @@ class MatchViewModel : ViewModel() {
     fun startOfflineGameService(
         nEvents: Int,
         computerPlayer: ComputerPlayer,
-        artificialMovesDelay: Long
+        artificialMovesDelay: Long = 1_000
     ) {
         val gameId = UUID.randomUUID().toString()
         _gameService = OfflineGameService(

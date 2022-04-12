@@ -38,9 +38,8 @@ class HomeFragment : Fragment() {
      * @param nEvents: number of Wins or Rounds depending on the game implementation
      */
     private fun playNRoundsWithComputer(nEvents: Int) {
-        val artificialMovesDelay: Long = 1_000 //should be customizable by a user
         val randomPlayer = RandomPlayer(listOf(Hand.ROCK, Hand.PAPER, Hand.SCISSORS))
-        matchViewModel.startOfflineGameService(nEvents, randomPlayer, artificialMovesDelay)
+        matchViewModel.startOfflineGameService(nEvents, randomPlayer)
         findNavController().navigate(R.id.gameFragment)
     }
 

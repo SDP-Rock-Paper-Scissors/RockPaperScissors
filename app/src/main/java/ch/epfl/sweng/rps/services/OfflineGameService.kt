@@ -46,7 +46,7 @@ class OfflineGameService(
     }
 
     override suspend fun playHand(hand: Hand) {
-        val me: String = if (repository.rawCurrentUid() != null) repository.rawCurrentUid()!! else ""
+        val me: String = repository.rawCurrentUid() ?:  ""
         ((currentGame.rounds as MutableMap)[currentGame.current_round.toString()]!!.hands as MutableMap)[me] =
             hand
         makeComputerMoves()
