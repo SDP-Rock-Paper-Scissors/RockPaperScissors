@@ -24,13 +24,18 @@ class MatchViewModel : ViewModel() {
     private var _gameService: OfflineGameService? = null
     var currentUserResult: Hand.Result? = null
     private val uid = FirebaseAuth.getInstance().currentUser?.uid
-    fun startOfflineGameService(nEvents: Int, computerPlayer: ComputerPlayer) {
+    fun startOfflineGameService(
+        nEvents: Int,
+        computerPlayer: ComputerPlayer,
+        artificialMovesDelay: Long
+    ) {
         val gameId = UUID.randomUUID().toString()
         _gameService = OfflineGameService(
             gameId,
-            ServiceLocator.getInstance().repository as FirebaseRepository,
+            ServiceLocator.getInstance().repository,
             listOf(computerPlayer),
-            Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0)
+            Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0),
+            artificialMovesDelay
         )
         _gameService?.startListening()
     }

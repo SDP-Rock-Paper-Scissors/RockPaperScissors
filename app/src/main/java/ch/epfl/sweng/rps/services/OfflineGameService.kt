@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.ComputerPlayer
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
@@ -11,9 +11,10 @@ import kotlinx.coroutines.delay
 
 class OfflineGameService(
     override val gameId: String,
-    private val firebaseRepository: FirebaseRepository,
+    private val repository: Repository,
     private val computerPlayers: List<ComputerPlayer>,
-    private val gameMode: Game.GameMode
+    private val gameMode: Game.GameMode,
+    private val artificialMovesDelay: Long
 ) : GameService {
 
     private var _game: Game? = null
@@ -45,13 +46,7 @@ class OfflineGameService(
     }
 
     override suspend fun playHand(hand: Hand) {
-        var me = ""
-        me = if (firebaseRepository.rawCurrentUid() != null){
-            firebaseRepository.rawCurrentUid()!!
-        } else{
-            " "
-        }
-
+        val me: String = if (repository.rawCurrentUid() != null) repository.rawCurrentUid()!! else ""
         ((currentGame.rounds as MutableMap)[currentGame.current_round.toString()]!!.hands as MutableMap)[me] =
             hand
         makeComputerMoves()
@@ -60,7 +55,7 @@ class OfflineGameService(
 
     private suspend fun makeComputerMoves() {
         for (pc in computerPlayers) {
-            delay(1_000)
+            delay(artificialMovesDelay)
             (currentGame.rounds[currentGame.current_round.toString()]!!.hands as MutableMap)[pc.computerPlayerId] =
                 pc.makeMove()
         }
