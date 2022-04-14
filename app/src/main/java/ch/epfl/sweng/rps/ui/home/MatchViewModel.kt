@@ -29,6 +29,7 @@ class MatchViewModel : ViewModel() {
         computerPlayer: ComputerPlayer,
         artificialMovesDelay: Long = 1_000
     ) {
+        // TODO: when having a local DB change the random UUID
         val gameId = UUID.randomUUID().toString()
         _gameService = OfflineGameService(
             gameId,
