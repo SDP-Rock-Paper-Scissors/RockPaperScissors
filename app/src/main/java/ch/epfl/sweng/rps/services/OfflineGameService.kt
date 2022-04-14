@@ -31,26 +31,32 @@ class OfflineGameService(
 
 
     override val isGameOver: Boolean
-        get() = _game?.current_round == roundCount
+        get() = _game?.done ?: false
 
 
     override suspend fun addRound(): Round {
+        checkNotDisposed()
         val round = Round(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
-        (_game!!.rounds as MutableMap)[_game?.current_round.toString()] = round
         _game = _game?.copy(current_round = _game?.current_round?.plus(1)!!)
+        (_game!!.rounds as MutableMap)[_game?.current_round.toString()] = round
         return round
 
     }
 
     override suspend fun playHand(hand: Hand) {
+        checkNotDisposed()
         val me: String = repository.rawCurrentUid() ?:  ""
         ((currentGame.rounds as MutableMap)[currentGame.current_round.toString()]!!.hands as MutableMap)[me] =
             hand
         makeComputerMoves()
+        changeToDone()
+    }
 
+    private fun changeToDone() {
+        _game = _game?.copy(done=true)
     }
 
     private suspend fun makeComputerMoves() {
