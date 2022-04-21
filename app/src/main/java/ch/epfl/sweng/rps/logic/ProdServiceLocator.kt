@@ -1,16 +1,19 @@
-package ch.epfl.sweng.rps.services
+package ch.epfl.sweng.rps.logic
 
-import ch.epfl.sweng.rps.db.*
+import ch.epfl.sweng.rps.services.FirebaseGameService
 
-/*
-* ServiceLocator is a singleton class that provides access to the different services
-* Services: FirebaseRepository, LocalRepository
-* */
-class ProdServiceLocator() : ServiceLocator {
+/**
+ * ServiceLocator is a singleton class that provides access to the different services
+ *
+ * Repositories: [FirebaseRepository], [LocalRepository]
+ *
+ * Services: [FirebaseGameService]
+ * */
+class ProdServiceLocator : ServiceLocator {
 
     val firebaseReferences by lazy { FirebaseReferences() }
 
-    override val repository by lazy { FirebaseRepository(firebaseReferences) }
+    override val repository by lazy { FirebaseRepository.createInstance(firebaseReferences) }
 
     override fun dispose() {
     }

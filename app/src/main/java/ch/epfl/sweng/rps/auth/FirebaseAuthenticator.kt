@@ -5,9 +5,8 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.logic.ServiceLocator
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -20,7 +19,7 @@ import kotlinx.coroutines.runBlocking
 class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (User) -> Unit) :
     Authenticator(callback) {
     private var auth: FirebaseAuth = Firebase.auth
-    private val repo = ServiceLocator.getInstance().repository;
+    private val repo = ServiceLocator.getInstance().repository
     private val resultLauncher =
         context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
             val data: Intent? = res.data
@@ -49,7 +48,7 @@ class FirebaseAuthenticator(private val context: ComponentActivity, val callback
         Log.d("DsName", displayName.orEmpty())
         var user = repo.getUser(uid)
         if (user == null) {
-            user = repo.createThisUser(displayName, email);
+            user = repo.createThisUser(displayName, email)
         }
         return user
     }
@@ -60,7 +59,7 @@ class FirebaseAuthenticator(private val context: ComponentActivity, val callback
             .requestEmail()
             .build()
 
-        val mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
+        val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
         resultLauncher.launch(mGoogleSignInClient.signInIntent)
     }
 

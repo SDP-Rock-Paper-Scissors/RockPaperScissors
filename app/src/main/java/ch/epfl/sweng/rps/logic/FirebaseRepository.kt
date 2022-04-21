@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.logic
 
 import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
@@ -10,9 +10,15 @@ import kotlinx.coroutines.tasks.await
 import java.net.URI
 
 
-class FirebaseRepository(
-    private val firebase: FirebaseReferences = FirebaseReferences()
+class FirebaseRepository private constructor(
+    private val firebase: FirebaseReferences
 ) : Repository {
+
+    companion object {
+        internal fun createInstance(firebaseReferences: FirebaseReferences): FirebaseRepository {
+            return FirebaseRepository(firebaseReferences)
+        }
+    }
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         val arguments = FirebaseHelper.processUserArguments(*pairs)

@@ -1,12 +1,22 @@
 package ch.epfl.sweng.rps.services
 
+import androidx.annotation.CallSuper
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
-import com.google.firebase.firestore.FirebaseFirestoreException
+import ch.epfl.sweng.rps.utils.ChangeNotifier
+import ch.epfl.sweng.rps.utils.StateNotifier
 
-interface GameService {
-    val gameId: String
+
+/**
+ * The GameService is the interface for the game logic.
+ * You can listen to the changes of the game state by using [addListener].
+ * You can listen to errors by using [addErrorListener].
+ *
+ * This class needs to be disposed when you don't need it anymore.
+ */
+abstract class GameService : ChangeNotifier() {
+    abstract val gameId: String
 
     /**
      * Starts the service.
@@ -14,28 +24,61 @@ interface GameService {
      *
      * In [FirebaseGameService] this listens to the game document.
      */
-    fun startListening(): GameService
+    abstract fun startListening(): GameService
+    abstract fun stopListening()
 
 
-    val isGameFull: Boolean
+    abstract val isGameFull: Boolean
 
-    suspend fun addRound(): Round
+    abstract suspend fun addRound(): Round
 
-    val currentGame: Game
-    suspend fun refreshGame(): Game
+    private var _game: Game? = null
+    protected var game: Game?
+        get() = _game
+        set(value) {
+            if (value != _game) {
+                _game = value
+                notifyListeners()
+            }
+        }
+    abstract val currentGame: Game
+    abstract suspend fun refreshGame(): Game
 
-    val currentRound: Round
+    abstract val currentRound: Round
 
-    suspend fun playHand(hand: Hand)
+    abstract suspend fun playHand(hand: Hand)
 
-    fun dispose()
+    @CallSuper
+    override fun dispose() {
+        _game = null
+        _error.dispose()
+        super.dispose()
+    }
 
-    val isGameOver: Boolean
+    abstract val isGameOver: Boolean
 
-    val isDisposed: Boolean
-    val active: Boolean
-    fun stopListening()
-    val error: FirebaseFirestoreException?
+    abstract val isDisposed: Boolean
+    abstract val active: Boolean
+
+
+    fun addErrorListener(listener: () -> Unit) {
+        _error.addListener(listener)
+    }
+
+
+    fun removeErrorListener(listener: () -> Unit) {
+        _error.removeListener(listener)
+    }
+
+    private val _error = StateNotifier<Exception?>(null)
+    var error: Exception?
+        get() = _error.value
+        set(value) {
+            if (value != _error.value) {
+                _error.value = value
+                notifyListeners()
+            }
+        }
 
     class GameServiceException : Exception {
         constructor(message: String) : super(message)

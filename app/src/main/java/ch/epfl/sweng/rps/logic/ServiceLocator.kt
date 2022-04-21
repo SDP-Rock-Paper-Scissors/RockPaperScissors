@@ -1,8 +1,6 @@
-package ch.epfl.sweng.rps.services
+package ch.epfl.sweng.rps.logic
 
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.db.Repository
+import ch.epfl.sweng.rps.services.FirebaseGameService
 
 interface ServiceLocator {
 

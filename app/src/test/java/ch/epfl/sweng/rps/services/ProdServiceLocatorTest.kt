@@ -1,7 +1,9 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.services.ServiceLocator.TestServiceLocator
+import ch.epfl.sweng.rps.logic.Env
+import ch.epfl.sweng.rps.logic.ProdServiceLocator
+import ch.epfl.sweng.rps.logic.ServiceLocator
+import ch.epfl.sweng.rps.logic.ServiceLocator.TestServiceLocator
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

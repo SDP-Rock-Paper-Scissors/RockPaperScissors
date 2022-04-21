@@ -1,6 +1,6 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.logic
 
-import ch.epfl.sweng.rps.db.Repository.UserNotLoggedIn
+import ch.epfl.sweng.rps.logic.Repository.UserNotLoggedIn
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi

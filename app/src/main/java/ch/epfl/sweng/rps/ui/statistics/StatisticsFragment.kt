@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
-import ch.epfl.sweng.rps.db.FirebaseHelper
+import ch.epfl.sweng.rps.logic.FirebaseHelper
 import kotlinx.coroutines.launch
 
 

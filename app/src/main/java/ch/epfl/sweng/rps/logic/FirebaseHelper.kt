@@ -1,7 +1,9 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.logic
 
-import ch.epfl.sweng.rps.models.*
-import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.RoundStat
+import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.UserStat
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -1,42 +1,35 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
-import ch.epfl.sweng.rps.db.FirebaseReferences
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.logic.FirebaseReferences
+import ch.epfl.sweng.rps.logic.FirebaseRepository
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
-import ch.epfl.sweng.rps.services.GameService.GameServiceException
-import com.google.firebase.FirebaseException
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
 class FirebaseGameService(
     private val firebase: FirebaseReferences,
     private val firebaseRepository: FirebaseRepository,
     override val gameId: String,
-) : GameService {
-    private var game: Game? = null
+) : GameService() {
     private var _disposed = false
-    private var gameRef = firebase.gamesCollection.document(gameId)
-    private lateinit var listenerRegistration: ListenerRegistration
+    private val gameRef = firebase.gamesCollection.document(gameId)
+    private var listenerRegistration: ListenerRegistration? = null
     private var _active = false
-    private var _error: FirebaseFirestoreException? = null
 
     override fun startListening(): FirebaseGameService {
         checkNotDisposed()
-        if (::listenerRegistration.isInitialized) {
+        if (listenerRegistration != null) {
             throw GameServiceException("Listener already registered")
         }
         listenerRegistration =
             gameRef.addSnapshotListener { value, e ->
                 if (e != null) {
-                    _error = e
+                    error = e
                     Log.e("FirebaseGameService", "Error while listening to game $gameId", e)
                 } else {
                     game = value?.toObject<Game>()
@@ -48,14 +41,10 @@ class FirebaseGameService(
 
     override fun stopListening() {
         checkNotDisposed()
-        if (!::listenerRegistration.isInitialized) {
-            throw GameServiceException("Listener not registered")
-        }
-        listenerRegistration.remove()
+        listenerRegistration?.remove()
         _active = false
     }
 
-    override val error: FirebaseFirestoreException? get() = _error
 
     override val currentGame: Game
         get() {
@@ -72,6 +61,12 @@ class FirebaseGameService(
             return currentGame.players.size == currentGame.mode.playerCount
         }
 
+    /**
+     * Because it updates the data in this database,
+     * it is not sure that the [currentGame] will up to date after this call.
+     *
+     * You should still use wait for the [currentGame] to be updated.
+     */
     override suspend fun addRound(): Round {
         checkNotDisposed()
         val game = refreshGame()
@@ -120,10 +115,11 @@ class FirebaseGameService(
 
     override fun dispose() {
         checkNotDisposed()
-        if (::listenerRegistration.isInitialized) {
-            listenerRegistration.remove()
-        }
+
+        listenerRegistration?.remove()
+
         _disposed = true
+        super.dispose()
     }
 
     override val isGameOver: Boolean get() = game?.done ?: false

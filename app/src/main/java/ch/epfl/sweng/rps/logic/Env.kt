@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.logic
 
 enum class Env(val value: String) {
     Test("test"),

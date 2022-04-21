@@ -2,15 +2,15 @@ package ch.epfl.sweng.rps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.FirebaseReferences
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.logic.Env
+import ch.epfl.sweng.rps.logic.FirebaseReferences
+import ch.epfl.sweng.rps.logic.FirebaseRepository
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
-import ch.epfl.sweng.rps.services.ProdServiceLocator
-import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.logic.ProdServiceLocator
+import ch.epfl.sweng.rps.logic.ServiceLocator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi

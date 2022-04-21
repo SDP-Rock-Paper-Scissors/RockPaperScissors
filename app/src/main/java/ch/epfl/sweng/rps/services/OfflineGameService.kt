@@ -1,12 +1,11 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.Repository
+import ch.epfl.sweng.rps.logic.Repository
 import ch.epfl.sweng.rps.models.ComputerPlayer
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.delay
 
 class OfflineGameService(
@@ -14,15 +13,15 @@ class OfflineGameService(
     private val repository: Repository,
     private val computerPlayers: List<ComputerPlayer>,
     private val gameMode: Game.GameMode,
-    private val artificialMovesDelay: Long
-) : GameService {
+    @Suppress("UNUSED_PARAMETER")
+    val artificialMovesDelay: Long = DEFAULT_DELAY
+) : GameService() {
 
-    private var _game: Game? = null
+    companion object {
+        private const val DEFAULT_DELAY = 100L
+    }
+
     private var _disposed = false
-    private val roundCount = gameMode.rounds
-    private var _active = false
-    private var _error: FirebaseFirestoreException? = null
-
 
     /**
      * Initialises the game after the game choice and play again button.
@@ -31,7 +30,12 @@ class OfflineGameService(
 
 
     override val isGameOver: Boolean
-        get() = _game?.done ?: false
+        get() {
+            val game = game ?: return false
+            return game.current_round == game.mode.rounds - 1 && game.rounds[game.current_round.toString()]?.hands?.keys?.containsAll(
+                game.players
+            ) ?: false
+        }
 
 
     override suspend fun addRound(): Round {
@@ -40,46 +44,42 @@ class OfflineGameService(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
-        _game = _game?.copy(current_round = _game?.current_round?.plus(1)!!)
-        (_game!!.rounds as MutableMap)[_game?.current_round.toString()] = round
+        game = game!!.copy(current_round = game!!.current_round.plus(1))
+        roundsMap[game?.current_round.toString()] = round
         return round
 
     }
 
+    private val roundsMap get() = currentGame.rounds as MutableMap
+    private val currentHands get() = currentRound.hands as MutableMap
+
     override suspend fun playHand(hand: Hand) {
         checkNotDisposed()
-        val me: String = repository.rawCurrentUid() ?:  ""
-        ((currentGame.rounds as MutableMap)[currentGame.current_round.toString()]!!.hands as MutableMap)[me] =
-            hand
+        val me: String = repository.getCurrentUid()
+        currentHands[me] = hand
         makeComputerMoves()
-        changeToDone()
-    }
-
-    private fun changeToDone() {
-        _game = _game?.copy(done=true)
     }
 
     private suspend fun makeComputerMoves() {
         for (pc in computerPlayers) {
             delay(artificialMovesDelay)
-            (currentGame.rounds[currentGame.current_round.toString()]!!.hands as MutableMap)[pc.computerPlayerId] =
-                pc.makeMove()
+            currentHands[pc.computerPlayerId] = pc.makeMove()
         }
     }
 
     override val currentGame: Game
         get() {
             checkNotDisposed()
-            if (_game == null) {
+            if (game == null) {
                 throw error
-                    ?: GameService.GameServiceException("Game service has not received a game yet")
+                    ?: GameServiceException("Game service has not received a game yet")
             } else {
-                return _game!!
+                return game!!
             }
         }
 
     override val currentRound: Round
-        get() = _game!!.rounds[_game!!.current_round.toString()]!!
+        get() = game!!.rounds[game!!.current_round.toString()]!!
 
     override val isGameFull: Boolean
         get() = true
@@ -87,8 +87,8 @@ class OfflineGameService(
 
     override fun dispose() {
         checkNotDisposed()
-        // TODO: probably here I should store it later
         _disposed = true
+        super.dispose()
     }
 
     override fun stopListening() {
@@ -98,14 +98,9 @@ class OfflineGameService(
         get() = _disposed
 
     override val active: Boolean
-        get() = _game != null
+        get() = game != null
 
-    override suspend fun refreshGame(): Game {
-        return _game!!
-    }
-
-    override val error: FirebaseFirestoreException?
-        get() = _error
+    override suspend fun refreshGame(): Game = game!!
 
     override fun startListening(): GameService {
         checkNotDisposed()
@@ -113,7 +108,7 @@ class OfflineGameService(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
-        _game = Game(
+        game = Game(
             gameId,
             computerPlayers.map { it.computerPlayerId },
             mutableMapOf("0" to round),
@@ -128,7 +123,7 @@ class OfflineGameService(
 
     private fun checkNotDisposed() {
         if (_disposed) {
-            throw GameService.GameServiceException("GameService is disposed")
+            throw GameServiceException("GameService is disposed")
         }
     }
 }
