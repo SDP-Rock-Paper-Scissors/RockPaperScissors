@@ -2,15 +2,11 @@ package ch.epfl.sweng.rps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.logic.Env
-import ch.epfl.sweng.rps.logic.FirebaseReferences
-import ch.epfl.sweng.rps.logic.FirebaseRepository
+import ch.epfl.sweng.rps.logic.*
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
-import ch.epfl.sweng.rps.logic.ProdServiceLocator
-import ch.epfl.sweng.rps.logic.ServiceLocator
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +28,7 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class FirebaseTests {
-    private val db = FirebaseRepository(FirebaseReferences())
+    private val db = FirebaseRepository.createInstance(FirebaseReferences())
 
     @Before
     fun setUp() {

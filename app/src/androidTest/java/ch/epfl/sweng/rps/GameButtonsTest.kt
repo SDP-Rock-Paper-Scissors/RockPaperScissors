@@ -7,8 +7,14 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.runTest
+import ch.epfl.sweng.rps.logic.Env
+import ch.epfl.sweng.rps.logic.LocalRepository
+import ch.epfl.sweng.rps.logic.ServiceLocator
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,10 +26,20 @@ class GameButtonsTest {
     @get:Rule
     val testRule = ActivityScenarioRule(MainActivity::class.java)
 
+    @Before
+    fun setUp() {
+        ServiceLocator.setCurrentEnv(Env.Test)
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid("test")
+    }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @After
+    fun tearDown() {
+        ServiceLocator.setCurrentEnv(Env.Prod)
+    }
+
     @Test
-    fun pressedRock(){
+    fun pressedRock() {
         checkPressedButton(R.id.rockRB)
     }
 
@@ -37,15 +53,11 @@ class GameButtonsTest {
         checkPressedButton(R.id.scissorsRB)
     }
 
-    private fun checkPressedButton(radioButtonId: Int) = runTest {
-        val asyncPart = GlobalScope.async {
-            withContext(Dispatchers.Default) {
-                onView(withId(R.id.button_play_1_games_offline)).perform(click())
-                onView(withId(radioButtonId)).perform(click())
-                delay(1_000)
-            }
-        }
-        asyncPart.await()
+    private fun checkPressedButton(radioButtonId: Int) = runBlocking {
+        onView(withId(R.id.button_play_1_games_offline)).perform(click())
+        onView(withId(radioButtonId)).perform(click())
+        delay(1_000)
+
         onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
 
     }
