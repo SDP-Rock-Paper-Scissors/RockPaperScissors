@@ -37,8 +37,16 @@
         android:id="@+id/gameFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameFragment"
         android:label="@string/menu_game"
-        tools:layout="@layout/fragment_game" />
-
+        tools:layout="@layout/fragment_game" >
+        <action
+            android:id="@+id/action_gameFragment_to_gameResultFragment"
+            app:destination="@id/gameResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameResultFragment"
+        android:name="ch.epfl.sweng.rps.ui.game.GameResultFragment"
+        android:label="result_fragment"
+        tools:layout="@layout/fragment_game_result" />
     <fragment
         android:id="@+id/nav_friends"
         android:name="ch.epfl.sweng.rps.ui.friends.FriendsFragment"
@@ -79,7 +87,6 @@
             android:name="isOnline"
             app:argType="boolean" />
     </fragment>
-
     <fragment
         android:id="@+id/cameraFragment"
         android:name="ch.epfl.sweng.rps.ui.camera.CameraFragment"

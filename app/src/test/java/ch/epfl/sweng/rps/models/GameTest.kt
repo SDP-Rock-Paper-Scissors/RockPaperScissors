@@ -26,7 +26,7 @@ class GameTest {
             timestamp = Timestamp.now(),
             player_count = 2,
             id = "id",
-            rounds = mapOf()
+            rounds = mutableMapOf()
         )
 
         assertEquals(g.game_mode, m1.toGameModeString())
