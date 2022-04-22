@@ -8,9 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.storage.PrivateStorage
-import ch.epfl.sweng.rps.utils.useEmulators
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 
 
 class LoginActivity : AppCompatActivity() {
@@ -42,9 +39,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        Firebase.initialize(this)
-
-        useEmulatorsIfNeeded()
 
         store = PrivateStorage(this)
         user = store.getUserDetails()
@@ -53,16 +47,6 @@ class LoginActivity : AppCompatActivity() {
 
         if (user != null)
             launchMain(user!!)
-    }
-
-    fun useEmulatorsIfNeeded() {
-        val use = intent.getStringExtra("USE_EMULATORS")
-        Log.d("MainActivity", "USE_EMULATORS: $use")
-        Log.d("MainActivity", intent.extras.toString())
-        if (use == "true") {
-            useEmulators(context = this)
-            Log.w("MainActivity", "Using emulators")
-        }
     }
 
     fun signIn(view: View) {
