@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
 
 class LeaderboardFragment : Fragment() {
@@ -18,21 +19,12 @@ class LeaderboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(LeaderboardViewModel::class.java)
+    ): View? {
 
-        _binding = FragmentLeaderboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textLeaderboard
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_leaderboard, container, false)
     }
 
     override fun onDestroyView() {
