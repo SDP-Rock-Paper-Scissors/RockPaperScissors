@@ -1,6 +1,11 @@
 import { randomUUID } from "crypto";
+import * as admin from "firebase-admin";
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { https, region } from "firebase-functions";
+
+
+admin.initializeApp();
+
 
 const eu = region("europe-west1");
 

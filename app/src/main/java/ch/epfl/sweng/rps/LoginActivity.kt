@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.storage.PrivateStorage
-import ch.epfl.sweng.rps.storage.Storage
+import ch.epfl.sweng.rps.utils.useEmulators
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 
 
 class LoginActivity : AppCompatActivity() {
@@ -31,18 +33,36 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private var authenticator: FirebaseAuthenticator = FirebaseAuthenticator(this, callback)
+    private val authenticator: FirebaseAuthenticator =
+        FirebaseAuthenticator.registerFor(this, callback)
+
     private lateinit var store: PrivateStorage
     private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        Firebase.initialize(this)
+
+        useEmulatorsIfNeeded()
+
         store = PrivateStorage(this)
         user = store.getUserDetails()
         user?.let { Log.d("STORE", it.uid) }
+
+
         if (user != null)
             launchMain(user!!)
+    }
+
+    fun useEmulatorsIfNeeded() {
+        val use = intent.getStringExtra("USE_EMULATORS")
+        Log.d("MainActivity", "USE_EMULATORS: $use")
+        Log.d("MainActivity", intent.extras.toString())
+        if (use == "true") {
+            useEmulators(context = this)
+            Log.w("MainActivity", "Using emulators")
+        }
     }
 
     fun signIn(view: View) {

@@ -16,6 +16,7 @@ class ProdServiceLocator : ServiceLocator {
     override val repository by lazy { FirebaseRepository.createInstance(firebaseReferences) }
 
     override fun dispose() {
+        disposeAllGameServices()
     }
 
     override val env: Env = Env.Prod
