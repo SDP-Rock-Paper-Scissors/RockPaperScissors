@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
+import ch.epfl.sweng.rps.db.FirebaseHelper.loadLeaderBoard
 import ch.epfl.sweng.rps.models.User
 import kotlinx.android.synthetic.main.content_scrolling.*
 
@@ -39,10 +40,11 @@ class LeaderboardFragment : Fragment() {
             setHasFixedSize(true)
 
         }
-        //loadPlayersUI(loadLeaderBoard())
+
+        loadPlayersUI(loadLeaderBoard())
     }
 
-    
+
 
     private fun loadPlayersUI(players: List<User>){
         val champions = players.take(3)
@@ -52,7 +54,7 @@ class LeaderboardFragment : Fragment() {
     }
 
     private fun showChampions(championPlayers: List<User>) {
-        TODO("Load the user pics of top 3")
+
         //iv_champion1.loadImg(championPlayers[0].photo)
         //iv_champion2.loadImg(championPlayers[1].photo)
         //iv_champion3.loadImg(championPlayers[2].photo)

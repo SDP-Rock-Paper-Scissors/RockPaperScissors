@@ -116,7 +116,14 @@ object FirebaseHelper {
 
 
     fun loadLeaderBoard(): List<User> {
-        TODO("This function should be complied with User class design")
+        val user1 =
+            User("jinglun", "1", "PUBLIC", true, "email")
+        val user2 =
+            User("leonardo", "2", "PUBLIC", true, "email")
+        val user3 =
+            User("adam", "uid", "PUBLIC", true, "email")
+        val allPlayers = listOf(user1,user2,user3)
+/*
         val db = FirebaseFirestore.getInstance()
         var allPlayers = listOf<User>()
         db.collection("users").orderBy("score", Query.Direction.DESCENDING)
@@ -129,6 +136,9 @@ object FirebaseHelper {
                     it.toObject(User::class.java)
                 }!!
             }
+
+
+ */
         return allPlayers
     }
     }
