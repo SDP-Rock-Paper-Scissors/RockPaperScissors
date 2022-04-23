@@ -4,14 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="id.balistream.leaderboard.LeaderBoardActivity">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/layout_champion"
@@ -20,7 +17,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="3"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:baselineAligned="false">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -39,11 +37,11 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#2C5E1A"
+                    android:textColor="#C0C0C0"
                     android:layout_below="@id/iv_champion2"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="2ND"/>
+                    android:text="2ND 🥈"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -63,11 +61,11 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#2C5E1A"
+                    android:textColor="#FFD700"
                     android:layout_below="@id/iv_champion1"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="1ST"/>
+                    android:text="1ST 🥇"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -82,16 +80,17 @@
                     android:layout_marginTop="16dp"
                     android:scaleType="centerCrop"
                     android:layout_centerHorizontal="true"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#2C5E1A"
                     android:layout_below="@id/iv_champion3"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="3RD"/>
+                    android:text="3RD 🥉"
+                    android:textColor="#B5A642"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
         </LinearLayout>

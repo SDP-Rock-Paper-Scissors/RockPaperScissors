@@ -1,7 +1,10 @@
 package ch.epfl.sweng.rps.db
 
+import android.util.Log
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -110,7 +113,25 @@ object FirebaseHelper {
 
         return allDetailsList
     }
-}
+
+
+    fun loadLeaderBoard(): List<User> {
+        TODO("This function should be complied with User class design")
+        val db = FirebaseFirestore.getInstance()
+        var allPlayers = listOf<User>()
+        db.collection("users").orderBy("score", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    error.message?.let { Log.d("TAG", it) }
+                    return@addSnapshotListener
+                }
+                allPlayers = snapshots?.map {
+                    it.toObject(User::class.java)
+                }!!
+            }
+        return allPlayers
+    }
+    }
 
 
 

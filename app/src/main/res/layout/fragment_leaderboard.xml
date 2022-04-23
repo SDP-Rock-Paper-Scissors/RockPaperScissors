@@ -21,7 +21,6 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:text="L E A D E R B O A R D"
-                android:textColor="#ffffff"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
