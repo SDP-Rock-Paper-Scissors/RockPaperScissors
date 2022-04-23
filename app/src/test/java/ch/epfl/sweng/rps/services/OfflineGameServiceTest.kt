@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.logic.Repository
+import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.ComputerPlayer
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand

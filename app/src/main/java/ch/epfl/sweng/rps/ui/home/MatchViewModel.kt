@@ -2,7 +2,7 @@ package ch.epfl.sweng.rps.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ch.epfl.sweng.rps.logic.ServiceLocator
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.models.ComputerPlayer
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand

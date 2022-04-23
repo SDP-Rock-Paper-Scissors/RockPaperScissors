@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.logic
+package ch.epfl.sweng.rps.db
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage

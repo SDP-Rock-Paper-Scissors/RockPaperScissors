@@ -15,9 +15,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import ch.epfl.sweng.rps.TestUtils.getActivityInstance
 import ch.epfl.sweng.rps.TestUtils.waitFor
-import ch.epfl.sweng.rps.logic.Env
-import ch.epfl.sweng.rps.logic.LocalRepository
-import ch.epfl.sweng.rps.logic.ServiceLocator
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.LocalRepository
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kotlinx.coroutines.runBlocking

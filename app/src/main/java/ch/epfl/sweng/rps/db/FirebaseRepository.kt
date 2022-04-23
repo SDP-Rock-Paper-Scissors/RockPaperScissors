@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.logic
+package ch.epfl.sweng.rps.db
 
 import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
