@@ -12,7 +12,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import ch.epfl.sweng.rps.TestUtils.getActivityInstance
 import ch.epfl.sweng.rps.TestUtils.waitFor
@@ -30,7 +29,6 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
-import kotlin.test.assertNotNull
 
 
 @RunWith(AndroidJUnit4::class)

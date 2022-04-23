@@ -1,6 +1,9 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.RoundStat
+import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
 import java.util.*
@@ -84,7 +87,7 @@ object FirebaseHelper {
         val userid = repo.rawCurrentUid()
 
         val game = repo.getGame(gid) ?: throw Exception("Game not found")
-        // note: 1 v 1 logic, if we support pvp mode, the table should be iterated to change as well.
+        // note: 1 v 1 db, if we support pvp mode, the table should be iterated to change as well.
         // get opponent user id from player list
         val opponentId: String = game.players.first { it != userid }
         val allDetailsList = game.rounds.entries.mapIndexed { i, round ->

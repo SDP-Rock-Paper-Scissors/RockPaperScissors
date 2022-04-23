@@ -2,12 +2,11 @@ package ch.epfl.sweng.rps.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.models.ComputerPlayer
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.services.OfflineGameService
-import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -66,7 +65,6 @@ class MatchViewModel : ViewModel() {
             _gameService?.playHand(userHand)
             determineResult()
             callback()
-
         }
     }
 }

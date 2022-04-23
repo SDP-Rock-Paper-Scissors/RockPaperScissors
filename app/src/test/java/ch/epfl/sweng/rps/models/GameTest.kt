@@ -2,7 +2,7 @@ package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Game.GameMode
 import com.google.firebase.Timestamp
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 
@@ -11,12 +11,12 @@ class GameTest {
     fun testGameMode() {
         val m1 =
             GameMode(playerCount = 2, type = GameMode.Type.PVP, rounds = 3, timeLimit = 10)
-        val m2 = GameMode.fromString(m1.toGameModeString())
+        val m2 =
+            GameMode(playerCount = 2, type = GameMode.Type.PVP, rounds = 3, timeLimit = 0)
 
-        assertEquals(m1.playerCount, m2.playerCount)
-        assertEquals(m1.rounds, m2.rounds)
-        assertEquals(m1.type, m2.type)
-        assertEquals(m1.timeLimit, m2.timeLimit)
+        assertEquals(m1, GameMode.fromString(m1.toGameModeString()))
+        assertEquals(m2, GameMode.fromString(m2.toGameModeString()))
+
 
         val g = Game(
             game_mode = m1.toGameModeString(),
@@ -32,9 +32,6 @@ class GameTest {
         assertEquals(g.game_mode, m1.toGameModeString())
         val m3 = g.mode
 
-        assertEquals(m1.playerCount, m3.playerCount)
-        assertEquals(m1.rounds, m3.rounds)
-        assertEquals(m1.type, m3.type)
-        assertEquals(m1.timeLimit, m3.timeLimit)
+        assertEquals(m1, m3)
     }
 }
