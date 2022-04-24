@@ -6,8 +6,10 @@ import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.models.ComputerPlayer
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.services.OfflineGameService
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.util.*
@@ -20,8 +22,9 @@ import java.util.*
 class MatchViewModel : ViewModel() {
 
 
-    private var _gameService: OfflineGameService? = null
+    var gameService: OfflineGameService? = null
     var currentUserResult: Hand.Result? = null
+    var computerPlayer: ComputerPlayer? = null
     private val uid = FirebaseAuth.getInstance().currentUser?.uid
     fun startOfflineGameService(
         nEvents: Int,
@@ -29,42 +32,49 @@ class MatchViewModel : ViewModel() {
         artificialMovesDelay: Long = 1_000
     ) {
         // TODO: when having a local DB change the random UUID
+        this.computerPlayer = computerPlayer
         val gameId = UUID.randomUUID().toString()
-        _gameService = OfflineGameService(
+        gameService = OfflineGameService(
             gameId,
             ServiceLocator.getInstance().repository,
             listOf(computerPlayer),
             Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0),
             artificialMovesDelay
         )
-        _gameService?.startListening()
+        gameService?.startListening()
     }
 
 
     private fun determineResult() {
-        val scores = _gameService?.currentRound!!.computeScores()
+        val scores = gameService?.currentRound!!.computeScores()
         val best = scores[0]
         val bestPoints = best.points
-        val bestUid = best.uid
-        currentUserResult = if (uid == bestUid) {
-            val secondBestPoints = scores[1].points
-            if (bestPoints > secondBestPoints) {
-                Hand.Result.WIN
-            } else {
-                Hand.Result.LOSS
+        val bestScoreList = mutableListOf<Round.Score>()
+        for (score in  scores){
+            if (score.points == bestPoints){
+                bestScoreList.add(score)
             }
-        } else {
-            Hand.Result.TIE
+        }
+        currentUserResult = if (uid in bestScoreList.map{it.uid}){
+            if (bestScoreList.size == 1){
+                Hand.Result.WIN
+            } else{
+                Hand.Result.TIE
+            }
+        } else{
+            Hand.Result.LOSS
         }
     }
 
-    fun playHand(userHand: Hand, callback: () -> Unit) {
+    fun playHand(userHand: Hand, updateUIResultCallback: () -> Unit, navigationCallback: () -> Unit) {
         viewModelScope.launch {
             //add proper round adding when supporting the multiround
             ensureActive()
-            _gameService?.playHand(userHand)
+            gameService?.playHand(userHand)
             determineResult()
-            callback()
+            updateUIResultCallback()
+            delay(1000L)
+            navigationCallback()
         }
     }
 }

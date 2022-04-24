@@ -35,11 +35,27 @@ class GameFragment : Fragment() {
     }
 
     private fun rpsPressed(hand: Hand) {
-        matchViewModel.playHand(hand) {
-            findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
+        matchViewModel.playHand(hand,
+            updateUIResultCallback = {
+                selectComputerChoice(matchViewModel.gameService?.currentRound?.hands?.get(
+                matchViewModel.computerPlayer!!.computerPlayerId)!!)},
+            navigationCallback = {
+            findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)}
+        )
+    }
+    private fun selectComputerChoice(hand: Hand){
+        when (hand) {
+            Hand.ROCK -> {
+                binding.rockRBOpponent.isChecked = true
+            }
+            Hand.PAPER -> {
+                binding.paperRBOpponent.isChecked = true
+            }
+            else -> {
+                binding.scissorsRB.isChecked = true
+            }
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
