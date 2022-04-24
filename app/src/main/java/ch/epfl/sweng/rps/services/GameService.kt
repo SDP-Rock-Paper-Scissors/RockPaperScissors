@@ -9,7 +9,7 @@ import ch.epfl.sweng.rps.utils.StateNotifier
 
 
 /**
- * The GameService is the interface for the game logic.
+ * The GameService is the interface for the game db.
  * You can listen to the changes of the game state by using [addListener].
  * You can listen to errors by using [addErrorListener].
  *
