@@ -13,16 +13,16 @@ class MatchmakingService {
     private val cloudFunctions = CloudFunctions()
 
     fun queue(gameMode: Game.GameMode): Flow<QueueStatus> = flow {
-        Log.d("MatchmakingService", "Queueing game mode $gameMode")
+        Log.i("MatchmakingService", "Queueing game mode ${gameMode.toGameModeString()}")
         emit(QueueStatus.Queued)
-        Log.d("MatchmakingService", "Sending request to cloud function")
+        Log.i("MatchmakingService", "Sending request to cloud function")
         val gameId = cloudFunctions.queue(gameMode)
-        Log.d("MatchmakingService", "Received game id $gameId")
+        Log.i("MatchmakingService", "Received game id $gameId")
 
         val service = ServiceLocator.getInstance().getGameServiceForGame(gameId)
-        Log.d("MatchmakingService", "Waiting for game to start")
+        Log.i("MatchmakingService", "Waiting for game to start")
         emit(QueueStatus.Accepted(service))
-        Log.d("MatchmakingService", "Game started")
+        Log.i("MatchmakingService", "Game started")
     }
 
     suspend fun acceptInvitation(invitationId: String): FirebaseGameService {

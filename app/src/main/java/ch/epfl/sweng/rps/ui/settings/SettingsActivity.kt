@@ -143,15 +143,20 @@ class SettingsActivity : AppCompatActivity(),
             }
             joinQueue.setOnPreferenceClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    ServiceLocator.getInstance().matchmakingService.queue(
-                        Game.GameMode(
-                            2,
-                            Game.GameMode.Type.PVP,
-                            3,
-                            0
-                        )
-                    ).collect {
-                        Log.i("QueueStatus", it.toString())
+                    Log.d("SettingsActivity", "Joining queue")
+                    try {
+                        ServiceLocator.getInstance().matchmakingService.queue(
+                            Game.GameMode(
+                                2,
+                                Game.GameMode.Type.PVP,
+                                3,
+                                0
+                            )
+                        ).collect {
+                            Log.i("QueueStatus", it.toString())
+                        }
+                    } catch (e: Exception) {
+                        Log.e("QueueStatus", e.toString(), e)
                     }
                 }
                 true

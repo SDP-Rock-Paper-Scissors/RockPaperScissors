@@ -1,9 +1,18 @@
 package ch.epfl.sweng.rps.utils
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 fun consume(block: () -> Any?): () -> Unit = { block() }
 
@@ -19,28 +28,45 @@ object FirebaseEmulatorsUtils {
         get() = emuUsed_
 
     fun useEmulators(
-        firebaseAuthConfig: EmulatorConfig? = EmulatorConfig(
-            "https://localhost",
+        firebaseAuthConfig: EmulatorConfig = EmulatorConfig(
+            "localhost",
             9099
         ),
-        firestoreConfig: EmulatorConfig? = EmulatorConfig(
-            "https://localhost",
+        firestoreConfig: EmulatorConfig = EmulatorConfig(
+            "localhost",
             8080
         ),
-        storageConfig: EmulatorConfig? = EmulatorConfig(
-            "https://localhost",
+        storageConfig: EmulatorConfig = EmulatorConfig(
+            "localhost",
             9199
+        ),
+        firebaseFunctions: EmulatorConfig = EmulatorConfig(
+            "localhost",
+            5001
         )
     ) {
-        if (firebaseAuthConfig != null) {
-            FirebaseAuth.getInstance().useEmulator(firebaseAuthConfig.host, firebaseAuthConfig.port)
+        Log.w("FirebaseEmulatorsUtils", FirebaseFirestore.getInstance().firestoreSettings.host)
+        FirebaseAuth.getInstance().useEmulator(firebaseAuthConfig.host, firebaseAuthConfig.port)
+
+        Firebase.firestore.firestoreSettings =
+            FirebaseFirestoreSettings.Builder()
+                .setHost(firestoreConfig.host + ":" + firestoreConfig.port)
+                .setSslEnabled(false)
+                .build()
+
+        Firebase.europeWest1.useEmulator(firebaseFunctions.host, firebaseFunctions.port)
+
+        FirebaseStorage.getInstance().useEmulator(storageConfig.host, storageConfig.port)
+
+        Log.w("FirebaseEmulatorsUtils", FirebaseFirestore.getInstance().firestoreSettings.host)
+        runBlocking {
+            Log.w(
+                "FirebaseEmulatorsUtils",
+                FirebaseFirestore.getInstance().document("global/gamemodes").get()
+                    .await().data.toString()
+            )
         }
-        if (firestoreConfig != null) {
-            FirebaseFirestore.getInstance().useEmulator(firestoreConfig.host, firestoreConfig.port)
-        }
-        if (storageConfig != null) {
-            FirebaseStorage.getInstance().useEmulator(storageConfig.host, storageConfig.port)
-        }
+
         emuUsed_ = true
     }
 }
@@ -61,4 +87,11 @@ suspend fun <T> retry(times: Int = 3, delayMs: Long = 500, block: suspend () -> 
 
 class RetryException(message: String, cause: Throwable? = null) : Exception(message, cause)
 private data class Result<T>(val value: T)
+
+val Firebase.europeWest1: FirebaseFunctions
+    get() = FirebaseFunctions.getInstance("europe-west1")
+
+val FirebaseFunctions.europeWest1: FirebaseFunctions
+    get() = FirebaseFunctions.getInstance("europe-west1")
+
 

@@ -1,10 +1,7 @@
 package ch.epfl.sweng.rps.logic
 
 import android.net.Uri
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Invitation
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
@@ -88,6 +85,11 @@ class FirebaseRepository private constructor(
             .whereEqualTo("done", false).get().await().documents.map {
                 it.toObject<Game>()!!
             }
+    }
+
+    override suspend fun statsOfUser(uid: String): UserStats {
+        return firebase.usersCollection.document(uid).collection("stats").document("games").get()
+            .await().toObject<UserStats>()!!
     }
 
     override suspend fun listInvitations(): List<Invitation> {

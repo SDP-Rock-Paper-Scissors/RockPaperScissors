@@ -27,7 +27,22 @@ data class Round(
                 res.key,
                 results = res.value,
                 points = res.value.sumOf { pointSystem.getPoints(it) })
-        }.sortedByDescending { it.points }
+        }.sortedByDescending { score -> score.results.count { it == Result.WIN } }
+            .sortedByDescending { it.points }
+    }
+
+    fun getWinner(): String? {
+        val scores = computeScores()
+        if (scores.isEmpty()) {
+            return null
+        }
+        val first = scores.first()
+        val last = scores.last()
+        return if (first.points == last.points) {
+            null
+        } else {
+            first.uid
+        }
     }
 
     class Score(

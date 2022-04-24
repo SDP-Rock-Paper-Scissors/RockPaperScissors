@@ -1,9 +1,6 @@
 package ch.epfl.sweng.rps.logic
 
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Invitation
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.*
 import java.net.URI
 
 interface Repository {
@@ -29,6 +26,7 @@ interface Repository {
     suspend fun gamesOfUser(uid: String): List<Game>
     suspend fun myActiveGames(): List<Game>
 
+    suspend fun statsOfUser(uid: String): UserStats
 
     suspend fun listInvitations(): List<Invitation>
 
