@@ -68,16 +68,17 @@ class MatchViewModel : ViewModel() {
         isGameOverCallback: () -> Unit
     ) {
         viewModelScope.launch {
-            //add proper round adding when supporting the multiround
             ensureActive()
             gameService?.playHand(userHand)
             determineResult()
             updateUIResultCallback()
+            // the delay to let the user see the opponent's choice (rock/paper/scissors)
+            // otherwise the transition is too fast to notice
             delay(1000L)
             resultNavigationCallback()
+            // the delay to let the user see the result of the game (win/loss/draw)
             delay(1000L)
             isGameOverCallback()
         }
-
     }
 }
