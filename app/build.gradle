@@ -143,6 +143,7 @@ dependencies {
 
     // For UI dependency
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation("io.coil-kt:coil:2.0.0-rc03")
 
 }
 

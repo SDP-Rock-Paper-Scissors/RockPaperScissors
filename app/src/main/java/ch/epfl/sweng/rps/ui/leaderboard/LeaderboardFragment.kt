@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
 import ch.epfl.sweng.rps.db.FirebaseHelper.loadLeaderBoard
+import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
+import coil.load
 import kotlinx.android.synthetic.main.content_scrolling.*
 
 
@@ -46,22 +48,22 @@ class LeaderboardFragment : Fragment() {
 
 
 
-    private fun loadPlayersUI(players: List<User>){
+    private fun loadPlayersUI(players: List<LeaderBoardInfo>){
         val champions = players.take(3)
         showPlayersPosition(players)
         showChampions(champions)
 
     }
 
-    private fun showChampions(championPlayers: List<User>) {
+    private fun showChampions(championPlayers: List<LeaderBoardInfo>) {
 
-        //iv_champion1.loadImg(championPlayers[0].photo)
-        //iv_champion2.loadImg(championPlayers[1].photo)
-        //iv_champion3.loadImg(championPlayers[2].photo)
+        iv_champion1.load(championPlayers[0].userProfilePictureUrl)
+        iv_champion2.load(championPlayers[1].userProfilePictureUrl)
+        iv_champion3.load(championPlayers[2].userProfilePictureUrl)
 
     }
 
-    private fun showPlayersPosition(players: List<User>) {
+    private fun showPlayersPosition(players: List<LeaderBoardInfo>) {
         val adapter = recycler_view.adapter as LeaderBoardPlayerAdapter
         adapter.addPlayers(players)
 

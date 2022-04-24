@@ -1,9 +1,7 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.RoundStat
-import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.models.UserStat
+import android.net.Uri
+import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -117,13 +115,13 @@ object FirebaseHelper {
     }
 
 
-    fun loadLeaderBoard(): List<User> {
+    fun loadLeaderBoard(): List<LeaderBoardInfo> {
         val user1 =
-            User("jinglun", "1", "PUBLIC", true, "email")
+            LeaderBoardInfo("jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
         val user2 =
-            User("leonardo", "2", "PUBLIC", true, "email")
+            LeaderBoardInfo("Leonardo", "2", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 80 )
         val user3 =
-            User("adam", "uid", "PUBLIC", true, "email")
+            LeaderBoardInfo("Adam", "3", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 60)
         val allPlayers = listOf(user1,user2,user3)
 /*
         val db = FirebaseFirestore.getInstance()
