@@ -64,7 +64,8 @@ class MatchViewModel : ViewModel() {
     fun playHand(
         userHand: Hand,
         updateUIResultCallback: () -> Unit,
-        navigationCallback: () -> Unit
+        resultNavigationCallback: () -> Unit,
+        isGameOverCallback: () -> Unit
     ) {
         viewModelScope.launch {
             //add proper round adding when supporting the multiround
@@ -73,7 +74,10 @@ class MatchViewModel : ViewModel() {
             determineResult()
             updateUIResultCallback()
             delay(1000L)
-            navigationCallback()
+            resultNavigationCallback()
+            delay(1000L)
+            isGameOverCallback()
         }
+
     }
 }
