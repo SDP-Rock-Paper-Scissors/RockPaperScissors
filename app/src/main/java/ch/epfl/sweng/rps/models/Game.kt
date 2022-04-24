@@ -59,7 +59,14 @@ data class Game(
         }
 
         fun toGameModeString(): String {
-            return "P:$playerCount,G:$type,R:$rounds,T:$timeLimit"
+            val map = listOf(
+                "P" to playerCount.toString(),
+                "G" to type.name,
+                "R" to rounds.toString(),
+                "T" to timeLimit.toString()
+            )
+            return map.sortedBy { it.first }
+                .joinToString(",") { it.first + ":" + it.second }
         }
     }
 

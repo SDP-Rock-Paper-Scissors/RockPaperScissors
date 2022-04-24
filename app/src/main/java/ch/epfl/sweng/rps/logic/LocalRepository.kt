@@ -2,6 +2,7 @@ package ch.epfl.sweng.rps.logic
 
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Invitation
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
 import java.net.URI
@@ -89,6 +90,16 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return games.values.filter { uid in it.players }
+    }
+
+    override suspend fun myActiveGames(): List<Game> {
+        return games.values.filter { it.players.contains(getCurrentUid()) && !it.done }
+    }
+
+    private var invitations = mutableMapOf<String, Invitation>()
+
+    override suspend fun listInvitations(): List<Invitation> {
+        return invitations.values.toList()
     }
 
 }

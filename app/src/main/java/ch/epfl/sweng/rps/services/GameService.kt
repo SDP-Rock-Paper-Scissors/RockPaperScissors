@@ -80,6 +80,9 @@ abstract class GameService : ChangeNotifier() {
             }
         }
 
+    val owner: String
+        get() = currentGame.players.first()
+
     class GameServiceException : Exception {
         constructor(message: String) : super(message)
         constructor(message: String, cause: Throwable) : super(message, cause)

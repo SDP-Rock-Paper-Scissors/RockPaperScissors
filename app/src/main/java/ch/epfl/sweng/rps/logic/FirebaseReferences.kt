@@ -17,5 +17,9 @@ class FirebaseReferences {
     val profilePicturesFolder = storageRoot.child("profile_pictures")
 
     val gamesCollection = root.collection("games")
+
+    fun invitationsOfUid(uid: String) = usersCollection
+        .document(uid)
+        .collection("invitations")
 }
 

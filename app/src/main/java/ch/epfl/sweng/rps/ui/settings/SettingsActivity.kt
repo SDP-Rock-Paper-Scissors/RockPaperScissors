@@ -2,9 +2,12 @@ package ch.epfl.sweng.rps.ui.settings
 
 import android.content.*
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
@@ -14,8 +17,10 @@ import ch.epfl.sweng.rps.logic.ServiceLocator
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.launch
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -132,6 +137,25 @@ class SettingsActivity : AppCompatActivity(),
                 clipboard?.setPrimaryClip(clip)
                 true
             }
+            val joinQueue = findPreference<Preference>(getString(R.string.join_queue_now_key))!!
+            joinQueue.setSummaryProvider {
+                if (FirebaseEmulatorsUtils.emulatorUsed) "Emulator used" else "Firebase Emulator not used"
+            }
+            joinQueue.setOnPreferenceClickListener {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    ServiceLocator.getInstance().matchmakingService.queue(
+                        Game.GameMode(
+                            2,
+                            Game.GameMode.Type.PVP,
+                            3,
+                            0
+                        )
+                    ).collect {
+                        Log.i("QueueStatus", it.toString())
+                    }
+                }
+                true
+            }
             findPreference<Preference>(getString(R.string.add_artificial_game_settings))?.setOnPreferenceClickListener {
                 val id = "artificial_game_1"
                 val uid = ServiceLocator.getInstance().repository.rawCurrentUid()!!
@@ -172,6 +196,10 @@ class SettingsActivity : AppCompatActivity(),
                     )
                 true
             }
+        }
+
+        class JoinQueueViewModel : ViewModel() {
+
         }
     }
 

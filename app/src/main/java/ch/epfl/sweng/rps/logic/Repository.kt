@@ -2,6 +2,7 @@ package ch.epfl.sweng.rps.logic
 
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Invitation
 import ch.epfl.sweng.rps.models.User
 import java.net.URI
 
@@ -26,6 +27,10 @@ interface Repository {
 
     suspend fun getGame(gameId: String): Game?
     suspend fun gamesOfUser(uid: String): List<Game>
+    suspend fun myActiveGames(): List<Game>
+
+
+    suspend fun listInvitations(): List<Invitation>
 
     class UserNotLoggedIn : Exception {
         constructor() : super("User not logged in")

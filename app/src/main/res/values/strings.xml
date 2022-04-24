@@ -81,4 +81,5 @@
     <string name="add_artificial_game_settings">add_artificial_game_settings</string>
     <string name="copy_fb_uid">Copy Firebase Uid</string>
     <string name="add_artificial_game">Add artificial game</string>
+    <string name="join_queue_now_key">join_queue_now</string>
 </resources>

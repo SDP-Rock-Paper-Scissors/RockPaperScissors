@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.logic
 import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Invitation
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.toObject
@@ -80,6 +81,19 @@ class FirebaseRepository private constructor(
             .await().documents.map {
                 it.toObject<Game>()!!
             }
+    }
+
+    override suspend fun myActiveGames(): List<Game> {
+        return firebase.gamesCollection.whereArrayContains("players", getCurrentUid())
+            .whereEqualTo("done", false).get().await().documents.map {
+                it.toObject<Game>()!!
+            }
+    }
+
+    override suspend fun listInvitations(): List<Invitation> {
+        return firebase.invitationsOfUid(getCurrentUid()).get().await().documents.map {
+            it.toObject<Invitation>()!!
+        }
     }
 
     private fun Uri.toURI(): URI = URI(toString())

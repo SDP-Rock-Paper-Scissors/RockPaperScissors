@@ -69,7 +69,7 @@ When the HTTPS request is received, a new document is created in the users/{user
   "invitation_id": "invitation_id"
 }*/
 
-export const invite = eu.https.onCall(async (data, context) => {
+export const invite_player = eu.https.onCall(async (data, context) => {
   const user_id = data.user_id as string | undefined;
   const game_mode = data.game_mode as string | undefined;
   if (user_id === undefined) {
@@ -105,7 +105,7 @@ export const invite = eu.https.onCall(async (data, context) => {
 })
 
 
-export const join = eu.https.onCall(async (data, context) => {
+export const accept_invitation = eu.https.onCall(async (data, context) => {
   const invitation_id = data.invitation_id as string | undefined;
 
   if (invitation_id === undefined) {
@@ -130,6 +130,7 @@ export const join = eu.https.onCall(async (data, context) => {
   //! TRANSACTION !!!
   await prod.collection("games").doc(game.id).set(game.data() as Game);
   await prod.collection("users").doc(context.auth!.uid).collection("invitations").doc(invitation_id).delete();
+  return game.id;
 })
 
 async function get_gamemodes(): Promise<GameMode[]> {

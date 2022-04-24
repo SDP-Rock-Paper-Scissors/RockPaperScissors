@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.logic
 
 import ch.epfl.sweng.rps.services.FirebaseGameService
+import ch.epfl.sweng.rps.services.MatchmakingService
 
 /**
  * ServiceLocator is a singleton class that provides access to the different services
@@ -23,7 +24,7 @@ class ProdServiceLocator : ServiceLocator {
 
     private val gameServices = mutableMapOf<String, FirebaseGameService>()
 
-    fun getGameServiceForGame(gameId: String, start: Boolean = true): FirebaseGameService {
+    override fun getGameServiceForGame(gameId: String, start: Boolean): FirebaseGameService {
         cleanUpServices()
         val service = gameServices.getOrPut(gameId) {
             FirebaseGameService(
@@ -57,6 +58,8 @@ class ProdServiceLocator : ServiceLocator {
 
     override val cachedGameServices: List<String>
         get() = gameServices.keys.toList()
+
+    override val matchmakingService: MatchmakingService = MatchmakingService()
 
 
 }
