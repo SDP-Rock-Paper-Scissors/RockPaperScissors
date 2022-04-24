@@ -11,7 +11,6 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
 import ch.epfl.sweng.rps.db.FirebaseHelper.loadLeaderBoard
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.User
 import coil.load
 import kotlinx.android.synthetic.main.content_scrolling.*
 

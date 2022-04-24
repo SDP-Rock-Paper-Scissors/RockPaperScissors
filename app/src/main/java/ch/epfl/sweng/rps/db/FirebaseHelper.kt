@@ -1,9 +1,7 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.RoundStat
-import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.models.UserStat
+import android.net.Uri
+import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
 import java.util.*
