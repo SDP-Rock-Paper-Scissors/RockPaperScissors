@@ -3,9 +3,12 @@ package ch.epfl.sweng.rps.db
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 
+/**
+ * Instantiating this class necessitates the Firebase SDK to be initialized.
+ */
 class FirebaseReferences {
     val root = FirebaseFirestore.getInstance()
-    private val storageRoot = FirebaseStorage.getInstance().reference
+    val storageRoot = FirebaseStorage.getInstance().reference
 
     fun usersFriendRequestOfUid(uid: String) =
         usersCollection.document(uid).collection("friend_requests")
@@ -15,3 +18,4 @@ class FirebaseReferences {
 
     val gamesCollection = root.collection("games")
 }
+

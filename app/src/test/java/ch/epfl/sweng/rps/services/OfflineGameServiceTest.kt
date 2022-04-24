@@ -30,7 +30,6 @@ class OfflineGameServiceTest {
             repo,
             computerPlayers,
             Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0),
-            artificialMovesDelay = 0L
         )
         gameService?.startListening()
     }

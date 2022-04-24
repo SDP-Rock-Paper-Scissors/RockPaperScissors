@@ -35,7 +35,7 @@ class GameFragment : Fragment() {
     }
 
     private fun rpsPressed(hand: Hand) {
-        matchViewModel.playHand(hand){
+        matchViewModel.playHand(hand) {
             findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
         }
     }
