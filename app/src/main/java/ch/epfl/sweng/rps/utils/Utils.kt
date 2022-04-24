@@ -2,14 +2,13 @@ package ch.epfl.sweng.rps.utils
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
@@ -52,6 +51,7 @@ object FirebaseEmulatorsUtils {
             FirebaseFirestoreSettings.Builder()
                 .setHost(firestoreConfig.host + ":" + firestoreConfig.port)
                 .setSslEnabled(false)
+                .setPersistenceEnabled(false)
                 .build()
 
         Firebase.europeWest1.useEmulator(firebaseFunctions.host, firebaseFunctions.port)
@@ -60,11 +60,18 @@ object FirebaseEmulatorsUtils {
 
         Log.w("FirebaseEmulatorsUtils", FirebaseFirestore.getInstance().firestoreSettings.host)
         runBlocking {
-            Log.w(
-                "FirebaseEmulatorsUtils",
-                FirebaseFirestore.getInstance().document("global/gamemodes").get()
-                    .await().data.toString()
-            )
+            try {
+                Log.w(
+                    "FirebaseEmulatorsUtils",
+                    FirebaseFirestore.getInstance().document("global/gamemodes").get()
+                        .await().data.toString()
+                )
+            } catch (e: Exception) {
+                Log.w(
+                    "FirebaseEmulatorsUtils",
+                    "Fail to get gamemodes (uid=${FirebaseAuth.getInstance().currentUser?.uid})"
+                )
+            }
         }
 
         emuUsed_ = true
@@ -94,4 +101,9 @@ val Firebase.europeWest1: FirebaseFunctions
 val FirebaseFunctions.europeWest1: FirebaseFunctions
     get() = FirebaseFunctions.getInstance("europe-west1")
 
+inline fun <reified T> List<DocumentSnapshot>.toListOf(): List<T> =
+    map { it.toObject(T::class.java)!! }
+
+inline fun <reified T> List<DocumentSnapshot>.toListOfNullable(): List<T?> =
+    map { it.toObject(T::class.java) }
 

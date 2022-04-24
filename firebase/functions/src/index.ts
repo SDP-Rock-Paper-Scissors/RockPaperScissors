@@ -182,7 +182,12 @@ function createGame(game_mode: GameMode): Game {
     player_count: 0,
     timestamp: Timestamp.now(),
     players: [],
-    rounds: {},
+    rounds: {
+      "0": {
+        hands: {},
+        timestamp: Timestamp.now(),
+      }
+    },
     current_round: 0,
     started: false,
     done: false
@@ -212,9 +217,13 @@ interface round_map {
   [key: string]: Round;
 }
 
+interface hands_map {
+  [key: string]: Hand;
+}
+
 interface Round {
   timestamp: Timestamp;
-  hands: Map<string, Hand>;
+  hands: hands_map;
 }
 
 enum Hand {

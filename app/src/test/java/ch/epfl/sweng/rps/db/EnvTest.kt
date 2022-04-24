@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.logic
+package ch.epfl.sweng.rps.db
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

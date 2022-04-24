@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps
 
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.logic.FirebaseReferences
+import ch.epfl.sweng.rps.db.FirebaseReferences
 import com.google.firebase.FirebaseApp
 import org.junit.Assert.assertEquals
 import org.junit.Before

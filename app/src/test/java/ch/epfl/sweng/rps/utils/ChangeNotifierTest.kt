@@ -2,8 +2,12 @@ package ch.epfl.sweng.rps.utils
 
 import ch.epfl.sweng.rps.utils.ChangeNotifier.ListenerException
 import ch.epfl.sweng.rps.utils.ChangeNotifier.ListenerNotFoundException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.runInterruptible
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.concurrent.thread
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -93,11 +97,49 @@ class ChangeNotifierTest {
         assertTrue((0 until 10).toList().randomElements(5).size <= 5)
     }
 
+    @Test
+    fun testAwaitFor() {
+        runBlocking {
+            val c = Counter()
+            thread {
+                while (c.count < 20) {
+                    c.increment()
+                    Thread.sleep(100)
+                }
+            }
+            c.awaitFor { it.count == 10 }
+            assertTrue { c.count >= 10 }
+        }
+    }
+
+    @Test
+    fun testAwait() {
+        runBlocking {
+            val c = Counter()
+            thread {
+                Thread.sleep(500)
+                c.increment()
+            }
+            c.await()
+            assertEquals(1, c.count)
+        }
+    }
+
+
     /**
      * This is a best effort as providing random elements from
      */
     private fun <T> List<T>.randomElements(n: Int): List<T> {
         return (0 until n).map { random() }.distinct()
+    }
+}
+
+
+class Counter : ChangeNotifier<Counter>() {
+    var count = 0
+    fun increment() {
+        count++
+        notifyListeners()
     }
 }
 

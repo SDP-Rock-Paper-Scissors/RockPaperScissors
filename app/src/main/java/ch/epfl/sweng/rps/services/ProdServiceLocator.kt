@@ -1,7 +1,9 @@
-package ch.epfl.sweng.rps.logic
+package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.services.FirebaseGameService
-import ch.epfl.sweng.rps.services.MatchmakingService
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.FirebaseReferences
+import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.db.LocalRepository
 
 /**
  * ServiceLocator is a singleton class that provides access to the different services
@@ -59,7 +61,7 @@ class ProdServiceLocator : ServiceLocator {
     override val cachedGameServices: List<String>
         get() = gameServices.keys.toList()
 
-    override val matchmakingService: MatchmakingService = MatchmakingService()
+    override val matchmakingService: MatchmakingService by lazy { MatchmakingService() }
 
 
 }

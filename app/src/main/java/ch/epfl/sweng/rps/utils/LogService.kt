@@ -3,33 +3,20 @@ package ch.epfl.sweng.rps.utils
 import android.util.Log
 import java.util.*
 
-object LogService : ChangeNotifier() {
+object LogService {
+    private val logService = LogService()
+    val notifier: ChangeNotifier<LogService> get() = logService
 
-    private val logEntries = LinkedList<LogEntry>()
-    val logs: List<LogEntry>
-        get() = logEntries
-    private var size_ = 100
     var size: Int
-        get() = size_
+        get() = logService.size
         set(value) {
-            if (value < 0) {
-                throw IllegalArgumentException("Log size must be positive")
-            }
-            size_ = value
-            while (logEntries.size > size_) {
-                logEntries.removeFirst()
-            }
-            notifyListeners()
+            logService.size = value
         }
 
     fun log(tag: String, message: String, level: Level = Level.INFO) {
         val entry = LogEntry(tag, message, Date(), level)
         Log.println(level.intValue, tag, message)
-        logEntries.add(entry)
-        if (logEntries.size > size) {
-            logEntries.removeFirst()
-        }
-        notifyListeners()
+        logService.add(entry)
     }
 
     fun e(tag: String, message: String) {
@@ -53,8 +40,7 @@ object LogService : ChangeNotifier() {
     }
 
     fun clear() {
-        logEntries.clear()
-        notifyListeners()
+        logService.clear()
     }
 
     enum class Level(val intValue: Int) {
@@ -72,4 +58,34 @@ object LogService : ChangeNotifier() {
         val time: Date,
         val level: Level
     )
+
+    class LogService : ChangeNotifier<LogService>() {
+        private val logs = LinkedList<LogEntry>()
+        private var size_ = 100
+        var size: Int
+            get() = size_
+            set(value) {
+                if (value < 0) {
+                    throw IllegalArgumentException("Log size must be positive")
+                }
+                size_ = value
+                while (logs.size > size_) {
+                    logs.removeFirst()
+                }
+                notifyListeners()
+            }
+
+        fun add(entry: LogEntry) {
+            logs.add(entry)
+            if (logs.size > size_) {
+                logs.removeFirst()
+            }
+            notifyListeners()
+        }
+
+        fun clear() {
+            logs.clear()
+            notifyListeners()
+        }
+    }
 }

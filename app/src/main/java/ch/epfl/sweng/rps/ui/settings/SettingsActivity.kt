@@ -4,6 +4,7 @@ import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
@@ -12,11 +13,11 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.logic.ProdServiceLocator
-import ch.epfl.sweng.rps.logic.ServiceLocator
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.services.ProdServiceLocator
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
@@ -143,7 +144,17 @@ class SettingsActivity : AppCompatActivity(),
             }
             joinQueue.setOnPreferenceClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    Log.d("SettingsActivity", "Joining queue")
+                    val games = ServiceLocator.getInstance().repository.myActiveGames()
+                    Log.w("JOIN_QUEUE", "games: $games")
+                    if (games.isNotEmpty()) {
+                        Toast.makeText(
+                            context,
+                            "You are already in a game (${games.first().id})",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@launch
+                    }
+                    Log.d("JOIN_QUEUE", "Joining queue")
                     try {
                         ServiceLocator.getInstance().matchmakingService.queue(
                             Game.GameMode(
@@ -203,9 +214,7 @@ class SettingsActivity : AppCompatActivity(),
             }
         }
 
-        class JoinQueueViewModel : ViewModel() {
-
-        }
+        class JoinQueueViewModel : ViewModel()
     }
 
 //    class AppearanceFragment : PreferenceFragmentCompat() {

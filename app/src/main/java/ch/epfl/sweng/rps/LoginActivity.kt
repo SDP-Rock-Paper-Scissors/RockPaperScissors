@@ -45,8 +45,9 @@ class LoginActivity : AppCompatActivity() {
         user?.let { Log.d("STORE", it.uid) }
 
 
-        if (user != null)
-            launchMain(user!!)
+        if (user != null) {
+            // launchMain(user!!)
+        }
     }
 
     fun signIn(view: View) {

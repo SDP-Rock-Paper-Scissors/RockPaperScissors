@@ -1,7 +1,8 @@
-package ch.epfl.sweng.rps.logic
+package ch.epfl.sweng.rps.db
 
 import android.net.Uri
 import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.utils.toListOf
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
@@ -51,9 +52,7 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun listFriendRequests(): List<FriendRequest> {
-        return firebase.usersFriendRequestOfUid(getCurrentUid()).get().await().documents.map {
-            it.toObject<FriendRequest>()!!
-        }
+        return firebase.usersFriendRequestOfUid(getCurrentUid()).get().await().documents.toListOf()
     }
 
     override suspend fun getFriends(): List<String> {
@@ -75,16 +74,14 @@ class FirebaseRepository private constructor(
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains("players", uid).get()
-            .await().documents.map {
-                it.toObject<Game>()!!
-            }
+            .await().documents.toListOf()
     }
 
     override suspend fun myActiveGames(): List<Game> {
-        return firebase.gamesCollection.whereArrayContains("players", getCurrentUid())
-            .whereEqualTo("done", false).get().await().documents.map {
-                it.toObject<Game>()!!
-            }
+        return firebase.gamesCollection
+            .whereArrayContains("players", getCurrentUid())
+            .whereEqualTo("done", false)
+            .get().await().documents.toListOf()
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
@@ -93,9 +90,8 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun listInvitations(): List<Invitation> {
-        return firebase.invitationsOfUid(getCurrentUid()).get().await().documents.map {
-            it.toObject<Invitation>()!!
-        }
+        return firebase.invitationsOfUid(getCurrentUid()).get()
+            .await().documents.toListOf()
     }
 
     private fun Uri.toURI(): URI = URI(toString())

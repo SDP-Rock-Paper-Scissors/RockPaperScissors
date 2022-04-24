@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.logic.ServiceLocator
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException

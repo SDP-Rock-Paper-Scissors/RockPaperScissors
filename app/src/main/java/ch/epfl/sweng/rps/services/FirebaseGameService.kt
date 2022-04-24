@@ -1,8 +1,8 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
-import ch.epfl.sweng.rps.logic.FirebaseReferences
-import ch.epfl.sweng.rps.logic.FirebaseRepository
+import ch.epfl.sweng.rps.db.FirebaseReferences
+import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round

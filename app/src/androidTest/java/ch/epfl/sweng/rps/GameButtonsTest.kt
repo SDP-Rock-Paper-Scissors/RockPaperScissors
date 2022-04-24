@@ -7,9 +7,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import ch.epfl.sweng.rps.logic.Env
-import ch.epfl.sweng.rps.logic.LocalRepository
-import ch.epfl.sweng.rps.logic.ServiceLocator
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.LocalRepository
+import ch.epfl.sweng.rps.services.ServiceLocator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

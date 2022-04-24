@@ -15,7 +15,7 @@ import ch.epfl.sweng.rps.utils.StateNotifier
  *
  * This class needs to be disposed when you don't need it anymore.
  */
-abstract class GameService : ChangeNotifier() {
+abstract class GameService : ChangeNotifier<GameService>() {
     abstract val gameId: String
 
     /**

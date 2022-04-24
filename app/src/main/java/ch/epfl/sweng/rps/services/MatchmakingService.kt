@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
-import ch.epfl.sweng.rps.logic.ServiceLocator
 import ch.epfl.sweng.rps.models.Game
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
@@ -13,16 +12,15 @@ class MatchmakingService {
     private val cloudFunctions = CloudFunctions()
 
     fun queue(gameMode: Game.GameMode): Flow<QueueStatus> = flow {
-        Log.i("MatchmakingService", "Queueing game mode ${gameMode.toGameModeString()}")
+        Log.i("MatchmakingService", "Queueing for game mode ${gameMode.toGameModeString()}")
         emit(QueueStatus.Queued)
         Log.i("MatchmakingService", "Sending request to cloud function")
         val gameId = cloudFunctions.queue(gameMode)
         Log.i("MatchmakingService", "Received game id $gameId")
 
         val service = ServiceLocator.getInstance().getGameServiceForGame(gameId)
-        Log.i("MatchmakingService", "Waiting for game to start")
+        Log.i("MatchmakingService", "Got service $service")
         emit(QueueStatus.Accepted(service))
-        Log.i("MatchmakingService", "Game started")
     }
 
     suspend fun acceptInvitation(invitationId: String): FirebaseGameService {
@@ -51,7 +49,7 @@ class MatchmakingService {
     }
 
     class CloudFunctions {
-        private val functions = Firebase.functions("europe-west1")
+        private val functions get() = Firebase.functions("europe-west1")
 
         suspend fun queue(gameMode: Game.GameMode): String {
             val res = functions.getHttpsCallable("queue").call(
