@@ -1,10 +1,10 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.RoundStat
-import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.models.UserStat
+import android.net.Uri
+import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -113,7 +113,35 @@ object FirebaseHelper {
 
         return allDetailsList
     }
-}
+
+
+    fun loadLeaderBoard(): List<LeaderBoardInfo> {
+        val user1 =
+            LeaderBoardInfo("jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
+        val user2 =
+            LeaderBoardInfo("Leonardo", "2", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 80 )
+        val user3 =
+            LeaderBoardInfo("Adam", "3", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 60)
+        val allPlayers = listOf(user1,user2,user3)
+/*
+        val db = FirebaseFirestore.getInstance()
+        var allPlayers = listOf<User>()
+        db.collection("users").orderBy("score", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    error.message?.let { Log.d("TAG", it) }
+                    return@addSnapshotListener
+                }
+                allPlayers = snapshots?.map {
+                    it.toObject(User::class.java)
+                }!!
+            }
+
+
+ */
+        return allPlayers
+    }
+    }
 
 
 
