@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.db
 
+import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.*
 import com.google.firebase.Timestamp
 import java.net.URI
@@ -101,7 +102,8 @@ class LocalRepository(private var uid: String? = null) : Repository {
         )
     }
 
-    private var invitations = mutableMapOf<String, Invitation>()
+    @VisibleForTesting
+    val invitations = mutableMapOf<String, Invitation>()
 
     override suspend fun listInvitations(): List<Invitation> {
         return invitations.values.toList()

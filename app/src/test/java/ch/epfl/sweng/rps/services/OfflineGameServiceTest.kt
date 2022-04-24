@@ -86,4 +86,16 @@ class OfflineGameServiceTest {
         assertThat(gameService?.isGameFull, `is`(true))
     }
 
+    @Test
+    fun `owner is the first player`() {
+        val gameService = OfflineGameService(
+            gameId,
+            mock(),
+            computerPlayers,
+            Game.GameMode(2, Game.GameMode.Type.PC, 1, 0),
+        )
+        gameService.startListening()
+        assertThat(gameService.owner, `is`(gameService.currentGame.players.first()))
+    }
+
 }

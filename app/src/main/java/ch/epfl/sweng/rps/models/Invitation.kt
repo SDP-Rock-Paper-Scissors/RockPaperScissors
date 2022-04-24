@@ -11,8 +11,8 @@ import com.google.firebase.Timestamp
   }
   * */
 data class Invitation(
-    val game: String,
+    val game_id: String,
     val timestamp: Timestamp,
-    val inviter: String,
-    val invitation_id: String
+    val from: String,
+    val id: String
 )

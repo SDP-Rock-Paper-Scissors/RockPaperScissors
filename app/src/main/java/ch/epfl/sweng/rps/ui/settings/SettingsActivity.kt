@@ -213,8 +213,6 @@ class SettingsActivity : AppCompatActivity(),
                 true
             }
         }
-
-        class JoinQueueViewModel : ViewModel()
     }
 
 //    class AppearanceFragment : PreferenceFragmentCompat() {

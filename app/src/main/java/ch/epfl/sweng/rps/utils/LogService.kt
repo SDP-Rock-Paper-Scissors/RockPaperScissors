@@ -1,11 +1,16 @@
 package ch.epfl.sweng.rps.utils
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import java.util.*
 
 object LogService {
     private val logService = LogService()
-    val notifier: ChangeNotifier<LogService> get() = logService
+    val notifier: LogService get() = logService
+
+    @VisibleForTesting
+    val logs
+        get() = logService.logs
 
     var size: Int
         get() = logService.size
@@ -60,7 +65,8 @@ object LogService {
     )
 
     class LogService : ChangeNotifier<LogService>() {
-        private val logs = LinkedList<LogEntry>()
+        @VisibleForTesting
+        val logs = LinkedList<LogEntry>()
         private var size_ = 100
         var size: Int
             get() = size_

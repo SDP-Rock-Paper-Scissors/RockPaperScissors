@@ -45,7 +45,7 @@ class MatchmakingService {
 
     sealed class QueueStatus {
         object Queued : QueueStatus()
-        class Accepted(val firebaseGameService: FirebaseGameService) : QueueStatus()
+        class Accepted(val gameService: GameService) : QueueStatus()
     }
 
     class CloudFunctions {
