@@ -51,9 +51,10 @@ class GameFragment : Fragment() {
             Hand.PAPER -> {
                 binding.paperRBOpponent.isChecked = true
             }
-            else -> {
+            Hand.SCISSORS -> {
                 binding.scissorsRB.isChecked = true
             }
+            Hand.NONE -> throw IllegalStateException("Impossible")
         }
     }
     override fun onDestroyView() {
