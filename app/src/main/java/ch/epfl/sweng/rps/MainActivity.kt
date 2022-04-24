@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
         super.onCreate(savedInstanceState)
         val userData: Bundle? = intent.extras?.getBundle("User")
         if (userData != null) {
@@ -41,7 +42,6 @@ class MainActivity : AppCompatActivity() {
 
         navView.setupWithNavController(navController)
 
-        SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
     }
 
 

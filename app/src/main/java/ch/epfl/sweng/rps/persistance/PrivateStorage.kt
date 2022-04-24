@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.storage
+package ch.epfl.sweng.rps.persistance
 
 import android.content.Context
 import ch.epfl.sweng.rps.models.User
