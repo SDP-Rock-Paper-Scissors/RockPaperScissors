@@ -46,7 +46,11 @@
         android:id="@+id/gameResultFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameResultFragment"
         android:label="result_fragment"
-        tools:layout="@layout/fragment_game_result" />
+        tools:layout="@layout/fragment_game_result" >
+        <action
+            android:id="@+id/action_gameResultFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/nav_friends"
         android:name="ch.epfl.sweng.rps.ui.friends.FriendsFragment"
