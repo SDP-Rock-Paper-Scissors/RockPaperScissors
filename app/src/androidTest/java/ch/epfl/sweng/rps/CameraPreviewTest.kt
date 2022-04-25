@@ -149,10 +149,10 @@ class CameraPreviewTest : LifecycleOwner, ImageReader.OnImageAvailableListener, 
 
         // wait until onImageAvailable is invoked. retry several times
         for (repeat in 5 downTo 0) {
-            Thread.sleep(600)
+            Thread.sleep(1000)
             val value = count.get()
             Log.i("CameraPreviewTest", String.format("count: %d", value))
-            if (value > 0) return
+            if (value > 0) break
         }
         Assert.assertNotEquals(0, count.get().toLong())
     }
