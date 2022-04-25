@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
-import com.google.firebase.FirebaseOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.delay
@@ -20,14 +19,15 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun setupApp() {
         runBlocking {
+            val isTest = intent.getBooleanExtra("isTest", false)
+            Firebase.initialize(this@LoadingActivity)
+            useEmulatorsIfNeeded()
             delay(1000)
+            if (!isTest) {
+                openLogin()
+                finish()
+            }
         }
-        Firebase.initialize(this)
-        useEmulatorsIfNeeded()
-        runBlocking {
-            delay(1000)
-        }
-        openLogin()
     }
 
     private fun openLogin() {
@@ -43,6 +43,4 @@ class LoadingActivity : AppCompatActivity() {
             Log.w("MainActivity", "Using emulators")
         }
     }
-
-
 }
