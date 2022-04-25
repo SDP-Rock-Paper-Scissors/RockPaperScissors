@@ -39,7 +39,6 @@ check_android_task:
       path: ./app/build/reports/lint-results-debug.xml
       type: text/xml
       format: android-lint
-      
 build_release_apk:
   name: Build release APK
   env:
