@@ -31,7 +31,7 @@ class CacheTests {
     }
     @Test
     fun cacheCorrectlySavesUser(){
-        val user = User(username = "USERNAME",uid="01234", email = "test@test.org")
+        val user:User? = User(username = "USERNAME",uid="01234", email = "test@test.org")
         cache.updateUserDetails(user)
         assert(cache.getUserDetails()!!.equals(user))
     }

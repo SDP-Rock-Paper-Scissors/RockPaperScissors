@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private var callback =
-        { user: User ->
+        { user: User? ->
             cache.updateUserDetails(user)
-            launchMain(user)
+            if (user != null) launchMain(user!!)
         }
 
     private fun launchMain(user: User) {

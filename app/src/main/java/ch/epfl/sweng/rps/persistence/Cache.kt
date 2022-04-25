@@ -52,7 +52,12 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         storage.writeBackStatsData(statsData)
     }
 
-    fun updateUserDetails(user:User) {
+    fun updateUserDetails(user:User?) {
+        if(user == null){
+            this.user = null
+            storage.removeFile(Storage.FILES.USERINFO)
+            return
+        }
         storage.writeBackUser(user)
     }
     fun getStatsData(position: Int):List<UserStat> {
