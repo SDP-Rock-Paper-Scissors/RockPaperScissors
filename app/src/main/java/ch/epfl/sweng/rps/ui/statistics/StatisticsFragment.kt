@@ -53,7 +53,7 @@ class StatisticsFragment : Fragment() {
                 //filter function
 
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val statsDataList = cache.getStatsData(position)
+                    val statsDataList = cache.getStatsDataAsync(position)
 
                     for (statsData in statsDataList) {
                         addPersonalStats(

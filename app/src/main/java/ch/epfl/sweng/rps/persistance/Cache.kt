@@ -6,6 +6,8 @@ import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
+import java.net.InetAddress
+
 
 class Cache private constructor(val ctx:Context, val preferFresh:Boolean = false) {
     companion object {
@@ -31,6 +33,8 @@ class Cache private constructor(val ctx:Context, val preferFresh:Boolean = false
             callback(user!!)
             return
         }
+        if(!isInternetAvailable())
+            return
         val uid = fbRepo.getCurrentUid()
         user = fbRepo.getUser(uid)
         callback(user)
@@ -45,8 +49,19 @@ class Cache private constructor(val ctx:Context, val preferFresh:Boolean = false
        return userStatData
     }
     suspend fun getStatsDataAsync(position:Int):List<UserStat>{
+        if(!isInternetAvailable())
+            return getStatsData(position)
         userStatData = FirebaseHelper.getStatsData(position)
         storage.writeBackStatsData(userStatData)
         return userStatData
+    }
+    fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            false
+        }
     }
 }
