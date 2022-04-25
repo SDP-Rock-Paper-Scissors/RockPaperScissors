@@ -23,7 +23,7 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
             return cache!!
         }
     }
-    private val fbRepo = ServiceLocator.getInstance(Env.Test).repository
+    private val fbRepo = ServiceLocator.getInstance().repository
     private val storage:Storage = PrivateStorage(ctx)
     private var user:User? = null
     private lateinit var userStatData : List<UserStat>
