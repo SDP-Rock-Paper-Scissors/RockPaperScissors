@@ -39,17 +39,3 @@ check_android_task:
       path: ./app/build/reports/lint-results-debug.xml
       type: text/xml
       format: android-lint
-build_release_apk:
-  name: Build release APK
-  env:
-    API_LEVEL: "30"
-  container:
-    image: reactivecircus/android-emulator-$API_LEVEL:latest
-    kvm: "true"
-    cpu: 8
-    memory: 10G
-  build_script: |
-    chmod +x gradlew
-    ./gradlew assembleRelease
-  publish_apk_script: |
-    path: ./app/build/outputs/apk/app-release.apk
