@@ -47,6 +47,10 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         storage.writeBackUser(user)
         fbRepo.updateUser(*pairs)
     }
+    fun updateStatsData(statsData:List<UserStat>){
+        userStatData = statsData
+        storage.writeBackStatsData(statsData)
+    }
 
     fun updateUserDetails(user:User) {
         storage.writeBackUser(user)
