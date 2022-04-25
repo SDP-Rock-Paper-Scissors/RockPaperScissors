@@ -13,12 +13,14 @@ import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
 import ch.epfl.sweng.rps.db.FirebaseHelper
+import ch.epfl.sweng.rps.persistance.Cache
 import kotlinx.coroutines.launch
 
 
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
+    private lateinit var cache:Cache
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +28,7 @@ class StatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val modes = getGameModes()
-
+        cache = Cache.getInstance(this.requireContext())
         val newView = inflater.inflate(R.layout.fragment_statistics, container, false)
         val modeSpinner = newView.findViewById(R.id.modeSelect) as Spinner
         val adapter =
@@ -51,7 +53,7 @@ class StatisticsFragment : Fragment() {
                 //filter function
 
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val statsDataList = FirebaseHelper.getStatsData(position)
+                    val statsDataList = cache.getStatsData(position)
 
                     for (statsData in statsDataList) {
                         addPersonalStats(
