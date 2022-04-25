@@ -1,10 +1,9 @@
-package ch.epfl.sweng.rps.persistance
+package ch.epfl.sweng.rps.persistence
 
 import android.content.Context
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.util.*
 

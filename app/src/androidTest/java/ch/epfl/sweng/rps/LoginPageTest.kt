@@ -10,8 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.persistance.PrivateStorage
-import ch.epfl.sweng.rps.persistance.Storage
+import ch.epfl.sweng.rps.persistence.PrivateStorage
+import ch.epfl.sweng.rps.persistence.Storage
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import org.junit.After

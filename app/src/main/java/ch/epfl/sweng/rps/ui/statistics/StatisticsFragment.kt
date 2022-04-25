@@ -3,17 +3,20 @@ package ch.epfl.sweng.rps.ui.statistics
 
 import android.graphics.Color
 import android.os.Bundle
+import android.service.autofill.UserData
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
-import ch.epfl.sweng.rps.db.FirebaseHelper
-import ch.epfl.sweng.rps.persistance.Cache
+import ch.epfl.sweng.rps.models.UserStat
+import ch.epfl.sweng.rps.persistence.Cache
 import kotlinx.coroutines.launch
 
 
@@ -28,11 +31,12 @@ class StatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val modes = getGameModes()
-        cache = Cache.getInstance(this.requireContext())
+        cache = Cache.getInstance()!!
         val newView = inflater.inflate(R.layout.fragment_statistics, container, false)
         val modeSpinner = newView.findViewById(R.id.modeSelect) as Spinner
         val adapter =
             ArrayAdapter(this.requireActivity(), android.R.layout.simple_spinner_item, modes)
+        val model:StatisticsViewModel by viewModels()
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         modeSpinner.adapter = adapter
         modeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -50,12 +54,8 @@ class StatisticsFragment : Fragment() {
                 }
 
                 println(position)
-                //filter function
-
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val statsDataList = cache.getStatsDataAsync(position)
-
-                    for (statsData in statsDataList) {
+                model.getStats(position).observe(viewLifecycleOwner, Observer { stats->
+                    for (statsData in stats) {
                         addPersonalStats(
                             view!!,
                             statsData.gameId,
@@ -65,8 +65,8 @@ class StatisticsFragment : Fragment() {
                             statsData.score
                         )
                     }
+                })
                 }
-            }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
                 // your code here
