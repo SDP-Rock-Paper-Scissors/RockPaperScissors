@@ -23,3 +23,7 @@ A problem with both datasets is, that the hands are recorded infront a white sur
 ### 2. Pose estimation
 
 A second approach would be to get the pose of the hand and deduce if a rock, paper or scissor is shown. Media Pipe provoides such a [model](https://google.github.io/mediapipe/solutions/hands), specificly made for mobile usage. The challange for this approach is to map the pose to the three possible symbols. This could either be done with a second NN or hard coded.
+
+## Implementation
+
+Most of the implementation has been adapted from the the android [example app](https://github.com/googlesamples/mlkit). Parts which were not used have been removed. 
