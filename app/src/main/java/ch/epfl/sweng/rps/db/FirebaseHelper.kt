@@ -3,8 +3,6 @@ package ch.epfl.sweng.rps.db
 import android.net.Uri
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -115,33 +113,39 @@ object FirebaseHelper {
     }
 
 
-    fun loadLeaderBoard(): List<LeaderBoardInfo> {
+    suspend fun loadLeaderBoard(): List<LeaderBoardInfo> {
+        val repo = ServiceLocator.getInstance().repository
+        val scores = repo.getLeaderBoardScore()
+        val allPlayers = mutableListOf<LeaderBoardInfo>()
+        for (score in scores){
+            val leaderBoardInfo = LeaderBoardInfo()
+            leaderBoardInfo.uid = score.uid!!
+            leaderBoardInfo.point = score.score!!
+            // The load function only support "android.net.Uri" but not "java.net.URI" package
+            leaderBoardInfo.userProfilePictureUrl = Uri.parse(repo.getUserProfilePictureUrl(score.uid).toString())
+            if (leaderBoardInfo.userProfilePictureUrl.toString() == "null" ) {
+                println("aaaaaa")
+                leaderBoardInfo.userProfilePictureUrl = Uri.parse("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
+            }
+            leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
+            allPlayers.add(leaderBoardInfo)
+        }
+
         val user1 =
-            LeaderBoardInfo("jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
+            LeaderBoardInfo("Jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
         val user2 =
             LeaderBoardInfo("Leonardo", "2", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 80 )
         val user3 =
             LeaderBoardInfo("Adam", "3", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 60)
-        val allPlayers = listOf(user1,user2,user3)
-/*
-        val db = FirebaseFirestore.getInstance()
-        var allPlayers = listOf<User>()
-        db.collection("users").orderBy("score", Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshots, error ->
-                if (error != null) {
-                    error.message?.let { Log.d("TAG", it) }
-                    return@addSnapshotListener
-                }
-                allPlayers = snapshots?.map {
-                    it.toObject(User::class.java)
-                }!!
-            }
+        val test = listOf<LeaderBoardInfo>(user1,user2,user3)
 
 
- */
         return allPlayers
     }
-    }
+
+
+
+}
 
 
 

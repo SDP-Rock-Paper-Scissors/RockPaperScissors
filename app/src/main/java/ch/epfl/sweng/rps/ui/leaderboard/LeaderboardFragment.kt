@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
 import ch.epfl.sweng.rps.db.FirebaseHelper.loadLeaderBoard
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.User
 import coil.load
 import kotlinx.android.synthetic.main.content_scrolling.*
+import kotlinx.coroutines.launch
 
 
 class LeaderboardFragment : Fragment() {
@@ -42,8 +43,9 @@ class LeaderboardFragment : Fragment() {
             setHasFixedSize(true)
 
         }
-
-        loadPlayersUI(loadLeaderBoard())
+        viewLifecycleOwner.lifecycleScope.launch {
+            loadPlayersUI(loadLeaderBoard())
+        }
     }
 
 

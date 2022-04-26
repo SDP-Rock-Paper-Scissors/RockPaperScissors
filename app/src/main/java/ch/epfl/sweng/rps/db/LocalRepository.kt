@@ -1,8 +1,6 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.*
 import com.google.firebase.Timestamp
 import java.net.URI
 
@@ -86,6 +84,11 @@ class LocalRepository(private var uid: String? = null) : Repository {
     override suspend fun getGame(gameId: String): Game? {
         return games[gameId]
     }
+
+    override suspend fun getLeaderBoardScore(): List<TotalScore> {
+        TODO("Not yet implemented")
+    }
+
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return games.values.filter { uid in it.players }
