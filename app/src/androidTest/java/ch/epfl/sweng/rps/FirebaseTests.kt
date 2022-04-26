@@ -2,7 +2,9 @@ package ch.epfl.sweng.rps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.db.*
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.FirebaseReferences
+import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
@@ -83,7 +85,7 @@ class FirebaseTests {
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                db.changeFriendRequestToStatus("user1")
+                db.acceptFriendRequest("user1")
             }
         }
     }
