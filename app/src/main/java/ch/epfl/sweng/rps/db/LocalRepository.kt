@@ -59,7 +59,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
     override suspend fun sendFriendRequestTo(uid: String) {
         val map = (friendRequests[uid] ?: mutableMapOf())
-        map[getCurrentUid()] = FriendRequest(getCurrentUid(), Timestamp.now())
+        map[getCurrentUid()] = FriendRequest.build(getCurrentUid(), uid, Timestamp.now())
         friendRequests[uid] = map
     }
 
@@ -69,15 +69,18 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
     override suspend fun getFriends(): List<String> {
         return friendRequests[getCurrentUid()]
-            ?.filter { it.value.accepted }
-            ?.map { it.value.from }
+            ?.filter { it.value.status == FriendRequest.Status.ACCEPTED }
+            ?.map { entry -> entry.value.users.first { it != getCurrentUid() } }
             ?.toList() ?: emptyList()
     }
 
-    override suspend fun acceptFriendRequestFrom(userUid: String) {
+    override suspend fun changeFriendRequestToStatus(
+        userUid: String,
+        status: FriendRequest.Status
+    ) {
         friendRequests[getCurrentUid()]?.set(
             userUid,
-            friendRequests[getCurrentUid()]!![userUid]!!.copy(accepted = true)
+            friendRequests[getCurrentUid()]!![userUid]!!.copy(status = status)
         )
     }
 
