@@ -1,7 +1,10 @@
 package ch.epfl.sweng.rps.db
 
+import android.net.Uri
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -84,7 +87,7 @@ object FirebaseHelper {
         val userid = repo.rawCurrentUid()
 
         val game = repo.getGame(gid) ?: throw Exception("Game not found")
-        // note: 1 v 1 logic, if we support pvp mode, the table should be iterated to change as well.
+        // note: 1 v 1 db, if we support pvp mode, the table should be iterated to change as well.
         // get opponent user id from player list
         val opponentId: String = game.players.first { it != userid }
         val allDetailsList = game.rounds.entries.mapIndexed { i, round ->
@@ -110,7 +113,35 @@ object FirebaseHelper {
 
         return allDetailsList
     }
-}
+
+
+    fun loadLeaderBoard(): List<LeaderBoardInfo> {
+        val user1 =
+            LeaderBoardInfo("jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
+        val user2 =
+            LeaderBoardInfo("Leonardo", "2", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 80 )
+        val user3 =
+            LeaderBoardInfo("Adam", "3", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 60)
+        val allPlayers = listOf(user1,user2,user3)
+/*
+        val db = FirebaseFirestore.getInstance()
+        var allPlayers = listOf<User>()
+        db.collection("users").orderBy("score", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    error.message?.let { Log.d("TAG", it) }
+                    return@addSnapshotListener
+                }
+                allPlayers = snapshots?.map {
+                    it.toObject(User::class.java)
+                }!!
+            }
+
+
+ */
+        return allPlayers
+    }
+    }
 
 
 

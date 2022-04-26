@@ -9,12 +9,11 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.services.ProdServiceLocator
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
-import ch.epfl.sweng.rps.services.ProdServiceLocator
-import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
 
@@ -27,10 +26,10 @@ class SettingsActivity : AppCompatActivity(),
         private const val TITLE_TAG = "settingsActivityTitle"
 
         fun applyTheme(
-            themeKey: String?,
-            sharedPreferences: SharedPreferences?
+            themeKey: String,
+            sharedPreferences: SharedPreferences
         ) {
-            when (sharedPreferences?.getString(themeKey, "system")) {
+            when (sharedPreferences.getString(themeKey, "system")) {
                 "light" -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
@@ -200,7 +199,7 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val themeKey = getString(R.string.theme_pref_key)
-        if (key == themeKey) applyTheme(themeKey, sharedPreferences)
+        if (key == themeKey) applyTheme(themeKey, sharedPreferences ?: return)
     }
 
 }

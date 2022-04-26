@@ -1,28 +1,43 @@
 package ch.epfl.sweng.rps
 
-import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isChecked
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
-import org.hamcrest.Matchers.not
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.LocalRepository
+import ch.epfl.sweng.rps.services.ServiceLocator
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class GameButtonsTest {
+    @ExperimentalCoroutinesApi
     @get:Rule
-    val testRule = ActivityTestRule(MainActivity::class.java)
+    val testRule = ActivityScenarioRule(MainActivity::class.java)
+
     @Before
-    fun launch(){
-        testRule.launchActivity(Intent())
+    fun setUp() {
+        ServiceLocator.setCurrentEnv(Env.Test)
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid("test")
     }
+
+    @After
+    fun tearDown() {
+        ServiceLocator.setCurrentEnv(Env.Prod)
+    }
+
     @Test
     fun pressedRock() {
         checkPressedButton(R.id.rockRB)
@@ -38,20 +53,13 @@ class GameButtonsTest {
         checkPressedButton(R.id.scissorsRB)
     }
 
-    private fun checkPressedButton(radioButtonId: Int) {
+    private fun checkPressedButton(radioButtonId: Int) = runBlocking {
         onView(withId(R.id.button_play_1_games_offline)).perform(click())
         onView(withId(radioButtonId)).perform(click())
-        onView(withId(radioButtonId)).check(matches(isChecked()))
-    }
+        delay(2_000)
 
-    @Test
-    fun pressedRockPaperRock() {
-        onView(withId(R.id.button_play_1_games_offline)).perform(click())
-        onView(withId(R.id.rockRB)).perform(click())
-        onView(withId(R.id.paperRB)).perform(click())
-        onView(withId(R.id.rockRB)).perform(click())
-        onView(withId(R.id.rockRB)).check(matches(isChecked()))
-        onView(withId(R.id.paperRB)).check(matches(not(isChecked())))
-        onView(withId(R.id.scissorsRB)).check(matches(not(isChecked())))
+        onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
+
     }
 }
+

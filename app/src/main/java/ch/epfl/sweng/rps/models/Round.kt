@@ -5,10 +5,7 @@ import ch.epfl.sweng.rps.models.PointSystem.*
 import com.google.firebase.Timestamp
 import java.util.*
 
-/*
- * This file is part of rps-android
- * pa
- */
+
 data class Round(
     val hands: Map<String, Hand> = mapOf(),
     val timestamp: Timestamp = Timestamp(Date(0)),
@@ -38,4 +35,5 @@ data class Round(
         val results: List<Result>,
         val points: Int
     )
+
 }

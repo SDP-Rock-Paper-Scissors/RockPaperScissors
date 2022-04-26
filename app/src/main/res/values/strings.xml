@@ -45,6 +45,12 @@
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
     <item name="test_for_stats_row" type="id" />
+
+    <!-- game -->
+    <string name="win">You win</string>
+    <string name="lose">You lose</string>
+    <string name="draw">Draw</string>
+
     <!-- Preference Titles -->
     <string name="appearance_header">Appearance</string>
     <string name="sync_header">Sync</string>

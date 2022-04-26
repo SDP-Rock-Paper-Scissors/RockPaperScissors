@@ -27,7 +27,7 @@ object TestUtils {
             throw TimeoutException("No activity found")
         }
         if (activity !is T) {
-            throw IllegalStateException("Activity is not of type ${T::class.java.simpleName}")
+            throw IllegalStateException("Activity is not of type ${T::class.java.simpleName} but of type ${activity!!.javaClass.simpleName}")
         }
         return activity!! as T
     }
