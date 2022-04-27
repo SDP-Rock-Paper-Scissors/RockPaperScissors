@@ -1,8 +1,10 @@
 package ch.epfl.sweng.rps
 
+import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import ch.epfl.sweng.rps.persistence.Cache
@@ -28,6 +30,7 @@ class CacheTests {
     fun cacheContainsNoDataWhenCreated(){
         assert(cache.getUserDetails() == null)
         assert(cache.getStatsData(0).isEmpty())
+        assert(cache.getLeaderBoardData().isEmpty())
     }
     @Test
     fun cacheCorrectlySavesUser(){
@@ -46,5 +49,20 @@ class CacheTests {
         cache.updateStatsData(lst)
         val result = cache.getStatsData(0)
         assert(result == lst)
+    }
+
+    @Test
+    fun cacheCorrectlySavesLeaderBoardData(){
+        assert(cache.getLeaderBoardData().isEmpty())
+        val user1 =
+            LeaderBoardInfo("jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
+        val user2 =
+            LeaderBoardInfo("Leonardo", "2", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 80 )
+        val user3 =
+            LeaderBoardInfo("Adam", "3", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 60)
+        val allPlayers = listOf(user1,user2,user3)
+        cache.updateLeaderBoardData(allPlayers)
+        val result = cache.getLeaderBoardData()
+        assert(result == allPlayers)
     }
 }
