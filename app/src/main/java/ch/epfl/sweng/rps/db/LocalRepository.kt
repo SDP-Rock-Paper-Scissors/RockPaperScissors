@@ -85,8 +85,9 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return games[gameId]
     }
 
+    val leaderBoardScore = listOf<TotalScore>()
     override suspend fun getLeaderBoardScore(): List<TotalScore> {
-        TODO("Not yet implemented")
+        return leaderBoardScore
     }
 
 
