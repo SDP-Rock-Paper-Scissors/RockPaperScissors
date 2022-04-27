@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.ui.friends
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,6 +15,10 @@ import ch.epfl.sweng.rps.FriendListAdapter
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.FakeFriendsData
 import ch.epfl.sweng.rps.models.FriendsInfo
+import java.util.*
+import kotlin.collections.ArrayList
+import android.widget.SearchView
+import kotlinx.android.synthetic.main.fragment_friends.*
 
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
@@ -33,14 +38,45 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
 
         val friends = FakeFriendsData.myFriendsData
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
+        val searchView = view.findViewById<SearchView>(R.id.userNameSearch)
+        val filterFriend = mutableListOf<FriendsInfo>()
 
 
         //Get info from Fake Data object and display
+        filterFriend.addAll(friends)
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = FriendListAdapter(friends, this)
+        recyclerView.adapter = FriendListAdapter(filterFriend, this)
+
+       searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterFriend.clear()
+                val searchText = newText!!.toLowerCase(Locale.getDefault())
+                if (searchText.isNotEmpty()){
+
+                    friends.forEach{
+
+                        if (it.username.toLowerCase(Locale.getDefault()).contains(searchText)){
+                            filterFriend.add(it)
+                        }
+                    }
+                    recyclerView.adapter!!.notifyDataSetChanged()
+                }
+                else {
+                    filterFriend.clear()
+                    filterFriend.addAll(friends)
+                    recyclerView.adapter!!.notifyDataSetChanged()
+                }
+                return false
+            }
+        })
 
     }
-   //Button Click Listeners
+    //Button Click Listeners
     override fun onButtonClick(position: Int, friends: List<FriendsInfo>, view: View) {
         val username = friends[position].username
         val gamesPlayed = friends[position].gamesPlayed

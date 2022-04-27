@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.models
 
 object FakeFriendsData {
-    val myFriendsData = listOf(
+    val myFriendsData = mutableListOf(
     FriendsInfo("RPSKing88", 120, 76, 63.3, true),
     FriendsInfo("Meliodas19", 220, 110, 50.0, true),
     FriendsInfo("Urtrash", 86, 32, 37.2, true),

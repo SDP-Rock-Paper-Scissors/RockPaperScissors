@@ -17,7 +17,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
+            android:theme="@style/Theme.RockPaperScissors.NoActionBar"
+            android:windowSoftInputMode="adjustNothing"
+            />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"

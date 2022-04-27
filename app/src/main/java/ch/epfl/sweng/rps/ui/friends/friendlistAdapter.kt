@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.models.FriendsInfo
 
 class FriendListAdapter(
-    private val friends : List<FriendsInfo>,
+    private val friends : MutableList<FriendsInfo>,
     private val listener : OnButtonClickListener
 ) :
     RecyclerView.Adapter<FriendListAdapter.CardViewHolder>(){
