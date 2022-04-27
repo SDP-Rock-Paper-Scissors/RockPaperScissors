@@ -113,7 +113,7 @@ object FirebaseHelper {
     }
 
 
-    suspend fun loadLeaderBoard(): List<LeaderBoardInfo> {
+    suspend fun getLeaderBoard(): List<LeaderBoardInfo> {
         val repo = ServiceLocator.getInstance().repository
         val scores = repo.getLeaderBoardScore()
         val allPlayers = mutableListOf<LeaderBoardInfo>()
