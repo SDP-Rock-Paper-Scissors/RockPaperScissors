@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.services
 
 import androidx.test.platform.app.InstrumentationRegistry
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Game
@@ -23,7 +24,7 @@ class FirebaseGameServiceTest {
 
     @Before
     fun setUp() {
-        Firebase.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
+        Firebase.initializeForTest()
         Firebase.auth.signOut()
     }
 

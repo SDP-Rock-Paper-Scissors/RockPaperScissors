@@ -9,6 +9,10 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 import org.hamcrest.Matcher
 import java.util.concurrent.TimeoutException
 
@@ -40,6 +44,12 @@ object TestUtils {
                 uiController.loopMainThreadForAtLeast(delay)
             }
         }
+    }
+
+    fun Firebase.initializeForTest() {
+        Firebase.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
+        Firebase.firestore.firestoreSettings =
+            FirebaseFirestoreSettings.Builder().setPersistenceEnabled(false).build()
     }
 
 }

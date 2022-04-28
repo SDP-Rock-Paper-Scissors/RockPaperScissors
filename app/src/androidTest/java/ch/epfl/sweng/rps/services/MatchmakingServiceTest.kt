@@ -1,26 +1,23 @@
 package ch.epfl.sweng.rps.services
 
-import androidx.test.platform.app.InstrumentationRegistry
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.Game
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Before
-
 import org.junit.Test
 
 class MatchmakingServiceTest {
 
     @Before
     fun setUp() {
-        Firebase.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
+        Firebase.initializeForTest()
         FirebaseAuth.getInstance().signOut()
     }
 

@@ -8,6 +8,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
+import com.google.firebase.ktx.Firebase
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,6 +20,11 @@ import org.junit.runner.RunWith
 class MainActivityTest {
     @get:Rule
     val testRule = ActivityScenarioRule(MainActivity::class.java)
+
+    @Before
+    fun setUp() {
+        Firebase.initializeForTest()
+    }
 
     @Test
     fun checkFirstFragment() {
