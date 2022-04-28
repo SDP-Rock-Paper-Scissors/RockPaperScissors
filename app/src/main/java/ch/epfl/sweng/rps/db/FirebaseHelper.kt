@@ -1,10 +1,14 @@
 package ch.epfl.sweng.rps.db
 
+import android.R
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import androidx.appcompat.content.res.AppCompatResources
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 object FirebaseHelper {
     fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
@@ -122,9 +126,10 @@ object FirebaseHelper {
             leaderBoardInfo.uid = score.uid!!
             leaderBoardInfo.point = score.score!!
             // The *load* function only support "android.net.Uri" but not "java.net.URI" package
-            leaderBoardInfo.userProfilePictureUrl = Uri.parse(repo.getUserProfilePictureUrl(score.uid).toString())
-            if (leaderBoardInfo.userProfilePictureUrl.toString() == "null" ) {
-                leaderBoardInfo.userProfilePictureUrl = Uri.parse("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
+            leaderBoardInfo.userProfilePictureUrl = repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
+            if(leaderBoardInfo.userProfilePictureUrl == null){
+                leaderBoardInfo.userProfilePictureUrl = Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon);
+
             }
             leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
             allPlayers.add(leaderBoardInfo)
@@ -133,6 +138,8 @@ object FirebaseHelper {
 
         return allPlayers
     }
+
+
 
 
 

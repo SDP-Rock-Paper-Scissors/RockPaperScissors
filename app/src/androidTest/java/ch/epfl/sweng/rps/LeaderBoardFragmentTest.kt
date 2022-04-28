@@ -2,11 +2,7 @@ package ch.epfl.sweng.rps
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.PerformException
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -41,10 +37,12 @@ class LeaderBoardFragmentTest {
     @Before
     fun setUp() {
         ServiceLocator.setCurrentEnv(Env.Test)
+
         val repo = ServiceLocator.getInstance().repository as LocalRepository
+        //must call it for logged in!!
+        repo.setCurrentUid("player1")
         repo.leaderBoardScore.clear()
         repo.users.clear()
-
 
         repo.users["player1"] = User(
             "player1",
@@ -73,6 +71,7 @@ class LeaderBoardFragmentTest {
             TotalScore("player2",200),
             TotalScore("player3",300))
 
+
     }
 
 
@@ -86,13 +85,18 @@ class LeaderBoardFragmentTest {
         assert(ServiceLocator.getCurrentEnv() == Env.Test)
     }
 
+
     @Test
     fun opensStatisticFragmentTest() {
-        onView(withId(R.id.nav_leaderboard)).perform(click())
 
-        // Check that you Activity was opened.
+        onView(withId(R.id.nav_leaderboard)).perform(click())
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()))
+        onView(withText("player1")).check(matches(isDisplayed()))
+        onView(withText("100")).check(matches(isDisplayed()))
         onView(withText("player2")).check(matches(isDisplayed()))
+        onView(withText("200")).check(matches(isDisplayed()))
+        onView(withText("player3")).check(matches(isDisplayed()))
+        onView(withText("300")).check(matches(isDisplayed()))
 
     }
 

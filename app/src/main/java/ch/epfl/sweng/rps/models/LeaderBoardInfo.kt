@@ -6,6 +6,6 @@ import android.net.Uri.EMPTY
 data class LeaderBoardInfo(
     var username: String = "",
     var uid: String = "",
-    var userProfilePictureUrl: Uri = EMPTY,
+    var userProfilePictureUrl: Uri? = null,
     var point: Int = 0
     )
