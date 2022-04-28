@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps
 
+import android.R
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -25,6 +26,7 @@ class CacheTests {
         val storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
         storage.removeFile(Storage.FILES.STATSDATA)
         storage.removeFile(Storage.FILES.USERINFO)
+        storage.removeFile(Storage.FILES.LEADERBOARDDATA)
     }
     @Test
     fun cacheContainsNoDataWhenCreated(){
@@ -55,11 +57,11 @@ class CacheTests {
     fun cacheCorrectlySavesLeaderBoardData(){
         assert(cache.getLeaderBoardData().isEmpty())
         val user1 =
-            LeaderBoardInfo("jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
+            LeaderBoardInfo("jinglun", "1",null , 100 )
         val user2 =
-            LeaderBoardInfo("Leonardo", "2", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 80 )
+            LeaderBoardInfo("Leonardo", "2", null, 80 )
         val user3 =
-            LeaderBoardInfo("Adam", "3", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 60)
+            LeaderBoardInfo("Adam", "3", null, 60)
         val allPlayers = listOf(user1,user2,user3)
         cache.updateLeaderBoardData(allPlayers)
         val result = cache.getLeaderBoardData()
