@@ -6,6 +6,7 @@ import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 import java.net.URI
@@ -88,12 +89,24 @@ class FirebaseRepository private constructor(
         return firebase.gamesCollection.document(gameId).get().await().toObject<Game>()
     }
 
+
+    override suspend fun getLeaderBoardScore(): List<TotalScore> {
+        return firebase.scoresCollection.orderBy("score", Query.Direction.DESCENDING).get()
+            .await().documents.map{
+                it.toObject<TotalScore>()!!
+            }
+
+
+    }
+
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains("players", uid).get()
             .await().documents.map {
                 it.toObject<Game>()!!
             }
     }
+
+
 
     private fun Uri.toURI(): URI = URI(toString())
 

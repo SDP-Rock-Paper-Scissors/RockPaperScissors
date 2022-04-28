@@ -6,6 +6,7 @@ import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
@@ -27,6 +28,7 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
     private val storage:Storage = PrivateStorage(ctx)
     private var user:User? = null
     private lateinit var userStatData : List<UserStat>
+    private lateinit var leaderBoardData: List<LeaderBoardInfo>
     fun getUserDetails() : User? {
         if(user != null) return user
         user = storage.getUserDetails()
@@ -75,6 +77,32 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         storage.writeBackStatsData(userStatData)
         return userStatData
     }
+
+
+    fun updateLeaderBoardData(lBData:List<LeaderBoardInfo>){
+        leaderBoardData = lBData
+        storage.writeBackLeaderBoardData(lBData)
+    }
+
+    fun getLeaderBoardData():List<LeaderBoardInfo> {
+        if(::leaderBoardData.isInitialized) return leaderBoardData
+        leaderBoardData = storage.getLeaderBoardData() ?: listOf()
+        return leaderBoardData
+    }
+    suspend fun getLeaderBoardDataAsync():List<LeaderBoardInfo>{
+        if(!isInternetAvailable()) {
+            Log.d("CACHE", "INTERNET NOT AVAILABLE")
+            return getLeaderBoardData()
+        }
+        leaderBoardData = FirebaseHelper.getLeaderBoard()
+        Log.d("Cache", leaderBoardData.size.toString())
+        storage.writeBackLeaderBoardData(leaderBoardData)
+        return leaderBoardData
+    }
+
+
+
+
     fun isInternetAvailable(): Boolean {
         return try {
             val ipAddr: InetAddress = InetAddress.getByName("www.google.com")

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.persistence
 
 import android.content.Context
+import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import com.google.gson.Gson
@@ -51,10 +52,28 @@ class PrivateStorage constructor(val context: Context) : Storage {
         val arr = Gson().fromJson(json, Array<UserStat>::class.java)
         return arr.toList()
     }
+
+    override fun getLeaderBoardData(): List<LeaderBoardInfo>? {
+        val leaderBoardFile = getFile(Storage.FILES.LEADERBOARDDATA)
+        if (!leaderBoardFile.exists())
+            return null
+        val json = leaderBoardFile.readText()
+        val arr = Gson().fromJson(json, Array<LeaderBoardInfo>::class.java)
+        return arr.toList()
+    }
+
     override fun writeBackStatsData(data : List<UserStat>){
         val gson = Gson()
         val json = gson.toJson(data.toTypedArray(), Array<UserStat>::class.java)
         val f = getFile(Storage.FILES.STATSDATA)
         f.writeText(json)
     }
+
+    override fun writeBackLeaderBoardData(data : List<LeaderBoardInfo>){
+        val gson = Gson()
+        val json = gson.toJson(data.toTypedArray(), Array<LeaderBoardInfo>::class.java)
+        val f = getFile(Storage.FILES.LEADERBOARDDATA)
+        f.writeText(json)
+    }
+
 }
