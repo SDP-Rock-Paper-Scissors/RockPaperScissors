@@ -52,6 +52,15 @@ class CacheTests {
         }
     }
     @Test
+    fun cacheCorrectlyRetrievesUserDetailsFromStorage(){
+        runBlocking {
+            assert(cache.getUserDetails() == null)
+            cache.updateUserDetails(User(uid = "RquV8FkGInaPnyUnqncOZGJjSKJ3"))
+            cache.updateUserDetails(null)
+            assert(cache.getUserDetails() == null)
+        }
+    }
+    @Test
     fun cacheCorrectlySavesUser(){
         val user:User? = User(username = "USERNAME",uid="01234", email = "test@test.org")
         cache.updateUserDetails(user)
