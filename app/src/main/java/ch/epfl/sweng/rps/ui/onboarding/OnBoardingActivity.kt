@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager
@@ -48,6 +49,27 @@ class OnBoardingActivity : AppCompatActivity() {
 
         const val DESTINATION_EXTRA = "destination"
         const val DONE_ONBOARDING_EXTRA = "done_onboarding"
+
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+        fun navOut(context: OnBoardingActivity, onDestroy: (() -> Unit)? = null) {
+            setFirstTime(context, false)
+            val destination = context.intent.getSerializableExtra(DESTINATION_EXTRA) as Destination
+            Log.i("OnBoardingActivity", "onboarding finished")
+            Log.i("OnBoardingActivity", "destination: $destination")
+            when (destination) {
+                Destination.FINISH -> {
+                    context.finish()
+                }
+                Destination.LOADING -> {
+                    val intent = Intent(context, LoadingPage::class.java)
+                    intent.putExtra(DONE_ONBOARDING_EXTRA, true)
+                    intent.putExtra(LoadingPage.HELP_ME_NAV_EXTRA, true)
+                    context.startActivity(intent)
+                }
+            }
+        }
+
+
     }
 
     enum class Destination {
@@ -65,23 +87,7 @@ class OnBoardingActivity : AppCompatActivity() {
         // new instance is created and data is took from an
         // array list known as getDataonborading
         val paperOnboardingFragment = PaperOnboardingFragment.newInstance(getDataforOnboarding())
-        paperOnboardingFragment.setOnRightOutListener {
-            setFirstTime(this, false)
-            val destination = intent.getSerializableExtra(DESTINATION_EXTRA) as Destination
-            Log.i("OnBoardingActivity", "onboarding finished")
-            Log.i("OnBoardingActivity", "destination: $destination")
-            when (destination) {
-                Destination.FINISH -> {
-                    finish()
-                }
-                Destination.LOADING -> {
-                    val intent = Intent(this, LoadingPage::class.java)
-                    intent.putExtra(DONE_ONBOARDING_EXTRA, true)
-                    intent.putExtra(LoadingPage.HELP_ME_NAV_EXTRA, true)
-                    startActivity(intent)
-                }
-            }
-        }
+        paperOnboardingFragment.setOnRightOutListener { navOut(this) }
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         // fragmentTransaction method is used

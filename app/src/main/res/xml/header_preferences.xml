@@ -43,11 +43,11 @@
     <Preference
         app:icon="@drawable/ic_baseline_dashboard_24"
         app:key="@string/settings_show_onboard"
-        app:title="Show the welcome screen" />
+        app:title="@string/show_welcome_screen_text_settings" />
 
     <Preference
         app:icon="@drawable/ic_baseline_delete_24"
         app:key="@string/settings_clear_shared_prefs"
-        app:title="Clear all settings" />
+        app:title="@string/clear_shared_prefs_settings_text" />
 
 </PreferenceScreen>
