@@ -11,11 +11,13 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.persistence.PrivateStorage
 import ch.epfl.sweng.rps.persistence.Storage
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -28,7 +30,7 @@ class LoginPageTest {
 
     @Before
     fun setUp() {
-        FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
+        Firebase.initializeForTest()
         FirebaseAuth.getInstance().signOut()
         PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext).removeFile(
             Storage.FILES.USERINFO

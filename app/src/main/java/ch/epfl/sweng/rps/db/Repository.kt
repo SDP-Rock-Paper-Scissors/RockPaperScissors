@@ -25,6 +25,11 @@ interface Repository {
     suspend fun getGame(gameId: String): Game?
     suspend fun getLeaderBoardScore(): List<TotalScore>
     suspend fun gamesOfUser(uid: String): List<Game>
+    suspend fun myActiveGames(): List<Game>
+
+    suspend fun statsOfUser(uid: String): UserStats
+
+    suspend fun listInvitations(): List<Invitation>
 
     class UserNotLoggedIn : Exception {
         constructor() : super("User not logged in")

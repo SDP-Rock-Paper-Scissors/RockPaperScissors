@@ -1,6 +1,11 @@
 import { randomUUID } from "crypto";
+import * as admin from "firebase-admin";
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { https, region } from "firebase-functions";
+
+
+admin.initializeApp();
+
 
 const eu = region("europe-west1");
 
@@ -9,21 +14,31 @@ export const queue = eu.https.onCall(async (data, context) => {
   if (game_mode_s === undefined) {
     throw new https.HttpsError("invalid-argument", "game_mode is required");
   }
+  const game_mode = new GameMode(game_mode_s);
 
   const gamemodes = await get_gamemodes();
 
-  if (gamemodes.every(gm => gm.name === game_mode.name)) {
-    throw new https.HttpsError("invalid-argument", `Provided gamemode \`${game_mode_s}\` is invalid`);
+  if (gamemodes.map(gm => gm.toString()).indexOf(game_mode.name) === -1) {
+    throw new https.HttpsError("invalid-argument", `Provided gamemode \`${game_mode.toString()
+      }\` is invalid because it is not in the list of available gamemodes : ${gamemodes.map(gm => gm.toString()).join(", ")}`);
   }
-  const game_mode = new GameMode(game_mode_s);
 
   const games = await prod.collection("games")
-    .where("game_mode", "==", game_mode)
+    .where("game_mode", "==", game_mode.toString())
     .where("player_count", "<", game_mode.max_player_count)
     .where("done", "==", false)
     .orderBy("player_count", "desc")
     .orderBy("timestamp", 'asc')
     .get();
+
+  const games_im_in =
+    await prod.collection("games")
+      .where("done", "==", false)
+      .where("players", "array-contains", context.auth!.uid).limit(1).get();
+
+  if (games_im_in.size > 0) {
+    throw new https.HttpsError("invalid-argument", "You are already in a game");
+  }
 
   let game: Game;
 
@@ -64,7 +79,7 @@ When the HTTPS request is received, a new document is created in the users/{user
   "invitation_id": "invitation_id"
 }*/
 
-export const invite = eu.https.onCall(async (data, context) => {
+export const invite_player = eu.https.onCall(async (data, context) => {
   const user_id = data.user_id as string | undefined;
   const game_mode = data.game_mode as string | undefined;
   if (user_id === undefined) {
@@ -100,7 +115,7 @@ export const invite = eu.https.onCall(async (data, context) => {
 })
 
 
-export const join = eu.https.onCall(async (data, context) => {
+export const accept_invitation = eu.https.onCall(async (data, context) => {
   const invitation_id = data.invitation_id as string | undefined;
 
   if (invitation_id === undefined) {
@@ -125,16 +140,20 @@ export const join = eu.https.onCall(async (data, context) => {
   //! TRANSACTION !!!
   await prod.collection("games").doc(game.id).set(game.data() as Game);
   await prod.collection("users").doc(context.auth!.uid).collection("invitations").doc(invitation_id).delete();
+  return game.id;
 })
 
 async function get_gamemodes(): Promise<GameMode[]> {
   const gamemodes = await prod.collection("global").doc("gamemodes").get();
+  if (!gamemodes.exists) {
+    throw new https.HttpsError("not-found", "Gamemodes not found");
+  }
   return (gamemodes.data()!.gamemodes as string[]).map(gm => new GameMode(gm));
 }
 
 class GameMode {
   max_player_count: number;
-  game_type: GameType;
+  game_type: string;
   rounds: number;
   time_limit: number;
 
@@ -143,16 +162,18 @@ class GameMode {
     const parts = name.split(",").map(p => p.trim().split(":", 2) as [string, string]);
     const map = new Map<string, string>(parts);
     this.max_player_count = parseInt(map.get("P")!);
-    this.game_type = GameType[map.get("G")! as keyof typeof GameType];
+    this.game_type = map.get("G")!;
     this.rounds = parseInt(map.get("R")!);
     this.time_limit = parseInt(map.get("T")!);
   }
-}
-enum GameType {
-  pc, pvp, local
+
+  toString() {
+    // Properties in the format "G:PVP,P:2,R:3,T:0"
+    return `G:${this.game_type},P:${this.max_player_count},R:${this.rounds},T:${this.time_limit}`;
+  }
 }
 
-const prod = getFirestore().doc('env/prod/');
+const prod = getFirestore();
 
 function createGame(game_mode: GameMode): Game {
   return {
@@ -161,9 +182,15 @@ function createGame(game_mode: GameMode): Game {
     player_count: 0,
     timestamp: Timestamp.now(),
     players: [],
-    rounds: new Map<string, Round>(),
+    rounds: {
+      "0": {
+        hands: {},
+        timestamp: Timestamp.now(),
+      }
+    },
     current_round: 0,
-    started: false
+    started: false,
+    done: false
   };
 }
 
@@ -179,14 +206,24 @@ interface Game {
   player_count: number;
   timestamp: Timestamp;
   players: string[];
-  rounds: Map<string, Round>;
+  rounds: round_map;
   current_round: number;
   started: boolean;
+  done: boolean;
+}
+
+// an interface with any key and any value
+interface round_map {
+  [key: string]: Round;
+}
+
+interface hands_map {
+  [key: string]: Hand;
 }
 
 interface Round {
   timestamp: Timestamp;
-  hands: Map<string, Hand>;
+  hands: hands_map;
 }
 
 enum Hand {

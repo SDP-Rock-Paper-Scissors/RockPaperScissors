@@ -7,9 +7,11 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -29,6 +31,7 @@ class GameButtonsTest {
     @Before
     fun setUp() {
         ServiceLocator.setCurrentEnv(Env.Test)
+        Firebase.initializeForTest()
         val repo = ServiceLocator.getInstance().repository as LocalRepository
         repo.setCurrentUid("test")
     }

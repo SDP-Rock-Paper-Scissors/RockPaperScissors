@@ -12,13 +12,26 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
 
-class FirebaseAuthenticator(private val context: ComponentActivity, val callback: (User) -> Unit) :
+class FirebaseAuthenticator private constructor(
+    private val context: ComponentActivity,
+    val callback: (User) -> Unit
+) :
     Authenticator(callback) {
-    private var auth: FirebaseAuth = Firebase.auth
+
+    companion object {
+        fun registerFor(
+            context: ComponentActivity,
+            callback: (User) -> Unit
+        ): FirebaseAuthenticator {
+            return FirebaseAuthenticator(context, callback)
+        }
+
+        private const val RC_SIGN_IN = 9001
+        private const val TAG = "GoogleActivity"
+    }
+
     private val repo = ServiceLocator.getInstance().repository
     private val resultLauncher =
         context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
@@ -34,8 +47,8 @@ class FirebaseAuthenticator(private val context: ComponentActivity, val callback
 
     private fun signInWithToken(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener { res ->
-            var user = res.result.user!!
+        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { res ->
+            val user = res.result.user!!
             var userData: User
             runBlocking {
                 userData = createOrGetUser(user.uid, user.displayName, user.email)
@@ -62,11 +75,4 @@ class FirebaseAuthenticator(private val context: ComponentActivity, val callback
         val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
         resultLauncher.launch(mGoogleSignInClient.signInIntent)
     }
-
-
-    companion object {
-        private const val RC_SIGN_IN = 9001
-        private const val TAG = "GoogleActivity"
-    }
-
 }

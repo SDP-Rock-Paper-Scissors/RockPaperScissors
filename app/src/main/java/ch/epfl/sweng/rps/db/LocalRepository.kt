@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.db
 
+import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.*
 import com.google.firebase.Timestamp
 import java.net.URI
@@ -93,6 +94,25 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return games.values.filter { uid in it.players }
+    }
+
+    override suspend fun myActiveGames(): List<Game> {
+        return games.values.filter { it.players.contains(getCurrentUid()) && !it.done }
+    }
+
+    override suspend fun statsOfUser(uid: String): UserStats {
+        return UserStats(
+            total_games = gamesOfUser(uid).size,
+            wins = 0,
+            userId = uid
+        )
+    }
+
+    @VisibleForTesting
+    val invitations = mutableMapOf<String, Invitation>()
+
+    override suspend fun listInvitations(): List<Invitation> {
+        return invitations.values.toList()
     }
 
 }
