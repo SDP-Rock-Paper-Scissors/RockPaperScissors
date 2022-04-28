@@ -13,7 +13,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RockPaperScissors">
+        <activity
+            android:name=".LoadingPage"
+            android:exported="true"
+            android:theme="@style/Theme.RockPaperScissors.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.onboarding.OnBoardingActivity"
+            android:exported="false"
+            android:theme="@style/OnBoardingTheme" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -25,14 +38,12 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.RockPaperScissors.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false"
+            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

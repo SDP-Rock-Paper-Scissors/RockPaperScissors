@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.persistence.Cache
-import kotlinx.coroutines.launch
 
 
 class LoginActivity : AppCompatActivity() {
@@ -33,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private var authenticator: FirebaseAuthenticator = FirebaseAuthenticator(this, callback)
-    private lateinit  var cache:Cache
+    private lateinit var cache: Cache
     private var user: User? = null
 
 
@@ -42,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         cache = Cache.getInstance() ?: Cache.createInstance(this)
         user = cache.getUserDetails()
-        if (user != null){
+        if (user != null) {
             Log.d("CACHE", "LAUNCHING MAIN")
             launchMain(user!!)
         }
