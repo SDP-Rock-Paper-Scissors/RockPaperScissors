@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.db
 import android.net.Uri
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.TotalScore
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -92,7 +93,7 @@ class FirebaseRepository private constructor(
 
     override suspend fun getLeaderBoardScore(): List<TotalScore> {
         return firebase.scoresCollection.orderBy("score", Query.Direction.DESCENDING).get()
-            .await().documents.map{
+            .await().documents.map {
                 it.toObject<TotalScore>()!!
             }
 
@@ -105,7 +106,6 @@ class FirebaseRepository private constructor(
                 it.toObject<Game>()!!
             }
     }
-
 
 
     private fun Uri.toURI(): URI = URI(toString())
