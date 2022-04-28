@@ -1,8 +1,6 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.*
 import java.net.URI
 
 interface Repository {
@@ -25,6 +23,7 @@ interface Repository {
         acceptFriendRequestFrom(friendRequest.from)
 
     suspend fun getGame(gameId: String): Game?
+    suspend fun getLeaderBoardScore(): List<TotalScore>
     suspend fun gamesOfUser(uid: String): List<Game>
 
     class UserNotLoggedIn : Exception {

@@ -1,8 +1,11 @@
 package ch.epfl.sweng.rps
 
+import android.R
+import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import ch.epfl.sweng.rps.persistence.Cache
@@ -23,11 +26,13 @@ class CacheTests {
         val storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
         storage.removeFile(Storage.FILES.STATSDATA)
         storage.removeFile(Storage.FILES.USERINFO)
+        storage.removeFile(Storage.FILES.LEADERBOARDDATA)
     }
     @Test
     fun cacheContainsNoDataWhenCreated(){
         assert(cache.getUserDetails() == null)
         assert(cache.getStatsData(0).isEmpty())
+        assert(cache.getLeaderBoardData().isEmpty())
     }
     @Test
     fun cacheCorrectlySavesUser(){
@@ -46,5 +51,20 @@ class CacheTests {
         cache.updateStatsData(lst)
         val result = cache.getStatsData(0)
         assert(result == lst)
+    }
+
+    @Test
+    fun cacheCorrectlySavesLeaderBoardData(){
+        assert(cache.getLeaderBoardData().isEmpty())
+        val user1 =
+            LeaderBoardInfo("jinglun", "1",null , 100 )
+        val user2 =
+            LeaderBoardInfo("Leonardo", "2", null, 80 )
+        val user3 =
+            LeaderBoardInfo("Adam", "3", null, 60)
+        val allPlayers = listOf(user1,user2,user3)
+        cache.updateLeaderBoardData(allPlayers)
+        val result = cache.getLeaderBoardData()
+        assert(result == allPlayers)
     }
 }
