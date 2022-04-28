@@ -47,9 +47,13 @@
     <item name="test_for_stats_row" type="id" />
 
     <!-- game -->
+    <string name="game_over">Game Over</string>
     <string name="win">You win</string>
     <string name="lose">You lose</string>
     <string name="draw">Draw</string>
+    <string name="play_again">Play Again</string>
+    <string name="back_home">Home</string>
+    <string name="init_player_score">0</string>
 
     <!-- Preference Titles -->
     <string name="appearance_header">Appearance</string>

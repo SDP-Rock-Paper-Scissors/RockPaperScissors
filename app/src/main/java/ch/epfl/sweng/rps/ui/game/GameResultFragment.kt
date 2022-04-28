@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameResultBinding
 import ch.epfl.sweng.rps.models.Hand
@@ -23,11 +24,14 @@ class GameResultFragment : Fragment() {
     ): View {
         _binding = FragmentGameResultBinding.inflate(inflater, container, false)
 
-        binding.gameResultCommunicate.text = when (matchViewModel.currentUserResult){
+        binding.gameResultCommunicate.text = when (matchViewModel.currentRoundResult){
             Hand.Result.WIN -> resources.getString(R.string.win)
             Hand.Result.LOSS -> resources.getString(R.string.lose)
             Hand.Result.TIE -> resources.getString(R.string.draw)
             else -> {throw IllegalStateException("Possible results are win, loose, tie.")}
+        }
+        binding.backHomeButton.setOnClickListener {
+            findNavController().navigate(R.id.action_gameResultFragment_to_nav_home)
         }
         return binding.root
     }

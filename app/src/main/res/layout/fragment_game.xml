@@ -14,21 +14,6 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:context=".ui.game.GameFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/result_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/match_result"
-            android:textSize="30sp" />
-    </LinearLayout>
-
     <include
         android:id="@+id/opponent_credentials"
         layout="@layout/user_match_data" />
@@ -71,27 +56,9 @@
             android:gravity="center" />
     </RadioGroup>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/counter_value"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
-
     <include
         android:id="@+id/user_credentials"
-        layout="@layout/user_match_data"/>
+        layout="@layout/user_match_data" />
 
     <RadioGroup
         android:id="@+id/rps_buttons"

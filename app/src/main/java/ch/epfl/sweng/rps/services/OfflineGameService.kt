@@ -32,6 +32,13 @@ class OfflineGameService(
     override val isGameOver: Boolean
         get() {
             val game = game ?: return false
+            println("game.current_round == game.mode.rounds - 1" + (game.current_round == game.mode.rounds - 1).toString())
+            print("game.current_round" + game.current_round + " game.mode.rounds - 1" + (game.mode.rounds - 1))
+            println(
+                game.rounds[game.current_round.toString()]?.hands?.keys?.containsAll(
+                    game.players
+                )
+            )
             return game.current_round == game.mode.rounds - 1 && game.rounds[game.current_round.toString()]?.hands?.keys?.containsAll(
                 game.players
             ) ?: false
@@ -44,6 +51,7 @@ class OfflineGameService(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
+        println("when adding rounds: " + game!!.current_round.plus(1))
         game = game!!.copy(current_round = game!!.current_round.plus(1))
         roundsMap[game?.current_round.toString()] = round
         return round

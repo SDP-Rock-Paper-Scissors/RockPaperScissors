@@ -29,6 +29,7 @@ class HomeFragment : Fragment() {
         setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
         binding.apply {
             buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
+            buttonPlay5GamesOffline.setOnClickListener { playNRoundsWithComputer(5) }
         }
         return binding.root
     }
@@ -47,7 +48,8 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int){
+
+    private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int) {
         buttonToBind.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(fragmentID)
         }

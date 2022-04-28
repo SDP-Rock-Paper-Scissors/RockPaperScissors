@@ -12,7 +12,6 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
-import kotlinx.coroutines.delay
 
 class GameFragment : Fragment() {
 
@@ -33,40 +32,43 @@ class GameFragment : Fragment() {
         binding.rockRB.setOnClickListener { rpsPressed(Hand.ROCK) }
         binding.paperRB.setOnClickListener { rpsPressed(Hand.PAPER) }
         binding.scissorsRB.setOnClickListener { rpsPressed(Hand.SCISSORS) }
-
+        matchViewModel.cumulativeScore.observe(
+            viewLifecycleOwner
+        ) {
+            binding.opponentCredentials.currentPoints.text =
+                matchViewModel.computerPlayerCurrentPoints
+            binding.userCredentials.currentPoints.text = matchViewModel.userPlayerCurrentPoints
+        }
     }
 
     private fun rpsPressed(hand: Hand) {
         matchViewModel.playHand(hand,
-            updateUIResultCallback = {
-                selectComputerChoice(
+            opponentsMoveUIUpdateCallback = {
+                opponentMoveUIUpdate(
                     matchViewModel.gameService?.currentRound?.hands?.get(
                         matchViewModel.computerPlayer!!.computerPlayerId
                     )!!
                 )
             },
+            scoreBasedUpdatesCallback = { matchViewModel.scoreBasedUpdates() },
+
             resultNavigationCallback = {
-                findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
-            },
-            isGameOverCallback = {
-                gameOverNavigation()
+                resultNavigation()
             }
         )
     }
 
-    private fun gameOverNavigation() {
+
+    private fun resultNavigation() {
+        println(matchViewModel.gameService?.gameId)
         if (matchViewModel.gameService?.isGameOver!!) {
-            findNavController().navigate(R.id.action_gameResultFragment_to_nav_home)
-            val text = "Game Over"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-        } else {
             findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
+        } else {
+            findNavController().navigate(R.id.action_gameFragment_self)
         }
     }
 
-    private fun selectComputerChoice(hand: Hand) {
+    private fun opponentMoveUIUpdate(hand: Hand) {
         when (hand) {
             Hand.ROCK -> {
                 binding.rockRBOpponent.isChecked = true
@@ -75,7 +77,7 @@ class GameFragment : Fragment() {
                 binding.paperRBOpponent.isChecked = true
             }
             Hand.SCISSORS -> {
-                binding.scissorsRB.isChecked = true
+                binding.scissorsRBOpponent.isChecked = true
             }
             Hand.NONE -> throw IllegalStateException("Impossible")
         }
