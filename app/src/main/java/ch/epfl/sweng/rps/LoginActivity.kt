@@ -14,7 +14,7 @@ class LoginActivity : AppCompatActivity() {
     private var callback =
         { user: User? ->
             cache.updateUserDetails(user)
-            if (user != null) launchMain(user!!)
+            if (user != null) launchMain(user)
         }
 
     private fun launchMain(user: User) {
