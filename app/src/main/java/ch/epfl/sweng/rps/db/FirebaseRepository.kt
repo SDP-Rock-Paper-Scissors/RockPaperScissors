@@ -42,13 +42,14 @@ class FirebaseRepository private constructor(
         return user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
+    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
         return if (getUser(uid)!!.has_profile_photo)
             firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
         else
             null
     }
-    override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
+
+    override suspend fun getUserProfilePictureImage(uid:String): Bitmap? {
         return if (getUser(uid)!!.has_profile_photo){
              val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
              Log.d("URI" , uri.path!!)
@@ -57,12 +58,12 @@ class FirebaseRepository private constructor(
         else
             null
     }
-    override suspend fun setUserProfilePicture(uid: String, image : Bitmap){
+    override suspend fun setUserProfilePicture(image : Bitmap){
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
         updateUser(Pair(User.Field.HAS_PROFILE_PHOTO , true))
-        firebase.profilePicturesFolder.child(uid).putBytes(data)
+        firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
     }
 
 

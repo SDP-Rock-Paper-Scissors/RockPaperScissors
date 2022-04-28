@@ -1,5 +1,7 @@
 package ch.epfl.sweng.rps.ui.profile
 
+import android.app.Activity
+import android.app.Instrumentation
 import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
@@ -34,10 +36,12 @@ class ProfileFragment : Fragment() {
     private lateinit var image: ImageView
 
     val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-        val uri: Uri = res.data?.data!!
-        val bitmap : Bitmap = getBitmap(requireContext().contentResolver, uri)!!
-        viewModel.updateProfilePicture(user.uid, bitmap)
-        image.setImageBitmap(bitmap)
+        if(res.resultCode == Activity.RESULT_OK) {
+            val uri: Uri = res.data?.data!!
+            val bitmap: Bitmap = getBitmap(requireContext().contentResolver, uri)!!
+            viewModel.updateProfilePicture(bitmap)
+            image.setImageBitmap(bitmap)
+        }
     }
     private fun getBitmap(contentResolver: ContentResolver, fileUri: Uri?): Bitmap? {
         return try {
@@ -70,7 +74,7 @@ class ProfileFragment : Fragment() {
         image = view.findViewById<ImageView>(R.id.profileImage)
         var cachedimg = viewModel.getCachedUserPicture()
         cachedimg?.let { image.setImageBitmap(it) }
-        viewModel.getProfilePicture(user.uid).observe(viewLifecycleOwner) {
+        viewModel.getProfilePicture().observe(viewLifecycleOwner) {
             bitmap -> bitmap?.let {  image.setImageBitmap(it)}
         }
         view.findViewById<MaterialToolbar>(R.id.profile_top_toolbar)

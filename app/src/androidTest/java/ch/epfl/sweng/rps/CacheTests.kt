@@ -2,6 +2,10 @@ package ch.epfl.sweng.rps
 
 import android.R
 import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import androidx.annotation.ColorInt
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
@@ -12,27 +16,40 @@ import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.persistence.PrivateStorage
 import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.services.ServiceLocator
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
+
 
 @RunWith(AndroidJUnit4::class)
 class CacheTests {
-    lateinit  var cache :Cache
+    lateinit var cache :Cache
+    lateinit var storage:Storage
     @Before
     fun setUp(){
-        ServiceLocator.setCurrentEnv(Env.Test)
+        ServiceLocator.setCurrentEnv(Env.Prod)
         cache = Cache.createInstance(InstrumentationRegistry.getInstrumentation().targetContext)
-        val storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
+        storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
         storage.removeFile(Storage.FILES.STATSDATA)
         storage.removeFile(Storage.FILES.USERINFO)
         storage.removeFile(Storage.FILES.LEADERBOARDDATA)
+        storage.removeFile(Storage.FILES.USERPICTURE)
     }
     @Test
     fun cacheContainsNoDataWhenCreated(){
         assert(cache.getUserDetails() == null)
         assert(cache.getStatsData(0).isEmpty())
         assert(cache.getLeaderBoardData().isEmpty())
+    }
+    @Test
+    fun cacheCorrectlyRetrievesUserDetails(){
+        runBlocking {
+            assert(cache.getUserDetails() == null)
+            cache.updateUserDetails(User(uid = "RquV8FkGInaPnyUnqncOZGJjSKJ3"))
+            cache.getUserDetailsAsync { assert(it != null) }
+        }
     }
     @Test
     fun cacheCorrectlySavesUser(){
@@ -66,5 +83,44 @@ class CacheTests {
         cache.updateLeaderBoardData(allPlayers)
         val result = cache.getLeaderBoardData()
         assert(result == allPlayers)
+    }
+    @Test
+    fun cacheCorrectlySavesProfileImage(){
+        assert(cache.getUserPicture() == null)
+        val btm = createTestBitmap(30,30, null)
+        runBlocking {
+            cache.updateUserPicture(btm)
+        }
+        assert(cache.getUserPicture() == btm)
+    }
+    @Test
+    fun cacheCorrectlyRetrievesProfileImageFromStorage(){
+       assert(cache.getUserPicture() == null)
+       val bitmap = createTestBitmap(20,20, Color.RED)
+       storage.writeBackUserPicture(bitmap)
+       assert(cache.getUserPicture() != null)
+    }
+    @Test
+    fun cacheCorrectlyRetrievesProfileImageFromFirebase(){
+        runBlocking {
+            assert(cache.getUserPictureAsync() == null)
+            cache.updateUserDetails(User(uid = "RquV8FkGInaPnyUnqncOZGJjSKJ3"))
+            assert(cache.getUserPictureAsync() != null)
+        }
+    }
+    fun createTestBitmap(w: Int, h: Int, @ColorInt color: Int?): Bitmap {
+        var color = color
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        if (color == null) {
+            val colors = intArrayOf(
+                Color.BLUE, Color.GREEN, Color.RED,
+                Color.YELLOW, Color.WHITE
+            )
+            val rgen = Random()
+            color = colors[rgen.nextInt(colors.size - 1)]
+        }
+        canvas.drawColor(color)
+        return bitmap
     }
 }

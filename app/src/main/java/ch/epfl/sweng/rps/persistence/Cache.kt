@@ -48,6 +48,7 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         callback(user)
     }
     suspend fun updateUserDetails(user:User, vararg pairs:Pair<User.Field, Any>) {
+        this.user = user
         storage.writeBackUser(user)
         fbRepo.updateUser(*pairs)
     }
@@ -62,22 +63,28 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
             storage.removeFile(Storage.FILES.USERINFO)
             return
         }
+        this.user = user
         storage.writeBackUser(user)
     }
     fun getUserPicture() : Bitmap?{
+        if(userPicture != null)
+            return userPicture
         return storage.getUserPicture()
     }
-    suspend fun getUserPictureAsync(uid:String) : Bitmap?{
+    suspend fun getUserPictureAsync() : Bitmap?{
         if(!isInternetAvailable()){
             return getUserPicture()
         }
-        userPicture = fbRepo.getUserProfilePictureImage(uid) ?: null
+        if(user == null)
+            return null
+        userPicture = fbRepo.getUserProfilePictureImage(user!!.uid) ?: null
         Log.d("UserPic" , userPicture.toString())
         userPicture?.let { storage.writeBackUserPicture(it)}
         return userPicture
     }
-    suspend fun updateUserPicture(uid:String, bitmap: Bitmap){
-        fbRepo.setUserProfilePicture(uid, bitmap)
+    suspend fun updateUserPicture(bitmap: Bitmap){
+        userPicture = bitmap
+        fbRepo.setUserProfilePicture(bitmap)
         storage.writeBackUserPicture(bitmap)
     }
 

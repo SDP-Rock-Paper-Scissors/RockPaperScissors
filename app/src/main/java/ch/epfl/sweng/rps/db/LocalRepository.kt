@@ -41,8 +41,8 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return users[uid]!!
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
-        val cond = getUser(getCurrentUid()).has_profile_photo
+    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
+        val cond = getUser(uid).has_profile_photo
         return if (cond) {
             URI("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
         } else {
@@ -100,6 +100,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return games.values.filter { uid in it.players }
     }
 
+<<<<<<< HEAD
     override suspend fun myActiveGames(): List<Game> {
         return games.values.filter { it.players.contains(getCurrentUid()) && !it.done }
     }
@@ -120,10 +121,13 @@ class LocalRepository(private var uid: String? = null) : Repository {
     }
 
     override suspend fun setUserProfilePicture(uid: String, image: Bitmap) {
+=======
+    override suspend fun setUserProfilePicture(image: Bitmap) {
+>>>>>>> 1987cd6 (Implemented tests)
 
     }
 
-    override suspend fun getUserProfilePictureImage(uid: String): Bitmap?{
+    override suspend fun getUserProfilePictureImage(uid:String): Bitmap?{
         TODO("Not yet implemented")
     }
 }
