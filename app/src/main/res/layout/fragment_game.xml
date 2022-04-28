@@ -31,7 +31,7 @@
 
     <include
         android:id="@+id/opponent_credentials"
-        layout="@layout/user_credentials" />
+        layout="@layout/user_match_data" />
 
     <RadioGroup
         android:id="@+id/rps_opponent"
@@ -91,7 +91,7 @@
 
     <include
         android:id="@+id/user_credentials"
-        layout="@layout/user_credentials"/>
+        layout="@layout/user_match_data"/>
 
     <RadioGroup
         android:id="@+id/rps_buttons"
