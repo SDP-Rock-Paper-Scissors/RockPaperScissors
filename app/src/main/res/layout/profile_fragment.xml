@@ -42,10 +42,10 @@
 
         <Button
             android:id="@+id/editProfilePic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="48dp"
+            android:layout_width="107dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="40dp"
             android:text="Edit"
             app:layout_constraintStart_toEndOf="@+id/profileImage"
             app:layout_constraintTop_toTopOf="@+id/profileImage" />
