@@ -6,6 +6,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -59,4 +60,13 @@ class ProfileFragmentTest {
         pressBack()
         onView(withId(R.id.profile_appbar_settings_btn)).check(matches(isDisplayed()))
     }
+    @Test
+    fun tapEditStartsIntent(){
+        Intents.init()
+        onView(withId(R.id.nav_profile)).perform(click())
+        onView(withId(R.id.editProfilePic)).perform(click())
+        assert(Intents.getIntents().size == 1)
+        Intents.release()
+    }
+
 }
