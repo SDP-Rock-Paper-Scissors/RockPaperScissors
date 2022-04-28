@@ -1,6 +1,10 @@
 package ch.epfl.sweng.rps.db
 
 import ch.epfl.sweng.rps.models.*
+import android.graphics.Bitmap
+import ch.epfl.sweng.rps.models.FriendRequest
+import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.User
 import java.net.URI
 
 interface Repository {
@@ -12,6 +16,8 @@ interface Repository {
     suspend fun getUser(uid: String): User?
 
     suspend fun getUserProfilePictureUrl(uid: String): URI?
+    suspend fun setUserProfilePicture(uid: String, image : Bitmap)
+    suspend fun getUserProfilePictureImage(uid: String): Bitmap?
 
     suspend fun createThisUser(name: String?, email: String?): User
     suspend fun sendFriendRequestTo(uid: String)

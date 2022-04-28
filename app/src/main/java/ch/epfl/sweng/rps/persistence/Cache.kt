@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.persistence
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseHelper
@@ -27,6 +28,7 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
     private val fbRepo = ServiceLocator.getInstance().repository
     private val storage:Storage = PrivateStorage(ctx)
     private var user:User? = null
+    private var userPicture : Bitmap? = null
     private lateinit var userStatData : List<UserStat>
     private lateinit var leaderBoardData: List<LeaderBoardInfo>
     fun getUserDetails() : User? {
@@ -62,6 +64,23 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         }
         storage.writeBackUser(user)
     }
+    fun getUserPicture() : Bitmap?{
+        return storage.getUserPicture()
+    }
+    suspend fun getUserPictureAsync(uid:String) : Bitmap?{
+        if(!isInternetAvailable()){
+            return getUserPicture()
+        }
+        userPicture = fbRepo.getUserProfilePictureImage(uid) ?: null
+        Log.d("UserPic" , userPicture.toString())
+        userPicture?.let { storage.writeBackUserPicture(it)}
+        return userPicture
+    }
+    suspend fun updateUserPicture(uid:String, bitmap: Bitmap){
+        fbRepo.setUserProfilePicture(uid, bitmap)
+        storage.writeBackUserPicture(bitmap)
+    }
+
     fun getStatsData(position: Int):List<UserStat> {
        if(::userStatData.isInitialized) return userStatData
        userStatData = storage.getStatsData() ?: listOf()

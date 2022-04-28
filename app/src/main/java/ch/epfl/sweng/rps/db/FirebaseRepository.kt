@@ -1,12 +1,23 @@
 package ch.epfl.sweng.rps.db
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.utils.toListOf
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
+import android.util.Log
+import android.widget.ImageView
+import ch.epfl.sweng.rps.models.FriendRequest
+import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.User
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
 import java.net.URI
 
 
@@ -37,6 +48,23 @@ class FirebaseRepository private constructor(
         else
             null
     }
+    override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
+        return if (getUser(uid)!!.has_profile_photo){
+             val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
+             Log.d("URI" , uri.path!!)
+             BitmapFactory.decodeStream(java.net.URL(uri.toURL(),"" ).openStream())
+        }
+        else
+            null
+    }
+    override suspend fun setUserProfilePicture(uid: String, image : Bitmap){
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO , true))
+        firebase.profilePicturesFolder.child(uid).putBytes(data)
+    }
+
 
     override suspend fun createThisUser(name: String?, email: String?): User {
         val uid = getCurrentUid()

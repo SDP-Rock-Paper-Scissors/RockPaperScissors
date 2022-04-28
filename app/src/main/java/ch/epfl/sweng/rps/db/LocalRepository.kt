@@ -2,6 +2,10 @@ package ch.epfl.sweng.rps.db
 
 import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.*
+import android.graphics.Bitmap
+import ch.epfl.sweng.rps.models.FriendRequest
+import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
 import java.net.URI
 
@@ -115,4 +119,11 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return invitations.values.toList()
     }
 
+    override suspend fun setUserProfilePicture(uid: String, image: Bitmap) {
+
+    }
+
+    override suspend fun getUserProfilePictureImage(uid: String): Bitmap?{
+        TODO("Not yet implemented")
+    }
 }
