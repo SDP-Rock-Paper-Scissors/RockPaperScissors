@@ -2,27 +2,30 @@ package ch.epfl.sweng.rps.ui.leaderboard
 
 import LeaderBoardPlayerAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
-import ch.epfl.sweng.rps.db.FirebaseHelper.loadLeaderBoard
+import ch.epfl.sweng.rps.db.FirebaseHelper.getLeaderBoard
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.persistence.Cache
 import coil.load
 import kotlinx.android.synthetic.main.content_scrolling.*
+import kotlinx.coroutines.launch
 
 
 class LeaderboardFragment : Fragment() {
 
     private var _binding: FragmentLeaderboardBinding? = null
+    private lateinit var cache: Cache
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +36,8 @@ class LeaderboardFragment : Fragment() {
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
+        cache = Cache.getInstance()!!
+        val model:LeaderBoardViewModel by viewModels()
         recycler_view.apply {
             // set a LinearLayoutManager to handle Android
             // RecyclerView behavior
@@ -43,7 +48,11 @@ class LeaderboardFragment : Fragment() {
 
         }
 
-        loadPlayersUI(loadLeaderBoard())
+        model.getLeaderBoard().observe(viewLifecycleOwner) { leaderboardData ->
+            loadPlayersUI(
+                leaderboardData
+            )
+        }
     }
 
 
