@@ -132,6 +132,7 @@ dependencies {
     testImplementation "io.mockk:mockk:1.12.2"
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
+    androidTestImplementation "io.mockk:mockk-android:1.12.2"
 
     //Declare the dependency for camera related functions
     def camerax_version = "1.1.0-beta03"

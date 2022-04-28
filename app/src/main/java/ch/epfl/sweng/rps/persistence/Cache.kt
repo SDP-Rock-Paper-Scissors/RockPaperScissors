@@ -17,15 +17,20 @@ import java.net.InetAddress
 class Cache private constructor(private val ctx:Context, val preferFresh:Boolean = false) {
     companion object {
         var cache:Cache? = null
-        fun getInstance(preferFresh: Boolean = false): Cache? {
+        fun getInstance(): Cache? {
             return cache
         }
         fun createInstance(ctx : Context ): Cache {
             cache = Cache(ctx.applicationContext, true)
             return cache!!
         }
+        fun createInstance(ctx:Context, repository: FirebaseRepository): Cache{
+            cache = Cache(ctx.applicationContext)
+            cache!!.fbRepo = repository
+            return cache!!
+        }
     }
-    private val fbRepo = ServiceLocator.getInstance().repository
+    private var fbRepo = ServiceLocator.getInstance().repository
     private val storage:Storage = PrivateStorage(ctx)
     private var user:User? = null
     private var userPicture : Bitmap? = null
@@ -73,7 +78,7 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         }
         if(user == null)
             return null
-        userPicture = fbRepo.getUserProfilePictureImage(user!!.uid) ?: null
+        userPicture = fbRepo.getUserProfilePictureImage(user!!.uid)
         Log.d("UserPic" , userPicture.toString())
         userPicture?.let { storage.writeBackUserPicture(it)}
         return userPicture

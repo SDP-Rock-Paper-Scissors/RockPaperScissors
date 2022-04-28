@@ -100,7 +100,6 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return games.values.filter { uid in it.players }
     }
 
-<<<<<<< HEAD
     override suspend fun myActiveGames(): List<Game> {
         return games.values.filter { it.players.contains(getCurrentUid()) && !it.done }
     }
@@ -120,10 +119,8 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return invitations.values.toList()
     }
 
-    override suspend fun setUserProfilePicture(uid: String, image: Bitmap) {
-=======
+
     override suspend fun setUserProfilePicture(image: Bitmap) {
->>>>>>> 1987cd6 (Implemented tests)
 
     }
 

@@ -6,7 +6,6 @@ import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.User
 import java.net.URI
-
 interface Repository {
     suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
     fun rawCurrentUid(): String?
