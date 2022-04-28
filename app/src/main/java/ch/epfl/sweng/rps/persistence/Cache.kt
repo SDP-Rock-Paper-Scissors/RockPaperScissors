@@ -37,10 +37,6 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         return user
     }
     suspend fun getUserDetailsAsync(callback: (User?) -> Unit) {
-        if(user != null) {
-            callback(user!!)
-            return
-        }
         if(!isInternetAvailable())
             return
         val uid = fbRepo.getCurrentUid()
