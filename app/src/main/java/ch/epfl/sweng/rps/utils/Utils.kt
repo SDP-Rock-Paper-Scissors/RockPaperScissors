@@ -8,10 +8,8 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 
 fun consume(block: () -> Any?): () -> Unit = { block() }
 
@@ -56,23 +54,9 @@ object FirebaseEmulatorsUtils {
 
         Firebase.europeWest1.useEmulator(firebaseFunctions.host, firebaseFunctions.port)
 
-        FirebaseStorage.getInstance().useEmulator(storageConfig.host, storageConfig.port)
+        Firebase.storage.useEmulator(storageConfig.host, storageConfig.port)
 
-        Log.w("FirebaseEmulatorsUtils", FirebaseFirestore.getInstance().firestoreSettings.host)
-        runBlocking {
-            try {
-                Log.w(
-                    "FirebaseEmulatorsUtils",
-                    FirebaseFirestore.getInstance().document("global/gamemodes").get()
-                        .await().data.toString()
-                )
-            } catch (e: Exception) {
-                Log.w(
-                    "FirebaseEmulatorsUtils",
-                    "Fail to get gamemodes (uid=${FirebaseAuth.getInstance().currentUser?.uid})"
-                )
-            }
-        }
+        Log.w("FirebaseEmulatorsUtils", Firebase.firestore.firestoreSettings.host)
 
         emuUsed_ = true
     }
