@@ -3,19 +3,17 @@ package ch.epfl.sweng.rps.ui.settings
 import android.content.*
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.services.ProdServiceLocator
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
-import ch.epfl.sweng.rps.services.ProdServiceLocator
-import ch.epfl.sweng.rps.services.ServiceLocator
-import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
 
@@ -132,24 +130,6 @@ class SettingsActivity : AppCompatActivity(),
                     ServiceLocator.getInstance().repository.rawCurrentUid()
                 )
                 clipboard?.setPrimaryClip(clip)
-                true
-            }
-            findPreference<Preference>(getString(R.string.settings_clear_shared_prefs))?.setOnPreferenceClickListener {
-                PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().clear()
-                    .apply()
-                // Show toast to confirm
-                Toast.makeText(
-                    requireContext(),
-                    "Shared preferences cleared",
-                    Toast.LENGTH_SHORT
-                ).show()
-                true
-            }
-            findPreference<Preference>(getString(R.string.settings_show_onboard))?.setOnPreferenceClickListener {
-                OnBoardingActivity.launch(
-                    requireContext(),
-                    destination = OnBoardingActivity.Destination.FINISH
-                )
                 true
             }
             findPreference<Preference>(getString(R.string.add_artificial_game_settings))?.setOnPreferenceClickListener {

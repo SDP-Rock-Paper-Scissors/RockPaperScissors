@@ -81,9 +81,4 @@
     <string name="add_artificial_game_settings">add_artificial_game_settings</string>
     <string name="copy_fb_uid">Copy Firebase Uid</string>
     <string name="add_artificial_game">Add artificial game</string>
-    <string name="is_first_time">is_first_time</string>
-    <string name="settings_clear_shared_prefs">settings_shared_prefs_clear</string>
-    <string name="settings_show_onboard">settings_show_onboard</string>
-    <string name="show_welcome_screen_text_settings">Show the welcome screen</string>
-    <string name="clear_shared_prefs_settings_text">Clear all settings</string>
 </resources>

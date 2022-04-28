@@ -24,7 +24,6 @@
         android:layout_width="233dp"
         android:layout_height="45dp"
         android:layout_marginBottom="144dp"
-        android:fontFamily="@font/montserrat"
         android:text="Not Logged In"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintBottom_toBottomOf="parent"
