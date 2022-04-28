@@ -32,9 +32,6 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.android.gms.tasks.Tasks
-import com.google.android.odml.image.BitmapMlImageBuilder
-import com.google.android.odml.image.ByteBufferMlImageBuilder
-import com.google.android.odml.image.MediaMlImageBuilder
 import com.google.android.odml.image.MlImage
 import com.google.mlkit.common.MlKitException
 import com.google.mlkit.vision.common.InputImage
@@ -103,18 +100,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
   override fun processBitmap(bitmap: Bitmap?, graphicOverlay: GraphicOverlay) {
     val frameStartMs = SystemClock.elapsedRealtime()
 
-    if (isMlImageEnabled(graphicOverlay.context)) {
-      val mlImage = BitmapMlImageBuilder(bitmap!!).build()
-      requestDetectInImage(
-        mlImage,
-        graphicOverlay,
-        /* originalCameraImage= */ null,
-        /* shouldShowFps= */ false,
-        frameStartMs
-      )
-      mlImage.close()
-      return
-    }
 
     requestDetectInImage(
       InputImage.fromBitmap(bitmap!!, 0),
@@ -136,25 +121,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
     }
     var bitmap: Bitmap? = null
 
-    if (isMlImageEnabled(graphicOverlay.context)) {
-      val mlImage =
-        MediaMlImageBuilder(image.image!!).setRotation(image.imageInfo.rotationDegrees).build()
-      requestDetectInImage(
-        mlImage,
-        graphicOverlay,
-        /* originalCameraImage= */ bitmap,
-        /* shouldShowFps= */ true,
-        frameStartMs
-      )
-        // When the image is from CameraX analysis use case, must call image.close() on received
-        // images when finished using them. Otherwise, new images may not be received or the camera
-        // may stall.
-        // Currently MlImage doesn't support ImageProxy directly, so we still need to call
-        // ImageProxy.close() here.
-        .addOnCompleteListener { image.close() }
-
-      return
-    }
 
     requestDetectInImage(
       InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees),
@@ -186,21 +152,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
     )
   }
 
-  private fun requestDetectInImage(
-    image: MlImage,
-    graphicOverlay: GraphicOverlay,
-    originalCameraImage: Bitmap?,
-    shouldShowFps: Boolean,
-    frameStartMs: Long
-  ): Task<T> {
-    return setUpListener(
-      detectInImage(image),
-      graphicOverlay,
-      originalCameraImage,
-      shouldShowFps,
-      frameStartMs
-    )
-  }
 
   private fun setUpListener(
     task: Task<T>,

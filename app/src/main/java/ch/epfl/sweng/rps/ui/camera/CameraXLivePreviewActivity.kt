@@ -35,8 +35,6 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.vision.GraphicOverlay
 import ch.epfl.sweng.rps.vision.LabelDetectorProcessor
@@ -59,7 +57,6 @@ class CameraXLivePreviewActivity :
   private var previewUseCase: Preview? = null
   private var analysisUseCase: ImageAnalysis? = null
   private var imageProcessor: VisionImageProcessor? = null
-  private var needUpdateGraphicOverlayImageSourceInfo = false
   private var lensFacing = CameraSelector.LENS_FACING_BACK
   private var cameraSelector: CameraSelector? = null
   private var targetResolution: Size = Size(960, 1280)
@@ -176,23 +173,12 @@ class CameraXLivePreviewActivity :
     builder.setTargetResolution(targetResolution)
     analysisUseCase = builder.build()
 
-    needUpdateGraphicOverlayImageSourceInfo = true
 
     analysisUseCase?.setAnalyzer(
       // imageProcessor.processImageProxy will use another thread to run the detection underneath,
       // thus we can just runs the analyzer itself on main thread.
       ContextCompat.getMainExecutor(this),
       ImageAnalysis.Analyzer { imageProxy: ImageProxy ->
-        if (needUpdateGraphicOverlayImageSourceInfo) {
-          val isImageFlipped = lensFacing == CameraSelector.LENS_FACING_FRONT
-          val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-          if (rotationDegrees == 0 || rotationDegrees == 180) {
-            graphicOverlay!!.setImageSourceInfo(imageProxy.width, imageProxy.height, isImageFlipped)
-          } else {
-            graphicOverlay!!.setImageSourceInfo(imageProxy.height, imageProxy.width, isImageFlipped)
-          }
-          needUpdateGraphicOverlayImageSourceInfo = false
-        }
         try {
           imageProcessor!!.processImageProxy(imageProxy, graphicOverlay)
         } catch (e: MlKitException) {
