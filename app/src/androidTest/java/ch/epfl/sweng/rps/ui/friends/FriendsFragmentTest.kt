@@ -150,16 +150,17 @@ class FriendsFragmentTest {
         onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
     }
 
-   /* @Test
+    @Test
     fun test_correctResultsShown_onSearchTextEntered(){
+        onView(withId(R.id.nav_friends)).perform(click())
         onView(withId(R.id.userNameSearch)).perform(click())
-        onView(withId(R.id.search_src_text)).perform(typeText("Rock"))
+        onView(withId(R.id.userNameSearch)).perform(typeText("Rock"))
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
-        onView(withId(R.id.userName_infoPage)).check(matches(withText(thisFriend.username)))
+            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+        onView(withId(R.id.userName_infoPage)).check(matches(withText("RockFirst")))
 
-    } */
+    }
 
 }
 class ClickButtonAction {
