@@ -2,12 +2,14 @@ package ch.epfl.sweng.rps.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ch.epfl.sweng.rps.MainActivity
@@ -21,12 +23,20 @@ class ProfileFragment : Fragment() {
 
     private lateinit var viewModel: ProfileViewModel
     private lateinit var user: User
+
+    val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+        println(res)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-        return inflater.inflate(R.layout.profile_fragment, container, false)
+        val view =  inflater.inflate(R.layout.profile_fragment, container, false)
+        val button:Button = view.findViewById(R.id.editProfilePic)
+        button.setOnClickListener{ getPicture()}
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,5 +58,14 @@ class ProfileFragment : Fragment() {
                 }
             }
     }
-
+    private fun getPicture(){
+        val intent = Intent()
+        intent.type = "image/*";
+        intent.action = Intent.ACTION_PICK
+        intent.setDataAndType ( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*" )
+        resultLauncher.launch(intent)
+    }
+    companion object{
+        val PICK_IMAGE = 1
+    }
 }
