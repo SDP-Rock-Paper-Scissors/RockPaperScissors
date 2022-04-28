@@ -5,48 +5,45 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
 import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.storage.PrivateStorage
-
+import ch.epfl.sweng.rps.persistence.Cache
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private var callback =
-        { user: User ->
-            Log.d("Here", "HERASDASDA")
-            launchMain(user)
+        { user: User? ->
+            cache.updateUserDetails(user)
+            if (user != null) launchMain(user!!)
         }
 
     private fun launchMain(user: User) {
         val intent = Intent(this, MainActivity::class.java)
         val b = Bundle()
-        store.writeBackUser(user)
         b.putString("email", user.email)
         b.putString("display_name", user.username)
         b.putString("uid", user.uid)
         b.putString("privacy", user.games_history_privacy.toString())
         intent.putExtra("User", b)
         startActivity(intent)
+        finish() // removes the activity from the Activity stack and prevents main from being launched twice
     }
 
-    private val authenticator: FirebaseAuthenticator =
-        FirebaseAuthenticator.registerFor(this, callback)
-
-    private lateinit var store: PrivateStorage
+    private var authenticator: FirebaseAuthenticator = FirebaseAuthenticator(this, callback)
+    private lateinit  var cache:Cache
     private var user: User? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-        store = PrivateStorage(this)
-        user = store.getUserDetails()
-        user?.let { Log.d("STORE", it.uid) }
-
-
-        if (user != null) {
-            // launchMain(user!!)
+        cache = Cache.getInstance() ?: Cache.createInstance(this)
+        user = cache.getUserDetails()
+        if (user != null){
+            Log.d("CACHE", "LAUNCHING MAIN")
+            launchMain(user!!)
         }
     }
 

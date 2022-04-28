@@ -1,7 +1,9 @@
-package ch.epfl.sweng.rps.storage
+package ch.epfl.sweng.rps.persistence
 
 import android.content.Context
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.UserStat
+import com.google.gson.Gson
 import java.io.File
 import java.util.*
 
@@ -17,7 +19,6 @@ class PrivateStorage constructor(val context: Context) : Storage {
     }
 
     override fun getUserDetails(): User? {
-        if (user != null) return user
         val userFile = getFile(Storage.FILES.USERINFO)
         if (!userFile.exists())
             return null
@@ -33,7 +34,7 @@ class PrivateStorage constructor(val context: Context) : Storage {
         )
     }
 
-    fun writeBackUser(user: User) {
+    override fun writeBackUser(user: User) {
         val data = Properties()
         if (user.username != null) data["username"] = user.username
         data["uid"] = user.uid
@@ -42,11 +43,18 @@ class PrivateStorage constructor(val context: Context) : Storage {
         data.store(f.bufferedWriter(), null)
     }
 
-    override fun getUserSettings() {
-        TODO("Not yet implemented")
+    override fun getStatsData(): List<UserStat>? {
+        val statsFile = getFile(Storage.FILES.STATSDATA)
+        if (!statsFile.exists())
+            return null
+        val json = statsFile.readText()
+        val arr = Gson().fromJson(json, Array<UserStat>::class.java)
+        return arr.toList()
     }
-
-    override fun getMatchesDetails() {
-        TODO("Not yet implemented")
+    override fun writeBackStatsData(data : List<UserStat>){
+        val gson = Gson()
+        val json = gson.toJson(data.toTypedArray(), Array<UserStat>::class.java)
+        val f = getFile(Storage.FILES.STATSDATA)
+        f.writeText(json)
     }
 }
