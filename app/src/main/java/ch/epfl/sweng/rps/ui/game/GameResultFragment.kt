@@ -32,6 +32,7 @@ class GameResultFragment : Fragment() {
         }
         binding.backHomeButton.setOnClickListener {
             findNavController().navigate(R.id.action_gameResultFragment_to_nav_home)
+            matchViewModel.reInit()
         }
         return binding.root
     }

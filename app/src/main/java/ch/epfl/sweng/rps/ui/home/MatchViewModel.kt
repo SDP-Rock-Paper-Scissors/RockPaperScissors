@@ -11,8 +11,8 @@ import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.OfflineGameService
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -20,14 +20,14 @@ import java.util.*
  * Shared ViewModel among HomeFragment and GameFragment.
  * Sharing is needed due to the proper Game initialization and synchronization with GameFragment creation.
  */
-
 class MatchViewModel : ViewModel() {
 
     var gameService: GameService? = null
     var currentRoundResult: Hand.Result? = null
     var gameResult: Hand.Result? = null
-    var cumulativeScore = MutableLiveData<List<Round.Score>>()
+    var cumulativeScore = MutableLiveData<List<Round.Score>?>()
     var computerPlayer: ComputerPlayer? = null
+    var job: Job? = null
     val uid = FirebaseAuth.getInstance().currentUser?.uid
     val computerPlayerCurrentPoints: String
         get() =
@@ -86,8 +86,8 @@ class MatchViewModel : ViewModel() {
     }
 
     private fun determineRoundResult() {
-        val scores = gameService?.currentRound!!.computeScores()
-        currentRoundResult = determineResults(scores)
+        val scores = gameService?.currentRound?.computeScores()
+        currentRoundResult = determineResults(scores!!)
     }
 
     private fun determineGameResult() {
@@ -101,28 +101,41 @@ class MatchViewModel : ViewModel() {
         determineGameResult()
     }
 
-    fun playHand(
+    /**
+     * MatchViewModel is reusable. Old data needs to be wiped out before starting the previous one.
+     */
+    fun reInit() {
+        if (gameService!!.isGameOver) {
+            gameService = null
+            currentRoundResult = null
+            gameResult = null
+            cumulativeScore = MutableLiveData<List<Round.Score>?>()
+            computerPlayer = null
+        }
+    }
+
+    fun managePlayHand(
         userHand: Hand,
         opponentsMoveUIUpdateCallback: () -> Unit,
         scoreBasedUpdatesCallback: () -> Unit,
-        resultNavigationCallback: () -> Unit
+        resultNavigationCallback: () -> Unit,
+        resetUIScoresCallback: () -> Unit
     ) {
-        viewModelScope.launch {
-            ensureActive()
+        job = viewModelScope.launch {
             gameService?.playHand(userHand)
             opponentsMoveUIUpdateCallback()
             scoreBasedUpdatesCallback()
+            // add round can be called only from suspend function or from coroutine
+            // therefore I use it here here
+            if (!gameService?.isGameOver!!) {
+                gameService?.addRound()
+            }
             // the delay to let the user see the opponent's choice (rock/paper/scissors)
             // otherwise the transition is too fast to notice
             delay(1000L)
             resultNavigationCallback()
-            // the delay to let the user see the result of the game (win/loss/draw)
-            delay(1000L)
-            // add round can be called only from suspend function or from coroutine
-            // therefore  I play it here here
-            if (!gameService?.isGameOver!!) {
-                gameService?.addRound()
-            }
+            resetUIScoresCallback()
+
         }
     }
 }

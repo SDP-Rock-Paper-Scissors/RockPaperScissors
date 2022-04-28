@@ -15,7 +15,7 @@
     tools:context=".ui.game.GameFragment">
 
     <include
-        android:id="@+id/opponent_credentials"
+        android:id="@+id/opponent_match_data"
         layout="@layout/user_match_data" />
 
     <RadioGroup
@@ -57,7 +57,7 @@
     </RadioGroup>
 
     <include
-        android:id="@+id/user_credentials"
+        android:id="@+id/user_match_data"
         layout="@layout/user_match_data" />
 
     <RadioGroup

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -35,32 +34,43 @@ class GameFragment : Fragment() {
         matchViewModel.cumulativeScore.observe(
             viewLifecycleOwner
         ) {
-            binding.opponentCredentials.currentPoints.text =
+            binding.opponentMatchData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
-            binding.userCredentials.currentPoints.text = matchViewModel.userPlayerCurrentPoints
+            binding.userMatchData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
         }
     }
 
     private fun rpsPressed(hand: Hand) {
-        matchViewModel.playHand(hand,
-            opponentsMoveUIUpdateCallback = {
-                opponentMoveUIUpdate(
-                    matchViewModel.gameService?.currentRound?.hands?.get(
-                        matchViewModel.computerPlayer!!.computerPlayerId
-                    )!!
-                )
-            },
-            scoreBasedUpdatesCallback = { matchViewModel.scoreBasedUpdates() },
+        // the button activates an asynchronous tasks
+        // while the task is still running the clicking on the other radio buttons should NOT
+        // start a new procedure and that's why the if statement in needed below
+        if (matchViewModel.job == null ||
+            (matchViewModel.job != null && !matchViewModel.job?.isActive!!)
+        ) {
+            matchViewModel.managePlayHand(hand,
+                opponentsMoveUIUpdateCallback = {
+                    opponentMoveUIUpdate(
+                        matchViewModel.gameService?.currentRound?.hands?.get(
+                            matchViewModel.computerPlayer!!.computerPlayerId
+                        )!!
+                    )
+                },
+                scoreBasedUpdatesCallback = {
+                    matchViewModel.scoreBasedUpdates()
+                },
 
-            resultNavigationCallback = {
-                resultNavigation()
-            }
-        )
+                resultNavigationCallback = {
+                    resultNavigation()
+                },
+                resetUIScoresCallback = {
+                    resetScores()
+                }
+            )
+        }
     }
 
 
     private fun resultNavigation() {
-        println(matchViewModel.gameService?.gameId)
         if (matchViewModel.gameService?.isGameOver!!) {
             findNavController().navigate(R.id.action_gameFragment_to_gameResultFragment)
         } else {
@@ -86,5 +96,12 @@ class GameFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun resetScores() {
+        if (matchViewModel.gameService?.isGameOver!!) {
+            binding.opponentMatchData.currentPoints.text = "0"
+            binding.userMatchData.currentPoints.text = "0"
+        }
     }
 }
