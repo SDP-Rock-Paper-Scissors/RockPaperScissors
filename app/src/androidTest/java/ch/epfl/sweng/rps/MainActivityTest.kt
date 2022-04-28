@@ -23,11 +23,7 @@ class MainActivityTest {
         onView(withId(R.id.fragment_home)).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun checkLeaderboard() {
-        onView(withId(R.id.nav_leaderboard)).perform(click())
-        onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()))
-    }
+    
 
     @Test
     fun checkStatistics() {
