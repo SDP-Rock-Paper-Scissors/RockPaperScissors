@@ -1,10 +1,14 @@
 package ch.epfl.sweng.rps.db
 
+import android.R
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import androidx.appcompat.content.res.AppCompatResources
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 object FirebaseHelper {
     fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
@@ -113,33 +117,33 @@ object FirebaseHelper {
     }
 
 
-    fun loadLeaderBoard(): List<LeaderBoardInfo> {
-        val user1 =
-            LeaderBoardInfo("jinglun", "1", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 100 )
-        val user2 =
-            LeaderBoardInfo("Leonardo", "2", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 80 )
-        val user3 =
-            LeaderBoardInfo("Adam", "3", Uri.parse("https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"), 60)
-        val allPlayers = listOf(user1,user2,user3)
-/*
-        val db = FirebaseFirestore.getInstance()
-        var allPlayers = listOf<User>()
-        db.collection("users").orderBy("score", Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshots, error ->
-                if (error != null) {
-                    error.message?.let { Log.d("TAG", it) }
-                    return@addSnapshotListener
-                }
-                allPlayers = snapshots?.map {
-                    it.toObject(User::class.java)
-                }!!
+    suspend fun getLeaderBoard(): List<LeaderBoardInfo> {
+        val repo = ServiceLocator.getInstance().repository
+        val scores = repo.getLeaderBoardScore()
+        val allPlayers = mutableListOf<LeaderBoardInfo>()
+        for (score in scores){
+            val leaderBoardInfo = LeaderBoardInfo()
+            leaderBoardInfo.uid = score.uid!!
+            leaderBoardInfo.point = score.score!!
+            // The *load* function only support "android.net.Uri" but not "java.net.URI" package
+            leaderBoardInfo.userProfilePictureUrl = repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
+            if(leaderBoardInfo.userProfilePictureUrl == null){
+                leaderBoardInfo.userProfilePictureUrl = Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon);
+
             }
+            leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
+            allPlayers.add(leaderBoardInfo)
+        }
 
 
- */
         return allPlayers
     }
-    }
+
+
+
+
+
+}
 
 
 

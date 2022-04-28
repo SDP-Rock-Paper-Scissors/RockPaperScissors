@@ -86,6 +86,12 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return games[gameId]
     }
 
+    var leaderBoardScore = mutableListOf<TotalScore>()
+    override suspend fun getLeaderBoardScore(): List<TotalScore> {
+        return leaderBoardScore
+    }
+
+
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return games.values.filter { uid in it.players }
     }
