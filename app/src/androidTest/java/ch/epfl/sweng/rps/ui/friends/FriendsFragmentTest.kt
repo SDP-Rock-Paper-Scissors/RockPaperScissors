@@ -13,8 +13,12 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import ch.epfl.sweng.rps.FriendListAdapter
 import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.FakeFriendsData
+import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matcher
+import org.junit.Before
 
 import org.junit.Rule
 import org.junit.Test
@@ -29,8 +33,15 @@ class FriendsFragmentTest {
     @JvmField
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
+    @Before
+    fun setUp() {
+        ServiceLocator.setCurrentEnv(Env.Test)
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid("test")
+    }
+
     @Test
-    fun checkFriendsFragment(){
+    fun checkFriendsFragment() {
         onView(withId(R.id.nav_friends)).perform(click())
         onView(withId(R.id.fragment_friends)).check(matches(isDisplayed()))
     }
@@ -46,7 +57,12 @@ class FriendsFragmentTest {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.fragment_info_page)).check(matches(isDisplayed()))
     }
@@ -56,80 +72,121 @@ class FriendsFragmentTest {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickPlayButton(R.id.playButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickPlayButton(R.id.playButton)
+                )
+            )
 
         onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_CorrectGamesPlayedShows_onInfoButtonClick(){
+    fun test_CorrectGamesPlayedShows_onInfoButtonClick() {
         val gamesPlayed = thisFriend.gamesPlayed
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.gamesPlayedText_infoPage)).check(matches(withText("Games Played: $gamesPlayed")))
     }
+
     @Test
-    fun test_CorrectGamesWonShows_onInfoButtonClick(){
+    fun test_CorrectGamesWonShows_onInfoButtonClick() {
         val gamesWon = thisFriend.gamesWon
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.gamesWonText_infoPage)).check(matches(withText("Games Won: $gamesWon")))
     }
 
     @Test
-    fun test_CorrectUserNameShows_onInfoButtonClick(){
+    fun test_CorrectUserNameShows_onInfoButtonClick() {
 
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.userName_infoPage)).check(matches(withText(thisFriend.username)))
     }
 
     @Test
-    fun test_CorrectWinRateShows_onInfoButtonClick(){
+    fun test_CorrectWinRateShows_onInfoButtonClick() {
         val winRate = thisFriend.winRate
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.winRateText_infoPage)).check(matches(withText("Win Rate: $winRate%")))
     }
 
     @Test
-    fun test_offlineStatusShows_onInfoButtonClick(){
+    fun test_offlineStatusShows_onInfoButtonClick() {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.offlineImage_infoPage)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_onlineStatusShows_onInfoButtonClick(){
+    fun test_onlineStatusShows_onInfoButtonClick() {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    0,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.onlineImage_infoPage)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_returnsToFriendFragment_onBackButtonClick(){
+    fun test_returnsToFriendFragment_onBackButtonClick() {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.infoPage_backButton)).perform(click())
 
@@ -137,11 +194,16 @@ class FriendsFragmentTest {
     }
 
     @Test
-    fun test_goesToGameFragment_onPlayButtonClick(){
+    fun test_goesToGameFragment_onPlayButtonClick() {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(
+                actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(
+                    LIST_ITEM,
+                    ClickButtonAction.clickInfoButton(R.id.infoButton)
+                )
+            )
 
         onView(withId(R.id.infoPage_playButton)).perform(click())
 
@@ -149,12 +211,13 @@ class FriendsFragmentTest {
     }
 
 }
+
 class ClickButtonAction {
     companion object {
         fun clickInfoButton(childId: Int): ViewAction {
             return object : ViewAction {
                 override fun getConstraints(): Matcher<View> {
-                  return isAssignableFrom(ImageButton::class.java)
+                    return isAssignableFrom(ImageButton::class.java)
                 }
 
                 override fun getDescription(): String {

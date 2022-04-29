@@ -10,7 +10,6 @@ import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.OfflineGameService
 import ch.epfl.sweng.rps.services.ServiceLocator
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,7 +27,8 @@ class MatchViewModel : ViewModel() {
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
     var computerPlayer: ComputerPlayer? = null
     var job: Job? = null
-    val uid = FirebaseAuth.getInstance().currentUser?.uid
+    var repository = ServiceLocator.getInstance().repository
+    var uid: String = repository.getCurrentUid()
     val computerPlayerCurrentPoints: String
         get() =
             cumulativeScore.value?.filter { score ->
@@ -48,7 +48,7 @@ class MatchViewModel : ViewModel() {
         val gameId = UUID.randomUUID().toString()
         gameService = OfflineGameService(
             gameId,
-            ServiceLocator.getInstance().repository,
+            repository,
             listOf(computerPlayer),
             Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0),
             artificialMovesDelay
@@ -135,7 +135,6 @@ class MatchViewModel : ViewModel() {
             delay(1000L)
             resultNavigationCallback()
             resetUIScoresCallback()
-
         }
     }
 }
