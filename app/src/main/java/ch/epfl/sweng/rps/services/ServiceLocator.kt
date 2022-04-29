@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.services
 
+import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.db.Repository
@@ -28,6 +29,10 @@ interface ServiceLocator {
         fun getCurrentEnv(): Env {
             return currentEnv
         }
+
+        @VisibleForTesting
+        val localRepository: LocalRepository
+            get() = getInstance(Env.Test).repository as LocalRepository
     }
 
     val repository: Repository

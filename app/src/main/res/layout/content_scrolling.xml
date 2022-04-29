@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -41,7 +40,7 @@
                     android:layout_below="@id/iv_champion2"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="2ND 🥈"/>
+                    android:text="@string/_2nd"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -65,7 +64,7 @@
                     android:layout_below="@id/iv_champion1"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="1ST 🥇"/>
+                    android:text="@string/_1st"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -87,7 +86,7 @@
                     android:layout_below="@id/iv_champion3"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:text="3RD 🥉"
+                    android:text="@string/_3rd"
                     android:textColor="#B5A642"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -100,6 +99,8 @@
             android:layout_below="@id/layout_champion"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="65dp"
             android:nestedScrollingEnabled="false"
             android:scrollbars="none"/>
 
