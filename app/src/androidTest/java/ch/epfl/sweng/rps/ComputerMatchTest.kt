@@ -45,20 +45,18 @@ class ComputerMatchTest {
 
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Test
     fun homeButtonExistAfterGame(): Unit = runBlocking {
-        GlobalScope.launch {
+        launch {
             run1roundGame()
         }.join()
         Espresso.onView(ViewMatchers.withId(R.id.backHomeButton))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Test
     fun navigateHomeWorksAfterGame(): Unit = runBlocking {
-        GlobalScope.launch {
+        launch {
             run1roundGame()
         }.join()
         Espresso.onView(ViewMatchers.withId(R.id.backHomeButton)).perform(ViewActions.click())
