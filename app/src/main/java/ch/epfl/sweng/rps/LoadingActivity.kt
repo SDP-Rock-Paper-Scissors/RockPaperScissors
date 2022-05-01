@@ -10,7 +10,6 @@ import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 class LoadingActivity : AppCompatActivity() {
@@ -40,7 +39,10 @@ class LoadingActivity : AppCompatActivity() {
         if (!helpMeNav) {
             runBlocking { logic() }
         }
-        nav()
+        val isTest = intent.getBooleanExtra("isTest", false)
+        if (!isTest) {
+            nav()
+        }
     }
 
     /**
@@ -49,14 +51,9 @@ class LoadingActivity : AppCompatActivity() {
     suspend fun logic() {
         Log.w("LoadingPage", "logic")
 
-        val isTest = intent.getBooleanExtra("isTest", false)
         Firebase.initialize(this@LoadingActivity)
         useEmulatorsIfNeeded()
-        delay(1000)
-        if (!isTest) {
-            openLogin()
-            finish()
-        }
+
 
     }
 
