@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RockPaperScissors">
         <activity
-            android:name=".LoadingPage"
+            android:name=".LoadingActivity"
             android:exported="true"
             android:theme="@style/Theme.RockPaperScissors.NoActionBar">
             <intent-filter>
@@ -28,16 +28,6 @@
             android:name=".ui.onboarding.OnBoardingActivity"
             android:exported="false"
             android:theme="@style/OnBoardingTheme" />
-        <activity
-            android:name=".LoadingActivity"
-            android:exported="true"
-            android:theme="@style/Theme.RockPaperScissors.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".LoginActivity"
             android:exported="false"
