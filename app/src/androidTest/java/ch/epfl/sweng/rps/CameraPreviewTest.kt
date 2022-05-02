@@ -19,8 +19,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.annotation.UiThreadTest
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import org.junit.*
 import org.junit.runner.RunWith
@@ -31,7 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger
  * @see "https://developer.android.com/training/camerax/architecture.combine-use-cases"
  */
 @RunWith(AndroidJUnit4::class)
-class CameraPreviewTest : LifecycleOwner, ImageReader.OnImageAvailableListener, Consumer<SurfaceRequest.Result> {
+class CameraPreviewTest : LifecycleOwner, ImageReader.OnImageAvailableListener,
+    Consumer<SurfaceRequest.Result> {
 
     @get:Rule
     val cameraAccess = GrantPermissionRule.grant(Manifest.permission.CAMERA)
@@ -46,7 +47,7 @@ class CameraPreviewTest : LifecycleOwner, ImageReader.OnImageAvailableListener, 
      */
     @Before
     fun setup() {
-        val context: Context = ApplicationProvider.getApplicationContext()
+        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
         Assert.assertNotNull(context)
         provider = ProcessCameraProvider.getInstance(context).get()
         Assert.assertNotNull(provider)
@@ -93,7 +94,7 @@ class CameraPreviewTest : LifecycleOwner, ImageReader.OnImageAvailableListener, 
     @UiThreadTest
     @Before
     fun markCreated() {
-        registry = LifecycleRegistry(this).also{
+        registry = LifecycleRegistry(this).also {
             it.currentState = Lifecycle.State.INITIALIZED
             it.currentState = Lifecycle.State.CREATED
         }

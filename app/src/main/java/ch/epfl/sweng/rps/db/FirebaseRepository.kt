@@ -1,15 +1,18 @@
 package ch.epfl.sweng.rps.db
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
+import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.TotalScore
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.utils.toListOf
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
 import java.net.URI
 
 
@@ -34,12 +37,30 @@ class FirebaseRepository private constructor(
         return user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
+    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
         return if (getUser(uid)!!.has_profile_photo)
             firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
         else
             null
     }
+
+    override suspend fun getUserProfilePictureImage(uid:String): Bitmap? {
+        return if (getUser(uid)!!.has_profile_photo){
+             val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
+             Log.d("URI" , uri.path!!)
+             BitmapFactory.decodeStream(java.net.URL(uri.toURL(),"" ).openStream())
+        }
+        else
+            null
+    }
+    override suspend fun setUserProfilePicture(image : Bitmap){
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO , true))
+        firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
+    }
+
 
     override suspend fun createThisUser(name: String?, email: String?): User {
         val uid = getCurrentUid()
@@ -102,9 +123,24 @@ class FirebaseRepository private constructor(
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains("players", uid).get()
-            .await().documents.map {
-                it.toObject<Game>()!!
-            }
+            .await().documents.toListOf()
+    }
+
+    override suspend fun myActiveGames(): List<Game> {
+        return firebase.gamesCollection
+            .whereArrayContains("players", getCurrentUid())
+            .whereEqualTo("done", false)
+            .get().await().documents.toListOf()
+    }
+
+    override suspend fun statsOfUser(uid: String): UserStats {
+        return firebase.usersCollection.document(uid).collection("stats").document("games").get()
+            .await().toObject<UserStats>()!!
+    }
+
+    override suspend fun listInvitations(): List<Invitation> {
+        return firebase.invitationsOfUid(getCurrentUid()).get()
+            .await().documents.toListOf()
     }
 
 

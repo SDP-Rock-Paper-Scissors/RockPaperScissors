@@ -3,14 +3,14 @@ package ch.epfl.sweng.rps
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.FirebaseReferences
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,22 +32,22 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class FirebaseTests {
-    private val db = FirebaseRepository.createInstance(FirebaseReferences())
+    lateinit var db: Repository
 
     @Before
     fun setUp() {
+        db = ServiceLocator.getInstance(Env.Test).repository
+
         for (env in Env.values()) {
             ServiceLocator.getInstance(env).disposeAllGameServices()
         }
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
-        runBlocking {
-            FirebaseAuth.getInstance().signOut()
-        }
+        FirebaseAuth.getInstance().signOut()
     }
 
     @After
     fun tearDown() {
-
+        FirebaseApp.clearInstancesForTest()
     }
 
     @Test
@@ -202,5 +202,11 @@ class FirebaseTests {
         assertEquals("games", firebase.gamesCollection.path)
 
         assertEquals("/profile_pictures", firebase.profilePicturesFolder.path)
+    }
+
+    @Test
+    fun testEmulator() {
+        FirebaseEmulatorsUtils.useEmulators()
+        assertEquals(true, FirebaseEmulatorsUtils.emulatorUsed)
     }
 }

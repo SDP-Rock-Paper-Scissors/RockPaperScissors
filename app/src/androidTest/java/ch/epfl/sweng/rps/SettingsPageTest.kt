@@ -14,12 +14,14 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import ch.epfl.sweng.rps.TestUtils.getActivityInstance
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.TestUtils.waitFor
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.instanceOf
 import org.junit.After
@@ -74,6 +76,7 @@ class SettingsPageTest {
     }
 
 
+
     @Test
     fun testSettingsPage() {
         onView(withId(R.id.settings)).check(matches(isDisplayed()))
@@ -117,6 +120,7 @@ class SettingsPageTest {
 
     @Before
     fun setUp() {
+        Firebase.initializeForTest()
         val clipboard: ClipboardManager? =
             getInstrumentation().context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
         text = clipboard?.primaryClip?.getItemAt(0)?.text?.toString()
