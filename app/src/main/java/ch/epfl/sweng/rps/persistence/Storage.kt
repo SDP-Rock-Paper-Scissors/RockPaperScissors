@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.persistence
-import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import android.graphics.Bitmap
+import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import java.io.File

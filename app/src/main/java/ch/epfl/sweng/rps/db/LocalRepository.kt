@@ -1,11 +1,8 @@
 package ch.epfl.sweng.rps.db
 
+import android.graphics.Bitmap
 import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.*
-import android.graphics.Bitmap
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.User
 import com.google.firebase.Timestamp
 import java.net.URI
 
