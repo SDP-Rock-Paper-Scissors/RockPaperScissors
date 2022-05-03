@@ -11,9 +11,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.net.URI
+import java.net.URL
 
 
 class FirebaseRepository private constructor(
@@ -37,28 +42,32 @@ class FirebaseRepository private constructor(
         return user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
+    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
         return if (getUser(uid)!!.has_profile_photo)
             firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
         else
             null
     }
 
-    override suspend fun getUserProfilePictureImage(uid:String): Bitmap? {
-        return if (getUser(uid)!!.has_profile_photo){
-             val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
-             Log.d("URI" , uri.path!!)
-             BitmapFactory.decodeStream(java.net.URL(uri.toURL(),"" ).openStream())
-        }
-        else
+    override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
+        return if (getUser(uid)!!.has_profile_photo) {
+            val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await()
+            Log.d("URI", uri.path!!)
+            withContext(Dispatchers.IO) {
+                val inputStream: InputStream = URL(uri.toString()).openStream()
+                BitmapFactory.decodeStream(inputStream)
+            }
+
+        } else
             null
     }
-    override suspend fun setUserProfilePicture(image : Bitmap){
+
+    override suspend fun setUserProfilePicture(image: Bitmap): UploadTask {
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
-        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO , true))
-        firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
+        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO, true))
+        return firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
     }
 
 
