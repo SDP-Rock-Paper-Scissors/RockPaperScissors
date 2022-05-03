@@ -39,8 +39,7 @@ data class GameMode(
 
         companion object {
             fun fromId(id: String): GameEdition {
-                ids[id]?.let { return it }
-                throw IllegalArgumentException("No game edition with id $id")
+                return ids[id] ?: throw IllegalArgumentException("Unknown game edition id: $id")
             }
 
             private val ids by lazy { values().associateBy { it.id } }
@@ -51,7 +50,7 @@ data class GameMode(
         // "P:5,G:PC,R:3,T:0", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
         fun fromString(s: String): GameMode {
             val map = s.split(",")
-                .map { it.trim().split(":", limit = 2) }
+                .map { it.split(":", limit = 2) }
                 .associate { it[0] to it[1] }
             val maxPlayerCount = map["P"]!!.toInt()
             val gameType = map["MT"]!!
@@ -66,13 +65,9 @@ data class GameMode(
                 edition = GameEdition.fromId(edition)
             )
         }
-
-
     }
 
-    override fun toString(): String {
-        return toGameModeString()
-    }
+    override fun toString(): String = toGameModeString()
 
     fun toGameModeString(): String {
         val map = listOf(
@@ -82,8 +77,9 @@ data class GameMode(
             "T" to timeLimit.toString(),
             "GE" to edition.id
         )
-        return map.sortedBy { it.first }
-            .joinToString(",") { it.first + ":" + it.second }
+        return map
+            .sortedBy { it.first }
+            .joinToString(",") { "${it.first}:${it.second}" }
     }
 
 
