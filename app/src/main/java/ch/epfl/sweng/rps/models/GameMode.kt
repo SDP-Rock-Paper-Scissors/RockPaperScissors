@@ -87,4 +87,9 @@ data class GameMode(
         return map.sortedBy { it.first }
             .joinToString(",") { it.first + ":" + it.second }
     }
+
+
+    fun String.toGameMode(): GameMode {
+        return GameMode.fromString(this)
+    }
 }
