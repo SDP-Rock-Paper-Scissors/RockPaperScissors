@@ -151,25 +151,34 @@ async function get_gamemodes(): Promise<GameMode[]> {
   return (gamemodes.data()!.gamemodes as string[]).map(gm => new GameMode(gm));
 }
 
-class GameMode {
+export class GameMode {
   max_player_count: number;
-  game_type: string;
+  type: string;
   rounds: number;
   time_limit: number;
+  game: string;
 
   // "P:5,G:PC,R:3,T:0", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
   constructor(public name: string) {
     const parts = name.split(",").map(p => p.trim().split(":", 2) as [string, string]);
     const map = new Map<string, string>(parts);
     this.max_player_count = parseInt(map.get("P")!);
-    this.game_type = map.get("G")!;
+    this.type = map.get("MT")!;
     this.rounds = parseInt(map.get("R")!);
     this.time_limit = parseInt(map.get("T")!);
+    this.game = map.get("G")!;
   }
 
   toString() {
     // Properties in the format "G:PVP,P:2,R:3,T:0"
-    return `G:${this.game_type},P:${this.max_player_count},R:${this.rounds},T:${this.time_limit}`;
+    const props = [];
+    props.push(`G:${this.game}`);
+    props.push(`P:${this.max_player_count}`);
+    props.push(`R:${this.rounds}`);
+    props.push(`T:${this.time_limit}`);
+    props.push(`MT:${this.type}`);
+    props.sort();
+    return props.join(",");
   }
 }
 
