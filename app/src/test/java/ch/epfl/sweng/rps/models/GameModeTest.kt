@@ -24,7 +24,7 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
         val m2 =
             GameMode(
@@ -64,10 +64,10 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
         GameMode.GameEdition.values().forEach {
-            assertEquals(it, GameMode.fromString(m1.copy(game = it).toGameModeString()).game)
+            assertEquals(it, GameMode.fromString(m1.copy(edition = it).toGameModeString()).edition)
         }
     }
 
@@ -98,7 +98,7 @@ internal class GameModeTest {
                 type = it,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
             assertTrue {
                 fn(mode)
@@ -111,7 +111,7 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = it,
+                edition = it,
             )
             assertTrue {
                 fn(mode)
@@ -127,7 +127,7 @@ internal class GameModeTest {
                 type = it,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
             fn(mode)
         }
@@ -138,7 +138,7 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = it,
+                edition = it,
             )
             fn(mode)
         }

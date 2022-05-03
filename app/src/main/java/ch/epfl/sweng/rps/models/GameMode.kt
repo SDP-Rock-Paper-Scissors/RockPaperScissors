@@ -11,7 +11,7 @@ data class GameMode(
     val type: Type,
     val rounds: Int,
     val timeLimit: Int,
-    val game: GameEdition
+    val edition: GameEdition
 ) {
     /**
      * The type of opponents.
@@ -57,13 +57,13 @@ data class GameMode(
             val gameType = map["MT"]!!
             val rounds = map["R"]!!.toInt()
             val timeLimit = map["T"]!!.toInt()
-            val game = map["G"]!!
+            val edition = map["GE"]!!
             return GameMode(
                 playerCount = maxPlayerCount,
                 type = Type.valueOf(gameType),
                 timeLimit = timeLimit,
                 rounds = rounds,
-                game = GameEdition.fromId(game)
+                edition = GameEdition.fromId(edition)
             )
         }
 
@@ -80,7 +80,7 @@ data class GameMode(
             "MT" to type.name,
             "R" to rounds.toString(),
             "T" to timeLimit.toString(),
-            "G" to game.id
+            "GE" to edition.id
         )
         return map.sortedBy { it.first }
             .joinToString(",") { it.first + ":" + it.second }
@@ -88,6 +88,6 @@ data class GameMode(
 
 
     fun String.toGameMode(): GameMode {
-        return GameMode.fromString(this)
+        return fromString(this)
     }
 }

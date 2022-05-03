@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.models
 
+import android.util.Log
 import ch.epfl.sweng.rps.models.GameMode.GameEdition
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
@@ -68,8 +69,15 @@ sealed class Game {
     companion object {
         fun DocumentSnapshot.toGame(): Game? {
             val editionString = this["edition"] as String?
-                ?: throw IllegalArgumentException("No edition found in the document")
-            val type = when (GameEdition.valueOf(editionString)) {
+            val gameMode = this["game_mode"] as String?
+            val edition =
+                editionString?.let { GameEdition.valueOf(it) }
+                    ?: gameMode?.let { GameMode.fromString(it).edition } ?: run {
+                        Log.e("Game", "Could not parse edition from document: '${editionString}'")
+                        return null
+                    }
+
+            val type = when (edition) {
                 GameEdition.RockPaperScissors -> Rps::class.java
                 GameEdition.TicTacToe -> TicTacToe::class.java
             }

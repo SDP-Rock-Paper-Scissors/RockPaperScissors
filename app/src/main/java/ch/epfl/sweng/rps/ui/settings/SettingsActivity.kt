@@ -204,7 +204,7 @@ class SettingsActivity : AppCompatActivity(),
                                 type = GameMode.Type.PVP,
                                 rounds = 1,
                                 timeLimit = 0,
-                                game = GameMode.GameEdition.RockPaperScissors
+                                edition = GameMode.GameEdition.RockPaperScissors
                             ).toGameModeString(),
                             current_round = 0,
                             done = true,
