@@ -1,11 +1,9 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.*
 import android.graphics.Bitmap
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.*
 import java.net.URI
+
 interface Repository {
     suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
     fun rawCurrentUid(): String?
@@ -14,9 +12,9 @@ interface Repository {
 
     suspend fun getUser(uid: String): User?
 
-    suspend fun getUserProfilePictureUrl(uid:String): URI?
-    suspend fun setUserProfilePicture(image : Bitmap)
-    suspend fun getUserProfilePictureImage(uid:String): Bitmap?
+    suspend fun getUserProfilePictureUrl(uid: String): URI?
+    suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean = false)
+    suspend fun getUserProfilePictureImage(uid: String): Bitmap?
 
     suspend fun createThisUser(name: String?, email: String?): User
     suspend fun sendFriendRequestTo(uid: String)

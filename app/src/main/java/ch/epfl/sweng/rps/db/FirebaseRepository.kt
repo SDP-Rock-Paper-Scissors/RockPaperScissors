@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -62,12 +61,14 @@ class FirebaseRepository private constructor(
             null
     }
 
-    override suspend fun setUserProfilePicture(image: Bitmap): UploadTask {
+    override suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean) {
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
         updateUser(Pair(User.Field.HAS_PROFILE_PHOTO, true))
-        return firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
+        val task = firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
+        if (waitForUploadTask)
+            task.await()
     }
 
 
