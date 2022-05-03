@@ -35,9 +35,7 @@ data class GameMode(
      */
     enum class GameEdition(val id: String) {
         RockPaperScissors("rps"),
-        TickTackToe("ttt"),
-        HeadsOrTails("ht"),
-        ConnectFour("cf");
+        TicTacToe("ttt");
 
         companion object {
             fun fromId(id: String): GameEdition {

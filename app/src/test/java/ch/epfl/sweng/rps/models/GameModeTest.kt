@@ -39,7 +39,7 @@ internal class GameModeTest {
         assertEquals(m2, GameMode.fromString(m2.toGameModeString()))
 
 
-        val g = Game(
+        val g = Game.Rps(
             game_mode = m1.toGameModeString(),
             players = listOf("player1", "player2"),
             current_round = 0,
@@ -51,7 +51,7 @@ internal class GameModeTest {
         )
 
         assertEquals(g.game_mode, m1.toGameModeString())
-        val m3 = g.mode
+        val m3 = g.gameMode
 
         assertEquals(m1, m3)
     }

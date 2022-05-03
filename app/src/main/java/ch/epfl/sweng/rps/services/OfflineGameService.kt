@@ -29,7 +29,7 @@ class OfflineGameService(
     override val isGameOver: Boolean
         get() {
             val game = game ?: return false
-            return game.current_round == game.mode.rounds - 1 && game.rounds[game.current_round.toString()]?.hands?.keys?.containsAll(
+            return game.current_round == game.gameMode.rounds - 1 && game.rounds[game.current_round.toString()]?.hands?.keys?.containsAll(
                 game.players
             ) ?: false
         }
@@ -37,17 +37,20 @@ class OfflineGameService(
 
     override suspend fun addRound(): Round {
         checkNotDisposed()
-        val round = Round(
+        val round = Round.Rps(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
-        game = game!!.copy(current_round = game!!.current_round.plus(1))
-        roundsMap[game?.current_round.toString()] = round
+        game = (game!! as Game.Rps).copy(current_round = game!!.current_round.plus(1))
+        setRound(round)
         return round
-
     }
 
-    private val roundsMap get() = currentGame.rounds as MutableMap
+
+    private fun setRound(round: Round) {
+        (currentGame.rounds as MutableMap)[game!!.current_round.toString()] = round
+    }
+
     private val currentHands get() = currentRound.hands as MutableMap
 
     override suspend fun playHand(hand: Hand) {
@@ -101,11 +104,11 @@ class OfflineGameService(
 
     override fun startListening(): GameService {
         checkNotDisposed()
-        val round = Round(
+        val round = Round.Rps(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
-        game = Game(
+        game = Game.Rps(
             gameId,
             computerPlayers.map { it.computerPlayerId },
             mutableMapOf("0" to round),

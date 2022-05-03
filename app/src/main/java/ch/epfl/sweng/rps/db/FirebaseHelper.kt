@@ -1,9 +1,7 @@
 package ch.epfl.sweng.rps.db
 
 import android.R
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.appcompat.content.res.AppCompatResources
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
@@ -59,7 +57,7 @@ object FirebaseHelper {
 
             }.sum()
 
-            val roundMode = userGame.mode.rounds
+            val roundMode = userGame.gameMode.rounds
             //by default 1v1 here, so just use overall rounds minus his score
             val opponentScore = roundMode.minus(userScore)
             // should be shown like "3 - 2 "

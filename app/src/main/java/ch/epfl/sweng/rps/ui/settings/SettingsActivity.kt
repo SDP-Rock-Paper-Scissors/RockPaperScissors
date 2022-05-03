@@ -184,14 +184,14 @@ class SettingsActivity : AppCompatActivity(),
                     id
                 )
                     .set(
-                        Game(
+                        Game.Rps(
                             id = id,
                             players = listOf(
                                 uid,
                                 uid2
                             ),
                             rounds = mapOf(
-                                "0" to Round(
+                                "0" to Round.Rps(
                                     hands = mapOf(
                                         uid to Hand.PAPER,
                                         uid2 to Hand.ROCK

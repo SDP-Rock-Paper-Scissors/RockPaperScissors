@@ -2,20 +2,15 @@ package ch.epfl.sweng.rps.db
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.util.Log
 import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.Game.Companion.toGame
 import ch.epfl.sweng.rps.utils.toListOf
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
-import android.util.Log
-import android.widget.ImageView
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.User
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
 import java.net.URI
@@ -99,7 +94,8 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun getGame(gameId: String): Game? {
-        return firebase.gamesCollection.document(gameId).get().await().toObject<Game>()
+        val doc: DocumentSnapshot = firebase.gamesCollection.document(gameId).get().await()
+        return doc.toGame()
     }
 
 
@@ -113,15 +109,15 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
-        return firebase.gamesCollection.whereArrayContains("players", uid).get()
-            .await().documents.toListOf()
+        return firebase.gamesCollection.whereArrayContains(Game.FIELDS.PLAYERS, uid).get()
+            .await().documents.map { it.toGame()!! }
     }
 
     override suspend fun myActiveGames(): List<Game> {
         return firebase.gamesCollection
-            .whereArrayContains("players", getCurrentUid())
-            .whereEqualTo("done", false)
-            .get().await().documents.toListOf()
+            .whereArrayContains(Game.FIELDS.PLAYERS, getCurrentUid())
+            .whereEqualTo(Game.FIELDS.DONE, false)
+            .get().await().documents.map { it.toGame()!! }
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
@@ -133,8 +129,6 @@ class FirebaseRepository private constructor(
         return firebase.invitationsOfUid(getCurrentUid()).get()
             .await().documents.toListOf()
     }
-
-
 
     private fun Uri.toURI(): URI = URI(toString())
 }

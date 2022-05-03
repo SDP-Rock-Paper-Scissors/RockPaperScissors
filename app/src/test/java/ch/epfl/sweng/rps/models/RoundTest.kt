@@ -8,7 +8,7 @@ class RoundTest {
     @Test
     fun testProperties() {
         val now = Timestamp.now()
-        val round = Round(
+        val round = Round.Rps(
             hands = hashMapOf(
                 "player1" to Hand.ROCK,
                 "player2" to Hand.SCISSORS
@@ -23,7 +23,7 @@ class RoundTest {
     @Test
     fun testScores() {
         val now = Timestamp.now()
-        val round = Round(
+        val round = Round.Rps(
             hands = hashMapOf(
                 "player1" to Hand.ROCK,
                 "player2" to Hand.SCISSORS,

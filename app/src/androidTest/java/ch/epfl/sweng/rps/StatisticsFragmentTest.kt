@@ -53,18 +53,18 @@ class StatisticsFragmentTest {
         repo.setCurrentUid("player1")
         repo.games.clear()
         repo.users.clear()
-        repo.games["game1"] = Game(
+        repo.games["game1"] = Game.Rps(
             "game1",
             listOf("player1", "player2"),
             mapOf(
-                "0" to Round(
+                "0" to Round.Rps(
                     mapOf(
                         "player1" to Hand.ROCK,
                         "player2" to Hand.SCISSORS
                     ),
                     Timestamp(Date(0))
                 ),
-                "1" to Round(
+                "1" to Round.Rps(
                     mapOf(
                         "player1" to Hand.SCISSORS,
                         "player2" to Hand.PAPER
