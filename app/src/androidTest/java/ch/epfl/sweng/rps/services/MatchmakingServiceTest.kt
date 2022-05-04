@@ -2,7 +2,7 @@ package ch.epfl.sweng.rps.services
 
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.ktx.Firebase
@@ -26,7 +26,15 @@ class MatchmakingServiceTest {
         val matchmakingService = MatchmakingService()
         assertThrows(FirebaseFunctionsException::class.java) {
             runBlocking {
-                matchmakingService.queue(Game.GameMode(2, Game.GameMode.Type.PVP, 3, 0)).collect()
+                matchmakingService.queue(
+                    GameMode(
+                        2,
+                        GameMode.Type.PVP,
+                        3,
+                        0,
+                        GameMode.GameEdition.RockPaperScissors
+                    )
+                ).collect()
             }
         }
     }
@@ -44,7 +52,13 @@ class MatchmakingServiceTest {
                     "",
                     LocalRepository(),
                     listOf(),
-                    Game.GameMode(2, Game.GameMode.Type.PVP, 3, 0)
+                    GameMode(
+                        2,
+                        GameMode.Type.PVP,
+                        3,
+                        0,
+                        GameMode.GameEdition.RockPaperScissors
+                    )
                 )
             )
         }

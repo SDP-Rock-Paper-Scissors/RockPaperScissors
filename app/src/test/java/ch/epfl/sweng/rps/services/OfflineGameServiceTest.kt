@@ -2,7 +2,7 @@ package ch.epfl.sweng.rps.services
 
 import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.ComputerPlayer
-import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.RandomPlayer
 import kotlinx.coroutines.runBlocking
@@ -29,7 +29,7 @@ class OfflineGameServiceTest {
             gameId,
             repo,
             computerPlayers,
-            Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0),
+            GameMode(2, GameMode.Type.PC, nEvents, 0, GameMode.GameEdition.RockPaperScissors),
         )
         gameService?.startListening()
     }
@@ -92,7 +92,7 @@ class OfflineGameServiceTest {
             gameId,
             mock(),
             computerPlayers,
-            Game.GameMode(2, Game.GameMode.Type.PC, 1, 0),
+            GameMode(2, GameMode.Type.PC, 1, 0, GameMode.GameEdition.RockPaperScissors),
         )
         gameService.startListening()
         assertThat(gameService.owner, `is`(gameService.currentGame.players.first()))
