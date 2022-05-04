@@ -1,10 +1,7 @@
 package ch.epfl.sweng.rps.services
 
 import ch.epfl.sweng.rps.db.Repository
-import ch.epfl.sweng.rps.models.ComputerPlayer
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.models.*
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.delay
 
@@ -12,7 +9,7 @@ class OfflineGameService(
     override val gameId: String,
     private val repository: Repository,
     private val computerPlayers: List<ComputerPlayer>,
-    private val gameMode: Game.GameMode,
+    private val gameMode: GameMode,
     @Suppress("UNUSED_PARAMETER")
     val artificialMovesDelay: Long = DEFAULT_DELAY
 ) : GameService() {

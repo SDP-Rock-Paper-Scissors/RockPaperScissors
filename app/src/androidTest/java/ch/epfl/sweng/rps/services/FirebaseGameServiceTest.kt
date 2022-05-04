@@ -1,17 +1,16 @@
 package ch.epfl.sweng.rps.services
 
-import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.utils.consume
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert.*
@@ -63,11 +62,12 @@ class FirebaseGameServiceTest {
                 "1" to round1
             ),
             1,
-            Game.GameMode(
+            GameMode(
                 2,
-                Game.GameMode.Type.PVP,
+                GameMode.Type.PVP,
                 3,
-                10
+                10,
+                GameMode.GameEdition.RockPaperScissors
             ).toGameModeString(),
             true,
             Timestamp(Date(0)),

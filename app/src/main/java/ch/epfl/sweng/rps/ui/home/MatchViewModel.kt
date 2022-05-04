@@ -3,7 +3,7 @@ package ch.epfl.sweng.rps.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.epfl.sweng.rps.models.ComputerPlayer
-import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.OfflineGameService
@@ -38,7 +38,7 @@ class MatchViewModel : ViewModel() {
             gameId,
             ServiceLocator.getInstance().repository,
             listOf(computerPlayer),
-            Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0),
+            GameMode(2, GameMode.Type.PC, nEvents, 0, GameMode.GameEdition.RockPaperScissors),
             artificialMovesDelay
         )
         gameService?.startListening()
