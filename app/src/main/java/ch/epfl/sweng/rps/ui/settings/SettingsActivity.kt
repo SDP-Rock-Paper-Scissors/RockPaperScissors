@@ -13,6 +13,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.services.ProdServiceLocator
@@ -157,11 +158,12 @@ class SettingsActivity : AppCompatActivity(),
                     Log.d("JOIN_QUEUE", "Joining queue")
                     try {
                         ServiceLocator.getInstance().matchmakingService.queue(
-                            Game.GameMode(
+                            GameMode(
                                 2,
-                                Game.GameMode.Type.PVP,
+                                GameMode.Type.PVP,
                                 3,
-                                0
+                                0,
+                                GameMode.GameEdition.RockPaperScissors
                             )
                         ).collect {
                             Log.i("QueueStatus", it.toString())

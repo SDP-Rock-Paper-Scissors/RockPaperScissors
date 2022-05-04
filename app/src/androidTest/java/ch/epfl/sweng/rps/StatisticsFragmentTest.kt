@@ -17,10 +17,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.Round
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.Timestamp
 import com.google.firebase.ktx.Firebase
@@ -76,11 +73,12 @@ class StatisticsFragmentTest {
                 )
             ),
             1,
-            Game.GameMode(
+            GameMode(
                 2,
-                Game.GameMode.Type.PVP,
+                GameMode.Type.PVP,
                 3,
-                10
+                10,
+                GameMode.GameEdition.RockPaperScissors
             ).toGameModeString(),
             true,
             Timestamp(Date(0)),

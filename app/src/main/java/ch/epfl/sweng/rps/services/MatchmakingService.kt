@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
-import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 class MatchmakingService {
     private val cloudFunctions = CloudFunctions()
 
-    fun queue(gameMode: Game.GameMode): Flow<QueueStatus> = flow {
+    fun queue(gameMode: GameMode): Flow<QueueStatus> = flow {
         Log.i("MatchmakingService", "Queueing for game mode ${gameMode.toGameModeString()}")
         emit(QueueStatus.Queued)
         Log.i("MatchmakingService", "Sending request to cloud function")
@@ -51,7 +51,7 @@ class MatchmakingService {
     class CloudFunctions {
         private val functions get() = Firebase.functions("europe-west1")
 
-        suspend fun queue(gameMode: Game.GameMode): String {
+        suspend fun queue(gameMode: GameMode): String {
             val res = functions.getHttpsCallable("queue").call(
                 hashMapOf(
                     "game_mode" to gameMode.toGameModeString()
@@ -60,7 +60,7 @@ class MatchmakingService {
             return res.data as String
         }
 
-        suspend fun invitePlayer(gameMode: Game.GameMode, userId: String): String {
+        suspend fun invitePlayer(gameMode: GameMode, userId: String): String {
             val res = functions.getHttpsCallable("invite_player").call(
                 hashMapOf(
                     "game_mode" to gameMode.toGameModeString(),
