@@ -2,13 +2,16 @@ package ch.epfl.sweng.rps.db
 
 import ch.epfl.sweng.rps.db.Repository.UserNotLoggedIn
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Invitation
 import ch.epfl.sweng.rps.models.User
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import java.util.*
 
 @ExperimentalCoroutinesApi
 class LocalRepositoryTest {
@@ -134,6 +137,22 @@ class LocalRepositoryTest {
             localRepository.setCurrentUid("user1")
             assertEquals(listOf<Game>(), localRepository.gamesOfUser("user1"))
             assertNull(localRepository.getGame("game1"))
+        }
+    }
+
+    @Test
+    fun listInvitations() {
+        runBlocking {
+            val localRepository = LocalRepository()
+            localRepository.setCurrentUid("user1")
+            assertEquals(listOf<Invitation>(), localRepository.listInvitations())
+            localRepository.invitations["invitation1"] =
+                Invitation("game1", Timestamp.now(), "user2", "invitation1")
+            assertEquals(1, localRepository.listInvitations().size)
+            assertEquals("invitation1", localRepository.listInvitations()[0].id)
+            assertEquals("game1", localRepository.listInvitations()[0].game_id)
+            assertEquals("user2", localRepository.listInvitations()[0].from)
+            assertTrue(localRepository.listInvitations()[0].timestamp.seconds > 0)
         }
     }
 }

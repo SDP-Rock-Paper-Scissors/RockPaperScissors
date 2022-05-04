@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Game
@@ -21,6 +22,11 @@ class FirebaseGameService(
     private var listenerRegistration: ListenerRegistration? = null
     private var _active = false
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun setGameTest(game: Game) {
+        super.game = game
+    }
+
     override fun startListening(): FirebaseGameService {
         checkNotDisposed()
         if (listenerRegistration != null) {
@@ -29,8 +35,8 @@ class FirebaseGameService(
         listenerRegistration =
             gameRef.addSnapshotListener { value, e ->
                 if (e != null) {
-                    error = e
                     Log.e("FirebaseGameService", "Error while listening to game $gameId", e)
+                    error = e
                 } else {
                     game = value?.toObject<Game>()
                 }
