@@ -40,6 +40,8 @@ import java.lang.Math.min
 import java.nio.ByteBuffer
 import java.util.Timer
 import java.util.TimerTask
+import android.view.View
+
 
 /**
  * Abstract base class for ML Kit frame processors. Subclasses need to implement {@link
@@ -158,7 +160,7 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
     graphicOverlay: GraphicOverlay,
     originalCameraImage: Bitmap?,
     shouldShowFps: Boolean,
-    frameStartMs: Long
+    frameStartMs: Long,
   ): Task<T> {
     val detectorStartMs = SystemClock.elapsedRealtime()
     return task

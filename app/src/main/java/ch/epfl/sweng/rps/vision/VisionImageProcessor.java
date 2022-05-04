@@ -26,6 +26,8 @@ import com.google.mlkit.common.MlKitException;
 
 import java.nio.ByteBuffer;
 
+import ch.epfl.sweng.rps.ui.camera.CameraXViewModel;
+
 /** An interface to process the images with different vision detectors and custom image models. */
 public interface VisionImageProcessor {
 

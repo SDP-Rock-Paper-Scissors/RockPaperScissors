@@ -18,6 +18,8 @@ package ch.epfl.sweng.rps.ui.camera
 
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +37,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.vision.GraphicOverlay
 import ch.epfl.sweng.rps.vision.LabelDetectorProcessor
@@ -60,6 +63,7 @@ class CameraXLivePreviewActivity :
   private var lensFacing = CameraSelector.LENS_FACING_BACK
   private var cameraSelector: CameraSelector? = null
   private var targetResolution: Size = Size(960, 1280)
+  private var model: CameraXViewModel? = null
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +82,9 @@ class CameraXLivePreviewActivity :
       Log.d(TAG, "graphicOverlay is null")
     }
 
-    ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))[CameraXViewModel::class.java]
-      .processCameraProvider
+    model = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application))[CameraXViewModel::class.java]
+
+    model!!.processCameraProvider
       .observe(
         this,
         Observer { provider: ProcessCameraProvider? ->
@@ -87,6 +92,19 @@ class CameraXLivePreviewActivity :
           bindAllCameraUseCases()
         }
       )
+    model!!.running
+      .observe(
+        this,
+        Observer { result: String ->
+           Intent(this, MainActivity::class.java )
+             .putExtra("result", result)
+             .setAction("fromCamera").also{
+             startActivity(it)
+          }
+        }
+      )
+
+
   }
   private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
     //Callback what to do with the response of the permissions
@@ -151,12 +169,12 @@ class CameraXLivePreviewActivity :
     }
     imageProcessor =
       try {
-        Log.i(TAG, "Using Custom Image Label (Birds) Detector Processor")
+        Log.i(TAG, "Using Custom Image Label rock_paper_scissors Detector Processor")
         val localClassifier =
           LocalModel.Builder().setAssetFilePath("model_1.tflite").build()
         val customImageLabelerOptions =
           CustomImageLabelerOptions.Builder(localClassifier).build()
-        LabelDetectorProcessor(this, customImageLabelerOptions)
+        LabelDetectorProcessor(this, customImageLabelerOptions, model!!)
 
       } catch (e: Exception) {
         Log.e(TAG, "Can not create image processor", e)

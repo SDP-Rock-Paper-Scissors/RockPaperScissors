@@ -51,19 +51,31 @@ public final class CameraXViewModel extends AndroidViewModel {
       cameraProviderLiveData = new MutableLiveData<>();
 
       ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
-          ProcessCameraProvider.getInstance(getApplication());
+              ProcessCameraProvider.getInstance(getApplication());
       cameraProviderFuture.addListener(
-          () -> {
-            try {
-              cameraProviderLiveData.setValue(cameraProviderFuture.get());
-            } catch (ExecutionException | InterruptedException e) {
-              // Handle any errors (including cancellation) here.
-              Log.e(TAG, "Unhandled exception", e);
-            }
-          },
-          ContextCompat.getMainExecutor(getApplication()));
+              () -> {
+                try {
+                  cameraProviderLiveData.setValue(cameraProviderFuture.get());
+                } catch (ExecutionException | InterruptedException e) {
+                  // Handle any errors (including cancellation) here.
+                  Log.e(TAG, "Unhandled exception", e);
+                }
+              },
+              ContextCompat.getMainExecutor(getApplication()));
     }
 
     return cameraProviderLiveData;
+  }
+
+  /**
+   * View model related to the detected symbol of the Analyzer
+   */
+  private MutableLiveData<String> result;
+
+  public MutableLiveData<String> getRunning() {
+      if (result == null) {
+          result = new MutableLiveData<>();
+      }
+      return result;
   }
 }

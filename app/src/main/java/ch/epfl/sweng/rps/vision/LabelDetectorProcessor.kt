@@ -18,6 +18,7 @@ package ch.epfl.sweng.rps.vision
 
 import android.content.Context
 import android.util.Log
+import ch.epfl.sweng.rps.ui.camera.CameraXViewModel
 import ch.epfl.sweng.rps.ui.camera.LabelGraphic
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.vision.common.InputImage
@@ -27,14 +28,19 @@ import com.google.mlkit.vision.label.ImageLabelerOptionsBase
 import com.google.mlkit.vision.label.ImageLabeling
 import java.io.IOException
 
-/** Custom InputImage Classifier Demo.  */
-class LabelDetectorProcessor(context: Context, options: ImageLabelerOptionsBase) :
-  VisionProcessorBase<List<ImageLabel>>(context) {
 
+
+/** Custom InputImage Classifier Demo.  */
+class LabelDetectorProcessor(context: Context, options: ImageLabelerOptionsBase, private val model: CameraXViewModel) :
+  VisionProcessorBase<List<ImageLabel>>(context) {
+  
   private val imageLabeler: ImageLabeler = ImageLabeling.getClient(options)
+
+
 
   override fun stop() {
     super.stop()
+
     try {
       imageLabeler.close()
     } catch (e: IOException) {
@@ -52,7 +58,12 @@ class LabelDetectorProcessor(context: Context, options: ImageLabelerOptionsBase)
   override fun onSuccess(results: List<ImageLabel>, graphicOverlay: GraphicOverlay) {
     graphicOverlay.add(LabelGraphic(graphicOverlay, results))
     logExtrasForTesting(results)
+    if(!results.isNullOrEmpty() && results.first().confidence > 0.85) {
+        this.model.running.postValue(results.first().text)
+      stop()
+      }
   }
+
 
   override fun onFailure(e: Exception) {
     Log.w(TAG, "Label detection failed.$e")
