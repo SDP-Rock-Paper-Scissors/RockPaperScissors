@@ -27,7 +27,7 @@ import com.google.mlkit.vision.label.ImageLabeler
 import com.google.mlkit.vision.label.ImageLabelerOptionsBase
 import com.google.mlkit.vision.label.ImageLabeling
 import java.io.IOException
-
+import java.util.*
 
 
 /** Custom InputImage Classifier Demo.  */
@@ -35,6 +35,10 @@ class LabelDetectorProcessor(context: Context, options: ImageLabelerOptionsBase,
   VisionProcessorBase<List<ImageLabel>>(context) {
   
   private val imageLabeler: ImageLabeler = ImageLabeling.getClient(options)
+  private val confidenceQueueRock: Queue<Double> = LinkedList<Double>(listOf(0.0, 0.0 ,0.0))
+  private val confidenceQueuePaper: Queue<Double> = LinkedList<Double>(listOf(0.0, 0.0 ,0.0))
+  private val confidenceQueueScissors: Queue<Double> = LinkedList<Double>(listOf(0.0, 0.0 ,0.0))
+  private val threshold: Double = 0.85
 
 
 
@@ -55,13 +59,28 @@ class LabelDetectorProcessor(context: Context, options: ImageLabelerOptionsBase,
     return imageLabeler.process(image)
   }
 
+  private fun updateQueue(confidenceQueue: Queue<Double>, name: String , results: List<ImageLabel>){
+    confidenceQueue.poll()
+    val imageLabel = results.find { imageLabel -> name == imageLabel.text}
+    confidenceQueue.add(imageLabel!!.confidence.toDouble())
+  }
+
   override fun onSuccess(results: List<ImageLabel>, graphicOverlay: GraphicOverlay) {
     graphicOverlay.add(LabelGraphic(graphicOverlay, results))
     logExtrasForTesting(results)
-    if(!results.isNullOrEmpty() && results.first().confidence > 0.85) {
+
+    if (!results.isNullOrEmpty()) {
+      updateQueue(confidenceQueuePaper, "paper", results)
+      updateQueue(confidenceQueueRock, "rock", results)
+      updateQueue(confidenceQueueScissors, "scissors", results)
+
+      if (confidenceQueuePaper.all{it > threshold} ||
+        confidenceQueueRock.all{it > threshold} ||
+        confidenceQueuePaper.all{it > threshold}) {
         this.model.running.postValue(results.first().text)
-      stop()
+        stop()
       }
+    }
   }
 
 
