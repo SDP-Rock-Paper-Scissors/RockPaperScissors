@@ -64,8 +64,11 @@ class TicTacToeFragment : Fragment() {
         if(choice == 0){
             //0 represent cross "x"
             boxList[index].setImageResource(R.drawable.cross)
+            boxList[index].tag = R.drawable.cross
+
         }else{
             boxList[index].setImageResource(R.drawable.nought)
+            boxList[index].tag = R.drawable.nought
         }
     }
 
