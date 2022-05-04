@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -219,11 +220,12 @@ class SettingsActivity : AppCompatActivity(),
                                         timestamp = Timestamp.now()
                                     )
                                 ),
-                                game_mode = Game.GameMode(
+                                game_mode = GameMode(
                                     playerCount = 2,
-                                    type = Game.GameMode.Type.PVP,
+                                    type = GameMode.Type.PVP,
                                     rounds = 1,
-                                    timeLimit = 0
+                                    timeLimit = 0,
+                                    game = GameMode.GameEdition.RockPaperScissors
                                 ).toGameModeString(),
                                 current_round = 0,
                                 done = true,
