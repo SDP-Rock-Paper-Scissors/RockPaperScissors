@@ -5,8 +5,10 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game.Companion.toGame
 import ch.epfl.sweng.rps.utils.toListOf
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -82,25 +84,39 @@ class FirebaseRepository private constructor(
     override fun rawCurrentUid(): String? = FirebaseAuth.getInstance().currentUser?.uid
 
     override suspend fun sendFriendRequestTo(uid: String) {
-        firebase.usersFriendRequestOfUid(uid)
-            .add(FriendRequest(from = getCurrentUid())).await()
+        firebase.usersFriendRequest
+            .add(FriendRequest.build(from = getCurrentUid(), to = uid, timestamp = Timestamp.now()))
+            .await()
     }
 
     override suspend fun listFriendRequests(): List<FriendRequest> {
-        return firebase.usersFriendRequestOfUid(getCurrentUid()).get().await().documents.toListOf()
+        return firebase.usersFriendRequest
+            .whereArrayContains("users", getCurrentUid())
+            .whereNotEqualTo("status", FriendRequest.Status.PENDING).get()
+            .await().toObjects(FriendRequest::class.java)
     }
 
     override suspend fun getFriends(): List<String> {
-        return firebase.usersFriendRequestOfUid(getCurrentUid())
-            .whereEqualTo("accepted", true)
+        val me = getCurrentUid()
+        return firebase.usersFriendRequest
+            .whereEqualTo("status", FriendRequest.Status.ACCEPTED)
+            .whereArrayContains("members", getCurrentUid())
             .get().await().documents
-            .map { it.toObject<FriendRequest>()!!.from }
+            .map { it.toObject<FriendRequest>()!!.users / me }
     }
 
-    override suspend fun acceptFriendRequestFrom(userUid: String) {
-        firebase.usersFriendRequestOfUid(userUid)
-            .whereEqualTo("from", getCurrentUid()).limit(1)
-            .get().await().documents.first().reference.update("accepted", true).await()
+
+    override suspend fun changeFriendRequestToStatus(
+        userUid: String,
+        status: FriendRequest.Status
+    ) {
+        firebase.usersFriendRequest
+            .whereArrayContains("users", userUid)
+            .whereArrayContains("users", getCurrentUid())
+            .whereNotEqualTo("status", FriendRequest.Status.PENDING)
+            .limit(1)
+            .get().await().documents.first().reference
+            .update("status", status).await()
     }
 
     override suspend fun getGame(gameId: String): Game? {
@@ -111,7 +127,7 @@ class FirebaseRepository private constructor(
 
     override suspend fun getLeaderBoardScore(): List<TotalScore> {
         return firebase.scoresCollection.orderBy("score", Query.Direction.DESCENDING).get()
-            .await().documents.map{
+            .await().documents.map {
                 it.toObject<TotalScore>()!!
             }
 
@@ -141,6 +157,8 @@ class FirebaseRepository private constructor(
     }
 
     private fun Uri.toURI(): URI = URI(toString())
+
+    private operator fun <T> List<T>.div(el: T): T = first { it != el }
 }
 
 

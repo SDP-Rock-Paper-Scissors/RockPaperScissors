@@ -94,7 +94,7 @@ class FirebaseTests {
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                db.acceptFriendRequestFrom("user1")
+                db.acceptFriendRequest("user1")
             }
         }
     }

@@ -91,6 +91,28 @@
         android:textSize="15sp"
         android:text="Open camera" />
 
+    <TextView
+        android:id="@+id/text_new_game"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="Add new game"/>
+
+    <Button
+        android:id="@+id/button_tik_tac_toe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Tic Tac Toe"
+        android:textSize="15sp" />
+
+
 
 
 
