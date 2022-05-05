@@ -39,6 +39,7 @@ class GameFragment : Fragment() {
                 matchViewModel.computerPlayerCurrentPoints
             binding.userMatchData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
         }
+        uiSetup()
     }
 
     private fun rpsPressed(hand: Hand) {
@@ -102,6 +103,17 @@ class GameFragment : Fragment() {
         if (matchViewModel.gameService?.isGameOver!!) {
             binding.opponentMatchData.currentPoints.text = "0"
             binding.userMatchData.currentPoints.text = "0"
+        }
+    }
+
+    private fun uiSetup() {
+        timeLimitSetup()
+    }
+
+    private fun timeLimitSetup() {
+        when (matchViewModel.timeLimit) {
+            0 -> binding.counter.text = getString(R.string.infinity)
+            else -> binding.counter.text = matchViewModel.timeLimit?.toString()
         }
     }
 }

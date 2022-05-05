@@ -28,6 +28,7 @@ class MatchViewModel : ViewModel() {
     var computerPlayer: ComputerPlayer? = null
     var nEvents: Int? = null
     var artificialMovesDelay: Long? = null
+    var timeLimit: Int? = 0 // this will be modifiable when the options allow it
     var job: Job? = null
     var repository = ServiceLocator.getInstance().repository
     var uid: String = repository.getCurrentUid()
@@ -57,7 +58,7 @@ class MatchViewModel : ViewModel() {
             gameId,
             repository,
             listOf(computerPlayer!!),
-            Game.GameMode(2, Game.GameMode.Type.PC, nEvents!!, 0),
+            Game.GameMode(2, Game.GameMode.Type.PC, nEvents!!, timeLimit!!),
             artificialMovesDelay!!
         )
         gameService?.startListening()
