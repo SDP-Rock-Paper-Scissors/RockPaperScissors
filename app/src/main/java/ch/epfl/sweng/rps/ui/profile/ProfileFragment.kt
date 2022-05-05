@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.ui.profile
 
 import android.app.Activity
-import android.app.Instrumentation
 import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
@@ -16,15 +15,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -91,11 +87,10 @@ class ProfileFragment : Fragment() {
     }
     private fun getPicture(){
         val intent = Intent()
-        intent.type = "image/*";
+        intent.type = "image/*"
         intent.action = Intent.ACTION_PICK
         intent.setDataAndType ( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*" )
         resultLauncher.launch(intent)
     }
-    companion object{
-    }
+    companion object
 }

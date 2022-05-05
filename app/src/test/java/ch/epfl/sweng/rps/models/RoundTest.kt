@@ -55,4 +55,27 @@ class RoundTest {
         assertEquals(-1, pointSystem.getPoints(Hand.Result.LOSS))
         assertEquals(0, pointSystem.getPoints(Hand.Result.TIE))
     }
+
+    @Test
+    fun testMore() {
+        val round = Round(
+            hands = hashMapOf(
+                "player1" to Hand.ROCK,
+                "player2" to Hand.SCISSORS,
+                "player3" to Hand.PAPER,
+                "player4" to Hand.PAPER,
+            ),
+            timestamp = Timestamp.now(),
+        )
+        val first = round.computeScores().first()
+        assertEquals(1, first.points)
+        assertEquals("player2", first.uid)
+        assertEquals(
+            listOf(
+                Hand.Result.WIN,
+                Hand.Result.WIN,
+                Hand.Result.LOSS
+            ).sortedBy { it.ordinal }, first.results.sortedBy { it.ordinal })
+
+    }
 }

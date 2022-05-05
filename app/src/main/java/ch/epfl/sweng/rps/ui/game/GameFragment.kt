@@ -12,7 +12,6 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
-import kotlinx.coroutines.delay
 
 class GameFragment : Fragment() {
 

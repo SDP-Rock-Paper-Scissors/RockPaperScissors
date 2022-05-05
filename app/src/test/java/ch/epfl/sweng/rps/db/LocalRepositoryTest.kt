@@ -75,7 +75,7 @@ class LocalRepositoryTest {
         localRepository.sendFriendRequestTo(u2)
 
         localRepository.setCurrentUid(u2)
-        localRepository.acceptFriendRequestFrom(u1)
+        localRepository.acceptFriendRequest(u1)
 
         assertTrue(localRepository.getFriends().contains(u1))
         assertEquals(1, localRepository.getFriends().size)
@@ -92,7 +92,7 @@ class LocalRepositoryTest {
 
         localRepository.setCurrentUid(u2)
         val friendRequest = localRepository.listFriendRequests().find { it.from == u1 }
-        localRepository.acceptFriendRequestFrom(friendRequest!!)
+        localRepository.acceptFriendRequest(friendRequest!!.from)
 
         assertTrue(localRepository.getFriends().contains(u1))
         assertEquals(1, localRepository.getFriends().size)
