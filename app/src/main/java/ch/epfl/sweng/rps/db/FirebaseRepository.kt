@@ -33,33 +33,32 @@ class FirebaseRepository private constructor(
     }
 
 
-
     override suspend fun getUser(uid: String): User? {
         val user = firebase.usersCollection.document(uid).get().await()
         return user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
+    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
         return if (getUser(uid)!!.has_profile_photo)
             firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
         else
             null
     }
 
-    override suspend fun getUserProfilePictureImage(uid:String): Bitmap? {
-        return if (getUser(uid)!!.has_profile_photo){
-             val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
-             Log.d("URI" , uri.path!!)
-             BitmapFactory.decodeStream(java.net.URL(uri.toURL(),"" ).openStream())
-        }
-        else
+    override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
+        return if (getUser(uid)!!.has_profile_photo) {
+            val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
+            Log.d("URI", uri.path!!)
+            BitmapFactory.decodeStream(java.net.URL(uri.toURL(), "").openStream())
+        } else
             null
     }
-    override suspend fun setUserProfilePicture(image : Bitmap){
+
+    override suspend fun setUserProfilePicture(image: Bitmap) {
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
-        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO , true))
+        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO, true))
         firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
     }
 
@@ -134,8 +133,10 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
-        return firebase.usersCollection.document(uid).collection("stats").document("games").get()
-            .await().toObject<UserStats>()!!
+        return firebase.usersCollection.document(uid)
+            .collection("stats")
+            .document("games").get()
+            .await().toObject<UserStats>() ?: UserStats(userId = uid)
     }
 
     override suspend fun listInvitations(): List<Invitation> {
