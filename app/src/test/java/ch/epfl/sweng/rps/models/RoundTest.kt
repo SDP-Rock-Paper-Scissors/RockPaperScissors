@@ -55,4 +55,6 @@ class RoundTest {
         assertEquals(-1, pointSystem.getPoints(Hand.Result.LOSS))
         assertEquals(0, pointSystem.getPoints(Hand.Result.TIE))
     }
+
+
 }

@@ -16,7 +16,7 @@ sealed class Round() {
     abstract val timestamp: Timestamp
     abstract val edition: GameMode.GameEdition
 
-    class Rps(
+    data class Rps(
         override val hands: Map<String, Hand> = mapOf(),
         override val timestamp: Timestamp = Timestamp(Date(0))
     ) : Round() {
@@ -58,18 +58,15 @@ sealed class Round() {
         }
     }
 
-    class TicTacToe(
-        val board: List<Int> = (1..9).map { 0 },
+    data class TicTacToe(
+        val board: List<Int?> = (1..9).map { null },
         val players: Map<String, Int> = mapOf(),
         val turn: String = "",
         override val timestamp: Timestamp = Timestamp(Date(0))
     ) : Round() {
         override val edition: GameMode.GameEdition = GameMode.GameEdition.TicTacToe
 
-
         override fun computeScores(pointSystem: PointSystem): List<Score> {
-            val isGameOver = board.none { it == 0 }
-
             val winner = computeWinner()
             when {
                 winner != null -> return players.map {
@@ -94,24 +91,36 @@ sealed class Round() {
         override fun getWinner(): String? {
             val winner = computeWinner()
             return if (winner != null) {
-                players.entries.first { it.value == winner }.key
+                players.entries.firstOrNull { it.value == winner }?.key
             } else {
                 null
             }
         }
 
+        val isGameOver: Boolean get() = board.none { it == null }
+
         // Look for a diagonal, a row or a column full of the same value
         // Return the value if found, null otherwise
         private fun computeWinner(): Int? {
-            val n = 3
-            val diag = board.indices.map { board[it] }.toList()
-            val diag2 = board.indices.map { board[n - 1 - it] }.toList()
-            val rows = board.chunked(n)
-            val cols = rows.map { it.reversed() }
+            val diag = listOf(0, 4, 8).map { board[it] }
+            val diag2 = listOf(2, 4, 6).map { board[it] }
+            val rows = board.chunked(3)
+            val initialValues = Array<Int?>(3) { null }
+            val cols = board.foldRightIndexed(
+                (0 until 3).map { initialValues.toMutableList() }
+            ) { index, elem, acc ->
+                acc[index % 3][index / 3] = elem
+                acc
+            }
             val all = rows + cols + listOf(diag, diag2)
-            return all.firstNotNullOfOrNull {
-                if (it.distinct().size == 1) {
-                    it.first()
+            println("Rows: $rows")
+            println("Cols: $cols")
+            println("Diag: $diag")
+            println("Diag2: $diag2")
+            return all.firstNotNullOfOrNull { list ->
+                val first = list.first()
+                if (list.all { it == first }) {
+                    first
                 } else {
                     null
                 }
