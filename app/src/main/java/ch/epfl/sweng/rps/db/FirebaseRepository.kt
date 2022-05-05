@@ -100,7 +100,7 @@ class FirebaseRepository private constructor(
         val me = getCurrentUid()
         return firebase.usersFriendRequest
             .whereEqualTo("status", FriendRequest.Status.ACCEPTED)
-            .whereArrayContains("members", getCurrentUid())
+            .whereArrayContains("users", getCurrentUid())
             .get().await().documents
             .map { it.toObject<FriendRequest>()!!.users / me }
     }
