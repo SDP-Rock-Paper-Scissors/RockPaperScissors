@@ -1,8 +1,10 @@
 package ch.epfl.sweng.rps.utils
 
 import androidx.annotation.CallSuper
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
-open class ChangeNotifier {
+open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
 
     private val listeners = ArrayList<() -> Unit>()
 
@@ -50,5 +52,23 @@ open class ChangeNotifier {
     class ListenerNotFoundException : Exception {
         constructor(message: String?, cause: Throwable?) : super(message, cause)
         constructor(message: String) : super(message)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    suspend fun awaitFor(predicate: (T) -> Boolean) {
+        var listener: (() -> Unit)? = null
+        suspendCancellableCoroutine<Unit> { cont ->
+            listener = {
+                if (predicate(this@ChangeNotifier as T)) {
+                    cont.resume(Unit)
+                }
+            }
+            addListener(listener!!)
+        }
+        listener?.let { removeListener(it) }
+    }
+
+    suspend fun await() {
+        awaitFor { true }
     }
 }

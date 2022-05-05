@@ -7,7 +7,6 @@ import ch.epfl.sweng.rps.db.Repository
 
 interface ServiceLocator {
 
-
     companion object {
         private val instances = mutableMapOf<Env, ServiceLocator>()
 
@@ -35,6 +34,8 @@ interface ServiceLocator {
             get() = getInstance(Env.Test).repository as LocalRepository
     }
 
+    fun getGameServiceForGame(gameId: String, start: Boolean = true): FirebaseGameService
+
     val repository: Repository
 
     fun dispose()
@@ -45,7 +46,10 @@ interface ServiceLocator {
 
     val cachedGameServices: List<String>
 
+    val matchmakingService: MatchmakingService
+
     class TestServiceLocator : ServiceLocator {
+
 
         override val repository = LocalRepository()
 
@@ -54,7 +58,10 @@ interface ServiceLocator {
 
         override val env: Env = Env.Test
 
-        fun getGameServiceForGame(gameId: String, start: Boolean = true): FirebaseGameService {
+        override fun getGameServiceForGame(
+            gameId: String,
+            start: Boolean
+        ): FirebaseGameService {
             TODO("Not yet implemented")
         }
 
@@ -64,5 +71,9 @@ interface ServiceLocator {
 
         override val cachedGameServices: List<String>
             get() = listOf()
+        override val matchmakingService: MatchmakingService
+            get() = TODO("Not yet implemented")
     }
+
+
 }

@@ -2,15 +2,19 @@ package ch.epfl.sweng.rps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.db.*
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
+import ch.epfl.sweng.rps.utils.europeWest1
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -20,6 +24,8 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.runner.RunWith
 
 /**
@@ -30,22 +36,27 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class FirebaseTests {
-    private val db = FirebaseRepository.createInstance(FirebaseReferences())
+    lateinit var db: Repository
 
     @Before
     fun setUp() {
+        db = ServiceLocator.getInstance(Env.Test).repository
+
         for (env in Env.values()) {
             ServiceLocator.getInstance(env).disposeAllGameServices()
         }
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
-        runBlocking {
-            FirebaseAuth.getInstance().signOut()
-        }
+        FirebaseAuth.getInstance().signOut()
     }
 
     @After
     fun tearDown() {
+        FirebaseApp.clearInstancesForTest()
+    }
 
+    @Test
+    fun testEuropeWest1() {
+        assertDoesNotThrow { Firebase.europeWest1 }
     }
 
     @Test
@@ -83,7 +94,7 @@ class FirebaseTests {
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                db.acceptFriendRequestFrom("user1")
+                db.acceptFriendRequest("user1")
             }
         }
     }
@@ -200,5 +211,11 @@ class FirebaseTests {
         assertEquals("games", firebase.gamesCollection.path)
 
         assertEquals("/profile_pictures", firebase.profilePicturesFolder.path)
+    }
+
+    @Test
+    fun testEmulator() {
+        FirebaseEmulatorsUtils.useEmulators()
+        assertEquals(true, FirebaseEmulatorsUtils.emulatorUsed)
     }
 }

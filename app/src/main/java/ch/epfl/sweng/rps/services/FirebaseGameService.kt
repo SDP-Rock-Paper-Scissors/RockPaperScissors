@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Game
@@ -21,6 +22,11 @@ class FirebaseGameService(
     private var listenerRegistration: ListenerRegistration? = null
     private var _active = false
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun setGameTest(game: Game) {
+        super.game = game
+    }
+
     override fun startListening(): FirebaseGameService {
         checkNotDisposed()
         if (listenerRegistration != null) {
@@ -29,8 +35,8 @@ class FirebaseGameService(
         listenerRegistration =
             gameRef.addSnapshotListener { value, e ->
                 if (e != null) {
-                    error = e
                     Log.e("FirebaseGameService", "Error while listening to game $gameId", e)
+                    error = e
                 } else {
                     game = value?.toObject<Game>()
                 }
@@ -58,7 +64,7 @@ class FirebaseGameService(
 
     override val isGameFull: Boolean
         get() {
-            return currentGame.players.size == currentGame.mode.playerCount
+            return currentGame.players.size == currentGame.gameMode.playerCount
         }
 
     /**
@@ -73,15 +79,15 @@ class FirebaseGameService(
         if (game.players.first() != firebaseRepository.getCurrentUid()) {
             throw GameServiceException("Only the first player can add a round")
         }
-        val round = Round(
+        val round = Round.Rps(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
 
         gameRef.update(
             mapOf(
-                "rounds.${game.current_round + 1}" to round,
-                "current_round" to game.current_round + 1,
+                "${Game.FIELDS.ROUNDS}.${game.current_round + 1}" to round,
+                Game.FIELDS.CURRENT_ROUND to game.current_round + 1,
             )
         ).await()
         return round
@@ -109,7 +115,7 @@ class FirebaseGameService(
         val game = refreshGame()
         val me = firebaseRepository.getCurrentUid()
         firebase.gamesCollection.document(gameId)
-            .update(mapOf("rounds.${game.current_round}.${me}" to hand))
+            .update(mapOf("${Game.FIELDS.ROUNDS}.${game.current_round}.${me}" to hand))
             .await()
     }
 

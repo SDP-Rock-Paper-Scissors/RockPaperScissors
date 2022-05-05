@@ -17,8 +17,8 @@ class FirebaseReferencesTest {
     @Test
     fun usersFriendRequestOfUid() {
         assertEquals(
-            "users/{uid}/friend_requests",
-            FirebaseReferences().usersFriendRequestOfUid("{uid}").path
+            "friend_requests",
+            FirebaseReferences().usersFriendRequest.path
         )
     }
 

@@ -2,31 +2,48 @@ package ch.epfl.sweng.rps
 
 import android.R
 import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import androidx.annotation.ColorInt
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
+import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.persistence.PrivateStorage
 import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
+import io.mockk.*
 
 @RunWith(AndroidJUnit4::class)
 class CacheTests {
-    lateinit  var cache :Cache
+    lateinit var cache :Cache
+    lateinit var cacheWithoutAuth : Cache
+    lateinit var storage:Storage
     @Before
     fun setUp(){
-        ServiceLocator.setCurrentEnv(Env.Test)
+        ServiceLocator.setCurrentEnv(Env.Prod)
+        Firebase.initializeForTest()
+        cacheWithoutAuth = Cache.createInstance(InstrumentationRegistry.getInstrumentation().targetContext, mockk<FirebaseRepository>(relaxed = true))
         cache = Cache.createInstance(InstrumentationRegistry.getInstrumentation().targetContext)
-        val storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
+        storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
         storage.removeFile(Storage.FILES.STATSDATA)
         storage.removeFile(Storage.FILES.USERINFO)
         storage.removeFile(Storage.FILES.LEADERBOARDDATA)
+        storage.removeFile(Storage.FILES.USERPICTURE)
     }
     @Test
     fun cacheContainsNoDataWhenCreated(){
@@ -35,10 +52,18 @@ class CacheTests {
         assert(cache.getLeaderBoardData().isEmpty())
     }
     @Test
+    fun cacheCorrectlyRetrievesUserDetailsFromStorage(){
+        runBlocking {
+            assert(cacheWithoutAuth.getUserDetails() == null)
+            cacheWithoutAuth.updateUserDetails(User(uid="RAND"))
+            assert(cacheWithoutAuth.getUserDetails()?.uid == "RAND")
+        }
+    }
+    @Test
     fun cacheCorrectlySavesUser(){
         val user:User? = User(username = "USERNAME",uid="01234", email = "test@test.org")
         cache.updateUserDetails(user)
-        assert(cache.getUserDetails()!!.equals(user))
+        assert(cache.getUserDetails()!! == user)
     }
     @Test
     fun cacheCorrectlySavesStatsData(){
@@ -66,5 +91,36 @@ class CacheTests {
         cache.updateLeaderBoardData(allPlayers)
         val result = cache.getLeaderBoardData()
         assert(result == allPlayers)
+    }
+    @Test
+    fun cacheCorrectlySavesProfileImage(){
+        assert(cacheWithoutAuth.getUserPicture() == null)
+        val btm = createTestBitmap(30,30, null)
+        runBlocking {
+            cacheWithoutAuth.updateUserPicture(btm)
+        }
+        assert(cacheWithoutAuth.getUserPicture() == btm)
+    }
+    @Test
+    fun cacheCorrectlyRetrievesProfileImageFromStorage(){
+       assert(cache.getUserPicture() == null)
+       val bitmap = createTestBitmap(20,20, Color.RED)
+       storage.writeBackUserPicture(bitmap)
+       assert(cache.getUserPicture() != null)
+    }
+    fun createTestBitmap(w: Int, h: Int, @ColorInt color: Int?): Bitmap {
+        var color = color
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        if (color == null) {
+            val colors = intArrayOf(
+                Color.BLUE, Color.GREEN, Color.RED,
+                Color.YELLOW, Color.WHITE
+            )
+            val rgen = Random()
+            color = colors[rgen.nextInt(colors.size - 1)]
+        }
+        canvas.drawColor(color)
+        return bitmap
     }
 }

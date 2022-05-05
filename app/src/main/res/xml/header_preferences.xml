@@ -36,8 +36,14 @@
         app:title="@string/copy_fb_uid" />
 
     <Preference
+        app:icon="@drawable/ic_baseline_play_circle_filled_24"
+        app:key="@string/join_queue_now_key"
+        app:title="Join queue" />
+
+    <Preference
         app:icon="@drawable/sync"
         app:key="@string/add_artificial_game_settings"
         app:title="@string/add_artificial_game" />
+
 
 </PreferenceScreen>

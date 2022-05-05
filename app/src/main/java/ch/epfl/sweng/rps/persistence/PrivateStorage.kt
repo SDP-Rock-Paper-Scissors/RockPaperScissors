@@ -1,11 +1,15 @@
 package ch.epfl.sweng.rps.persistence
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.UserStat
 import com.google.gson.Gson
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 class PrivateStorage constructor(val context: Context) : Storage {
@@ -76,4 +80,17 @@ class PrivateStorage constructor(val context: Context) : Storage {
         f.writeText(json)
     }
 
+    override fun writeBackUserPicture(bitmap: Bitmap) {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        FileOutputStream(getFile(Storage.FILES.USERPICTURE)).write(data)
+    }
+
+    override fun getUserPicture(): Bitmap? {
+        val userFile = getFile(Storage.FILES.USERPICTURE)
+        if (!userFile.exists())
+            return null
+        return BitmapFactory.decodeFile(getFile(Storage.FILES.USERPICTURE).path)
+    }
 }

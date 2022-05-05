@@ -2,20 +2,26 @@ package ch.epfl.sweng.rps.ui.settings
 
 import android.content.*
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.services.ProdServiceLocator
-import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.services.ProdServiceLocator
+import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.launch
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -132,6 +138,41 @@ class SettingsActivity : AppCompatActivity(),
                 clipboard?.setPrimaryClip(clip)
                 true
             }
+            val joinQueue = findPreference<Preference>(getString(R.string.join_queue_now_key))!!
+            joinQueue.setSummaryProvider {
+                if (FirebaseEmulatorsUtils.emulatorUsed) "Emulator used" else "Firebase Emulator not used"
+            }
+            joinQueue.setOnPreferenceClickListener {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val games = ServiceLocator.getInstance().repository.myActiveGames()
+                    Log.w("JOIN_QUEUE", "games: $games")
+                    if (games.isNotEmpty()) {
+                        Toast.makeText(
+                            context,
+                            "You are already in a game (${games.first().id})",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@launch
+                    }
+                    Log.d("JOIN_QUEUE", "Joining queue")
+                    try {
+                        ServiceLocator.getInstance().matchmakingService.queue(
+                            GameMode(
+                                2,
+                                GameMode.Type.PVP,
+                                3,
+                                0,
+                                GameMode.GameEdition.RockPaperScissors
+                            )
+                        ).collect {
+                            Log.i("QueueStatus", it.toString())
+                        }
+                    } catch (e: Exception) {
+                        Log.e("QueueStatus", e.toString(), e)
+                    }
+                }
+                true
+            }
             findPreference<Preference>(getString(R.string.add_artificial_game_settings))?.setOnPreferenceClickListener {
                 val id = "artificial_game_1"
                 val uid = ServiceLocator.getInstance().repository.rawCurrentUid()!!
@@ -143,14 +184,14 @@ class SettingsActivity : AppCompatActivity(),
                     id
                 )
                     .set(
-                        Game(
+                        Game.Rps(
                             id = id,
                             players = listOf(
                                 uid,
                                 uid2
                             ),
                             rounds = mapOf(
-                                "0" to Round(
+                                "0" to Round.Rps(
                                     hands = mapOf(
                                         uid to Hand.PAPER,
                                         uid2 to Hand.ROCK
@@ -158,11 +199,12 @@ class SettingsActivity : AppCompatActivity(),
                                     timestamp = Timestamp.now()
                                 )
                             ),
-                            game_mode = Game.GameMode(
+                            game_mode = GameMode(
                                 playerCount = 2,
-                                type = Game.GameMode.Type.PVP,
+                                type = GameMode.Type.PVP,
                                 rounds = 1,
-                                timeLimit = 0
+                                timeLimit = 0,
+                                edition = GameMode.GameEdition.RockPaperScissors
                             ).toGameModeString(),
                             current_round = 0,
                             done = true,

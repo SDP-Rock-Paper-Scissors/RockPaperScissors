@@ -1,37 +1,61 @@
 package ch.epfl.sweng.rps.models
 
-import ch.epfl.sweng.rps.models.Game.GameMode
 import com.google.firebase.Timestamp
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 
 class GameTest {
     @Test
-    fun testGameMode() {
-        val m1 =
-            GameMode(playerCount = 2, type = GameMode.Type.PVP, rounds = 3, timeLimit = 10)
-        val m2 =
-            GameMode(playerCount = 2, type = GameMode.Type.PVP, rounds = 3, timeLimit = 0)
-
-        assertEquals(m1, GameMode.fromString(m1.toGameModeString()))
-        assertEquals(m2, GameMode.fromString(m2.toGameModeString()))
-
-
-        val g = Game(
-            game_mode = m1.toGameModeString(),
-            players = listOf("player1", "player2"),
-            current_round = 0,
-            done = false,
-            timestamp = Timestamp.now(),
-            player_count = 2,
-            id = "id",
-            rounds = mutableMapOf()
+    fun testTicTacToe() {
+        /**
+         * public constructor TicTacToe(
+        id: String,
+        players: List<String>,
+        rounds: Map<String, Round.TicTacToe>,
+        current_round: Int,
+        game_mode: String,
+        done: Boolean,
+        timestamp: Timestamp,
+        player_count: Int
         )
-
-        assertEquals(g.game_mode, m1.toGameModeString())
-        val m3 = g.mode
-
-        assertEquals(m1, m3)
+         */
+        val now = Timestamp.now()
+        val now2 = Timestamp.now()
+        val game = Game.TicTacToe(
+            "1",
+            listOf("p1", "p2"),
+            mapOf(
+                "0" to Round.TicTacToe(
+                    (0 until 9).map { 0 },
+                    mapOf("p1" to 1, "p2" to 2),
+                    "p1",
+                    now,
+                )
+            ),
+            0,
+            "",
+            false,
+            now2,
+            2
+        )
+        assertEquals("1", game.id)
+        assertEquals(2, game.player_count)
+        assertEquals(0, game.current_round)
+        assertEquals(false, game.done)
+        assertEquals("", game.game_mode)
+        assertEquals(now2, game.timestamp)
+        assertEquals(listOf("p1", "p2"), game.players)
+        assertEquals(
+            mapOf(
+                "0" to Round.TicTacToe(
+                    (0 until 9).map { 0 },
+                    mapOf("p1" to 1, "p2" to 2),
+                    "p1",
+                    now,
+                )
+            ), game.rounds
+        )
     }
+
 }

@@ -1,11 +1,10 @@
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import coil.load
-
 import kotlinx.android.synthetic.main.lb_player_list.view.*
 
 class LeaderBoardPlayerAdapter : RecyclerView.Adapter<LeaderBoardPlayerAdapter.PlayerViewHolder>() {

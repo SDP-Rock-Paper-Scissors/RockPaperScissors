@@ -1,7 +1,5 @@
 package ch.epfl.sweng.rps.models
 
-import android.util.Log
-
 /**
  *
  */

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.epfl.sweng.rps.models.ComputerPlayer
-import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.services.GameService
@@ -56,9 +56,9 @@ class MatchViewModel : ViewModel() {
         val gameId = UUID.randomUUID().toString()
         gameService = OfflineGameService(
             gameId,
-            repository,
+            ServiceLocator.getInstance().repository,
             listOf(computerPlayer!!),
-            Game.GameMode(2, Game.GameMode.Type.PC, nEvents!!, timeLimit!!),
+            GameMode(2, GameMode.Type.PC, nEvents!!, 0, GameMode.GameEdition.RockPaperScissors),
             artificialMovesDelay!!
         )
         gameService?.startListening()

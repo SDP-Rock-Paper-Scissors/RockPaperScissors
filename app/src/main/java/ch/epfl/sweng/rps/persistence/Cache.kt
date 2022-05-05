@@ -1,10 +1,9 @@
 package ch.epfl.sweng.rps.persistence
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
-import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.FirebaseHelper
-import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.User
@@ -16,17 +15,23 @@ import java.net.InetAddress
 class Cache private constructor(private val ctx:Context, val preferFresh:Boolean = false) {
     companion object {
         var cache:Cache? = null
-        fun getInstance(preferFresh: Boolean = false): Cache? {
+        fun getInstance(): Cache? {
             return cache
         }
         fun createInstance(ctx : Context ): Cache {
             cache = Cache(ctx.applicationContext, true)
             return cache!!
         }
+        fun createInstance(ctx:Context, repository: FirebaseRepository): Cache{
+            cache = Cache(ctx.applicationContext)
+            cache!!.fbRepo = repository
+            return cache!!
+        }
     }
-    private val fbRepo = ServiceLocator.getInstance().repository
+    private var fbRepo = ServiceLocator.getInstance().repository
     private val storage:Storage = PrivateStorage(ctx)
     private var user:User? = null
+    private var userPicture : Bitmap? = null
     private lateinit var userStatData : List<UserStat>
     private lateinit var leaderBoardData: List<LeaderBoardInfo>
     fun getUserDetails() : User? {
@@ -35,10 +40,6 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         return user
     }
     suspend fun getUserDetailsAsync(callback: (User?) -> Unit) {
-        if(user != null) {
-            callback(user!!)
-            return
-        }
         if(!isInternetAvailable())
             return
         val uid = fbRepo.getCurrentUid()
@@ -46,6 +47,7 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         callback(user)
     }
     suspend fun updateUserDetails(user:User, vararg pairs:Pair<User.Field, Any>) {
+        this.user = user
         storage.writeBackUser(user)
         fbRepo.updateUser(*pairs)
     }
@@ -60,8 +62,31 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
             storage.removeFile(Storage.FILES.USERINFO)
             return
         }
+        this.user = user
         storage.writeBackUser(user)
     }
+    fun getUserPicture() : Bitmap?{
+        if(userPicture != null)
+            return userPicture
+        return storage.getUserPicture()
+    }
+    suspend fun getUserPictureAsync() : Bitmap?{
+        if(!isInternetAvailable()){
+            return getUserPicture()
+        }
+        if(user == null)
+            return null
+        userPicture = fbRepo.getUserProfilePictureImage(user!!.uid)
+        Log.d("UserPic" , userPicture.toString())
+        userPicture?.let { storage.writeBackUserPicture(it)}
+        return userPicture
+    }
+    suspend fun updateUserPicture(bitmap: Bitmap){
+        userPicture = bitmap
+        fbRepo.setUserProfilePicture(bitmap)
+        storage.writeBackUserPicture(bitmap)
+    }
+
     fun getStatsData(position: Int):List<UserStat> {
        if(::userStatData.isInitialized) return userStatData
        userStatData = storage.getStatsData() ?: listOf()

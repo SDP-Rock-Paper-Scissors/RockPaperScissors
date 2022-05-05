@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.db
 
+import android.graphics.Bitmap
 import ch.epfl.sweng.rps.models.*
 import java.net.URI
 
@@ -12,19 +13,29 @@ interface Repository {
     suspend fun getUser(uid: String): User?
 
     suspend fun getUserProfilePictureUrl(uid: String): URI?
+    suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean = false)
+    suspend fun getUserProfilePictureImage(uid: String): Bitmap?
 
     suspend fun createThisUser(name: String?, email: String?): User
     suspend fun sendFriendRequestTo(uid: String)
 
     suspend fun listFriendRequests(): List<FriendRequest>
     suspend fun getFriends(): List<String>
-    suspend fun acceptFriendRequestFrom(userUid: String)
-    suspend fun acceptFriendRequestFrom(friendRequest: FriendRequest) =
-        acceptFriendRequestFrom(friendRequest.from)
+    suspend fun changeFriendRequestToStatus(userUid: String, status: FriendRequest.Status)
+    suspend fun acceptFriendRequest(userUid: String) =
+        changeFriendRequestToStatus(userUid, FriendRequest.Status.ACCEPTED)
+
+    suspend fun rejectFriendRequest(userUid: String) =
+        changeFriendRequestToStatus(userUid, FriendRequest.Status.REJECTED)
 
     suspend fun getGame(gameId: String): Game?
     suspend fun getLeaderBoardScore(): List<TotalScore>
     suspend fun gamesOfUser(uid: String): List<Game>
+    suspend fun myActiveGames(): List<Game>
+
+    suspend fun statsOfUser(uid: String): UserStats
+
+    suspend fun listInvitations(): List<Invitation>
 
     class UserNotLoggedIn : Exception {
         constructor() : super("User not logged in")

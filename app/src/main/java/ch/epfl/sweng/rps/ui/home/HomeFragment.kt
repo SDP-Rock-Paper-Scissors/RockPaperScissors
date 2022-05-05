@@ -27,6 +27,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
+        setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
         binding.apply {
             buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
             buttonPlay5GamesOffline.setOnClickListener { playNRoundsWithComputer(5) }
