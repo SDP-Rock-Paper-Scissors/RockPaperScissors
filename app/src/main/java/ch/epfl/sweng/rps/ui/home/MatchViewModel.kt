@@ -26,6 +26,8 @@ class MatchViewModel : ViewModel() {
     var gameResult: Hand.Result? = null
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
     var computerPlayer: ComputerPlayer? = null
+    var nEvents: Int? = null
+    var artificialMovesDelay: Long? = null
     var job: Job? = null
     var repository = ServiceLocator.getInstance().repository
     var uid: String = repository.getCurrentUid()
@@ -38,20 +40,25 @@ class MatchViewModel : ViewModel() {
         get() = cumulativeScore.value?.filter { score -> score.uid == uid }
             ?.get(0)?.points.toString()
 
-    fun startOfflineGameService(
+    fun setGameServiceSettings(
         nEvents: Int,
         computerPlayer: ComputerPlayer,
         artificialMovesDelay: Long = 1_000
     ) {
-        // TODO: when having a local DB change the random UUID
+        this.nEvents = nEvents
         this.computerPlayer = computerPlayer
+        this.artificialMovesDelay = artificialMovesDelay
+    }
+
+    fun startOfflineGameService() {
+        // TODO: when having a local DB change the random UUID
         val gameId = UUID.randomUUID().toString()
         gameService = OfflineGameService(
             gameId,
             repository,
-            listOf(computerPlayer),
-            Game.GameMode(2, Game.GameMode.Type.PC, nEvents, 0),
-            artificialMovesDelay
+            listOf(computerPlayer!!),
+            Game.GameMode(2, Game.GameMode.Type.PC, nEvents!!, 0),
+            artificialMovesDelay!!
         )
         gameService?.startListening()
     }
@@ -82,7 +89,7 @@ class MatchViewModel : ViewModel() {
         } else {
             Hand.Result.LOSS
         }
-        return result;
+        return result
     }
 
     private fun determineRoundResult() {
@@ -101,17 +108,26 @@ class MatchViewModel : ViewModel() {
         determineGameResult()
     }
 
+    private fun resetResults() {
+        currentRoundResult = null
+        gameResult = null
+        cumulativeScore = MutableLiveData<List<Round.Score>?>()
+    }
+
     /**
      * MatchViewModel is reusable. Old data needs to be wiped out before starting the previous one.
      */
     fun reInit() {
         if (gameService!!.isGameOver) {
             gameService = null
-            currentRoundResult = null
-            gameResult = null
-            cumulativeScore = MutableLiveData<List<Round.Score>?>()
             computerPlayer = null
+            resetResults()
         }
+    }
+
+    fun reInitToPlayAgain() {
+        startOfflineGameService()
+        resetResults()
     }
 
     fun managePlayHand(
