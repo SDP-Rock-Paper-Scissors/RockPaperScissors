@@ -39,7 +39,6 @@ class FirebaseRepository private constructor(
     }
 
 
-
     override suspend fun getUser(uid: String): User? {
         val user = firebase.usersCollection.document(uid).get().await()
         return user?.toObject<User>()
@@ -147,8 +146,10 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
-        return firebase.usersCollection.document(uid).collection("stats").document("games").get()
-            .await().toObject<UserStats>()!!
+        return firebase.usersCollection.document(uid)
+            .collection("stats")
+            .document("games").get()
+            .await().toObject<UserStats>() ?: UserStats(userId = uid)
     }
 
     override suspend fun listInvitations(): List<Invitation> {
