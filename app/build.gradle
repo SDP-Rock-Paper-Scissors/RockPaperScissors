@@ -66,6 +66,11 @@ android {
         noCompress "tflite"
         // or noCompress "lite"
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -135,6 +140,8 @@ dependencies {
     //Declare the dependency for image labelling
     implementation 'com.google.mlkit:image-labeling-custom:17.0.1'
 
+    //Declare the dependency for testing custom views
+    testImplementation "org.robolectric:robolectric:4.3.1"
 }
 
 
