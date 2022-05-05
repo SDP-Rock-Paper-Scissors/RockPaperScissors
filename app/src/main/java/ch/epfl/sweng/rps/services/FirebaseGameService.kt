@@ -64,7 +64,7 @@ class FirebaseGameService(
 
     override val isGameFull: Boolean
         get() {
-            return currentGame.players.size == currentGame.mode.playerCount
+            return currentGame.players.size == currentGame.gameMode.playerCount
         }
 
     /**
@@ -79,15 +79,15 @@ class FirebaseGameService(
         if (game.players.first() != firebaseRepository.getCurrentUid()) {
             throw GameServiceException("Only the first player can add a round")
         }
-        val round = Round(
+        val round = Round.Rps(
             hands = mutableMapOf(),
             timestamp = Timestamp.now(),
         )
 
         gameRef.update(
             mapOf(
-                "rounds.${game.current_round + 1}" to round,
-                "current_round" to game.current_round + 1,
+                "${Game.FIELDS.ROUNDS}.${game.current_round + 1}" to round,
+                Game.FIELDS.CURRENT_ROUND to game.current_round + 1,
             )
         ).await()
         return round
@@ -115,7 +115,7 @@ class FirebaseGameService(
         val game = refreshGame()
         val me = firebaseRepository.getCurrentUid()
         firebase.gamesCollection.document(gameId)
-            .update(mapOf("rounds.${game.current_round}.${me}" to hand))
+            .update(mapOf("${Game.FIELDS.ROUNDS}.${game.current_round}.${me}" to hand))
             .await()
     }
 

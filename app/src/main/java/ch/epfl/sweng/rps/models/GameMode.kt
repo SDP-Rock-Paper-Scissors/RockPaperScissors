@@ -11,7 +11,7 @@ data class GameMode(
     val type: Type,
     val rounds: Int,
     val timeLimit: Int,
-    val game: GameEdition
+    val edition: GameEdition
 ) {
     /**
      * The type of opponents.
@@ -35,14 +35,11 @@ data class GameMode(
      */
     enum class GameEdition(val id: String) {
         RockPaperScissors("rps"),
-        TickTackToe("ttt"),
-        HeadsOrTails("ht"),
-        ConnectFour("cf");
+        TicTacToe("ttt");
 
         companion object {
             fun fromId(id: String): GameEdition {
-                ids[id]?.let { return it }
-                throw IllegalArgumentException("No game edition with id $id")
+                return ids[id] ?: throw IllegalArgumentException("Unknown game edition id: $id")
             }
 
             private val ids by lazy { values().associateBy { it.id } }
@@ -53,28 +50,24 @@ data class GameMode(
         // "P:5,G:PC,R:3,T:0", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
         fun fromString(s: String): GameMode {
             val map = s.split(",")
-                .map { it.trim().split(":", limit = 2) }
+                .map { it.split(":", limit = 2) }
                 .associate { it[0] to it[1] }
             val maxPlayerCount = map["P"]!!.toInt()
             val gameType = map["MT"]!!
             val rounds = map["R"]!!.toInt()
             val timeLimit = map["T"]!!.toInt()
-            val game = map["G"]!!
+            val edition = map["GE"]!!
             return GameMode(
                 playerCount = maxPlayerCount,
                 type = Type.valueOf(gameType),
                 timeLimit = timeLimit,
                 rounds = rounds,
-                game = GameEdition.fromId(game)
+                edition = GameEdition.fromId(edition)
             )
         }
-
-
     }
 
-    override fun toString(): String {
-        return toGameModeString()
-    }
+    override fun toString(): String = toGameModeString()
 
     fun toGameModeString(): String {
         val map = listOf(
@@ -82,14 +75,15 @@ data class GameMode(
             "MT" to type.name,
             "R" to rounds.toString(),
             "T" to timeLimit.toString(),
-            "G" to game.id
+            "GE" to edition.id
         )
-        return map.sortedBy { it.first }
-            .joinToString(",") { it.first + ":" + it.second }
+        return map
+            .sortedBy { it.first }
+            .joinToString(",") { "${it.first}:${it.second}" }
     }
 
 
     fun String.toGameMode(): GameMode {
-        return GameMode.fromString(this)
+        return fromString(this)
     }
 }

@@ -2,8 +2,11 @@ package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Hand.*
 import ch.epfl.sweng.rps.models.Hand.Result.*
-import org.junit.jupiter.api.Assertions.*
+import okio.utf8Size
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class HandTest {
 
@@ -66,5 +69,34 @@ class HandTest {
         assertEquals(wins.values.distinct().size, 1)
         assertEquals(losses.values.distinct().size, 1)
         assertEquals(eq.values.distinct().size, 1)
+    }
+
+    fun String.isNotText() = !this.matches(Regex("\\w+"))
+
+    @Test
+    fun `check asEmoji`() {
+        Hand.values().forEach {
+            assertTrue("Emoji has utf9 size of ${it.asEmoji().utf8Size()}") {
+                it.asEmoji().utf8Size() <= 6
+            }
+            assertTrue { it.asEmoji().isNotEmpty() }
+            assertTrue { it.asEmoji().isNotText() }
+
+            assertTrue("Emoji has utf9 size of ${it.asHandEmoji().utf8Size()}") {
+                it.asHandEmoji().utf8Size() <= 6
+            }
+            assertTrue { it.asHandEmoji().isNotEmpty() }
+            assertTrue { it.asHandEmoji().isNotText() }
+        }
+        Hand.values().forEach { h1 ->
+            Hand.values().forEach { h2 ->
+                if (h1 != h2) {
+                    assertNotEquals(h1.asEmoji(), h2.asEmoji())
+                } else {
+                    assertEquals(h1.asEmoji(), h2.asEmoji())
+                }
+            }
+        }
+
     }
 }

@@ -24,7 +24,7 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
         val m2 =
             GameMode(
@@ -39,7 +39,7 @@ internal class GameModeTest {
         assertEquals(m2, GameMode.fromString(m2.toGameModeString()))
 
 
-        val g = Game(
+        val g = Game.Rps(
             game_mode = m1.toGameModeString(),
             players = listOf("player1", "player2"),
             current_round = 0,
@@ -51,7 +51,7 @@ internal class GameModeTest {
         )
 
         assertEquals(g.game_mode, m1.toGameModeString())
-        val m3 = g.mode
+        val m3 = g.gameMode
 
         assertEquals(m1, m3)
     }
@@ -64,10 +64,10 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
         GameMode.GameEdition.values().forEach {
-            assertEquals(it, GameMode.fromString(m1.copy(game = it).toGameModeString()).game)
+            assertEquals(it, GameMode.fromString(m1.copy(edition = it).toGameModeString()).edition)
         }
     }
 
@@ -98,7 +98,7 @@ internal class GameModeTest {
                 type = it,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
             assertTrue {
                 fn(mode)
@@ -111,7 +111,7 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = it,
+                edition = it,
             )
             assertTrue {
                 fn(mode)
@@ -127,7 +127,7 @@ internal class GameModeTest {
                 type = it,
                 rounds = 3,
                 timeLimit = 10,
-                game = GameMode.GameEdition.RockPaperScissors,
+                edition = GameMode.GameEdition.RockPaperScissors,
             )
             fn(mode)
         }
@@ -138,7 +138,7 @@ internal class GameModeTest {
                 type = GameMode.Type.PVP,
                 rounds = 3,
                 timeLimit = 10,
-                game = it,
+                edition = it,
             )
             fn(mode)
         }

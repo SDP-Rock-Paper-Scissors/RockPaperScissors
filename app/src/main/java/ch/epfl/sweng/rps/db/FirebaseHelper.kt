@@ -58,7 +58,7 @@ object FirebaseHelper {
 
             }.sum()
 
-            val roundMode = userGame.mode.rounds
+            val roundMode = userGame.gameMode.rounds
             //by default 1v1 here, so just use overall rounds minus his score
             val opponentScore = roundMode.minus(userScore)
             // should be shown like "3 - 2 "
