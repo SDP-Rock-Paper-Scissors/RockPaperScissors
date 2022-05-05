@@ -7,21 +7,6 @@
     tools:context=".ui.friends.FriendsFragment"
     android:id="@+id/fragment_friends">
 
-    <SearchView
-        android:id="@+id/userNameSearch"
-        android:layout_width="327dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="3dp"
-        android:queryHint="Enter User Name"
-        android:iconifiedByDefault="false"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"
-        android:queryBackground="@android:color/transparent"
-        />
-
     <ImageButton
         android:id="@+id/requestButton"
         android:layout_width="73dp"
@@ -44,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userNameSearch"
+        app:layout_constraintTop_toBottomOf="@id/requestButton"
         tools:listitem="@layout/friend_card2" />
 
 

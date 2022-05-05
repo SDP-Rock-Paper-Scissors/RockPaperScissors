@@ -149,18 +149,34 @@ class FriendsFragmentTest {
 
         onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
     }
+    @Test
+    fun test_goesToRequestFragment_onRequestButtonClicked(){
+        onView(withId(R.id.nav_friends)).perform(click())
+
+        onView(withId(R.id.requestButton)).perform(click())
+        onView(withId(R.id.requestFragment)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun test_showsMyRequestFragment_onMyRequestButtonClicked(){
+        onView(withId(R.id.nav_friends)).perform(click())
+
+        onView(withId(R.id.requestButton)).perform(click())
+        onView(withId(R.id.myFriendReqButton)).perform(click())
+
+        onView(withId(R.id.myFriendRequestsFragment)).check(matches(isDisplayed()))
+    }
 
     @Test
-    fun test_correctResultsShown_onSearchTextEntered(){
+    fun test_showsAddFriendFragment_onAddFriendButtonClicked(){
         onView(withId(R.id.nav_friends)).perform(click())
-        onView(withId(R.id.userNameSearch)).perform(click())
-        onView(withId(R.id.userNameSearch)).perform(typeText("Rock"))
 
-        onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
-        onView(withId(R.id.userName_infoPage)).check(matches(withText("RockFirst")))
+        onView(withId(R.id.requestButton)).perform(click())
+        onView(withId(R.id.addFriendsButton)).perform(click())
 
+        onView(withId(R.id.addFriendFragment)).check(matches(isDisplayed()))
     }
+
+
 
 }
 class ClickButtonAction {
