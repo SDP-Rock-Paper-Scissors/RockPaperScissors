@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package ch.epfl.sweng.rps.ui.camera
+package ch.epfl.sweng.rps.vision
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import ch.epfl.sweng.rps.vision.GraphicOverlay
 import ch.epfl.sweng.rps.vision.GraphicOverlay.Graphic
 import com.google.mlkit.vision.label.ImageLabel
 import java.util.Locale
