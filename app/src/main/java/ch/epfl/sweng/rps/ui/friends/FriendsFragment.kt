@@ -59,6 +59,7 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         val friends = mutableListOf<FriendsInfo>()
         viewLifecycleOwner.lifecycleScope.launch{
             val f = FirebaseHelper.getFriends()
+            Log.i("Friendfragment", "f:${f}")
             friends.addAll(f)
             recyclerView.adapter!!.notifyDataSetChanged()
         }
