@@ -1,11 +1,9 @@
 package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.*
 import android.graphics.Bitmap
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.*
 import java.net.URI
+
 interface Repository {
     suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
     fun rawCurrentUid(): String?
@@ -23,9 +21,12 @@ interface Repository {
 
     suspend fun listFriendRequests(): List<FriendRequest>
     suspend fun getFriends(): List<String>
-    suspend fun acceptFriendRequestFrom(userUid: String)
-    suspend fun acceptFriendRequestFrom(friendRequest: FriendRequest) =
-        acceptFriendRequestFrom(friendRequest.from)
+    suspend fun changeFriendRequestToStatus(userUid: String, status: FriendRequest.Status)
+    suspend fun acceptFriendRequest(userUid: String) =
+        changeFriendRequestToStatus(userUid, FriendRequest.Status.ACCEPTED)
+
+    suspend fun rejectFriendRequest(userUid: String) =
+        changeFriendRequestToStatus(userUid, FriendRequest.Status.REJECTED)
 
     suspend fun getGame(gameId: String): Game?
     suspend fun getLeaderBoardScore(): List<TotalScore>

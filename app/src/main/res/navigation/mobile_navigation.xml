@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_nav_home_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_ticTacToeChoiceFragment"
+            app:destination="@id/ticTacToeChoiceFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_leaderboard"
@@ -112,5 +115,16 @@
             android:id="@+id/action_requestFragment_to_nav_friends"
             app:destination="@id/nav_friends" />
     </fragment>
+
+    <fragment
+        android:id="@+id/ticTacToeChoiceFragment"
+        android:name="ch.epfl.sweng.rps.ui.tictactoe.TicTacToeChoiceFragment"
+        android:label="tic_tac_toe_choice_page"
+        tools:layout="@layout/fragment_tictactoe_choice" >
+        <action
+            android:id="@+id/action_ticTacToeChoiceFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+
 
 </navigation>

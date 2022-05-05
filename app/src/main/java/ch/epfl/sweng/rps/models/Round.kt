@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.Hand.Result
-import ch.epfl.sweng.rps.models.PointSystem.*
+import ch.epfl.sweng.rps.models.PointSystem.DefaultPointSystem
 import com.google.firebase.Timestamp
 import java.util.*
 

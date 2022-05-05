@@ -1,9 +1,7 @@
 package ch.epfl.sweng.rps.db
 
 import android.R
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.appcompat.content.res.AppCompatResources
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
@@ -129,7 +127,7 @@ object FirebaseHelper {
             // The *load* function only support "android.net.Uri" but not "java.net.URI" package
             leaderBoardInfo.userProfilePictureUrl = repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
             if(leaderBoardInfo.userProfilePictureUrl == null){
-                leaderBoardInfo.userProfilePictureUrl = Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon);
+                leaderBoardInfo.userProfilePictureUrl = Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon)
 
             }
             leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
