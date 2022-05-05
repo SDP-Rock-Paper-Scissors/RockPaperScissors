@@ -163,18 +163,17 @@ object FirebaseHelper {
         val friendRequest = fbRepo.listFriendRequests()
         val friendList = mutableListOf<FriendRequestInfo>()
 
-        for (reqs in friendRequest) {
-            val user = fbRepo.getUser(reqs.)?:continue
-            val userStats = fbRepo.statsOfUser(reqs)
+        for (req in friendRequest) {
+            val user = fbRepo.getUser(req.from)?:continue
             val friendsInfo = FriendRequestInfo(
                 username = user.username?:"UsernameEmpty",
-                uid = reqs
+                uid = req.from
             )
-
             friendList.add(friendsInfo)
         }
         return friendList
     }
+
     }
 
 

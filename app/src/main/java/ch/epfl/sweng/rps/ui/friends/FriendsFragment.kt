@@ -19,8 +19,12 @@ import ch.epfl.sweng.rps.models.FriendsInfo
 import java.util.*
 import kotlin.collections.ArrayList
 import android.widget.SearchView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
+import ch.epfl.sweng.rps.db.FirebaseHelper
 import kotlinx.android.synthetic.main.fragment_friends.*
+import kotlinx.coroutines.launch
 
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
@@ -35,30 +39,33 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         return inflater.inflate(R.layout.fragment_friends, container, false)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val model: FriendsViewModel by viewModels()
 
-        val friends = FakeFriendsData.myFriendsData
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
         val searchView = view.findViewById<SearchView>(R.id.userNameSearch)
         val filterFriend = mutableListOf<FriendsInfo>()
         val requestBtn = view.findViewById<ImageButton>(R.id.requestButton)
 
         //Get info from Fake Data object and display
-        filterFriend.addAll(friends)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = FriendListAdapter(filterFriend, this)
 
         requestBtn.setOnClickListener{
             findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToRequestFragment())
         }
-
+        val friends = mutableListOf<FriendsInfo>()
+        viewLifecycleOwner.lifecycleScope.launch{
+            val f = FirebaseHelper.getFriends()
+            friends.addAll(f)
+            recyclerView.adapter!!.notifyDataSetChanged()
+        }
        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 TODO("Not yet implemented")
             }
-
-
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextChange(newText: String?): Boolean {
