@@ -1,5 +1,7 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.GameMode.Type.*
+
 /**
  * Represents a game mode.
  * @property playerCount The number of players in the game, including computers.
@@ -47,16 +49,21 @@ data class GameMode(
     }
 
     companion object {
+
+        private fun Map<String, String>.getSafely(key: String): String {
+            return this[key] ?: throw IllegalArgumentException("Missing key '$key' in game mode")
+        }
+
         // "P:5,G:PC,R:3,T:0", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
         fun fromString(s: String): GameMode {
             val map = s.split(",")
                 .map { it.split(":", limit = 2) }
                 .associate { it[0] to it[1] }
-            val maxPlayerCount = map["P"]!!.toInt()
-            val gameType = map["MT"]!!
-            val rounds = map["R"]!!.toInt()
-            val timeLimit = map["T"]!!.toInt()
-            val edition = map["GE"]!!
+            val maxPlayerCount = map.getSafely("P").toInt()
+            val gameType = map.getSafely("MT")
+            val rounds = map.getSafely("R").toInt()
+            val timeLimit = map.getSafely("T").toInt()
+            val edition = map.getSafely("GE")
             return GameMode(
                 playerCount = maxPlayerCount,
                 type = Type.valueOf(gameType),
@@ -66,6 +73,7 @@ data class GameMode(
             )
         }
     }
+
 
     override fun toString(): String = toGameModeString()
 
