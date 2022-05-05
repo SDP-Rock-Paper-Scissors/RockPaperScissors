@@ -156,7 +156,7 @@ export class GameMode {
   type: string;
   rounds: number;
   time_limit: number;
-  game: string;
+  edition: string;
 
   // "P:5,G:PC,R:3,T:0", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
   constructor(public name: string) {
@@ -166,13 +166,13 @@ export class GameMode {
     this.type = map.get("MT")!;
     this.rounds = parseInt(map.get("R")!);
     this.time_limit = parseInt(map.get("T")!);
-    this.game = map.get("G")!;
+    this.edition = map.get("GE")!;
   }
 
   toString() {
     // Properties in the format "G:PVP,P:2,R:3,T:0"
     const props = [];
-    props.push(`G:${this.game}`);
+    props.push(`GE:${this.edition}`);
     props.push(`P:${this.max_player_count}`);
     props.push(`R:${this.rounds}`);
     props.push(`T:${this.time_limit}`);
@@ -199,7 +199,8 @@ function createGame(game_mode: GameMode): Game {
     },
     current_round: 0,
     started: false,
-    done: false
+    done: false,
+    edition: undefined
   };
 }
 
@@ -219,6 +220,7 @@ interface Game {
   current_round: number;
   started: boolean;
   done: boolean;
+  edition: string | undefined;
 }
 
 // an interface with any key and any value
