@@ -99,13 +99,13 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
   }
 
   // -----------------Code for processing single still image----------------------------------------
-  override fun processBitmap(bitmap: Bitmap?, graphicOverlay: GraphicOverlay) {
+  override fun processBitmap(bitmap: Bitmap?, graphicOverlay: GraphicOverlay?) {
     val frameStartMs = SystemClock.elapsedRealtime()
 
 
     requestDetectInImage(
       InputImage.fromBitmap(bitmap!!, 0),
-      graphicOverlay,
+      graphicOverlay!!,
       /* originalCameraImage= */ null,
       /* shouldShowFps= */ false,
       frameStartMs
@@ -116,7 +116,7 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
   // -----------------Code for processing live preview frame from CameraX API-----------------------
   @RequiresApi(VERSION_CODES.LOLLIPOP)
   @ExperimentalGetImage
-  override fun processImageProxy(image: ImageProxy, graphicOverlay: GraphicOverlay) {
+  override fun processImageProxy(image: ImageProxy?, graphicOverlay: GraphicOverlay?) {
     val frameStartMs = SystemClock.elapsedRealtime()
     if (isShutdown) {
       return
@@ -125,8 +125,8 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
 
 
     requestDetectInImage(
-      InputImage.fromMediaImage(image.image!!, image.imageInfo.rotationDegrees),
-      graphicOverlay,
+      InputImage.fromMediaImage(image!!.image!!, image.imageInfo.rotationDegrees),
+      graphicOverlay!!,
       /* originalCameraImage= */ bitmap,
       /* shouldShowFps= */ true,
       frameStartMs
@@ -210,9 +210,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
             Log.d(TAG, "Memory available in system: $availableMegs MB")
           }
           graphicOverlay.clear()
-          if (originalCameraImage != null) {
-            graphicOverlay.add(CameraImageGraphic(graphicOverlay, originalCameraImage))
-          }
           this@VisionProcessorBase.onSuccess(results, graphicOverlay)
 
             graphicOverlay.add(

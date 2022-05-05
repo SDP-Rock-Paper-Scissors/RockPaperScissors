@@ -43,7 +43,7 @@ class LabelGraphic(
   }
 
   @Synchronized
-  override fun draw(canvas: Canvas) {
+   override fun draw(canvas: Canvas?) {
     // First try to find maxWidth and totalHeight in order to draw to the center of the screen.
     var maxWidth = 0f
     val totalHeight = labels.size * 2 * TEXT_SIZE
@@ -67,7 +67,7 @@ class LabelGraphic(
 
     if (labels.isNotEmpty()) {
       val padding = 20f
-      canvas.drawRect(
+      canvas!!.drawRect(
         x - padding,
         y - padding,
         x + maxWidth + padding,
@@ -80,9 +80,9 @@ class LabelGraphic(
       if (y + TEXT_SIZE * 2 > overlay.height) {
         break
       }
-      canvas.drawText(label.text, x, y + TEXT_SIZE, textPaint)
+      canvas!!.drawText(label.text, x, y + TEXT_SIZE, textPaint)
       y += TEXT_SIZE
-      canvas.drawText(
+      canvas!!.drawText(
         String.format(
           Locale.US,
           LABEL_FORMAT,

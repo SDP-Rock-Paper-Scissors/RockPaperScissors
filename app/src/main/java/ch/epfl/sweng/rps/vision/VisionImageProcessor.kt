@@ -13,31 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ch.epfl.sweng.rps.vision
 
-package ch.epfl.sweng.rps.vision;
+import android.graphics.Bitmap
+import ch.epfl.sweng.rps.vision.GraphicOverlay
+import androidx.annotation.RequiresApi
+import android.os.Build.VERSION_CODES
+import kotlin.Throws
+import com.google.mlkit.common.MlKitException
+import androidx.camera.core.ImageProxy
 
-import android.graphics.Bitmap;
-import android.os.Build.VERSION_CODES;
+/** An interface to process the images with different vision detectors and custom image models.  */
+interface VisionImageProcessor {
+    /** Processes a bitmap image.  */
+    fun processBitmap(bitmap: Bitmap?, graphicOverlay: GraphicOverlay?)
 
-import androidx.annotation.RequiresApi;
-import androidx.camera.core.ImageProxy;
+    /** Processes ImageProxy image data, e.g. used for CameraX live preview case.  */
+    @RequiresApi(VERSION_CODES.KITKAT)
+    @Throws(MlKitException::class)
+    fun processImageProxy(image: ImageProxy?, graphicOverlay: GraphicOverlay?)
 
-import com.google.mlkit.common.MlKitException;
-
-import java.nio.ByteBuffer;
-
-import ch.epfl.sweng.rps.ui.camera.CameraXViewModel;
-
-/** An interface to process the images with different vision detectors and custom image models. */
-public interface VisionImageProcessor {
-
-  /** Processes a bitmap image. */
-  void processBitmap(Bitmap bitmap, GraphicOverlay graphicOverlay);
-
-  /** Processes ImageProxy image data, e.g. used for CameraX live preview case. */
-  @RequiresApi(VERSION_CODES.KITKAT)
-  void processImageProxy(ImageProxy image, GraphicOverlay graphicOverlay) throws MlKitException;
-
-  /** Stops the underlying machine learning model and release resources. */
-  void stop();
+    /** Stops the underlying machine learning model and release resources.  */
+    fun stop()
 }
