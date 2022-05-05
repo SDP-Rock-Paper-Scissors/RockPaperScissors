@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -78,19 +79,18 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun opponentMoveUIUpdate(hand: Hand) {
-        when (hand) {
-            Hand.ROCK -> {
-                binding.rockRBOpponent.isChecked = true
-            }
-            Hand.PAPER -> {
-                binding.paperRBOpponent.isChecked = true
-            }
-            Hand.SCISSORS -> {
-                binding.scissorsRBOpponent.isChecked = true
-            }
-            Hand.NONE -> throw IllegalStateException("Impossible")
+    private fun getOpponentRBBindingForHand(hand: Hand): RadioButton? {
+        return when (hand) {
+            Hand.ROCK -> binding.rockRBOpponent
+            Hand.PAPER -> binding.paperRBOpponent
+            Hand.SCISSORS -> binding.scissorsRBOpponent
+            Hand.NONE -> null
         }
+    }
+
+    private fun opponentMoveUIUpdate(hand: Hand) {
+        val radioButtonBinding = getOpponentRBBindingForHand(hand)
+        radioButtonBinding?.isChecked = true
     }
 
     override fun onDestroyView() {
