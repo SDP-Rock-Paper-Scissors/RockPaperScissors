@@ -18,6 +18,7 @@ import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.FakeFriendsData
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matcher
+import org.junit.After
 import org.junit.Before
 
 import org.junit.Rule
@@ -38,6 +39,13 @@ class FriendsFragmentTest {
         ServiceLocator.setCurrentEnv(Env.Test)
         val repo = ServiceLocator.getInstance().repository as LocalRepository
         repo.setCurrentUid("test")
+    }
+
+    @After
+    fun tearDown() {
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid(null)
+        ServiceLocator.setCurrentEnv(Env.Prod)
     }
 
     @Test

@@ -32,6 +32,8 @@ class ComputerMatchTest {
 
     @After
     fun tearDown() {
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid(null)
         ServiceLocator.setCurrentEnv(Env.Prod)
     }
 
