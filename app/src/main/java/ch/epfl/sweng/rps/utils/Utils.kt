@@ -90,4 +90,3 @@ inline fun <reified T> List<DocumentSnapshot>.toListOf(): List<T> =
 
 inline fun <reified T> List<DocumentSnapshot>.toListOfNullable(): List<T?> =
     map { it.toObject(T::class.java) }
-
