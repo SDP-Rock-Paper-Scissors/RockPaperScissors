@@ -6,7 +6,7 @@ import android.util.Log
  *
  */
 data class User(
-    val username: String? = "",
+    var username: String? = "",
 
     val uid: String = "",
 

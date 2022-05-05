@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+
 object FirebaseHelper {
     fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
         return pairs.associate { t -> t.first.value to t.second }
@@ -139,11 +140,46 @@ object FirebaseHelper {
         return allPlayers
     }
 
+    suspend fun getFriends(): List<FriendsInfo> {
+        val fbRepo = ServiceLocator.getInstance().repository
+        val friends = fbRepo.getFriends()
+        val friendList = mutableListOf<FriendsInfo>()
+
+        for (friend in friends) {
+            val user = fbRepo.getUser(friend)?:continue
+            val userStats = fbRepo.statsOfUser(friend)
+            val friendsInfo = FriendsInfo(
+                username = user.username?:"UsernameEmpty",
+                gamesPlayed = userStats.total_games,
+                gamesWon = userStats.wins,
+                winRate = userStats.winRate,
+                isOnline = true)
+
+            friendList.add(friendsInfo)
+        }
+        return friendList
+    }
+
+    suspend fun getFriendReqs(): List<FriendRequestInfo> {
+        val fbRepo = ServiceLocator.getInstance().repository
+        val friendRequest = fbRepo.listFriendRequests()
+        val friendList = mutableListOf<FriendRequestInfo>()
+
+        for (reqs in friendRequest) {
+            val user = fbRepo.getUser(reqs.)?:continue
+            val userStats = fbRepo.statsOfUser(reqs)
+            val friendsInfo = FriendRequestInfo(
+                username = user.username?:"UsernameEmpty",
+                uid = reqs
+            )
+
+            friendList.add(friendsInfo)
+        }
+        return friendList
+    }
+    }
 
 
-
-
-}
 
 
 

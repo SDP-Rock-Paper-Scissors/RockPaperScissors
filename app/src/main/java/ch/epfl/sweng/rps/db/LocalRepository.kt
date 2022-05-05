@@ -41,6 +41,11 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return users[uid]!!
     }
 
+    var allUsers = mutableListOf<User>()
+    override suspend fun getAllUsers(): List<User?> {
+        return allUsers
+    }
+
     override suspend fun getUserProfilePictureUrl(uid:String): URI? {
         val cond = getUser(uid).has_profile_photo
         return if (cond) {

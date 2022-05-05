@@ -62,6 +62,9 @@
         <action
             android:id="@+id/action_nav_friends_to_gameFragment2"
             app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_nav_friends_to_requestFragment"
+            app:destination="@id/requestFragment" />
     </fragment>
     
     <fragment
@@ -99,6 +102,15 @@
         <action
             android:id="@+id/action_cameraFragment_to_nav_home"
             app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.RequestFragment"
+        android:label="request_fragment"
+        tools:layout="@layout/request_fragment" >
+        <action
+            android:id="@+id/action_requestFragment_to_nav_friends"
+            app:destination="@id/nav_friends" />
     </fragment>
 
 </navigation>

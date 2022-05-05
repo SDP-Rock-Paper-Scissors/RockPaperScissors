@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import ch.epfl.sweng.rps.models.FriendsInfo
 import java.util.*
 import kotlin.collections.ArrayList
 import android.widget.SearchView
+import androidx.navigation.NavDirections
 import kotlinx.android.synthetic.main.fragment_friends.*
 
 
@@ -40,17 +42,23 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
         val searchView = view.findViewById<SearchView>(R.id.userNameSearch)
         val filterFriend = mutableListOf<FriendsInfo>()
-
+        val requestBtn = view.findViewById<ImageButton>(R.id.requestButton)
 
         //Get info from Fake Data object and display
         filterFriend.addAll(friends)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = FriendListAdapter(filterFriend, this)
 
+        requestBtn.setOnClickListener{
+            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToRequestFragment())
+        }
+
        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 TODO("Not yet implemented")
             }
+
+
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -108,6 +116,7 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
             //Move to game fragment on button click
             findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameFragment2())
         }
+
     }
 
 
