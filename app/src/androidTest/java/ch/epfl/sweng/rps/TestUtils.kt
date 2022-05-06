@@ -15,10 +15,11 @@ import androidx.test.runner.lifecycle.Stage
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 import org.hamcrest.Matcher
 import org.junit.rules.ExternalResource
 import java.util.concurrent.TimeoutException
@@ -54,16 +55,59 @@ object TestUtils {
     }
 
     fun Firebase.initializeForTest() {
-        Firebase.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
-        Firebase.firestore.firestoreSettings =
+        FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
+        kotlin.runCatching { FirebaseApp.getInstance().delete() }
+        FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
+        FirebaseFirestore.getInstance().firestoreSettings =
             FirebaseFirestoreSettings.Builder().setPersistenceEnabled(false).build()
     }
 }
 
+interface TestFlow {
+    fun setup()
+    fun tearDown()
+
+    companion object {
+        fun onlySetup(setup: () -> Unit) = object : TestFlow {
+            override fun setup() = setup()
+
+            override fun tearDown() {}
+        }
+
+        fun setupAndTearDown(setup: () -> Unit, tearDown: () -> Unit) = object : TestFlow {
+            override fun setup() = setup()
+
+            override fun tearDown() = tearDown()
+        }
+
+        val empty = object : TestFlow {
+            override fun setup() {}
+
+            override fun tearDown() {}
+        }
+
+        fun with(vararg flows: TestFlow) = object : TestFlow {
+            override fun setup() {
+                flows.forEach { it.setup() }
+            }
+
+            override fun tearDown() {
+                flows.reversed().forEach { it.tearDown() }
+            }
+        }
+    }
+
+    /**
+     * Runs [other] after `this`. In [tearDown], the order is reversed.
+     */
+    infix fun then(other: TestFlow) = with(this, other)
+}
+
 class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
 
+
     private val scenarioSupplier: () -> ActivityScenario<A>
-    private val setup: () -> Unit
+    private val testFlow: TestFlow
 
     private var _scenario: ActivityScenario<A>? = null
 
@@ -75,22 +119,31 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
          * ServiceLocator.setCurrentEnv(Env.Test)
          * ```
          */
-        val defaultSetup = {
-            Firebase.initializeForTest()
-            ServiceLocator.setCurrentEnv(Env.Test)
-        }
+        val defaultTestFlow = TestFlow.setupAndTearDown(
+            {
+                ServiceLocator.setCurrentEnv(Env.Test)
+                Firebase.initializeForTest()
+                Firebase.firestore.firestoreSettings =
+                    FirebaseFirestoreSettings.Builder().setPersistenceEnabled(false).build()
+                ServiceLocator.localRepository.setCurrentUid("test")
+            },
+            {
+                FirebaseApp.clearInstancesForTest()
+                ServiceLocator.setCurrentEnv(Env.Prod)
+            }
+        )
 
         fun <A : Activity> default(clazz: Class<A>): ActivityScenarioRuleWithSetup<A> {
             return ActivityScenarioRuleWithSetup(
                 clazz,
-                defaultSetup
+                defaultTestFlow
             )
         }
 
         fun <A : Activity> default(intent: Intent): ActivityScenarioRuleWithSetup<A> {
             return ActivityScenarioRuleWithSetup(
                 intent,
-                defaultSetup
+                defaultTestFlow
             )
         }
     }
@@ -100,11 +153,11 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
      *
      * @param activityClass an activity class to launch
      */
-    constructor(activityClass: Class<A>, setup: () -> Unit = {}) {
+    constructor(activityClass: Class<A>, testFlow: TestFlow = TestFlow.empty) {
         scenarioSupplier = {
             ActivityScenario.launch(activityClass)
         }
-        this.setup = setup
+        this.testFlow = testFlow
     }
 
     /**
@@ -112,14 +165,18 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
      * @param activityOptions an activity options bundle to be passed along with the intent to start
      * activity.
      */
-    constructor(activityClass: Class<A>, activityOptions: Bundle?, setup: () -> Unit = {}) {
+    constructor(
+        activityClass: Class<A>,
+        activityOptions: Bundle?,
+        testFlow: TestFlow = TestFlow.empty
+    ) {
         scenarioSupplier = {
             ActivityScenario.launch(
                 activityClass,
                 activityOptions
             )
         }
-        this.setup = setup
+        this.testFlow = testFlow
     }
 
     /**
@@ -127,12 +184,12 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
      *
      * @param startActivityIntent an intent to start an activity
      */
-    constructor(startActivityIntent: Intent, setup: () -> Unit = {}) {
+    constructor(startActivityIntent: Intent, testFlow: TestFlow = TestFlow.empty) {
         scenarioSupplier =
             {
                 ActivityScenario.launch(startActivityIntent)
             }
-        this.setup = setup
+        this.testFlow = testFlow
     }
 
 
@@ -141,7 +198,11 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
      * @param activityOptions an activity options bundle to be passed along with the intent to start
      * activity.
      */
-    constructor(startActivityIntent: Intent, activityOptions: Bundle?, setup: () -> Unit = {}) {
+    constructor(
+        startActivityIntent: Intent,
+        activityOptions: Bundle?,
+        testFlow: TestFlow = TestFlow.empty
+    ) {
         scenarioSupplier =
             {
                 ActivityScenario.launch(
@@ -149,18 +210,19 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
                     activityOptions
                 )
             }
-        this.setup = setup
+        this.testFlow = testFlow
     }
 
 
     @Throws(Throwable::class)
     override fun before() {
-        setup.invoke()
+        testFlow.setup()
         _scenario = scenarioSupplier.invoke()
     }
 
     override fun after() {
         _scenario!!.close()
+        testFlow.tearDown()
     }
 
     /**

@@ -7,14 +7,11 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.ktx.Firebase
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -45,7 +42,7 @@ class ProfileFragmentTest {
     }
 
     @get:Rule
-    val testRule = ActivityScenarioRule<MainActivity>(createIntent())
+    val testRule = ActivityScenarioRuleWithSetup.default<MainActivity>(createIntent())
     @Test
     fun testFields() {
         onView(withId(R.id.nav_profile)).perform(click())

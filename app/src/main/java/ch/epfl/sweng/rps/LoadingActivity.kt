@@ -19,7 +19,6 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun setupApp() {
         runBlocking {
-            val isTest = intent.getBooleanExtra("isTest", false)
             Firebase.initialize(this@LoadingActivity)
             useEmulatorsIfNeeded()
             delay(1000)
@@ -39,8 +38,17 @@ class LoadingActivity : AppCompatActivity() {
         val use = intent.getStringExtra("USE_EMULATORS")
         Log.d("MainActivity", "USE_EMULATORS: $use")
         if (use == "true") {
+            if (isTest) {
+                throw IllegalStateException("Emulators should not be used in tests")
+            }
             FirebaseEmulatorsUtils.useEmulators()
             Log.w("MainActivity", "Using emulators")
         }
+    }
+
+    private val isTest get() = intent.getBooleanExtra("isTest", false)
+
+    companion object {
+        const val IS_TEST_EXTRA = "isTest"
     }
 }

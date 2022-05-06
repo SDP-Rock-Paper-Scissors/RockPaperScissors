@@ -6,7 +6,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.models.User
@@ -41,7 +40,7 @@ class TicTacToeTest {
     }
 
     @get:Rule
-    val testRule = ActivityScenarioRule<MainActivity>(createIntent())
+    val testRule = ActivityScenarioRuleWithSetup.default<MainActivity>(createIntent())
 
 
 
