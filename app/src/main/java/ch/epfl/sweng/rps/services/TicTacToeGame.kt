@@ -14,7 +14,7 @@ abstract class TicTacToeGame {
         if(checkCell(3,2,0)) return true
         return false
     }
-    fun checkCell(d: Int, cx:Int, cy:Int):Boolean {
+    private fun checkCell(d: Int, cx:Int, cy:Int):Boolean {
         val dirx = arrayOf(0,1,1,-1) // 0 = ↓ 1 = ↘ 2 = ↙
         val diry = arrayOf(1,0,1,1)
         var cnt = 0

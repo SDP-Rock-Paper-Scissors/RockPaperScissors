@@ -5,7 +5,11 @@ import kotlin.random.Random
 
 
 class OfflineTicTacToe(val view : TicTacToeFragment) : TicTacToeGame() {
-
+    var player2 = object : TicTacToeOpponent {
+        override fun makeMove(): Pair<Int,Int> {
+           return Pair(Random.nextInt(0,3), Random.nextInt(0,3))
+        }
+    }
     override fun putChoice(move: MOVES, square: Int) {
         if(!gameRunning)
             return
@@ -18,8 +22,9 @@ class OfflineTicTacToe(val view : TicTacToeFragment) : TicTacToeGame() {
         if(calculate()) return
         val opponent = if(move == MOVES.CROSS) MOVES.CIRCLE else MOVES.CROSS
         while (true){
-            var cell = Random.nextInt(0,3)
-            var row = Random.nextInt(0,3)
+            var oppChoice = player2.makeMove()
+            var cell = oppChoice.second
+            var row = oppChoice.first
             if(matrix[row][cell] == MOVES.EMPTY){
                 matrix[row][cell] = opponent
                 view.updateUI((row * 3 ) + cell, opponent)
