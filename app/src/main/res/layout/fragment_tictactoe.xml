@@ -129,14 +129,15 @@
             android:layout_weight="0.25"></View>
 
         <LinearLayout
+            android:id="@+id/matrix"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginRight="35dp"
             android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
             android:layout_weight="4"
-            android:weightSum="10"
+            android:background="@drawable/grid"
             android:orientation="vertical"
-            android:background="@drawable/grid">
+            android:weightSum="10">
 
             <View
                 android:layout_width="match_parent"
@@ -157,12 +158,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="1"
                     android:id="@+id/img_1"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="1"></ImageView>
 
                 <View
                     android:layout_width="0dp"
@@ -170,12 +171,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="2"
                     android:id="@+id/img_2"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="2"></ImageView>
 
 
                 <View
@@ -184,12 +185,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="3"
                     android:id="@+id/img_3"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="3"></ImageView>
 
                 <View
                     android:layout_width="0dp"
@@ -216,12 +217,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="4"
                     android:id="@+id/img_4"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="4"></ImageView>
 
                 <View
                     android:layout_width="0dp"
@@ -229,12 +230,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="5"
                     android:id="@+id/img_5"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="5"></ImageView>
 
 
                 <View
@@ -243,12 +244,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="6"
                     android:id="@+id/img_6"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="6"></ImageView>
 
                 <View
                     android:layout_width="0dp"
@@ -275,12 +276,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="7"
                     android:id="@+id/img_7"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="7"></ImageView>
 
                 <View
                     android:layout_width="0dp"
@@ -288,12 +289,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="8"
                     android:id="@+id/img_8"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="8"></ImageView>
 
 
                 <View
@@ -302,12 +303,12 @@
                     android:layout_weight="0.15"></View>
 
                 <ImageView
-                    android:tag="9"
                     android:id="@+id/img_9"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:layout_height="match_parent"></ImageView>
+                    android:tag="9"></ImageView>
 
                 <View
                     android:layout_width="0dp"
@@ -424,6 +425,16 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.6"></View>
+
+        <TextView
+            android:id="@+id/outcomeTTT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="YOU LOSE"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="#FA1111"
+            android:visibility="invisible" />
 
 
     </LinearLayout>
