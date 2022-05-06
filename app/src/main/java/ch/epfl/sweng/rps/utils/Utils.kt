@@ -79,12 +79,8 @@ suspend fun <T> retry(times: Int = 3, delayMs: Long = 500, block: suspend () -> 
 }
 
 class RetryException(message: String, cause: Throwable? = null) : Exception(message, cause)
-private data class Result<T>(val value: T)
 
 val Firebase.europeWest1: FirebaseFunctions
-    get() = FirebaseFunctions.getInstance("europe-west1")
-
-val FirebaseFunctions.europeWest1: FirebaseFunctions
     get() = FirebaseFunctions.getInstance("europe-west1")
 
 inline fun <reified T> List<DocumentSnapshot>.toListOf(): List<T> =

@@ -10,8 +10,7 @@ class FirebaseReferences {
     val root = FirebaseFirestore.getInstance()
     val storageRoot = FirebaseStorage.getInstance().reference
 
-    fun usersFriendRequestOfUid(uid: String) =
-        usersCollection.document(uid).collection("friend_requests")
+    val usersFriendRequest = root.collection("friend_requests")
 
     val usersCollection = root.collection("users")
     val profilePicturesFolder = storageRoot.child("profile_pictures")

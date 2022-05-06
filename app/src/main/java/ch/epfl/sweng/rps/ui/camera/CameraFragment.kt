@@ -1,16 +1,17 @@
 package ch.epfl.sweng.rps.ui.camera
 
+
 import android.Manifest
 import android.content.ContentValues.TAG
-
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.*
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -22,7 +23,6 @@ import ch.epfl.sweng.rps.databinding.FragmentCameraBinding
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
 
 
 class CameraFragment : Fragment() {

@@ -13,17 +13,17 @@ enum class Hand(val id: Int) {
     }
 
     fun asEmoji(): String = when (this) {
-        Hand.NONE -> "❌"
-        Hand.ROCK -> "🪨"
-        Hand.PAPER -> "📄"
-        Hand.SCISSORS -> "✂️"
+        NONE -> "❌"
+        ROCK -> "🪨"
+        PAPER -> "📄"
+        SCISSORS -> "✂️"
     }
 
     fun asHandEmoji(): String = when (this) {
-        Hand.NONE -> "❔"
-        Hand.ROCK -> "✊"
-        Hand.PAPER -> "🤚"
-        Hand.SCISSORS -> "✌️"
+        NONE -> "❔"
+        ROCK -> "✊"
+        PAPER -> "🤚"
+        SCISSORS -> "✌️"
     }
 
 
