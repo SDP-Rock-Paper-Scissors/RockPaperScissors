@@ -29,14 +29,14 @@ sealed class Game {
     val gameMode: GameMode get() = GameMode.fromString(game_mode)
 
     data class Rps(
-        override val id: String,
-        override val players: List<String>,
-        override val rounds: Map<String, Round.Rps>,
-        override val current_round: Int,
-        override val game_mode: String,
-        override val done: Boolean,
-        override val timestamp: Timestamp,
-        override val player_count: Int,
+        override val id: String = "",
+        override val players: List<String> = listOf(),
+        override val rounds: Map<String, Round.Rps> = mapOf(),
+        override val current_round: Int = -1,
+        override val game_mode: String = "",
+        override val done: Boolean = false,
+        override val timestamp: Timestamp = Timestamp.now(),
+        override val player_count: Int = 0,
     ) : Game() {
         override val edition: GameEdition = GameEdition.RockPaperScissors
     }
