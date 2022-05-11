@@ -200,7 +200,6 @@ function createGame(game_mode: GameMode): Game {
     current_round: 0,
     started: false,
     done: false,
-    edition: undefined
   };
 }
 
@@ -220,7 +219,6 @@ interface Game {
   current_round: number;
   started: boolean;
   done: boolean;
-  edition: string | undefined;
 }
 
 // an interface with any key and any value

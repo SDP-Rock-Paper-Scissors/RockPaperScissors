@@ -144,8 +144,9 @@ class SettingsActivity : AppCompatActivity(),
             }
             joinQueue.setOnPreferenceClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
+                    val TAG = "Matchmaking"
                     val games = ServiceLocator.getInstance().repository.myActiveGames()
-                    Log.w("JOIN_QUEUE", "games: $games")
+                    Log.w(TAG, "games: $games")
                     if (games.isNotEmpty()) {
                         Toast.makeText(
                             context,
@@ -154,7 +155,7 @@ class SettingsActivity : AppCompatActivity(),
                         ).show()
                         return@launch
                     }
-                    Log.d("JOIN_QUEUE", "Joining queue")
+                    Log.d(TAG, "Joining queue")
                     try {
                         ServiceLocator.getInstance().matchmakingService.queue(
                             GameMode(
@@ -165,10 +166,10 @@ class SettingsActivity : AppCompatActivity(),
                                 GameMode.GameEdition.RockPaperScissors
                             )
                         ).collect {
-                            Log.i("QueueStatus", it.toString())
+                            Log.i(TAG, it.toString())
                         }
                     } catch (e: Exception) {
-                        Log.e("QueueStatus", e.toString(), e)
+                        Log.e(TAG, e.toString(), e)
                     }
                 }
                 true
