@@ -12,11 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.epfl.sweng.rps.FriendListAdapter
+import ch.epfl.sweng.rps.RequestListAdapter
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.FriendsInfo
 import androidx.lifecycle.lifecycleScope
+import ch.epfl.sweng.rps.FriendListAdapter
+import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.db.FirebaseHelper
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.launch
 
 
@@ -39,12 +42,13 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
         val requestBtn = view.findViewById<ImageButton>(R.id.requestButton)
 
-        //Get info from Fake Data object and display
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         requestBtn.setOnClickListener{
             findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToRequestFragment())
         }
+
+        //get info from database
         val friends = mutableListOf<FriendsInfo>()
         viewLifecycleOwner.lifecycleScope.launch{
             val f = FirebaseHelper.getFriends()

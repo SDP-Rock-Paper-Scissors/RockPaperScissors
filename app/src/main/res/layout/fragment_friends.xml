@@ -21,17 +21,18 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendListRecyclerView"
-        android:layout_width="400dp"
-        android:layout_height="723dp"
+        android:layout_width="match_parent"
+        android:layout_height="586dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="85dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/requestButton"
+        app:layout_constraintVertical_bias="0.485"
         tools:listitem="@layout/friend_card2" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

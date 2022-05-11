@@ -161,17 +161,20 @@ object FirebaseHelper {
     suspend fun getFriendReqs(): List<FriendRequestInfo> {
         val fbRepo = ServiceLocator.getInstance().repository
         val friendRequest = fbRepo.listFriendRequests()
-        val friendList = mutableListOf<FriendRequestInfo>()
+        val reqList = mutableListOf<FriendRequestInfo>()
+        val uid = fbRepo.rawCurrentUid()
 
         for (req in friendRequest) {
-            val user = fbRepo.getUser(req.from)?:continue
-            val friendsInfo = FriendRequestInfo(
-                username = user.username?:"UsernameEmpty",
-                uid = req.from
-            )
-            friendList.add(friendsInfo)
+            if (req.from != uid) {
+                val user = fbRepo.getUser(req.from) ?: continue
+                val friendsReq = FriendRequestInfo(
+                    username = user.username ?: "UsernameEmpty",
+                    uid = req.from
+                )
+                reqList.add(friendsReq)
+            }
         }
-        return friendList
+        return reqList
     }
 
     }

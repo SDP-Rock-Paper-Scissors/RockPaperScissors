@@ -10,6 +10,7 @@ import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 

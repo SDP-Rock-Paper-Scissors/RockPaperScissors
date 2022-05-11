@@ -10,25 +10,30 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/enterUsername"
         android:layout_width="match_parent"
-        android:layout_height="50sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="80sp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/sendRequestButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addUserName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter username you want to add" />
+            android:layout_height="60dp"
+            android:hint="Enter User ID you want to add"
+            android:textSize="20dp"
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/sendRequestButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="5dp"
         android:text="Send Request"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterUsername" />

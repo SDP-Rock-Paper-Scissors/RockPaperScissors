@@ -93,7 +93,7 @@ class FirebaseRepository private constructor(
     override suspend fun listFriendRequests(): List<FriendRequest> {
         return firebase.usersFriendRequest
             .whereArrayContains("users", getCurrentUid())
-            .whereNotEqualTo("status", FriendRequest.Status.PENDING).get()
+            .whereEqualTo("status", FriendRequest.Status.PENDING).get()
             .await().toObjects(FriendRequest::class.java)
     }
 
@@ -113,8 +113,7 @@ class FirebaseRepository private constructor(
     ) {
         firebase.usersFriendRequest
             .whereArrayContains("users", userUid)
-            .whereArrayContains("users", getCurrentUid())
-            .whereNotEqualTo("status", FriendRequest.Status.PENDING)
+            .whereEqualTo("status", FriendRequest.Status.PENDING)
             .limit(1)
             .get().await().documents.first().reference
             .update("status", status).await()
