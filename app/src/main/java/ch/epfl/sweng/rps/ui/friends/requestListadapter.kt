@@ -12,7 +12,7 @@ import ch.epfl.sweng.rps.models.FriendRequestInfo
 import ch.epfl.sweng.rps.models.FriendsInfo
 
 class RequestListAdapter(
-    private val requests : MutableList<FriendRequestInfo>,
+    private val requests : List<FriendRequestInfo>,
     private val listener : OnButtonClickListener
 ) :
     RecyclerView.Adapter<RequestListAdapter.CardViewHolder>(){

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class MyFriendsRequestsModel : ViewModel(){
     private val cache = Cache.getInstance()!!
-    fun getFriends() : LiveData<List<FriendRequestInfo>> {
+    fun getFriendReqs() : LiveData<List<FriendRequestInfo>> {
         var livedata = MutableLiveData<List<FriendRequestInfo>>()
         viewModelScope.launch(Dispatchers.IO) {
             livedata.postValue(cache.getFriendReqsAsync())

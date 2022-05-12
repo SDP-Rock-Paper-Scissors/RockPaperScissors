@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -47,7 +48,7 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
         val requestBtn = view.findViewById<ImageButton>(R.id.requestButton)
 
-        cache = Cache.getInstance()!!
+
         val model:FriendsViewModel by viewModels()
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -56,16 +57,22 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
             findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToRequestFragment())
         }
 
+        //Get friends from cache
+        cache = Cache.getInstance()!!
+        model.getFriends().observe(viewLifecycleOwner) { f ->
+            recyclerView.adapter = FriendListAdapter(f, this)
+        }
 
-        //get info from database
-        val friends = mutableListOf<FriendsInfo>()
+
+
+       /* val friends = mutableListOf<FriendsInfo>()
         viewLifecycleOwner.lifecycleScope.launch{
             val f = FirebaseHelper.getFriends()
             Log.i("Friendfragment", "f:${f}")
             friends.addAll(f)
             recyclerView.adapter!!.notifyDataSetChanged()
         }
-        recyclerView.adapter = FriendListAdapter(friends , this)
+        recyclerView.adapter = FriendListAdapter(friends , this) */
     }
     //Button Click Listeners
     override fun onButtonClick(position: Int, friends: List<FriendsInfo>, view: View) {

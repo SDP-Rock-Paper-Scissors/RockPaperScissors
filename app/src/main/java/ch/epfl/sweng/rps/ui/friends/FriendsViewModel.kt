@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 
 class FriendsViewModel : ViewModel(){
     private val cache = Cache.getInstance()!!
-    fun getFriends() : LiveData<MutableList<FriendsInfo>> {
-        var livedata = MutableLiveData<MutableList<FriendsInfo>>()
+    fun getFriends() : LiveData<List<FriendsInfo>> {
+        var livedata = MutableLiveData<List<FriendsInfo>>()
         viewModelScope.launch(Dispatchers.IO) {
             livedata.postValue(cache.getFriendsAsync())
         }

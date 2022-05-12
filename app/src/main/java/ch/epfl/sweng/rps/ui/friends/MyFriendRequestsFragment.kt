@@ -27,8 +27,7 @@ class MyFriendRequestsFragment : Fragment(), RequestListAdapter.OnButtonClickLis
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        cache = Cache.getInstance()!!
-        val model:FriendsViewModel by viewModels()
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_friend_requests, container, false)
     }
@@ -37,18 +36,24 @@ class MyFriendRequestsFragment : Fragment(), RequestListAdapter.OnButtonClickLis
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.myReqsRecyclerView)
-
+        val model:MyFriendsRequestsModel by viewModels()
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
-        val reqs = mutableListOf<FriendRequestInfo>()
-        //get requests from database
+        /* val reqs = mutableListOf<FriendRequestInfo>()
+
         viewLifecycleOwner.lifecycleScope.launch{
             val f = FirebaseHelper.getFriendReqs()
             Log.i("ReqFragment", "reqs:${f}")
             reqs.addAll(f)
             recyclerView.adapter!!.notifyDataSetChanged()
+        } 
+        recyclerView.adapter = RequestListAdapter(reqs ,this) */
+
+        // Get requests from cache
+        cache = Cache.getInstance()!!
+        model.getFriendReqs().observe(viewLifecycleOwner) { reqs ->
+            recyclerView.adapter = RequestListAdapter(reqs, this)
         }
-        recyclerView.adapter = RequestListAdapter(reqs ,this)
     }
 
     override fun onButtonClick(position: Int, reqs: List<FriendRequestInfo>, view: View) {
