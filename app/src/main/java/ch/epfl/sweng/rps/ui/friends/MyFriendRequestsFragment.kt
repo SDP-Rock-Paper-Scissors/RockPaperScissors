@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,15 +16,19 @@ import ch.epfl.sweng.rps.RequestListAdapter
 import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.FriendRequestInfo
+import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.services.ServiceLocator
 import kotlinx.coroutines.launch
 
 class MyFriendRequestsFragment : Fragment(), RequestListAdapter.OnButtonClickListener {
+    private lateinit var cache: Cache
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        cache = Cache.getInstance()!!
+        val model:FriendsViewModel by viewModels()
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_friend_requests, container, false)
     }

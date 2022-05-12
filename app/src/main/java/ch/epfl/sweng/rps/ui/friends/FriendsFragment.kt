@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,11 +21,14 @@ import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.FriendListAdapter
 import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.db.FirebaseHelper
+import ch.epfl.sweng.rps.persistence.Cache
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.launch
 
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
+
+    private lateinit var cache: Cache
 
 
     override fun onCreateView(
@@ -42,11 +47,15 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
         val requestBtn = view.findViewById<ImageButton>(R.id.requestButton)
 
+        cache = Cache.getInstance()!!
+        val model:FriendsViewModel by viewModels()
+
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         requestBtn.setOnClickListener{
             findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToRequestFragment())
         }
+
 
         //get info from database
         val friends = mutableListOf<FriendsInfo>()

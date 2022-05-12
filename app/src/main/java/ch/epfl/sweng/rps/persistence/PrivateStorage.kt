@@ -3,9 +3,7 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import ch.epfl.sweng.rps.models.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.models.UserStat
+import ch.epfl.sweng.rps.models.*
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -56,6 +54,38 @@ class PrivateStorage constructor(val context: Context) : Storage {
         val arr = Gson().fromJson(json, Array<UserStat>::class.java)
         return arr.toList()
     }
+    override fun getFriends(): List<FriendsInfo>? {
+        val statsFile = getFile(Storage.FILES.FRIENDS)
+        if (!statsFile.exists())
+            return null
+        val json = statsFile.readText()
+        val arr = Gson().fromJson(json, Array<FriendsInfo>::class.java)
+        return arr.toList()
+    }
+
+    override fun getFriendReqs(): List<FriendRequestInfo>? {
+        val statsFile = getFile(Storage.FILES.REQUESTS)
+        if (!statsFile.exists())
+            return null
+        val json = statsFile.readText()
+        val arr = Gson().fromJson(json, Array<FriendRequestInfo>::class.java)
+        return arr.toList()
+    }
+
+    override fun writeBackFriends(data : List<FriendsInfo>){
+        val gson = Gson()
+        val json = gson.toJson(data.toTypedArray(), Array<UserStat>::class.java)
+        val f = getFile(Storage.FILES.FRIENDS)
+        f.writeText(json)
+    }
+
+    override fun writeBackFriendReqs(data : List<FriendRequestInfo>){
+        val gson = Gson()
+        val json = gson.toJson(data.toTypedArray(), Array<UserStat>::class.java)
+        val f = getFile(Storage.FILES.REQUESTS)
+        f.writeText(json)
+    }
+
 
     override fun getLeaderBoardData(): List<LeaderBoardInfo>? {
         val leaderBoardFile = getFile(Storage.FILES.LEADERBOARDDATA)
