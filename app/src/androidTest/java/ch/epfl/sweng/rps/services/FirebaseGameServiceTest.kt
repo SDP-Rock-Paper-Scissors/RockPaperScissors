@@ -41,18 +41,18 @@ class FirebaseGameServiceTest {
         assertThrows(GameService.GameServiceException::class.java) {
             gameService.currentRound
         }
-        val round1 = Round(
+        val round1 = Round.Rps(
             mapOf(
                 "player1" to Hand.SCISSORS,
                 "player2" to Hand.PAPER
             ),
             Timestamp(Date(1))
         )
-        val game = Game(
+        val game = Game.Rps(
             "game1",
             listOf("player1", "player2"),
             mapOf(
-                "0" to Round(
+                "0" to Round.Rps(
                     mapOf(
                         "player1" to Hand.ROCK,
                         "player2" to Hand.SCISSORS

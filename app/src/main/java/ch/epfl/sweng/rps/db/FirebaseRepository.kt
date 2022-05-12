@@ -6,14 +6,20 @@ import android.net.Uri
 import android.util.Log
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.models.FriendRequest
+import ch.epfl.sweng.rps.models.Game.Companion.toGame
 import ch.epfl.sweng.rps.utils.toListOf
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.net.URI
+import java.net.URL
 
 
 class FirebaseRepository private constructor(
@@ -37,28 +43,34 @@ class FirebaseRepository private constructor(
         return user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
+    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
         return if (getUser(uid)!!.has_profile_photo)
             firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
         else
             null
     }
 
-    override suspend fun getUserProfilePictureImage(uid:String): Bitmap? {
-        return if (getUser(uid)!!.has_profile_photo){
-             val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
-             Log.d("URI" , uri.path!!)
-             BitmapFactory.decodeStream(java.net.URL(uri.toURL(),"" ).openStream())
-        }
-        else
+    override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
+        return if (getUser(uid)!!.has_profile_photo) {
+            val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await()
+            Log.d("URI", uri.path!!)
+            withContext(Dispatchers.IO) {
+                val inputStream: InputStream = URL(uri.toString()).openStream()
+                BitmapFactory.decodeStream(inputStream)
+            }
+
+        } else
             null
     }
-    override suspend fun setUserProfilePicture(image : Bitmap){
+
+    override suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean) {
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
-        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO , true))
-        firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
+        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO, true))
+        val task = firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
+        if (waitForUploadTask)
+            task.await()
     }
 
 
@@ -88,7 +100,7 @@ class FirebaseRepository private constructor(
         val me = getCurrentUid()
         return firebase.usersFriendRequest
             .whereEqualTo("status", FriendRequest.Status.ACCEPTED)
-            .whereArrayContains("members", getCurrentUid())
+            .whereArrayContains("users", getCurrentUid())
             .get().await().documents
             .map { it.toObject<FriendRequest>()!!.users / me }
     }
@@ -108,7 +120,8 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun getGame(gameId: String): Game? {
-        return firebase.gamesCollection.document(gameId).get().await().toObject<Game>()
+        val doc: DocumentSnapshot = firebase.gamesCollection.document(gameId).get().await()
+        return doc.toGame()
     }
 
 
@@ -122,15 +135,15 @@ class FirebaseRepository private constructor(
     }
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
-        return firebase.gamesCollection.whereArrayContains("players", uid).get()
-            .await().documents.toListOf()
+        return firebase.gamesCollection.whereArrayContains(Game.FIELDS.PLAYERS, uid).get()
+            .await().documents.map { it.toGame()!! }
     }
 
     override suspend fun myActiveGames(): List<Game> {
         return firebase.gamesCollection
-            .whereArrayContains("players", getCurrentUid())
-            .whereEqualTo("done", false)
-            .get().await().documents.toListOf()
+            .whereArrayContains(Game.FIELDS.PLAYERS, getCurrentUid())
+            .whereEqualTo(Game.FIELDS.DONE, false)
+            .get().await().documents.map { it.toGame()!! }
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
@@ -142,7 +155,6 @@ class FirebaseRepository private constructor(
         return firebase.invitationsOfUid(getCurrentUid()).get()
             .await().documents.toListOf()
     }
-
 
     private fun Uri.toURI(): URI = URI(toString())
 

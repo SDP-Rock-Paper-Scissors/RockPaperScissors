@@ -120,7 +120,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
     }
 
 
-    override suspend fun setUserProfilePicture(image: Bitmap) {
+    override suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean) {
 
     }
 

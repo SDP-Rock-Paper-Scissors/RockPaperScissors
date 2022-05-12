@@ -11,8 +11,10 @@ import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
+import ch.epfl.sweng.rps.utils.europeWest1
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -22,6 +24,8 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.runner.RunWith
 
 /**
@@ -48,6 +52,11 @@ class FirebaseTests {
     @After
     fun tearDown() {
         FirebaseApp.clearInstancesForTest()
+    }
+
+    @Test
+    fun testEuropeWest1() {
+        assertDoesNotThrow { Firebase.europeWest1 }
     }
 
     @Test
