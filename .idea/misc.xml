@@ -4,8 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/activity_vision_camerax_live_preview.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/SDP/RockPaperScissors/app/src/main/res/layout/graphic_overlay.xml" value="0.2125" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="18" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="18" project-jdk-type="JavaSDK" />
 </project>
