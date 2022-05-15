@@ -26,7 +26,7 @@ class LoadingActivityTest {
 
     @get:Rule
     val rule =
-        ActivityScenarioRule<LoginActivity>(createIntent())
+        ActivityScenarioRule<LoadingActivity>(createIntent())
 
     @Test
     fun start() {
