@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -205,14 +204,14 @@ class SettingsActivity : AppCompatActivity(),
                 if (repo is ProdServiceLocator) {
                     repo.firebaseReferences.gamesCollection.document(id)
                         .set(
-                            Game(
+                            Game.Rps(
                                 id = id,
                                 players = listOf(
                                     uid,
                                     uid2
                                 ),
                                 rounds = mapOf(
-                                    "0" to Round(
+                                    "0" to Round.Rps(
                                         hands = mapOf(
                                             uid to Hand.PAPER,
                                             uid2 to Hand.ROCK
@@ -225,7 +224,7 @@ class SettingsActivity : AppCompatActivity(),
                                     type = GameMode.Type.PVP,
                                     rounds = 1,
                                     timeLimit = 0,
-                                    game = GameMode.GameEdition.RockPaperScissors
+                                    edition = GameMode.GameEdition.RockPaperScissors
                                 ).toGameModeString(),
                                 current_round = 0,
                                 done = true,
