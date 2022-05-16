@@ -31,6 +31,7 @@ class StatsItemAdapter(private val fragmentManager: FragmentManager) :
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(statsList[position])
         holder.itemView.findViewById<CardView>(R.id.stats_card).isClickable
+        //holder.itemView.findViewById<CardView>(R.id.stats_card).id = statsList[position].gameId.toInt()
         holder.itemView.setOnClickListener {
             val matchDetailFragment = MatchDetailsFragment()
             val bundle = Bundle()
