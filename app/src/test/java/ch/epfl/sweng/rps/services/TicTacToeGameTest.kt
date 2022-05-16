@@ -12,7 +12,7 @@ class TicTacToeGameTest {
         ticTacToe = object : TicTacToeGame(){
             override fun putChoice(move: MOVES, square: Int) {
                 val cell = square % 3
-                val row = (square / 3) as Int
+                val row = (square / 3)
                 matrix[row][cell] = move
             }
 

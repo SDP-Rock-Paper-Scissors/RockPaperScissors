@@ -28,7 +28,7 @@ abstract class TicTacToeGame {
                 cnt++
         }
         if(cnt == 3) {
-            gameOver(choice);
+            gameOver(choice)
             return true
         }
         return false

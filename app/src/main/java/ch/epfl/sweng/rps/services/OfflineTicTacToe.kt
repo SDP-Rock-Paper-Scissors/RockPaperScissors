@@ -14,7 +14,7 @@ class OfflineTicTacToe(val view : TicTacToeFragment) : TicTacToeGame() {
         if(!gameRunning)
             return
         val cell = square % 3
-        val row = (square / 3) as Int
+        val row = (square / 3)
         if(matrix[row][cell] != MOVES.EMPTY)
             return
         matrix[row][cell] = move

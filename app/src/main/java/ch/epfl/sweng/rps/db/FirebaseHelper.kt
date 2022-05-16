@@ -1,7 +1,8 @@
 package ch.epfl.sweng.rps.db
 
-import android.R
+
 import android.net.Uri
+import android.R
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
@@ -28,14 +29,35 @@ object FirebaseHelper {
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
-        val userName = firebaseRepository.getUser(userid)
         val userGameList = firebaseRepository.gamesOfUser(userid)
-
         val allStatsResult = mutableListOf<UserStat>()
         for (userGame in userGameList) {
             val userStat = UserStat()
             val players = userGame.players
+            val gameRounds = userGame.rounds
             val opponents = mutableListOf<String>()
+            val roundMode = userGame.gameMode.rounds
+            val gameMode = userGame.gameMode.edition.id
+            val gameModeName: String
+            val gameModeID: Int
+            val date = dateFormat.format(userGame.timestamp.toDate())
+            val allRoundScores = gameRounds.map { it.value.computeScores() }
+            val userScore = allRoundScores.asSequence().map { scores ->
+                val max = scores.maxOf { it.points }
+                if (scores.any { it.points == max && it.uid == userid && !scores.all { it.points == max } })
+                    1
+                else
+                    0
+
+            }.sum()
+            val opponentScore = roundMode.minus(userScore)
+            val score = userScore - opponentScore
+            val outcome: Int = when {
+                score < 0 -> -1
+                score == 0 -> 0
+                else -> 1
+            }
+
             for (p in players) {
                 if (p != userid) {
                     val user = firebaseRepository.getUser(p)
@@ -45,36 +67,25 @@ object FirebaseHelper {
                 }
             }
 
-            val gameRounds = userGame.rounds
-            val allRoundScores = gameRounds.map { it.value.computeScores() }
+            if (gameMode == "ttt") {
+                gameModeName = "Tic-Tac-Toe"
+                gameModeID = 2
+            } else {
+                gameModeName = "Rock-Paper-Scissor"
+                gameModeID = 1
+            }
 
-            val userScore = allRoundScores.asSequence().map { scores ->
-                val max = scores.maxOf { it.points }
-                if (scores.any { it.points == max && it.uid == userid && !scores.all { it.points == max } })
-                    1
-                else
-                    0
-
-            }.sum()
-
-            val roundMode = userGame.gameMode.rounds
-            val gameModeEdition = userGame.gameMode.edition
-            //by default 1v1 here, so just use overall rounds minus his score
-            val opponentScore = roundMode.minus(userScore)
-            // should be shown like "3 - 2 "
-            val score = "$userScore - $opponentScore"
-            val date =
-                dateFormat.format(userGame.timestamp.toDate())
             userStat.gameId = userGame.id
             userStat.date = date
-            // Pass the id temporarily since I am not sure how to get name from id
             userStat.opponents = opponents.joinToString(",") { it }
-            userStat.roundMode = roundMode.toString()
-            userStat.score = score
+            userStat.gameMode = gameModeName
+            userStat.userScore = userScore.toString()
+            userStat.opponentScore = opponentScore.toString()
+            userStat.outCome = outcome
 
-            //mode filter, selectMode = 0 means by default to fetch all result
-            // todo: map selectMode (best of X) in UI to Game round number
-            if (roundMode == selectMode || selectMode == 0) {
+
+            //  mode filter, selectMode = 0 means by default to fetch all result
+            if (gameModeID == selectMode || selectMode == 0) {
                 allStatsResult.add(userStat)
             }
         }
@@ -120,14 +131,16 @@ object FirebaseHelper {
         val repo = ServiceLocator.getInstance().repository
         val scores = repo.getLeaderBoardScore()
         val allPlayers = mutableListOf<LeaderBoardInfo>()
-        for (score in scores){
+        for (score in scores) {
             val leaderBoardInfo = LeaderBoardInfo()
             leaderBoardInfo.uid = score.uid!!
             leaderBoardInfo.point = score.score!!
             // The *load* function only support "android.net.Uri" but not "java.net.URI" package
-            leaderBoardInfo.userProfilePictureUrl = repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
-            if(leaderBoardInfo.userProfilePictureUrl == null){
-                leaderBoardInfo.userProfilePictureUrl = Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon)
+            leaderBoardInfo.userProfilePictureUrl =
+                repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
+            if (leaderBoardInfo.userProfilePictureUrl == null) {
+                leaderBoardInfo.userProfilePictureUrl =
+                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon)
 
             }
             leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
@@ -137,9 +150,6 @@ object FirebaseHelper {
 
         return allPlayers
     }
-
-
-
 
 
 }

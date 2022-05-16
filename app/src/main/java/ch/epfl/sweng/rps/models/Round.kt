@@ -6,7 +6,7 @@ import com.google.firebase.Timestamp
 import java.util.*
 
 
-sealed class Round() {
+sealed class Round {
 
     open val hands: Map<String, Hand>
         get() = throw IllegalStateException(

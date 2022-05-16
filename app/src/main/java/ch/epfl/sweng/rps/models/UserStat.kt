@@ -7,6 +7,7 @@ data class UserStat(
     var opponents: String = "",
     var gameMode: String = "",
     var userScore: String = "",
-    var opponentScore: String = ""
+    var opponentScore: String = "",
+    var outCome: Int = 0,
 
 )
