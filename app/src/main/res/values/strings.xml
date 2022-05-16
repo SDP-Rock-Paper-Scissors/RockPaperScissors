@@ -85,4 +85,9 @@
     <string name="_2nd">2ND 🥈</string>
     <string name="_1st">1ST 🥇</string>
     <string name="_3rd">3RD 🥉</string>
+    <string name="is_first_time">is_first_time</string>
+    <string name="settings_clear_shared_prefs">settings_shared_prefs_clear</string>
+    <string name="settings_show_onboard">settings_show_onboard</string>
+    <string name="show_welcome_screen_text_settings">Show the welcome screen</string>
+    <string name="clear_shared_prefs_settings_text">Clear all settings</string>
 </resources>

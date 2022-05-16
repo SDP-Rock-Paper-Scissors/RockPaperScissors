@@ -154,4 +154,17 @@ class SettingsPageTest {
             onView(withText(R.string.add_artificial_game)).perform(click())
         }
     }
+
+    @Test
+    fun testOpenOnboarding() {
+        onView(withId(R.id.settings)).check(matches(isDisplayed()))
+        onView(withText(R.string.show_welcome_screen_text_settings)).perform(click())
+        onView(withId(R.id.onboarding_layout)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testResetSharedPrefs() {
+        onView(withId(R.id.settings)).check(matches(isDisplayed()))
+        onView(withText(R.string.clear_shared_prefs_settings_text)).perform(click())
+    }
 }
