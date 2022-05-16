@@ -28,7 +28,7 @@ object FirebaseHelper {
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
-
+        val userName = firebaseRepository.getUser(userid)
         val userGameList = firebaseRepository.gamesOfUser(userid)
 
         val allStatsResult = mutableListOf<UserStat>()
@@ -58,6 +58,7 @@ object FirebaseHelper {
             }.sum()
 
             val roundMode = userGame.gameMode.rounds
+            val gameModeEdition = userGame.gameMode.edition
             //by default 1v1 here, so just use overall rounds minus his score
             val opponentScore = roundMode.minus(userScore)
             // should be shown like "3 - 2 "

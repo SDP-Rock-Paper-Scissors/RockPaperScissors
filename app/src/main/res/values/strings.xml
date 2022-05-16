@@ -85,4 +85,5 @@
     <string name="_2nd">2ND 🥈</string>
     <string name="_1st">1ST 🥇</string>
     <string name="_3rd">3RD 🥉</string>
+    <string name="personal_statistics">Personal Statistics</string>
 </resources>

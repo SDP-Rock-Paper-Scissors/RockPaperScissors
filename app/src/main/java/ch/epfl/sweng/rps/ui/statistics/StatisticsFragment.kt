@@ -49,7 +49,6 @@ class StatisticsFragment : Fragment() {
 
                 }
 
-                println(position)
                 model.getStats(position).observe(viewLifecycleOwner, Observer { stats->
                     for (statsData in stats) {
                         addPersonalStats(
@@ -140,9 +139,8 @@ class StatisticsFragment : Fragment() {
 
         return arrayOf(
             "Mode Filter",
-            "1 round",
-            "Best of 3",
-            "Best of 5",
+            "Rock-Paper-Scissor",
+            "Tic-Tac-Toe",
         )
 
     }

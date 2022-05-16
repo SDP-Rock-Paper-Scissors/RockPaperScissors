@@ -5,7 +5,8 @@ data class UserStat(
     var gameId: String = "",
     var date: String = "",
     var opponents: String = "",
-    var roundMode: String = "",
-    var score: String = ""
+    var gameMode: String = "",
+    var userScore: String = "",
+    var opponentScore: String = ""
 
 )
