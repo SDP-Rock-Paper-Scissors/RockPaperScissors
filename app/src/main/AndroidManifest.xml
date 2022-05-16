@@ -3,8 +3,8 @@
     package="ch.epfl.sweng.rps">
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RockPaperScissors">
+        <activity
+            android:name=".vision.GraphicOverlayActivity"
+            android:exported="false"
+            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -33,10 +37,10 @@
             android:theme="@style/Theme.RockPaperScissors.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

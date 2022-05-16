@@ -141,10 +141,6 @@ dependencies {
     //Declare the dependency for image labelling
     implementation 'com.google.mlkit:image-labeling-custom:17.0.1'
 
-    //Declare the dependency for testing custom views
-    testImplementation "org.robolectric:robolectric:4.8.1"
-    testCompileOnly 'junit:junit:4.13.2'
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.8.2'
 }
 
 
