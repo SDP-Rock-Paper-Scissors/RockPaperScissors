@@ -28,7 +28,7 @@ object TestUtils {
     inline fun <reified T : Activity> getActivityInstance(): T {
         var activity: Activity? = null
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            val resumedActivities: Collection<Activity> =
+            val resumedActivities =
                 ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
             Log.i("SettingsPageTest", "resumedActivities: $resumedActivities")
             if (resumedActivities.iterator().hasNext()) {
@@ -62,6 +62,7 @@ object TestUtils {
             FirebaseFirestoreSettings.Builder().setPersistenceEnabled(false).build()
     }
 }
+
 
 interface TestFlow {
     fun setup()
@@ -233,4 +234,47 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
      */
     val scenario: ActivityScenario<A>
         get() = _scenario!!
+}
+    fun retry(
+        maxRetries: Int = 3,
+        retryDelay: Long = 1000L,
+        action: () -> Unit,
+    ): Boolean {
+        var retries = 0
+        while (retries < maxRetries) {
+            try {
+                action()
+                return true
+            } catch (e: Exception) {
+                retries++
+                if (retries >= maxRetries) {
+                    throw e
+                }
+                Thread.sleep(retryDelay)
+            }
+        }
+        return false
+    }
+
+    fun retryPredicate(
+        maxRetries: Int = 3,
+        retryDelay: Long = 1000L,
+        action: () -> Boolean,
+    ): Boolean {
+        var retries = 0
+        while (retries < maxRetries) {
+            try {
+                if (action()) {
+                    return true
+                }
+            } catch (e: Exception) {
+                retries++
+                if (retries >= maxRetries) {
+                    throw e
+                }
+                Thread.sleep(retryDelay)
+            }
+        }
+        return false
+    }
 }
