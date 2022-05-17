@@ -79,6 +79,16 @@ class LeaderboardFragment : Fragment() {
 
     }
 
+    private fun getGameModes(): Array<String> {
+
+        return arrayOf(
+            "Mode Filter",
+            "Rock-Paper-Scissor",
+            "Tic-Tac-Toe",
+        )
+
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
