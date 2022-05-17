@@ -15,12 +15,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/match_date"
+            android:id="@+id/match_mode"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_gravity="center|left"
             android:gravity="center"
-            android:textColor="#000000"
             android:textStyle="bold|italic" />
 
         <LinearLayout
@@ -34,13 +33,12 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/match_mode"
+                android:id="@+id/match_date"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="center"
-                android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -57,8 +55,7 @@
                 android:ems="10"
                 android:gravity="center"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+                android:textStyle="bold" />
 
             <Space
                 android:layout_width="145dp"
@@ -83,7 +80,6 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="center"
-                android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -101,8 +97,7 @@
                 android:ems="10"
                 android:gravity="center"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+                android:textStyle="bold" />
 
             <Space
                 android:layout_width="145dp"
