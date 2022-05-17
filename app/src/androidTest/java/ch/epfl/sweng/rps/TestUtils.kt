@@ -16,9 +16,9 @@ import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.hamcrest.Matcher
 import org.junit.rules.ExternalResource
@@ -99,8 +99,6 @@ object TestUtils {
 
     fun Firebase.initializeForTest() {
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
-        kotlin.runCatching { FirebaseApp.getInstance().delete() }
-        FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
         FirebaseFirestore.getInstance().firestoreSettings =
             FirebaseFirestoreSettings.Builder().setPersistenceEnabled(false).build()
     }
@@ -116,6 +114,13 @@ interface TestFlow {
             override fun setup() = setup()
 
             override fun tearDown() {}
+        }
+
+
+        fun sameSetupAndTearDown(fn: () -> Unit) = object : TestFlow {
+            override fun setup() = fn()
+
+            override fun tearDown() = fn()
         }
 
         fun setupAndTearDown(setup: () -> Unit, tearDown: () -> Unit) = object : TestFlow {
@@ -148,8 +153,6 @@ interface TestFlow {
 }
 
 class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
-
-
     private val scenarioSupplier: () -> ActivityScenario<A>
     private val testFlow: TestFlow
 
@@ -167,11 +170,10 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
             {
                 ServiceLocator.setCurrentEnv(Env.Test)
                 Firebase.initializeForTest()
-                Firebase.firestore.firestoreSettings =
-                    FirebaseFirestoreSettings.Builder().setPersistenceEnabled(false).build()
                 ServiceLocator.localRepository.setCurrentUid("test")
             },
             {
+                FirebaseAuth.getInstance().signOut()
                 FirebaseApp.clearInstancesForTest()
                 ServiceLocator.setCurrentEnv(Env.Prod)
             }
