@@ -54,6 +54,49 @@ object TestUtils {
         }
     }
 
+    fun retry(
+        maxRetries: Int = 3,
+        retryDelay: Long = 1000L,
+        action: () -> Unit,
+    ): Boolean {
+        var retries = 0
+        while (retries < maxRetries) {
+            try {
+                action()
+                return true
+            } catch (e: Exception) {
+                retries++
+                if (retries >= maxRetries) {
+                    throw e
+                }
+                Thread.sleep(retryDelay)
+            }
+        }
+        return false
+    }
+
+    fun retryPredicate(
+        maxRetries: Int = 3,
+        retryDelay: Long = 1000L,
+        action: () -> Boolean,
+    ): Boolean {
+        var retries = 0
+        while (retries < maxRetries) {
+            try {
+                if (action()) {
+                    return true
+                }
+            } catch (e: Exception) {
+                retries++
+                if (retries >= maxRetries) {
+                    throw e
+                }
+                Thread.sleep(retryDelay)
+            }
+        }
+        return false
+    }
+
     fun Firebase.initializeForTest() {
         FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
         kotlin.runCatching { FirebaseApp.getInstance().delete() }
@@ -235,46 +278,5 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
     val scenario: ActivityScenario<A>
         get() = _scenario!!
 }
-    fun retry(
-        maxRetries: Int = 3,
-        retryDelay: Long = 1000L,
-        action: () -> Unit,
-    ): Boolean {
-        var retries = 0
-        while (retries < maxRetries) {
-            try {
-                action()
-                return true
-            } catch (e: Exception) {
-                retries++
-                if (retries >= maxRetries) {
-                    throw e
-                }
-                Thread.sleep(retryDelay)
-            }
-        }
-        return false
-    }
 
-    fun retryPredicate(
-        maxRetries: Int = 3,
-        retryDelay: Long = 1000L,
-        action: () -> Boolean,
-    ): Boolean {
-        var retries = 0
-        while (retries < maxRetries) {
-            try {
-                if (action()) {
-                    return true
-                }
-            } catch (e: Exception) {
-                retries++
-                if (retries >= maxRetries) {
-                    throw e
-                }
-                Thread.sleep(retryDelay)
-            }
-        }
-        return false
-    }
-}
+
