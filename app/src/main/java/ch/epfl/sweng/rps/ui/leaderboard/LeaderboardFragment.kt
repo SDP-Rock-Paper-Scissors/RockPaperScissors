@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,30 +30,48 @@ class LeaderboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        val newView = inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        val modeSpinner = newView.findViewById(R.id.modeSelect_leaderboard) as Spinner
+        val modes = getGameModes()
+        val adapter =
+            ArrayAdapter(this.requireActivity(), android.R.layout.simple_spinner_item, modes)
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        modeSpinner.adapter = adapter
+        return newView
     }
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
         cache = Cache.getInstance()!!
         val leaderBoardRecyclerView = itemView.findViewById<RecyclerView>(R.id.leaderboard_recycler_view)
+        val modeSpinner = itemView.findViewById(R.id.modeSelect_leaderboard) as Spinner
         val model:LeaderBoardViewModel by viewModels()
+        modeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                leaderBoardRecyclerView.removeAllViews()
+                leaderBoardRecyclerView?.apply {
+                    // set a LinearLayoutManager to handle Android
+                    // RecyclerView behavior
+                    layoutManager = LinearLayoutManager(activity)
+                    // set the custom adapter to the RecyclerView
+                    adapter = LeaderBoardPlayerAdapter()
+                    setHasFixedSize(true)
+                    model.getLeaderBoard(position).observe(viewLifecycleOwner) { leaderboardData ->
+                        loadPlayersUI(
+                            itemView, leaderboardData
+                        )
+                    }
 
-        leaderBoardRecyclerView?.apply {
-            // set a LinearLayoutManager to handle Android
-            // RecyclerView behavior
-            layoutManager = LinearLayoutManager(activity)
-            // set the custom adapter to the RecyclerView
-            adapter = LeaderBoardPlayerAdapter()
-            setHasFixedSize(true)
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                // do nothing
+            }
+
 
         }
 
-        model.getLeaderBoard().observe(viewLifecycleOwner) { leaderboardData ->
-            loadPlayersUI(
-                itemView, leaderboardData
-            )
-        }
     }
 
 
@@ -82,7 +103,6 @@ class LeaderboardFragment : Fragment() {
     private fun getGameModes(): Array<String> {
 
         return arrayOf(
-            "Mode Filter",
             "Rock-Paper-Scissor",
             "Tic-Tac-Toe",
         )

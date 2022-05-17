@@ -125,8 +125,8 @@ class FirebaseRepository private constructor(
     }
 
 
-    override suspend fun getLeaderBoardScore(): List<TotalScore> {
-        return firebase.scoresCollection.orderBy("score", Query.Direction.DESCENDING).get()
+    override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
+        return firebase.scoresCollection.orderBy(scoreMode, Query.Direction.DESCENDING).get()
             .await().documents.map {
                 it.toObject<TotalScore>()!!
             }
