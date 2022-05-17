@@ -118,7 +118,6 @@ class StatisticsFragmentTest {
     @Test
     fun opensStatisticFragmentTest() {
         onView(withId(R.id.nav_statistics)).perform(click())
-        Thread.sleep(100000000000000)
         onView(withId(R.id.fragment_statistics)).check(matches(isDisplayed()))
         onView(withText("player2")).check(matches(isDisplayed()))
 
