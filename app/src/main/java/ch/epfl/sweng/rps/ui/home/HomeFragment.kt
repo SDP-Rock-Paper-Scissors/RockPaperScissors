@@ -30,6 +30,7 @@ class HomeFragment : Fragment() {
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
         binding.apply {
             buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
+            buttonPlay5GamesOffline.setOnClickListener { playNRoundsWithComputer(5) }
         }
         return binding.root
     }
@@ -40,7 +41,8 @@ class HomeFragment : Fragment() {
      */
     private fun playNRoundsWithComputer(nEvents: Int) {
         val randomPlayer = RandomPlayer(listOf(Hand.ROCK, Hand.PAPER, Hand.SCISSORS))
-        matchViewModel.startOfflineGameService(nEvents, randomPlayer)
+        matchViewModel.setGameServiceSettings(nEvents, randomPlayer)
+        matchViewModel.startOfflineGameService()
         findNavController().navigate(R.id.gameFragment)
     }
 
@@ -48,7 +50,8 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int){
+
+    private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int) {
         buttonToBind.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(fragmentID)
         }
