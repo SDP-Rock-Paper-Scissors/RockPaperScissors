@@ -5,15 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import ch.epfl.sweng.rps.persistence.Cache
 import coil.load
-import kotlinx.android.synthetic.main.content_scrolling.*
 
 
 class LeaderboardFragment : Fragment() {
@@ -26,50 +30,82 @@ class LeaderboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        val newView = inflater.inflate(R.layout.fragment_leaderboard, container, false)
+        val modeSpinner = newView.findViewById(R.id.modeSelect_leaderboard) as Spinner
+        val modes = getGameModes()
+        val adapter =
+            ArrayAdapter(this.requireActivity(), android.R.layout.simple_spinner_item, modes)
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        modeSpinner.adapter = adapter
+        return newView
     }
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
         cache = Cache.getInstance()!!
+        val leaderBoardRecyclerView = itemView.findViewById<RecyclerView>(R.id.leaderboard_recycler_view)
+        val modeSpinner = itemView.findViewById(R.id.modeSelect_leaderboard) as Spinner
         val model:LeaderBoardViewModel by viewModels()
-        recycler_view.apply {
-            // set a LinearLayoutManager to handle Android
-            // RecyclerView behavior
-            layoutManager = LinearLayoutManager(activity)
-            // set the custom adapter to the RecyclerView
-            adapter = LeaderBoardPlayerAdapter()
-            setHasFixedSize(true)
+        modeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+                leaderBoardRecyclerView.removeAllViews()
+                leaderBoardRecyclerView?.apply {
+                    // set a LinearLayoutManager to handle Android
+                    // RecyclerView behavior
+                    layoutManager = LinearLayoutManager(activity)
+                    // set the custom adapter to the RecyclerView
+                    adapter = LeaderBoardPlayerAdapter()
+                    setHasFixedSize(true)
+                    model.getLeaderBoard(position).observe(viewLifecycleOwner) { leaderboardData ->
+                        loadPlayersUI(
+                            itemView, leaderboardData
+                        )
+                    }
+
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                // do nothing
+            }
+
 
         }
 
-        model.getLeaderBoard().observe(viewLifecycleOwner) { leaderboardData ->
-            loadPlayersUI(
-                leaderboardData
-            )
-        }
     }
 
 
 
-    private fun loadPlayersUI(players: List<LeaderBoardInfo>){
+    private fun loadPlayersUI(itemView: View, players: List<LeaderBoardInfo>){
         val champions = players.take(3)
-        showPlayersPosition(players)
-        showChampions(champions)
+        showPlayersPosition(itemView, players)
+        showChampions(itemView,champions)
 
     }
 
-    private fun showChampions(championPlayers: List<LeaderBoardInfo>) {
+    private fun showChampions(itemView: View, championPlayers: List<LeaderBoardInfo>) {
 
-        iv_champion1.load(championPlayers[0].userProfilePictureUrl)
-        iv_champion2.load(championPlayers[1].userProfilePictureUrl)
-        iv_champion3.load(championPlayers[2].userProfilePictureUrl)
+        itemView.findViewById<ImageView>(R.id.iv_champion1).load(championPlayers[0].userProfilePictureUrl)
+        itemView.findViewById<ImageView>(R.id.iv_champion2).load(championPlayers[1].userProfilePictureUrl)
+        itemView.findViewById<ImageView>(R.id.iv_champion3).load(championPlayers[2].userProfilePictureUrl)
 
     }
 
-    private fun showPlayersPosition(players: List<LeaderBoardInfo>) {
-        val adapter = recycler_view.adapter as LeaderBoardPlayerAdapter
+    private fun showPlayersPosition(
+        itemView: View,
+        players: List<LeaderBoardInfo>
+    ) {
+        val adapter = itemView.findViewById<RecyclerView>(R.id.leaderboard_recycler_view).adapter as LeaderBoardPlayerAdapter
         adapter.addPlayers(players)
+
+    }
+
+    private fun getGameModes(): Array<String> {
+
+        return arrayOf(
+            "Rock-Paper-Scissor",
+            "Tic-Tac-Toe",
+        )
 
     }
 

@@ -1,11 +1,13 @@
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.LeaderBoardInfo
 import coil.load
-import kotlinx.android.synthetic.main.lb_player_list.view.*
+
 
 class LeaderBoardPlayerAdapter : RecyclerView.Adapter<LeaderBoardPlayerAdapter.PlayerViewHolder>() {
 
@@ -33,10 +35,11 @@ class LeaderBoardPlayerAdapter : RecyclerView.Adapter<LeaderBoardPlayerAdapter.P
 
     inner class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(player: LeaderBoardInfo, position: Int) {
-            itemView.tv_position.text = (position + 1).toString()
-            itemView.tv_name.text = player.username
-            itemView.tv_score.text = player.point.toString()
-            itemView.iv_photo.load(player.userProfilePictureUrl)
+
+            itemView.findViewById<TextView>(R.id.tv_position).text = (position + 1).toString()
+            itemView.findViewById<TextView>(R.id.tv_name).text = player.username
+            itemView.findViewById<TextView>(R.id.tv_score).text = player.point.toString()
+            itemView.findViewById<ImageView>(R.id.iv_photo).load(player.userProfilePictureUrl)
         }
     }
 }

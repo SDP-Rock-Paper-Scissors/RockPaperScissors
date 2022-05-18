@@ -20,7 +20,6 @@ import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Before
-
 import org.junit.Rule
 import org.junit.Test
 
@@ -30,9 +29,10 @@ class FriendsFragmentTest {
     val LIST_ITEM = FakeFriendsData.myFriendsData.size - 1
     val thisFriend = FakeFriendsData.myFriendsData[LIST_ITEM]
 
-    @Rule
-    @JvmField
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
+    @get:Rule
+    val activityRule = ActivityScenarioRuleWithSetup(MainActivity::class.java,
+        defaultTestFlow then TestFlow.onlySetup { ServiceLocator.localRepository.setCurrentUid("test") }
+    )
 
     @Before
     fun setUp() {

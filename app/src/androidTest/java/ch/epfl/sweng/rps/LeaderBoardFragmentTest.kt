@@ -2,26 +2,30 @@ package ch.epfl.sweng.rps
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.TotalScore
+import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.ServiceLocator
+import org.hamcrest.Matchers.anything
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
-
+import kotlin.test.assertEquals
 
 class LeaderBoardFragmentTest {
     @get:Rule
-    val testRule = ActivityScenarioRule<MainActivity>(createIntent())
+    val testRule = ActivityScenarioRuleWithSetup.default<MainActivity>(
+        createIntent()
+    )
 
     private fun createIntent(): Intent {
         val i = Intent(
@@ -67,9 +71,10 @@ class LeaderBoardFragmentTest {
         )
 
         repo.leaderBoardScore = mutableListOf(
-            TotalScore("player1",100),
-            TotalScore("player2",200),
-            TotalScore("player3",300))
+            TotalScore("player1", 100, 350),
+            TotalScore("player2", 200, 250),
+            TotalScore("player3", 300, 150)
+        )
 
 
     }
@@ -82,12 +87,12 @@ class LeaderBoardFragmentTest {
 
     @Test
     fun testEnv() {
-        assert(ServiceLocator.getCurrentEnv() == Env.Test)
+        assertEquals(Env.Test, ServiceLocator.getCurrentEnv())
     }
 
 
     @Test
-    fun opensStatisticFragmentTest() {
+    fun opensLeaderBoardFragmentTest() {
 
         onView(withId(R.id.nav_leaderboard)).perform(click())
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()))
@@ -97,6 +102,24 @@ class LeaderBoardFragmentTest {
         onView(withText("200")).check(matches(isDisplayed()))
         onView(withText("player3")).check(matches(isDisplayed()))
         onView(withText("300")).check(matches(isDisplayed()))
+
+    }
+
+    @Test
+    fun opensLeaderboardSpinnerFragmentTest() {
+        onView(withId(R.id.nav_leaderboard)).perform(click())
+        onView(withId(R.id.modeSelect_leaderboard)).perform(click())
+        onData(anything()).atPosition(1).perform(click())
+        onView(withText("100")).check(doesNotExist())
+        onView(withText("150")).check(matches(isDisplayed()))
+        onView(withId(R.id.modeSelect_leaderboard)).perform(click())
+        onData(anything()).atPosition(0).perform(click())
+        onView(withText("250")).check(doesNotExist())
+        onView(withText("200")).check(matches(isDisplayed()))
+
+
+
+
 
     }
 

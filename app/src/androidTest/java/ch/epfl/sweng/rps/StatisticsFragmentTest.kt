@@ -12,7 +12,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
@@ -32,7 +31,7 @@ import java.util.concurrent.TimeoutException
 
 class StatisticsFragmentTest {
     @get:Rule
-    val testRule = ActivityScenarioRule<MainActivity>(createIntent())
+    val testRule = ActivityScenarioRuleWithSetup.default<MainActivity>(createIntent())
 
     private fun createIntent(): Intent {
         val i = Intent(
