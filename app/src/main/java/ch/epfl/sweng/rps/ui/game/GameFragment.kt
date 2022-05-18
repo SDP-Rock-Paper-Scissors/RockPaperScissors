@@ -32,7 +32,14 @@ class GameFragment : Fragment() {
         binding.rockRB.setOnClickListener { rpsPressed(Hand.ROCK) }
         binding.paperRB.setOnClickListener { rpsPressed(Hand.PAPER) }
         binding.scissorsRB.setOnClickListener { rpsPressed(Hand.SCISSORS) }
+    }
 
+    override fun onStart() {
+        super.onStart()
+        val gameId = arguments?.getString("game_id")
+        if (gameId != null) {
+            Toast.makeText(context, "Game ID: $gameId", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun rpsPressed(hand: Hand) {

@@ -97,7 +97,7 @@ class OfflineGameService(
     override val isDisposed: Boolean
         get() = _disposed
 
-    override val active: Boolean
+    override val started: Boolean
         get() = game != null
 
     override suspend fun refreshGame(): Game = game!!

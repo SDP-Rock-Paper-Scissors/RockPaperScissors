@@ -54,6 +54,16 @@ data class GameMode(
             return this[key] ?: throw IllegalArgumentException("Missing key '$key' in game mode")
         }
 
+        fun default(rounds: Int): GameMode {
+            return GameMode(
+                playerCount = 2,
+                type = PVP,
+                rounds = rounds,
+                timeLimit = 0,
+                edition = GameEdition.RockPaperScissors
+            )
+        }
+
         // "P:5,G:PC,R:3,T:0", //5 players, against computer, 3 rounds, 0 time limit (no time limit)
         fun fromString(s: String): GameMode {
             val map = s.split(",")

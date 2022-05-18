@@ -4,6 +4,7 @@ import android.util.Log
 import ch.epfl.sweng.rps.models.GameMode
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -13,14 +14,14 @@ class MatchmakingService {
 
     fun queue(gameMode: GameMode): Flow<QueueStatus> = flow {
         Log.i("MatchmakingService", "Queueing for game mode ${gameMode.toGameModeString()}")
-        emit(QueueStatus.Queued)
+        emit(QueueStatus.Queued(gameMode))
         Log.i("MatchmakingService", "Sending request to cloud function")
         val gameId = cloudFunctions.queue(gameMode)
         Log.i("MatchmakingService", "Received game id $gameId")
 
         val service = ServiceLocator.getInstance().getGameServiceForGame(gameId)
         Log.i("MatchmakingService", "Got service $service")
-        emit(QueueStatus.Accepted(service))
+        emit(QueueStatus.GameJoined(service))
     }
 
     suspend fun acceptInvitation(invitationId: String): FirebaseGameService {
@@ -43,9 +44,16 @@ class MatchmakingService {
         return ServiceLocator.getInstance().getGameServiceForGame(games[0].id)
     }
 
+    /**
+     * Cancel the current queue if any. For now this doesn't do anything.
+     */
+    suspend fun cancelQueue() {
+        delay(100)
+    }
+
     sealed class QueueStatus {
-        object Queued : QueueStatus()
-        class Accepted(val gameService: GameService) : QueueStatus()
+        class Queued(val gameMode: GameMode) : QueueStatus()
+        class GameJoined(val gameService: FirebaseGameService) : QueueStatus()
     }
 
     class CloudFunctions {

@@ -90,4 +90,6 @@
     <string name="settings_show_onboard">settings_show_onboard</string>
     <string name="show_welcome_screen_text_settings">Show the welcome screen</string>
     <string name="clear_shared_prefs_settings_text">Clear all settings</string>
+    <string name="placeholder_text">PLACEHOLDER TEXT</string>
+    <string name="cancel_text">Cancel</string>
 </resources>

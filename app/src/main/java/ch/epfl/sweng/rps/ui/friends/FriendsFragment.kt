@@ -40,7 +40,8 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         recyclerView.adapter = FriendListAdapter(friends, this)
 
     }
-   //Button Click Listeners
+
+    //Button Click Listeners
     override fun onButtonClick(position: Int, friends: List<FriendsInfo>, view: View) {
         val username = friends[position].username
         val gamesPlayed = friends[position].gamesPlayed
@@ -54,26 +55,33 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
             Log.i("Press info", "This is $username's info")
             Toast.makeText(activity, "This is $username's info", Toast.LENGTH_SHORT).show()
             //Move to infoPage on button click
-            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToInfoPageFragment3(
-                //Passing all the info to be displayed in the Info Page
-                username,
-                "Games Played: $gamesPlayed",
-                "Games Won: $gamesWon",
-                "Win Rate: $winRate%",
-                isOnline))
+            findNavController().navigate(
+                FriendsFragmentDirections.actionNavFriendsToInfoPageFragment3(
+                    //Passing all the info to be displayed in the Info Page
+                    username,
+                    "Games Played: $gamesPlayed",
+                    "Games Won: $gamesWon",
+                    "Win Rate: $winRate%",
+                    isOnline
+                )
+            )
 
 
         }
         //if play button is clicked
-        else if (view == view.findViewById(R.id.playButton)){
+        else if (view == view.findViewById(R.id.playButton)) {
             Log.i("Press info", "You will play a game with $username")
-            Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT)
+                .show()
 
             //Move to game fragment on button click
-            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameFragment2())
+            findNavController().navigate(
+                FriendsFragmentDirections.actionNavFriendsToGameFragment2(
+                    null
+                )
+            )
         }
     }
-
 
 
 }

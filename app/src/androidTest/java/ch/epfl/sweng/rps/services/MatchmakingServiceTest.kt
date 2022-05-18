@@ -1,11 +1,11 @@
 package ch.epfl.sweng.rps.services
 
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.GameMode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.ktx.Firebase
+import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertThrows
@@ -41,30 +41,22 @@ class MatchmakingServiceTest {
 
     @Test
     fun queueStatus() {
-        val status: () -> MatchmakingService.QueueStatus = { MatchmakingService.QueueStatus.Queued }
-        when (status()) {
-            MatchmakingService.QueueStatus.Queued -> assertTrue(true)
-            is MatchmakingService.QueueStatus.Accepted -> assertTrue(false)
-        }
+        val status: () -> MatchmakingService.QueueStatus =
+            { MatchmakingService.QueueStatus.Queued(mockk()) }
+        assertTrue(
+            when (status()) {
+                is MatchmakingService.QueueStatus.Queued -> true
+                is MatchmakingService.QueueStatus.GameJoined -> false
+            }
+        )
         val status2: () -> MatchmakingService.QueueStatus = {
-            MatchmakingService.QueueStatus.Accepted(
-                OfflineGameService(
-                    "",
-                    LocalRepository(),
-                    listOf(),
-                    GameMode(
-                        2,
-                        GameMode.Type.PVP,
-                        3,
-                        0,
-                        GameMode.GameEdition.RockPaperScissors
-                    )
-                )
-            )
+            MatchmakingService.QueueStatus.GameJoined(mockk())
         }
-        when (status2()) {
-            MatchmakingService.QueueStatus.Queued -> assertTrue(false)
-            is MatchmakingService.QueueStatus.Accepted -> assertTrue(true)
-        }
+        assertTrue(
+            when (status2()) {
+                is MatchmakingService.QueueStatus.Queued -> false
+                is MatchmakingService.QueueStatus.GameJoined -> true
+            }
+        )
     }
 }

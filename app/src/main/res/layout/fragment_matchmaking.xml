@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/matchmaking_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="32dp"
+    tools:context=".ui.game.MatchmakingFragment">
+
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/matchmaking_status_progress_indicator"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:gravity="center"
+        android:indeterminate="true"
+
+        android:visibility="visible" />
+
+    <android.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="32dp" />
+
+    <TextView
+        android:id="@+id/matchmaking_status_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/placeholder_text" />
+
+    <android.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="32dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/cancel_text"
+        android:visibility="invisible" />
+
+
+</LinearLayout>

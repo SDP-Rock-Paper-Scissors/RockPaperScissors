@@ -58,7 +58,7 @@ abstract class GameService : ChangeNotifier<GameService>() {
     abstract val isGameOver: Boolean
 
     abstract val isDisposed: Boolean
-    abstract val active: Boolean
+    abstract val started: Boolean
 
 
     fun addErrorListener(listener: () -> Unit) {

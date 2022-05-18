@@ -28,12 +28,16 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
-        binding.apply {
-            buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
-        }
+        binding.buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
+        binding.buttonPlay1GamesOnline.setOnClickListener { playOnlineGame(1) }
+        binding.buttonPlay5GamesOnline.setOnClickListener { playOnlineGame(5) }
         return binding.root
     }
 
+    private fun playOnlineGame(rounds: Int) {
+        val action = HomeFragmentDirections.actionNavHomeToMatchmakingFragment(rounds)
+        findNavController().navigate(action)
+    }
 
     /**
      * @param nEvents: number of Wins or Rounds depending on the game implementation
@@ -48,7 +52,8 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int){
+
+    private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int) {
         buttonToBind.setOnClickListener { view: View ->
             Navigation.findNavController(view).navigate(fragmentID)
         }

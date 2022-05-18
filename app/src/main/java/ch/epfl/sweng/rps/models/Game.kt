@@ -25,6 +25,7 @@ sealed class Game {
     abstract val timestamp: Timestamp
     abstract val player_count: Int
     abstract val edition: GameEdition
+    abstract val started: Boolean
 
     val gameMode: GameMode get() = GameMode.fromString(game_mode)
 
@@ -37,6 +38,7 @@ sealed class Game {
         override val done: Boolean = false,
         override val timestamp: Timestamp = Timestamp(Date(0)),
         override val player_count: Int = 0,
+        override val started: Boolean = false,
     ) : Game() {
         override val edition: GameEdition = GameEdition.RockPaperScissors
     }
@@ -51,6 +53,7 @@ sealed class Game {
         override val done: Boolean = false,
         override val timestamp: Timestamp = Timestamp(Date(0)),
         override val player_count: Int = 0,
+        override val started: Boolean = false,
     ) : Game() {
         override val edition: GameEdition = GameEdition.TicTacToe
     }
