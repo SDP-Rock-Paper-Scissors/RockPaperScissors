@@ -60,7 +60,7 @@ class CacheTests {
     fun cacheContainsNoDataWhenCreated() {
         assert(cache.getUserDetails() == null)
         assert(cache.getStatsData(0).isEmpty())
-        assert(cache.getLeaderBoardData().isEmpty())
+        assert(cache.getLeaderBoardData(0).isEmpty())
     }
 
     @Test
@@ -103,7 +103,7 @@ class CacheTests {
             LeaderBoardInfo("Adam", "3", null, 60)
         val allPlayers = listOf(user1, user2, user3)
         cache.updateLeaderBoardData(allPlayers)
-        val result = cache.getLeaderBoardData()
+        val result = cache.getLeaderBoardData(0)
         assert(result == allPlayers)
     }
 
