@@ -1,52 +1,59 @@
 package ch.epfl.sweng.rps.utils
 
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
-
 import org.junit.Test
 
 class LogServiceTest {
+    private lateinit var logService: L.LogService
 
     @Before
     fun setUp() {
+        logService = L.of("LogServiceTest")
     }
 
     @After
     fun tearDown() {
-        LogService.clear()
+        L.unregister(logService)
+        L.dispose(logService.name)
     }
 
     @Test
     fun log() {
-        LogService.d("LoginServiceTest", "test")
-        assertEquals(LogService.logs.size, 1)
-        assertEquals(LogService.logs[0].tag, "LoginServiceTest")
-        assertEquals(LogService.logs[0].message, "test")
+        logService.d("test")
+        assertEquals(logService.logs.size, 1)
+        assertEquals(logService.logs[0].tag, "LogServiceTest")
+        assertEquals(logService.logs[0].message, "test")
     }
 
     @Test
     fun setSize() {
-        LogService.size = 10
-        assertEquals(LogService.size, 10)
-        for (i in 0..LogService.size * 2) {
-            LogService.d("LoginServiceTest", "test")
+        logService.size = 10
+        assertEquals(logService.size, 10)
+        for (i in 0..logService.size * 2) {
+            logService.d(i.toString())
         }
-        assertEquals(LogService.logs.size, LogService.size)
-        LogService.size = 2
-        assertEquals(LogService.size, 2)
-        assertEquals(LogService.logs.size, LogService.size)
+        assertEquals(logService.logs.size, logService.size)
+        assertEquals(
+            logService.logs.map { it.message },
+            (0..logService.size * 2).reversed().take(logService.size).reversed()
+                .map { it.toString() }
+        )
+        logService.size = 2
+        assertEquals(logService.size, 2)
+        assertEquals(logService.logs.size, logService.size)
     }
 
     @Test
     fun allLevels() {
-        LogService.d("LoginServiceTest", "test")
-        LogService.i("LoginServiceTest", "test")
-        LogService.w("LoginServiceTest", "test")
-        LogService.e("LoginServiceTest", "test")
-        LogService.v("LoginServiceTest", "test")
+        logService.d("test")
+        logService.i("test")
+        logService.w("test")
+        logService.e("test")
+        logService.v("test")
 
-        assertEquals(LogService.logs.size, 5)
+        assertEquals(logService.logs.size, 5)
     }
 
 }

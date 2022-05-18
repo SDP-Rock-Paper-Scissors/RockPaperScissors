@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.models
 import com.google.firebase.Timestamp
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertTrue
 
 internal class GameModeTest {
@@ -90,6 +91,19 @@ internal class GameModeTest {
         }
     }
 
+    @Test
+    fun `fails when missing key`() {
+        forAll {
+            for (i in 0 until it.toGameModeString().split(",").size) {
+                val missing = it
+                    .toGameModeString()
+                    .split(",")
+                    .filterIndexed { index, _ -> index != i }
+                    .joinToString(",")
+                assertThrows<IllegalArgumentException> { GameMode.fromString(missing) }
+            }
+        }
+    }
 
     private fun testThatForAll(fn: (mode: GameMode) -> Boolean) {
         GameMode.Type.values().forEach {

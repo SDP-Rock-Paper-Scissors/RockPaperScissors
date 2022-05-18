@@ -25,10 +25,10 @@ object FirebaseEmulatorsUtils {
         get() = emuUsed_
 
     fun useEmulators(
-        firebaseAuthConfig: EmulatorConfig = EmulatorConfig(
+        firebaseAuthConfig: EmulatorConfig? = null /*EmulatorConfig(
             "localhost",
             9099
-        ),
+        )*/,
         firestoreConfig: EmulatorConfig = EmulatorConfig(
             "localhost",
             8080
@@ -43,7 +43,10 @@ object FirebaseEmulatorsUtils {
         )
     ) {
         Log.w("FirebaseEmulatorsUtils", FirebaseFirestore.getInstance().firestoreSettings.host)
-        FirebaseAuth.getInstance().useEmulator(firebaseAuthConfig.host, firebaseAuthConfig.port)
+
+        firebaseAuthConfig?.let {
+            FirebaseAuth.getInstance().useEmulator(it.host, it.port)
+        }
 
         Firebase.firestore.firestoreSettings =
             FirebaseFirestoreSettings.Builder()

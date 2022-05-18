@@ -29,11 +29,9 @@ class LoginActivity : AppCompatActivity() {
         finish() // removes the activity from the Activity stack and prevents main from being launched twice
     }
 
-    private var authenticator: FirebaseAuthenticator =
-        FirebaseAuthenticator.registerFor(this, callback)
+    private var authenticator: FirebaseAuthenticator = FirebaseAuthenticator.registerFor(this, callback)
     private lateinit var cache: Cache
     private var user: User? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
