@@ -28,6 +28,9 @@ class LoadingActivity : AppCompatActivity() {
         val use = intent.getStringExtra("USE_EMULATORS")
         Log.d("MainActivity", "USE_EMULATORS: $use")
         if (use == "true") {
+            if (isTest) {
+                throw IllegalStateException("Emulators should not be used in tests")
+            }
             FirebaseEmulatorsUtils.useEmulators()
             Log.w("MainActivity", "Using emulators")
         }
@@ -70,8 +73,12 @@ class LoadingActivity : AppCompatActivity() {
         }
     }
 
+    
+    private val isTest get() = intent.getBooleanExtra("isTest", false)
+
     companion object {
         const val HELP_ME_NAV_EXTRA = "helpMeNav"
+        const val IS_TEST_EXTRA = "isTest"
 
         fun launch(context: Context, helpMeNav: Boolean, vararg extras: Pair<String, Any>) {
             val intent = Intent(context, LoadingActivity::class.java)

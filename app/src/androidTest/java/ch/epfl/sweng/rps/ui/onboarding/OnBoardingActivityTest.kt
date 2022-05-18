@@ -10,9 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.TestUtils
-import ch.epfl.sweng.rps.TestUtils.retryPredicate
 import org.junit.Test
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.test.assertEquals
 
 
@@ -30,10 +28,9 @@ class OnBoardingActivityTest {
     fun onCreate() {
         val scenario = ActivityScenario.launch<OnBoardingActivity>(createIntent())
         onView(withId(R.id.onboarding_layout)).check(matches(isDisplayed()))
-        val atomicBoolean = AtomicBoolean(false)
         val activity = TestUtils.getActivityInstance<OnBoardingActivity>()
         OnBoardingActivity.navOut(activity)
-        retryPredicate(retryDelay = 200, maxRetries = 10) {
+        TestUtils.retryPredicate(retryDelay = 200, maxRetries = 10) {
             scenario.state == Lifecycle.State.DESTROYED
         }
         assertEquals(Lifecycle.State.DESTROYED, scenario.state)

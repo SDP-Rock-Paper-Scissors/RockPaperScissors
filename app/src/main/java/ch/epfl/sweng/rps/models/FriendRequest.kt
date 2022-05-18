@@ -1,11 +1,17 @@
 package ch.epfl.sweng.rps.models
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.PropertyName
+import java.util.*
 
 data class FriendRequest(
+    @PropertyName(FIELDS.USERS)
     val users: List<String> = listOf(),
-    val timestamp: Timestamp = Timestamp.now(),
+    @PropertyName(FIELDS.TIMESTAMP)
+    val timestamp: Timestamp = Timestamp(Date(0)),
+    @PropertyName(FIELDS.STATUS)
     val status: Status = Status.PENDING,
+    @PropertyName(FIELDS.ID)
     val id: String = ""
 ) {
     companion object {
@@ -22,5 +28,12 @@ data class FriendRequest(
 
     enum class Status {
         PENDING, ACCEPTED, REJECTED
+    }
+
+    object FIELDS {
+        const val USERS = "users"
+        const val TIMESTAMP = "timestamp"
+        const val STATUS = "status"
+        const val ID = "id"
     }
 }

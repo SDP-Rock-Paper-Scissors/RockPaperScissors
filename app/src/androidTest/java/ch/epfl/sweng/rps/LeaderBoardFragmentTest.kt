@@ -8,7 +8,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
@@ -20,11 +19,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
+import kotlin.test.assertEquals
 
 class LeaderBoardFragmentTest {
     @get:Rule
-    val testRule = ActivityScenarioRule<MainActivity>(createIntent())
+    val testRule = ActivityScenarioRuleWithSetup.default<MainActivity>(
+        createIntent()
+    )
 
     private fun createIntent(): Intent {
         val i = Intent(
@@ -86,7 +87,7 @@ class LeaderBoardFragmentTest {
 
     @Test
     fun testEnv() {
-        assert(ServiceLocator.getCurrentEnv() == Env.Test)
+        assertEquals(Env.Test, ServiceLocator.getCurrentEnv())
     }
 
 
