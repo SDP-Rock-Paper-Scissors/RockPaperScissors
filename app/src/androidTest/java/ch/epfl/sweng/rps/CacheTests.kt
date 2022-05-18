@@ -94,7 +94,7 @@ class CacheTests {
 
     @Test
     fun cacheCorrectlySavesLeaderBoardData() {
-        assert(cache.getLeaderBoardData().isEmpty())
+        assert(cache.getLeaderBoardData(0).isEmpty())
         val user1 =
             LeaderBoardInfo("jinglun", "1", null, 100)
         val user2 =
