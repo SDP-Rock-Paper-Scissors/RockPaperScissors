@@ -2,5 +2,6 @@ package ch.epfl.sweng.rps.models
 
 data class TotalScore (
     val uid: String ? = "",
-    val score : Int ? = 0
+    val RPSScore : Int ? = 0,
+    val TTTScore : Int ? = 0
     )

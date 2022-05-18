@@ -109,17 +109,17 @@ class Cache private constructor(private val ctx:Context, val preferFresh:Boolean
         storage.writeBackLeaderBoardData(lBData)
     }
 
-    fun getLeaderBoardData():List<LeaderBoardInfo> {
+    fun getLeaderBoardData(position: Int):List<LeaderBoardInfo> {
         if(::leaderBoardData.isInitialized) return leaderBoardData
         leaderBoardData = storage.getLeaderBoardData() ?: listOf()
         return leaderBoardData
     }
-    suspend fun getLeaderBoardDataAsync():List<LeaderBoardInfo>{
+    suspend fun getLeaderBoardDataAsync(position: Int):List<LeaderBoardInfo>{
         if(!isInternetAvailable()) {
             Log.d("CACHE", "INTERNET NOT AVAILABLE")
-            return getLeaderBoardData()
+            return getLeaderBoardData(position)
         }
-        leaderBoardData = FirebaseHelper.getLeaderBoard()
+        leaderBoardData = FirebaseHelper.getLeaderBoard(position)
         Log.d("Cache", leaderBoardData.size.toString())
         storage.writeBackLeaderBoardData(leaderBoardData)
         return leaderBoardData

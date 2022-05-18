@@ -29,7 +29,7 @@ interface Repository {
         changeFriendRequestToStatus(userUid, FriendRequest.Status.REJECTED)
 
     suspend fun getGame(gameId: String): Game?
-    suspend fun getLeaderBoardScore(): List<TotalScore>
+    suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore>
     suspend fun gamesOfUser(uid: String): List<Game>
     suspend fun myActiveGames(): List<Game>
 
