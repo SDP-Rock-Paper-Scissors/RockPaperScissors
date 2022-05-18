@@ -6,8 +6,8 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
+import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.models.User
 import com.google.firebase.ktx.Firebase
@@ -32,7 +32,7 @@ class TicTacToeTest {
 
     private fun createIntent(): Intent {
         Firebase.initializeForTest()
-        val i: Intent = Intent(
+        val i = Intent(
             InstrumentationRegistry.getInstrumentation().targetContext,
             MainActivity::class.java
         )
@@ -41,9 +41,8 @@ class TicTacToeTest {
     }
 
     @get:Rule
-    val testRule = ActivityScenarioRule<MainActivity>(createIntent())
-
-
+    val testRule = ActivityScenarioRuleWithSetup<MainActivity>(createIntent(),
+        defaultTestFlow then TestFlow.sameSetupAndTearDown { Thread.sleep(1000) })
 
     @Test
     fun opensTicTecToeChoiceFragmentTest() {
@@ -52,24 +51,22 @@ class TicTacToeTest {
     }
 
     @Test
-    fun chooseCrossTest(){
+    fun chooseCrossTest() {
         onView(withId(R.id.button_tik_tac_toe)).perform(click())
         onView(withId(R.id.ai_pick_side_cross_radio)).perform(click())
         onView(withId(R.id.ai_pick_side_continue_btn)).perform(click())
         onView(withId(R.id.fragment_tictactoe)).check(matches(isDisplayed()))
         onView(withId(R.id.img_1)).perform(click())
-       onView(withId(R.id.img_1)).check(matches(withTagValue(equalTo(R.drawable.cross))))
+        onView(withId(R.id.img_1)).check(matches(withTagValue(equalTo(R.drawable.cross))))
     }
 
     @Test
-    fun chooseNoughtTest(){
+    fun chooseNoughtTest() {
         onView(withId(R.id.button_tik_tac_toe)).perform(click())
         onView(withId(R.id.ai_pick_side_circle_radio)).perform(click())
         onView(withId(R.id.ai_pick_side_continue_btn)).perform(click())
         onView(withId(R.id.fragment_tictactoe)).check(matches(isDisplayed()))
         onView(withId(R.id.img_5)).perform(click())
         onView(withId(R.id.img_5)).check(matches(withTagValue(equalTo(R.drawable.nought))))
-
     }
-
 }
