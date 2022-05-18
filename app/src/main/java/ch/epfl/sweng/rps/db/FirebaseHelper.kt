@@ -127,14 +127,21 @@ object FirebaseHelper {
     }
 
 
-    suspend fun getLeaderBoard(): List<LeaderBoardInfo> {
+    suspend fun getLeaderBoard(selectMode: Int): List<LeaderBoardInfo> {
         val repo = ServiceLocator.getInstance().repository
-        val scores = repo.getLeaderBoardScore()
+        val scoreMode: String = when (selectMode) {
+            0 -> "RPSScore"
+            else -> "TTTScore"
+        }
+        val scores = repo.getLeaderBoardScore(scoreMode)
         val allPlayers = mutableListOf<LeaderBoardInfo>()
         for (score in scores) {
             val leaderBoardInfo = LeaderBoardInfo()
             leaderBoardInfo.uid = score.uid!!
-            leaderBoardInfo.point = score.score!!
+            leaderBoardInfo.point = when (selectMode) {
+                0 -> score.RPSScore!!
+                else -> score.TTTScore!!
+            }
             // The *load* function only support "android.net.Uri" but not "java.net.URI" package
             leaderBoardInfo.userProfilePictureUrl =
                 repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }

@@ -91,7 +91,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
     }
 
     var leaderBoardScore = mutableListOf<TotalScore>()
-    override suspend fun getLeaderBoardScore(): List<TotalScore> {
+    override suspend fun getLeaderBoardScore(scoreMode:String): List<TotalScore> {
         return leaderBoardScore
     }
 

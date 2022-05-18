@@ -49,7 +49,7 @@ class CacheTests {
     fun cacheContainsNoDataWhenCreated(){
         assert(cache.getUserDetails() == null)
         assert(cache.getStatsData(0).isEmpty())
-        assert(cache.getLeaderBoardData().isEmpty())
+        assert(cache.getLeaderBoardData(0).isEmpty())
     }
     @Test
     fun cacheCorrectlyRetrievesUserDetailsFromStorage(){
@@ -80,7 +80,7 @@ class CacheTests {
 
     @Test
     fun cacheCorrectlySavesLeaderBoardData(){
-        assert(cache.getLeaderBoardData().isEmpty())
+        assert(cache.getLeaderBoardData(0).isEmpty())
         val user1 =
             LeaderBoardInfo("jinglun", "1",null , 100 )
         val user2 =
@@ -89,7 +89,7 @@ class CacheTests {
             LeaderBoardInfo("Adam", "3", null, 60)
         val allPlayers = listOf(user1,user2,user3)
         cache.updateLeaderBoardData(allPlayers)
-        val result = cache.getLeaderBoardData()
+        val result = cache.getLeaderBoardData(0)
         assert(result == allPlayers)
     }
     @Test
