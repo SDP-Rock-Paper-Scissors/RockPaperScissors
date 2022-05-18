@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.db.FirebaseReferences
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.Game.Companion.toGame
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
 import com.google.firebase.Timestamp
@@ -38,7 +39,7 @@ class FirebaseGameService(
                     Log.e("FirebaseGameService", "Error while listening to game $gameId", e)
                     error = e
                 } else {
-                    game = value?.toObject<Game>()
+                    game = value?.toGame()
                 }
             }
         _active = true
