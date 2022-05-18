@@ -9,10 +9,8 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import ch.epfl.sweng.rps.FriendListAdapter
-import ch.epfl.sweng.rps.MainActivity
-import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.*
+import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.FakeFriendsData
