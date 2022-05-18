@@ -4,6 +4,7 @@ import android.util.Log
 import ch.epfl.sweng.rps.models.GameMode.GameEdition
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
+import java.util.*
 
 
 /**
@@ -32,10 +33,10 @@ sealed class Game {
         override val id: String = "",
         override val players: List<String> = listOf(),
         override val rounds: Map<String, Round.Rps> = mapOf(),
-        override val current_round: Int = -1,
+        override val current_round: Int = 0,
         override val game_mode: String = "",
         override val done: Boolean = false,
-        override val timestamp: Timestamp = Timestamp.now(),
+        override val timestamp: Timestamp = Timestamp(Date(0)),
         override val player_count: Int = 0,
     ) : Game() {
         override val edition: GameEdition = GameEdition.RockPaperScissors
@@ -43,20 +44,19 @@ sealed class Game {
 
 
     data class TicTacToe(
-        override val id: String,
-        override val players: List<String>,
-        override val rounds: Map<String, Round.TicTacToe>,
-        override val current_round: Int,
-        override val game_mode: String,
-        override val done: Boolean,
-        override val timestamp: Timestamp,
-        override val player_count: Int,
+        override val id: String = "",
+        override val players: List<String> = listOf(),
+        override val rounds: Map<String, Round.TicTacToe> = mapOf(),
+        override val current_round: Int = 0,
+        override val game_mode: String = "",
+        override val done: Boolean = false,
+        override val timestamp: Timestamp = Timestamp(Date(0)),
+        override val player_count: Int = 0,
     ) : Game() {
         override val edition: GameEdition = GameEdition.TicTacToe
     }
 
     object FIELDS {
-        const val ID = "id"
         const val PLAYERS = "players"
         const val ROUNDS = "rounds"
         const val CURRENT_ROUND = "current_round"
