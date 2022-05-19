@@ -9,7 +9,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager
-import ch.epfl.sweng.rps.LoadingActivity
 import ch.epfl.sweng.rps.R
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 import com.ramotion.paperonboarding.PaperOnboardingPage
@@ -51,17 +50,15 @@ class OnBoardingActivity : AppCompatActivity() {
         const val DONE_ONBOARDING_EXTRA = "done_onboarding"
 
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-        fun navOut(context: OnBoardingActivity, onDestroy: (() -> Unit)? = null) {
-            setFirstTime(context, false)
-            val destination = context.intent.getSerializableExtra(DESTINATION_EXTRA) as Destination
+        fun navOut(onBoardingActivity: OnBoardingActivity, onDestroy: (() -> Unit)? = null) {
+            setFirstTime(onBoardingActivity, false)
+            val destination =
+                onBoardingActivity.intent.getSerializableExtra(DESTINATION_EXTRA) as Destination
             Log.i("OnBoardingActivity", "onboarding finished")
             Log.i("OnBoardingActivity", "destination: $destination")
             when (destination) {
                 Destination.FINISH -> {
-                    context.finish()
-                }
-                Destination.LOADING -> {
-                    LoadingActivity.launch(context, true, DONE_ONBOARDING_EXTRA to true)
+                    onBoardingActivity.finish()
                 }
             }
         }
@@ -71,7 +68,6 @@ class OnBoardingActivity : AppCompatActivity() {
 
     enum class Destination {
         FINISH,
-        LOADING
     }
 
     private lateinit var fragmentManager: FragmentManager
