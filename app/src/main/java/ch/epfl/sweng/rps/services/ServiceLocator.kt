@@ -4,6 +4,9 @@ import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.db.Repository
+import ch.epfl.sweng.rps.models.GameMode
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 interface ServiceLocator {
 
@@ -71,8 +74,13 @@ interface ServiceLocator {
 
         override val cachedGameServices: List<String>
             get() = listOf()
+
         override val matchmakingService: MatchmakingService
-            get() = TODO("Not yet implemented")
+            get() = object : MatchmakingService() {
+                override fun queue(gameMode: GameMode): Flow<QueueStatus> = flow { }
+                override suspend fun currentGame(): FirebaseGameService? =
+                    throw IllegalArgumentException()
+            }
     }
 
 

@@ -46,9 +46,7 @@ class MatchmakingFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewLifecycleOwner.lifecycleScope.launch {
-            startMatchmaking()
-        }
+        viewLifecycleOwner.lifecycleScope.launch { startMatchmaking() }
     }
 
     suspend fun wait() {
@@ -82,8 +80,8 @@ class MatchmakingFragment : Fragment() {
             }
         }
 
-        val game = mm.currentGame()
         try {
+            val game = mm.currentGame()
             val gameId = if (game != null) {
                 joinCurrentGame(mm, game)
             } else {
@@ -92,18 +90,18 @@ class MatchmakingFragment : Fragment() {
             MatchmakingFragmentDirections.actionMatchmakingFragmentToGameFragment(gameId)
                 .also { findNavController().navigate(it) }
         } catch (e: MatchmakingTimeoutException) {
+            displayCancelButton(mm)
             write(e.message)
             setLoading(false)
-            displayCancelButton(mm)
         } catch (e: TimeoutCancellationException) {
+            displayCancelButton(mm)
             write("Timed out: ${e.message}")
             setLoading(false)
-            displayCancelButton(mm)
         } catch (e: Exception) {
+            displayCancelButton(mm)
             write("Error: ${e.message}")
             Log.e(null, null, e)
             setLoading(false)
-            displayCancelButton(mm)
         }
     }
 
@@ -192,7 +190,7 @@ class MatchmakingFragment : Fragment() {
     }
 
     private fun displayCancelButton(mm: MatchmakingService) {
-        binding.button.apply {
+        binding.matchmakingCancelButton.apply {
             isEnabled = true
             text = getString(R.string.cancel_text)
             visibility = View.VISIBLE
@@ -203,9 +201,11 @@ class MatchmakingFragment : Fragment() {
                     mm.cancelQueue()
                     write("Cancelled matchmaking")
                     setLoading(false)
-                    binding.button.visibility = View.INVISIBLE
-                    binding.button.isEnabled = false
-                    binding.button.setOnClickListener { }
+                    binding.matchmakingCancelButton.apply {
+                        visibility = View.INVISIBLE
+                        isEnabled = false
+                        setOnClickListener { }
+                    }
                 }
             }
         }

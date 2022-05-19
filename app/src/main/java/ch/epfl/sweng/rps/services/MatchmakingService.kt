@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
-class MatchmakingService {
+open class MatchmakingService {
     private val cloudFunctions = CloudFunctions()
 
-    fun queue(gameMode: GameMode): Flow<QueueStatus> = flow {
+    open fun queue(gameMode: GameMode): Flow<QueueStatus> = flow {
         Log.i("MatchmakingService", "Queueing for game mode ${gameMode.toGameModeString()}")
         emit(QueueStatus.Queued(gameMode))
         Log.i("MatchmakingService", "Sending request to cloud function")
@@ -29,7 +29,7 @@ class MatchmakingService {
         return ServiceLocator.getInstance().getGameServiceForGame(gameId)
     }
 
-    suspend fun currentGame(): FirebaseGameService? {
+    open suspend fun currentGame(): FirebaseGameService? {
         val repo = ServiceLocator.getInstance().repository
         val games = repo.gamesOfUser(repo.getCurrentUid())
         if (games.isEmpty()) {
