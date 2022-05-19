@@ -14,24 +14,9 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:context=".ui.game.GameFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/result_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/match_result"
-            android:textSize="30sp" />
-    </LinearLayout>
-
     <include
-        android:id="@+id/opponent_credentials"
-        layout="@layout/user_credentials" />
+        android:id="@+id/opponent_match_data"
+        layout="@layout/user_match_data" />
 
     <RadioGroup
         android:id="@+id/rps_opponent"
@@ -71,12 +56,22 @@
             android:gravity="center" />
     </RadioGroup>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
         android:gravity="center"
         android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:src="@drawable/ic_clock_pastel_col"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/counter"
@@ -86,12 +81,15 @@
             android:text="@string/counter_value"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.491" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
-        android:id="@+id/user_credentials"
-        layout="@layout/user_credentials"/>
+        android:id="@+id/user_match_data"
+        layout="@layout/user_match_data" />
 
     <RadioGroup
         android:id="@+id/rps_buttons"

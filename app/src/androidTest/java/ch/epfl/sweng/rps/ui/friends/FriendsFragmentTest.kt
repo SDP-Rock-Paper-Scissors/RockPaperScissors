@@ -11,9 +11,13 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import ch.epfl.sweng.rps.*
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.FakeFriendsData
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matcher
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -27,6 +31,20 @@ class FriendsFragmentTest {
     val activityRule = ActivityScenarioRuleWithSetup(MainActivity::class.java,
         defaultTestFlow then TestFlow.onlySetup { ServiceLocator.localRepository.setCurrentUid("test") }
     )
+
+    @Before
+    fun setUp() {
+        ServiceLocator.setCurrentEnv(Env.Test)
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid("test")
+    }
+
+    @After
+    fun tearDown() {
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid(null)
+        ServiceLocator.setCurrentEnv(Env.Prod)
+    }
 
     @Test
     fun checkFriendsFragment() {
