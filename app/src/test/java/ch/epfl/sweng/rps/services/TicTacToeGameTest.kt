@@ -1,16 +1,15 @@
 package ch.epfl.sweng.rps.services
 
-import org.junit.Before
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class TicTacToeGameTest {
-    lateinit var ticTacToe:TicTacToeGame
+    lateinit var ticTacToe: TicTacToeGame
+
     @BeforeEach
-    fun setup(){
-        ticTacToe = object : TicTacToeGame(MOVES.CIRCLE){
-            override fun putChoice( square: Int) {
+    fun setup() {
+        ticTacToe = object : TicTacToeGame(MOVES.CIRCLE) {
+            override fun putChoice(square: Int) {
                 val cell = square % 3
                 val row = (square / 3)
                 matrix[row][cell] = player
@@ -21,17 +20,19 @@ class TicTacToeGameTest {
             }
         }
     }
+
     @Test
-    fun TTTcorrectlycalculatesWinRow(){
+    fun TTTcorrectlycalculatesWinRow() {
         assert(ticTacToe.gameRunning)
-        ticTacToe.putChoice( 0)
-        ticTacToe.putChoice( 1)
-        ticTacToe.putChoice( 2)
+        ticTacToe.putChoice(0)
+        ticTacToe.putChoice(1)
+        ticTacToe.putChoice(2)
         ticTacToe.calculate()
         assert(!ticTacToe.gameRunning)
     }
+
     @Test
-    fun TTTcorrectlycalculatesWinCol(){
+    fun TTTcorrectlycalculatesWinCol() {
         assert(ticTacToe.gameRunning)
         ticTacToe.putChoice(0)
         ticTacToe.putChoice(3)
@@ -39,8 +40,9 @@ class TicTacToeGameTest {
         ticTacToe.calculate()
         assert(!ticTacToe.gameRunning)
     }
+
     @Test
-    fun TTTcorrectlycalculatesWinDiag1(){
+    fun TTTcorrectlycalculatesWinDiag1() {
         assert(ticTacToe.gameRunning)
         ticTacToe.putChoice(2)
         ticTacToe.putChoice(4)
@@ -48,8 +50,9 @@ class TicTacToeGameTest {
         ticTacToe.calculate()
         assert(!ticTacToe.gameRunning)
     }
+
     @Test
-    fun TTTcorrectlycalculatesWinDiag2(){
+    fun TTTcorrectlycalculatesWinDiag2() {
         assert(ticTacToe.gameRunning)
         ticTacToe.putChoice(0)
         ticTacToe.calculate()

@@ -6,14 +6,16 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class TicTacToeMultiplayerTest {
-    lateinit var tictactoe:MultiplayerTicTacToe
+    lateinit var tictactoe: MultiplayerTicTacToe
     lateinit var view: TicTacToeFragment
     var player = TicTacToeGame.MOVES.CIRCLE
+
     @BeforeEach
-    fun setup(){
+    fun setup() {
         view = mockk<TicTacToeFragment>(relaxed = true)
-        tictactoe = MultiplayerTicTacToe(view,player)
+        tictactoe = MultiplayerTicTacToe(view, player)
     }
+
     @Test
     fun putChoiceCorrectlyPutsChoice() {
         tictactoe.putChoice(0)
@@ -30,8 +32,9 @@ class TicTacToeMultiplayerTest {
         tictactoe.putChoice(2)
         assert(tictactoe.matrix[0][2] == TicTacToeGame.MOVES.EMPTY)
     }
+
     @Test
-    fun putChoice2TimesDoesNotChange(){
+    fun putChoice2TimesDoesNotChange() {
         tictactoe.putChoice(0)
         assert(tictactoe.matrix[0][0] == TicTacToeGame.MOVES.CIRCLE)
         tictactoe.putChoice(0)

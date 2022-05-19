@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.services.TicTacToeGame
 
@@ -47,12 +46,16 @@ class TicTacToeChoiceFragment : Fragment() {
 
         contBtn.setOnClickListener {
             val player = if (choice == 0) TicTacToeGame.MOVES.CROSS else TicTacToeGame.MOVES.CIRCLE
-            val action = TicTacToeChoiceFragmentDirections.startTicTacToe(player, TicTacToeGame.MODE.PC)
+            val action =
+                TicTacToeChoiceFragmentDirections.startTicTacToe(player, TicTacToeGame.MODE.PC)
             Navigation.findNavController(view).navigate(action)
         }
-        multBtn.setOnClickListener{
+        multBtn.setOnClickListener {
             val player = if (choice == 0) TicTacToeGame.MOVES.CROSS else TicTacToeGame.MOVES.CIRCLE
-            val action = TicTacToeChoiceFragmentDirections.startTicTacToe(player, TicTacToeGame.MODE.MULTIPLAYER)
+            val action = TicTacToeChoiceFragmentDirections.startTicTacToe(
+                player,
+                TicTacToeGame.MODE.MULTIPLAYER
+            )
             Navigation.findNavController(view).navigate(action)
         }
     }
