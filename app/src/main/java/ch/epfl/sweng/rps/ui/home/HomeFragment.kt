@@ -30,8 +30,9 @@ class HomeFragment : Fragment() {
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
         binding.apply {
             buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
-        }
             buttonPlay5GamesOffline.setOnClickListener { playNRoundsWithComputer(5) }
+        }
+
         return binding.root
     }
 
