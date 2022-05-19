@@ -1,9 +1,9 @@
 package ch.epfl.sweng.rps.services
 
-abstract class TicTacToeGame {
+abstract class TicTacToeGame(var player:MOVES) {
     val matrix = Array(3){Array(3){MOVES.EMPTY}}
     var gameRunning = true
-    abstract fun putChoice(move : MOVES, square: Int)
+    abstract fun putChoice(square: Int)
     abstract fun gameOver(winner: MOVES)
     fun calculate():Boolean{
         for (i in (0..2)){
@@ -35,6 +35,9 @@ abstract class TicTacToeGame {
     }
     enum class MOVES{
         CROSS , CIRCLE, EMPTY
+    }
+    enum class MODE{
+        PC, MULTIPLAYER
     }
     enum class RESULT{
         WON, LOST

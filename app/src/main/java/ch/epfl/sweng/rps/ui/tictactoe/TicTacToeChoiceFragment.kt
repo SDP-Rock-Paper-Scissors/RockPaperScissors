@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.services.TicTacToeGame
 
 
 class TicTacToeChoiceFragment : Fragment() {
@@ -29,7 +30,7 @@ class TicTacToeChoiceFragment : Fragment() {
         val noughtSelect = view.findViewById<ImageView>(R.id.ai_pick_side_circle_radio)
         val crossSelect = view.findViewById<ImageView>(R.id.ai_pick_side_cross_radio)
         val contBtn = view.findViewById<Button>(R.id.ai_pick_side_continue_btn)
-
+        val multBtn = view.findViewById<Button>(R.id.multButton)
         crossSelect.setOnClickListener {
             choice = 0
             crossSelect.setImageResource(R.drawable.radio_button_checked)
@@ -45,15 +46,14 @@ class TicTacToeChoiceFragment : Fragment() {
         }
 
         contBtn.setOnClickListener {
-//            val ticTacToeFragment = TicTacToeFragment()
-//            val bundle = Bundle()
-//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//            bundle.putInt("choice", choice)
-//            ticTacToeFragment.arguments = bundle
-//            transaction.replace(R.id.container, ticTacToeFragment)
-//            transaction.commit()
-            val action = TicTacToeChoiceFragmentDirections.startTicTacToe(choice)
-            Navigation.findNavController(view).navigate(R.id.action_ticTacToeChoiceFragment_to_ticTacToeFragment2)
+            val player = if (choice == 0) TicTacToeGame.MOVES.CROSS else TicTacToeGame.MOVES.CIRCLE
+            val action = TicTacToeChoiceFragmentDirections.startTicTacToe(player, TicTacToeGame.MODE.PC)
+            Navigation.findNavController(view).navigate(action)
+        }
+        multBtn.setOnClickListener{
+            val player = if (choice == 0) TicTacToeGame.MOVES.CROSS else TicTacToeGame.MOVES.CIRCLE
+            val action = TicTacToeChoiceFragmentDirections.startTicTacToe(player, TicTacToeGame.MODE.MULTIPLAYER)
+            Navigation.findNavController(view).navigate(action)
         }
     }
 

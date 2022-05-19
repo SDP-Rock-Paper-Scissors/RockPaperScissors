@@ -130,8 +130,11 @@
             android:id="@+id/action_ticTacToeFragment2_to_nav_home"
             app:destination="@id/nav_home" />
         <argument
-            android:name="choice"
-            app:argType="integer" />
+            android:name="PLAYER"
+            app:argType="ch.epfl.sweng.rps.services.TicTacToeGame$MOVES" />
+        <argument
+            android:name="MODE"
+            app:argType="ch.epfl.sweng.rps.services.TicTacToeGame$MODE" />
     </fragment>
 
 
