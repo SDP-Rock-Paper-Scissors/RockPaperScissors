@@ -51,17 +51,22 @@ class OnBoardingActivity : AppCompatActivity() {
         const val DONE_ONBOARDING_EXTRA = "done_onboarding"
 
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-        fun navOut(context: OnBoardingActivity, onDestroy: (() -> Unit)? = null) {
-            setFirstTime(context, false)
-            val destination = context.intent.getSerializableExtra(DESTINATION_EXTRA) as Destination
+        fun navOut(onBoardingActivity: OnBoardingActivity, onDestroy: (() -> Unit)? = null) {
+            setFirstTime(onBoardingActivity, false)
+            val destination =
+                onBoardingActivity.intent.getSerializableExtra(DESTINATION_EXTRA) as Destination
             Log.i("OnBoardingActivity", "onboarding finished")
             Log.i("OnBoardingActivity", "destination: $destination")
             when (destination) {
                 Destination.FINISH -> {
-                    context.finish()
+                    onBoardingActivity.finish()
                 }
                 Destination.LOADING -> {
-                    LoadingActivity.launch(context, true, DONE_ONBOARDING_EXTRA to true)
+                    LoadingActivity.launch(
+                        onBoardingActivity,
+                        true,
+                        DONE_ONBOARDING_EXTRA to true
+                    )
                 }
             }
         }

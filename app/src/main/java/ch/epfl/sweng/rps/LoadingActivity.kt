@@ -8,8 +8,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
-import com.google.firebase.appcheck.FirebaseAppCheck
-import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.delay
@@ -19,7 +17,7 @@ class LoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
-        setupApp()
+
     }
 
     /**
@@ -30,10 +28,14 @@ class LoadingActivity : AppCompatActivity() {
 
         val isTest = intent.getBooleanExtra("isTest", false)
         Firebase.initialize(this@LoadingActivity)
-        val firebaseAppCheck = FirebaseAppCheck.getInstance()
-        firebaseAppCheck.installAppCheckProviderFactory(
-            SafetyNetAppCheckProviderFactory.getInstance()
-        )
+        /*  val firebaseAppCheck = FirebaseAppCheck.getInstance()
+          firebaseAppCheck.installAppCheckProviderFactory(
+              if (BuildConfig.DEBUG) {
+                  DebugAppCheckProviderFactory.getInstance()
+              } else {
+                  SafetyNetAppCheckProviderFactory.getInstance()
+              }
+          )*/
         useEmulatorsIfNeeded()
         delay(1000)
         if (!isTest) {
@@ -64,6 +66,7 @@ class LoadingActivity : AppCompatActivity() {
         val helpMeNav = intent.extras?.getBoolean(HELP_ME_NAV_EXTRA, false) ?: false
         if (!helpMeNav) {
             runBlocking { logic() }
+
         }
         val isTest = intent.getBooleanExtra("isTest", false)
         if (!isTest) {
@@ -76,12 +79,23 @@ class LoadingActivity : AppCompatActivity() {
         Log.w("LoadingPage", "nav")
         val doneOnBoarding =
             intent.extras?.getBoolean(OnBoardingActivity.DONE_ONBOARDING_EXTRA, false) ?: false
-        if (OnBoardingActivity.isFirstTime(this) && !doneOnBoarding) {
+        if (true || OnBoardingActivity.isFirstTime(this) && !doneOnBoarding) {
             Log.w("LoadingPage", "nav to onboarding")
-            OnBoardingActivity.launch(this, OnBoardingActivity.Destination.LOADING)
+            OnBoardingActivity.launch(this, OnBoardingActivity.Destination.FINISH)
         } else {
             Log.w("LoadingPage", "nav to main")
             startActivity(Intent(this, LoginActivity::class.java))
+        }
+    }
+
+    private val hasRunLogic = false
+
+    override fun onResume() {
+        super.onResume()
+        if (!hasRunLogic) {
+            setupApp()
+        } else {
+            nav()
         }
     }
 
