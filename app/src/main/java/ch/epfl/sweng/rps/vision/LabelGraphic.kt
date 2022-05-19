@@ -27,7 +27,7 @@ import kotlin.math.max
 /** Graphic instance for rendering a label within an associated graphic overlay view.  */
 class LabelGraphic(
   private val overlay: GraphicOverlay,
-  private val labels: List<ImageLabel>
+  val labels: List<ImageLabel>
 ) : Graphic(overlay) {
   private val textPaint: Paint = Paint()
   private val labelPaint: Paint
