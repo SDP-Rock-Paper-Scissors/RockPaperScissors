@@ -69,4 +69,45 @@ class TicTacToeTest {
         onView(withId(R.id.img_5)).perform(click())
         onView(withId(R.id.img_5)).check(matches(withTagValue(equalTo(R.drawable.nought))))
     }
+    @Test
+    fun multiplayerChooseCrossTest(){
+        onView(withId(R.id.button_tik_tac_toe)).perform(click())
+        onView(withId(R.id.ai_pick_side_cross_radio)).perform(click())
+        onView(withId(R.id.multButton)).perform(click())
+        onView(withId(R.id.fragment_tictactoe)).check(matches(isDisplayed()))
+        onView(withId(R.id.img_5)).perform(click())
+        onView(withId(R.id.img_5)).check(matches(withTagValue(equalTo(R.drawable.cross))))
+        onView(withId(R.id.img_1)).perform(click())
+        onView(withId(R.id.img_1)).check(matches(withTagValue(equalTo(R.drawable.nought))))
+    }
+    @Test
+    fun multiplayerChooseCircleTest(){
+        onView(withId(R.id.button_tik_tac_toe)).perform(click())
+        onView(withId(R.id.ai_pick_side_circle_radio)).perform(click())
+        onView(withId(R.id.multButton)).perform(click())
+        onView(withId(R.id.fragment_tictactoe)).check(matches(isDisplayed()))
+        onView(withId(R.id.img_5)).perform(click())
+        onView(withId(R.id.img_5)).check(matches(withTagValue(equalTo(R.drawable.nought))))
+        onView(withId(R.id.img_9)).perform(click())
+        onView(withId(R.id.img_9)).check(matches(withTagValue(equalTo(R.drawable.cross))))
+    }
+    @Test
+    fun testCompleteMultGame(){
+        onView(withId(R.id.button_tik_tac_toe)).perform(click())
+        onView(withId(R.id.ai_pick_side_cross_radio)).perform(click())
+        onView(withId(R.id.multButton)).perform(click())
+        onView(withId(R.id.fragment_tictactoe)).check(matches(isDisplayed()))
+        onView(withId(R.id.img_1)).perform(click())
+        onView(withId(R.id.img_1)).check(matches(withTagValue(equalTo(R.drawable.cross))))
+        onView(withId(R.id.img_4)).perform(click())
+        onView(withId(R.id.img_4)).check(matches(withTagValue(equalTo(R.drawable.nought))))
+        onView(withId(R.id.img_2)).perform(click())
+        onView(withId(R.id.img_2)).check(matches(withTagValue(equalTo(R.drawable.cross))))
+        onView(withId(R.id.img_5)).perform(click())
+        onView(withId(R.id.img_5)).check(matches(withTagValue(equalTo(R.drawable.nought))))
+        onView(withId(R.id.img_3)).perform(click())
+        onView(withId(R.id.img_3)).check(matches(withTagValue(equalTo(R.drawable.cross))))
+        onView(withId(R.id.outcomeTTT)).check(matches(isDisplayed()))
+        onView(withId(R.id.outcomeTTT)).check(matches(withText("CROSS WINS")))
+    }
 }
