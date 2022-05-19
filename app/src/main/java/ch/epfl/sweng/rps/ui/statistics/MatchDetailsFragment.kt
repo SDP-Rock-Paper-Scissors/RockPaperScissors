@@ -77,7 +77,7 @@ class MatchDetailsFragment : Fragment() {
         opponentChoice: String,
         outcome: String,
     ) {
-        val sizeInDp = 5
+        val sizeInDp = 8
         val matchDetailTable = view.findViewById<TableLayout>(R.id.matchDetailTable)
         val row = TableRow(activity)
         row.setBackgroundColor(Color.parseColor("#0FF0F7F7"))
