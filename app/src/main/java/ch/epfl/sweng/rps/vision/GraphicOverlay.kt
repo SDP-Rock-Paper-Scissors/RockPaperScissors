@@ -70,7 +70,7 @@ class GraphicOverlay constructor(context: Context, attrs: AttributeSet? = null, 
     // The number of vertical pixels needed to be cropped on each side to fit the image with the
     // area of overlay View after scaling.
     var postScaleHeightOffset = 0f
-    private var isImageFlipped = false
+    var isImageFlipped = false
     private var needUpdateTransformation = true
 
     /**

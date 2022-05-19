@@ -26,4 +26,4 @@ A second approach would be to get the pose of the hand and deduce if a rock, pap
 
 ## Implementation
 
-Most of the implementation has been adapted from the the android [example app](https://github.com/googlesamples/mlkit/tree/master/android/vision-quickstart). Parts which were not used have been removed. 
+In the end the first implementation was chosen, most of this implementation was taken from the the android [example app](https://github.com/googlesamples/mlkit/tree/master/android/vision-quickstart). Parts which were not used have been removed. 

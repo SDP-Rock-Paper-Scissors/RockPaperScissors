@@ -18,14 +18,6 @@ import org.junit.Test
 
 class GraphicOverlayTest {
 
-    private fun createIntent(): Intent {
-        return Intent(
-            InstrumentationRegistry.getInstrumentation().targetContext,
-            GraphicOverlayActivity::class.java
-        )
-    }
-
-
     @get:Rule
     val activityTestRule = ActivityScenarioRule(GraphicOverlayActivity::class.java)
 
@@ -113,6 +105,59 @@ class GraphicOverlayTest {
                 (sourceWidth / imageAspectRatio - sourceHeight) / 2,
                 graphicOverlay.postScaleHeightOffset
             )
+        }
+    }
+    @Test
+    fun scaleTest() {
+        activityTestRule.scenario.onActivity { activity ->
+            val graphicOverlay =
+                activity.findViewById<GraphicOverlay>(R.id.graphic_overlay_test)
+
+            val results: MutableList<ImageLabel> = mutableListOf(ImageLabel("test", 0.5F, 1))
+            val lgraphic = LabelGraphic(graphicOverlay, results)
+            assertEquals(5.0f,lgraphic.scale(5.0f))
+
+        }
+    }
+    @Test
+    fun translatexFlippedTest() {
+        activityTestRule.scenario.onActivity { activity ->
+            val graphicOverlay =
+                activity.findViewById<GraphicOverlay>(R.id.graphic_overlay_test)
+            graphicOverlay.isImageFlipped = true
+
+            val results: MutableList<ImageLabel> = mutableListOf(ImageLabel("test", 0.5F, 1))
+            val lgraphic = LabelGraphic(graphicOverlay, results)
+            val expected: Float = graphicOverlay.width - (lgraphic.scale(5.0f) - graphicOverlay.postScaleWidthOffset)
+            assertEquals(expected, lgraphic.translateX(5.0f))
+
+        }
+    }
+    @Test
+    fun translatexNotFlippedTest() {
+        activityTestRule.scenario.onActivity { activity ->
+            val graphicOverlay =
+                activity.findViewById<GraphicOverlay>(R.id.graphic_overlay_test)
+            graphicOverlay.isImageFlipped = false
+
+            val results: MutableList<ImageLabel> = mutableListOf(ImageLabel("test", 0.5F, 1))
+            val lgraphic = LabelGraphic(graphicOverlay, results)
+            val expected: Float = lgraphic.scale(5.0f) - graphicOverlay.postScaleWidthOffset
+            assertEquals(expected, lgraphic.translateX(5.0f))
+
+        }
+    }
+
+    fun translateYTest() {
+        activityTestRule.scenario.onActivity { activity ->
+            val graphicOverlay =
+                activity.findViewById<GraphicOverlay>(R.id.graphic_overlay_test)
+
+            val results: MutableList<ImageLabel> = mutableListOf(ImageLabel("test", 0.5F, 1))
+            val lgraphic = LabelGraphic(graphicOverlay, results)
+            val expected: Float = lgraphic.scale(5.0f) - graphicOverlay.postScaleHeightOffset
+            assertEquals(expected, lgraphic.translateY(5.0f))
+
         }
     }
 
