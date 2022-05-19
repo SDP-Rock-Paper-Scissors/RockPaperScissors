@@ -15,6 +15,7 @@ import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.FirebaseGameService.PlayerCount.Full
 import ch.epfl.sweng.rps.services.MatchmakingService
+import ch.epfl.sweng.rps.services.MatchmakingService.QueueStatus
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.L
 import kotlinx.coroutines.TimeoutCancellationException
@@ -88,13 +89,12 @@ class MatchmakingFragment : Fragment() {
             } else {
                 queueForNewGame(mm, rounds!!)
             }
-            if (gameId == null) {
-                write("Error: gameId is null")
-                return
-            } else {
-                MatchmakingFragmentDirections.actionMatchmakingFragmentToGameFragment(gameId)
-                    .also { findNavController().navigate(it) }
-            }
+            MatchmakingFragmentDirections.actionMatchmakingFragmentToGameFragment(gameId)
+                .also { findNavController().navigate(it) }
+        } catch (e: MatchmakingTimeoutException) {
+            write(e.message)
+            setLoading(false)
+            displayCancelButton(mm)
         } catch (e: TimeoutCancellationException) {
             write("Timed out: ${e.message}")
             setLoading(false)
@@ -107,38 +107,88 @@ class MatchmakingFragment : Fragment() {
         }
     }
 
+
+    class MatchmakingTimeoutException(
+        val action: String,
+        val timeout: Long?,
+        throwable: Throwable? = null
+    ) : Exception(throwable) {
+        override val message: String
+            get() = "Timed out waiting for $action after $timeout ms"
+    }
+
+    private suspend fun <T> timeout(timeout: Long, action: String, block: suspend () -> T): T {
+        try {
+            return withTimeout(timeout) { block() }
+        } catch (e: TimeoutCancellationException) {
+            throw MatchmakingTimeoutException(action, timeout, e)
+        }
+    }
+
+    val twoMinutes = 2 * 60 * 1000L
+    val thirtySeconds = 30 * 1000L
+
+    @Throws(MatchmakingTimeoutException::class)
     private suspend fun queueForNewGame(
         mm: MatchmakingService,
         rounds: Int
-    ): String? {
+    ): String {
         write("Queueing for new game...")
         wait()
-
-        val timeout = 1000 * 60 * 2L
-
-        val joined = withTimeout(timeout) {
+        val joined = timeout(twoMinutes, "queuing for new game") {
             mm.queue(GameMode.default(rounds)).onEach {
                 when (it) {
-                    is MatchmakingService.QueueStatus.Queued -> {
+                    is QueueStatus.Queued -> {
                         write("Queued for game ${it.gameMode}")
                         wait()
                     }
-                    is MatchmakingService.QueueStatus.GameJoined -> {
+                    is QueueStatus.GameJoined -> {
                     }
                 }
-            }.first { it is MatchmakingService.QueueStatus.GameJoined }
-        } as MatchmakingService.QueueStatus.GameJoined
+            }.first { it is QueueStatus.GameJoined }
+        } as QueueStatus.GameJoined
         write("Game found: ${joined.gameService.gameId}")
         val gameService = joined.gameService
-        gameService.awaitForGame()
+        timeout(twoMinutes, "getting the game") {
+            gameService.awaitForGame()
+        }
         val opponentsNbr =
-            { i: Int -> write("Waiting for opponent ($i/${gameService.currentGame.gameMode.playerCount})") }
+            createDisplayOpponentsFunction(gameService.currentGame.gameMode.playerCount)
         wait()
-        joined.gameService.opponentCount().onEach {
-            opponentsNbr(it.playerCount)
-        }.first { it is Full }
-        joined.gameService.waitForGameStart()
+        timeout(twoMinutes, "waiting for all opponents") {
+            joined.gameService.opponentCount().onEach {
+                opponentsNbr(it.playerCount)
+            }.first { it is Full }
+        }
+        timeout(twoMinutes, "wait for game to start") {
+            joined.gameService.waitForGameStart()
+        }
         return joined.gameService.gameId
+    }
+
+
+    fun createDisplayOpponentsFunction(total: Int): (Int) -> Unit =
+        { i: Int -> write("Waiting for opponent ($i/${total})") }
+
+    @Throws(MatchmakingTimeoutException::class)
+    private suspend fun joinCurrentGame(
+        mm: MatchmakingService,
+        game: FirebaseGameService
+    ): String {
+        write("You already have a game, joining...")
+        wait()
+        write("Waiting for opponent...")
+        val showOpponents = createDisplayOpponentsFunction(game.currentGame.gameMode.playerCount)
+        timeout(twoMinutes, "waiting for all opponents") {
+            game.opponentCount()
+                .onEach { showOpponents(it.playerCount) }
+                .first { it is Full }
+        }
+        write("Waiting for game to start...")
+        timeout(twoMinutes, "wait for game to start") {
+            game.waitForGameStart()
+        }
+        return game.gameId
     }
 
     private fun displayCancelButton(mm: MatchmakingService) {
@@ -159,23 +209,6 @@ class MatchmakingFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private suspend fun joinCurrentGame(
-        mm: MatchmakingService,
-        game: FirebaseGameService
-    ): String? {
-        write("You already have a game, joining...")
-        wait()
-        write("Waiting for opponent...")
-        game.opponentCount().first { it is Full }
-        write("Waiting for game to start...")
-        game.waitForGameStart()
-        wait()
-        write("Game started!")
-        wait()
-        return game.gameId
-
     }
 
 }
