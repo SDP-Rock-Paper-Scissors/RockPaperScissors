@@ -15,6 +15,6 @@ export function assertTrue(value: boolean) {
 
 export function assertEquals(expected: any, actual: any) {
   if (expected !== actual) {
-    throw new Error(`expected \'${expected}\', actual \'${actual}\'`)
+    throw new Error(`expected '${expected}', actual '${actual}'`)
   }
 }

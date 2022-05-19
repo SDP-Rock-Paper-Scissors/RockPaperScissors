@@ -29,14 +29,14 @@ class TicTacToeChoiceFragment : Fragment() {
         val contBtn = view.findViewById<Button>(R.id.ai_pick_side_continue_btn)
 
         crossSelect.setOnClickListener {
-            choice = 0;
+            choice = 0
             crossSelect.setImageResource(R.drawable.radio_button_checked)
             noughtSelect.setImageResource(R.drawable.radio_button_unchecked)
 
         }
 
         noughtSelect.setOnClickListener {
-            choice = 1;
+            choice = 1
             noughtSelect.setImageResource(R.drawable.radio_button_checked)
             crossSelect.setImageResource(R.drawable.radio_button_unchecked)
 
