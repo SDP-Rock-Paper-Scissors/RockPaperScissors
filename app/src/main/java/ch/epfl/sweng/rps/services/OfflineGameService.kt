@@ -63,7 +63,7 @@ class OfflineGameService(
     private suspend fun makeComputerMoves() {
         for (pc in computerPlayers) {
             delay(artificialMovesDelay)
-            currentHands[pc.computerPlayerId] = pc.makeMove()
+            currentHands[pc.uid] = pc.makeMove()
         }
     }
 
@@ -110,7 +110,7 @@ class OfflineGameService(
         )
         game = Game.Rps(
             gameId,
-            computerPlayers.map { it.computerPlayerId },
+            computerPlayers.map { it.uid },
             mutableMapOf("0" to round),
             0,
             gameMode.toGameModeString(),

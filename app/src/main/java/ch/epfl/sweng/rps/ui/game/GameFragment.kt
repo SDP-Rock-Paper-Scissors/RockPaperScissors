@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
 import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
 
 class GameFragment : Fragment() {
@@ -48,6 +49,11 @@ class GameFragment : Fragment() {
         val gameId = arguments?.getString("game_id")
         if (gameId != null) {
             Toast.makeText(context, "Game ID: $gameId", Toast.LENGTH_LONG).show()
+//            matchViewModel.gameService = ServiceLocator.getInstance().getGameServiceForGame(gameId)
+            matchViewModel.setGameServiceSettingsOnline(
+                ServiceLocator.getInstance().getGameServiceForGame(gameId)
+            )
+
         }
     }
 
@@ -58,11 +64,12 @@ class GameFragment : Fragment() {
         if (matchViewModel.job == null ||
             (matchViewModel.job != null && !matchViewModel.job?.isActive!!)
         ) {
+
             matchViewModel.managePlayHand(hand,
                 opponentsMoveUIUpdateCallback = {
                     opponentMoveUIUpdate(
                         matchViewModel.gameService?.currentRound?.hands?.get(
-                            matchViewModel.computerPlayer!!.computerPlayerId
+                            matchViewModel.opponent!!.uid
                         )!!
                     )
                 },
