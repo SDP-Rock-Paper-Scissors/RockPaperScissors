@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import ch.epfl.sweng.rps.R
 
 
@@ -43,16 +45,15 @@ class TicTacToeChoiceFragment : Fragment() {
         }
 
         contBtn.setOnClickListener {
-            val ticTacToeFragment = TicTacToeFragment()
-            val bundle = Bundle()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            bundle.putInt("choice", choice)
-            println(choice)
-            ticTacToeFragment.arguments = bundle
-            transaction.replace(R.id.ticTacToeChoiceFragment, ticTacToeFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
-
+//            val ticTacToeFragment = TicTacToeFragment()
+//            val bundle = Bundle()
+//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//            bundle.putInt("choice", choice)
+//            ticTacToeFragment.arguments = bundle
+//            transaction.replace(R.id.container, ticTacToeFragment)
+//            transaction.commit()
+            val action = TicTacToeChoiceFragmentDirections.startTicTacToe(choice)
+            Navigation.findNavController(view).navigate(R.id.action_ticTacToeChoiceFragment_to_ticTacToeFragment2)
         }
     }
 
