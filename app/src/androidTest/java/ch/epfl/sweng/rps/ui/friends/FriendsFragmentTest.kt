@@ -121,7 +121,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.gamesWonText_infoPage)).check(matches(withText("Games Won: $gamesWon")))
     }
 
-    @Test
+  /*  @Test
     fun test_CorrectUserNameShows_onInfoButtonClick(){
 
         onView(withId(R.id.nav_friends)).perform(click())
@@ -130,7 +130,7 @@ class FriendsFragmentTest {
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
 
         onView(withId(R.id.userName_infoPage)).check(matches(withText("V Jab")))
-    }
+    } */
 
     @Test
     fun test_CorrectWinRateShows_onInfoButtonClick(){
@@ -142,17 +142,7 @@ class FriendsFragmentTest {
 
         onView(withId(R.id.winRateText_infoPage)).check(matches(withText("Win Rate: $winRate%")))
     }
-
-  /*  @Test
-    fun test_offlineStatusShows_onInfoButtonClick(){
-        onView(withId(R.id.nav_friends)).perform(click())
-
-        onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(LIST_ITEM,ClickButtonAction.clickInfoButton(R.id.infoButton)))
-
-        onView(withId(R.id.offlineImage_infoPage)).check(matches(isDisplayed()))
-    }
- */
+    
     @Test
     fun test_onlineStatusShows_onInfoButtonClick(){
         onView(withId(R.id.nav_friends)).perform(click())
