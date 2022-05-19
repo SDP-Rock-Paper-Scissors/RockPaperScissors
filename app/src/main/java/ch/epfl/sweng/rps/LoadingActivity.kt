@@ -8,8 +8,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
-import com.google.firebase.appcheck.FirebaseAppCheck
-import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.delay
@@ -19,8 +17,8 @@ class LoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
-        setupApp()
     }
+
 
     /**
      * Here logic to setup the app
@@ -28,12 +26,7 @@ class LoadingActivity : AppCompatActivity() {
     suspend fun logic() {
         Log.w("LoadingPage", "logic")
 
-        val isTest = intent.getBooleanExtra("isTest", false)
         Firebase.initialize(this@LoadingActivity)
-        val firebaseAppCheck = FirebaseAppCheck.getInstance()
-        firebaseAppCheck.installAppCheckProviderFactory(
-            SafetyNetAppCheckProviderFactory.getInstance()
-        )
         useEmulatorsIfNeeded()
         delay(1000)
         if (!isTest) {
@@ -59,13 +52,16 @@ class LoadingActivity : AppCompatActivity() {
         }
     }
 
+    val isTest: Boolean
+        get() = intent.getBooleanExtra("isTest", false)
+
     private fun setupApp() {
         // All the logic here is to check if the user is logged in or not
-        val helpMeNav = intent.extras?.getBoolean(HELP_ME_NAV_EXTRA, false) ?: false
-        if (!helpMeNav) {
+        if (!hasRunLogic) {
             runBlocking { logic() }
+            hasRunLogic = true
         }
-        val isTest = intent.getBooleanExtra("isTest", false)
+
         if (!isTest) {
             nav()
         }
@@ -78,7 +74,7 @@ class LoadingActivity : AppCompatActivity() {
             intent.extras?.getBoolean(OnBoardingActivity.DONE_ONBOARDING_EXTRA, false) ?: false
         if (OnBoardingActivity.isFirstTime(this) && !doneOnBoarding) {
             Log.w("LoadingPage", "nav to onboarding")
-            OnBoardingActivity.launch(this, OnBoardingActivity.Destination.LOADING)
+            OnBoardingActivity.launch(this, OnBoardingActivity.Destination.FINISH)
         } else {
             Log.w("LoadingPage", "nav to main")
             startActivity(Intent(this, LoginActivity::class.java))
@@ -86,11 +82,17 @@ class LoadingActivity : AppCompatActivity() {
     }
 
 
-    private val isTest get() = intent.getBooleanExtra("isTest", false)
+    override fun onResume() {
+        super.onResume()
+        setupApp()
+    }
+
 
     companion object {
         const val HELP_ME_NAV_EXTRA = "helpMeNav"
         const val IS_TEST_EXTRA = "isTest"
+
+        private var hasRunLogic = false
 
         fun launch(context: Context, helpMeNav: Boolean, vararg extras: Pair<String, Any>) {
             val intent = Intent(context, LoadingActivity::class.java)
