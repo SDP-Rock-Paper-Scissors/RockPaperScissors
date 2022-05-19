@@ -158,6 +158,44 @@ object FirebaseHelper {
         return allPlayers
     }
 
+    suspend fun getFriends(): List<FriendsInfo> {
+        val fbRepo = ServiceLocator.getInstance().repository
+        val friends = fbRepo.getFriends()
+        val friendList = mutableListOf<FriendsInfo>()
+
+        for (friend in friends) {
+            val user = fbRepo.getUser(friend)?:continue
+            val userStats = fbRepo.statsOfUser(friend)
+            val friendsInfo = FriendsInfo(
+                username = user.username?:"UsernameEmpty",
+                gamesPlayed = userStats.total_games,
+                gamesWon = userStats.wins,
+                winRate = userStats.winRate,
+                isOnline = true)
+
+            friendList.add(friendsInfo)
+        }
+        return friendList
+    }
+
+    suspend fun getFriendReqs(): List<FriendRequestInfo> {
+        val fbRepo = ServiceLocator.getInstance().repository
+        val friendRequest = fbRepo.listFriendRequests()
+        val reqList = mutableListOf<FriendRequestInfo>()
+        val uid = fbRepo.rawCurrentUid()
+
+        for (req in friendRequest) {
+            if (req.from != uid) {
+                val user = fbRepo.getUser(req.from) ?: continue
+                val friendsReq = FriendRequestInfo(
+                    username = user.username ?: "UsernameEmpty",
+                    uid = req.from
+                )
+                reqList.add(friendsReq)
+            }
+        }
+        return reqList
+    }
 
 }
 
