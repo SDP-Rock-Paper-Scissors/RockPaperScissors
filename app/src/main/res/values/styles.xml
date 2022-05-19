@@ -11,4 +11,23 @@
         <item name="iconPadding">0dp</item>
         <item name="rippleColor">?colorOnPrimary</item>
     </style>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="OnBoardingTheme" parent="Theme.AppCompat">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="myTextViewStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#ffffffff</item>
+    </style>
 </resources>

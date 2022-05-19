@@ -1,0 +1,1 @@
+(cd firebase/functions && npm run build) && (cd firebase && firebase emulators:start)

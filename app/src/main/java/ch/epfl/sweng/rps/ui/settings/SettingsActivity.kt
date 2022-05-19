@@ -2,21 +2,27 @@ package ch.epfl.sweng.rps.ui.settings
 
 import android.content.*
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.Round
 import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
+import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.launch
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -27,10 +33,10 @@ class SettingsActivity : AppCompatActivity(),
         private const val TITLE_TAG = "settingsActivityTitle"
 
         fun applyTheme(
-            themeKey: String?,
-            sharedPreferences: SharedPreferences?
+            themeKey: String,
+            sharedPreferences: SharedPreferences
         ) {
-            when (sharedPreferences?.getString(themeKey, "system")) {
+            when (sharedPreferences.getString(themeKey, "system")) {
                 "light" -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
@@ -133,48 +139,106 @@ class SettingsActivity : AppCompatActivity(),
                 clipboard?.setPrimaryClip(clip)
                 true
             }
-            findPreference<Preference>(getString(R.string.add_artificial_game_settings))?.setOnPreferenceClickListener {
-                val id = "artificial_game_1"
-                val uid = ServiceLocator.getInstance().repository.rawCurrentUid()!!
-                val uid2 = "RquV8FkGInaPnyUnqncOZGJjSKJ3"
-                val repo = ServiceLocator.getInstance()
-                if (repo !is ProdServiceLocator) return@setOnPreferenceClickListener true
-
-                repo.firebaseReferences.gamesCollection.document(
-                    id
-                )
-                    .set(
-                        Game(
-                            id = id,
-                            players = listOf(
-                                uid,
-                                uid2
-                            ),
-                            rounds = mapOf(
-                                "0" to Round(
-                                    hands = mapOf(
-                                        uid to Hand.PAPER,
-                                        uid2 to Hand.ROCK
-                                    ),
-                                    timestamp = Timestamp.now()
-                                )
-                            ),
-                            game_mode = Game.GameMode(
-                                playerCount = 2,
-                                type = Game.GameMode.Type.PVP,
-                                rounds = 1,
-                                timeLimit = 0
-                            ).toGameModeString(),
-                            current_round = 0,
-                            done = true,
-                            timestamp = Timestamp.now(),
-                            player_count = 2
-                        )
-                    )
+            val joinQueue = findPreference<Preference>(getString(R.string.join_queue_now_key))
+            joinQueue?.setSummaryProvider {
+                if (FirebaseEmulatorsUtils.emulatorUsed) "Emulator used" else "Firebase Emulator not used"
+            }
+            joinQueue?.setOnPreferenceClickListener {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val TAG = "Matchmaking"
+                    val games = ServiceLocator.getInstance().repository.myActiveGames()
+                    Log.w(TAG, "games: $games")
+                    if (games.isNotEmpty()) {
+                        Toast.makeText(
+                            context,
+                            "You are already in a game (${games.first().id})",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@launch
+                    }
+                    Log.d(TAG, "Joining queue")
+                    try {
+                        ServiceLocator.getInstance().matchmakingService.queue(
+                            GameMode(
+                                2,
+                                GameMode.Type.PVP,
+                                3,
+                                0,
+                                GameMode.GameEdition.RockPaperScissors
+                            )
+                        ).collect {
+                            Log.i(TAG, it.toString())
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.toString(), e)
+                    }
+                }
                 true
             }
+            findPreference<Preference>(getString(R.string.settings_clear_shared_prefs))?.setOnPreferenceClickListener {
+                PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().clear()
+                    .apply()
+                // Show toast to confirm
+                Toast.makeText(
+                    requireContext(),
+                    "Shared preferences cleared",
+                    Toast.LENGTH_SHORT
+                ).show()
+                true
+            }
+            findPreference<Preference>(getString(R.string.settings_show_onboard))?.setOnPreferenceClickListener {
+                OnBoardingActivity.launch(
+                    requireContext(),
+                    destination = OnBoardingActivity.Destination.FINISH
+                )
+                true
+            }
+            val gameSettings =
+                findPreference<Preference>(getString(R.string.add_artificial_game_settings))
+
+            gameSettings!!.setOnPreferenceClickListener {
+                val id = "artificial_game_1"
+                val uid = ServiceLocator.getInstance().repository.getCurrentUid()
+                val uid2 = "RquV8FkGInaPnyUnqncOZGJjSKJ3"
+                val repo = ServiceLocator.getInstance()
+
+                if (repo is ProdServiceLocator) {
+                    repo.firebaseReferences.gamesCollection.document(id)
+                        .set(
+                            Game.Rps(
+                                id = id,
+                                players = listOf(
+                                    uid,
+                                    uid2
+                                ),
+                                rounds = mapOf(
+                                    "0" to Round.Rps(
+                                        hands = mapOf(
+                                            uid to Hand.PAPER,
+                                            uid2 to Hand.ROCK
+                                        ),
+                                        timestamp = Timestamp.now()
+                                    )
+                                ),
+                                game_mode = GameMode(
+                                    playerCount = 2,
+                                    type = GameMode.Type.PVP,
+                                    rounds = 1,
+                                    timeLimit = 0,
+                                    edition = GameMode.GameEdition.RockPaperScissors
+                                ).toGameModeString(),
+                                current_round = 0,
+                                done = true,
+                                timestamp = Timestamp.now(),
+                                player_count = 2
+                            )
+                        )
+                }
+                true
+            }
+
         }
-    }
+
 
 //    class AppearanceFragment : PreferenceFragmentCompat() {
 //        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -187,6 +251,7 @@ class SettingsActivity : AppCompatActivity(),
 //            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
 //        }
 //    }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -198,9 +263,11 @@ class SettingsActivity : AppCompatActivity(),
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences?,
+        key: String?
+    ) {
         val themeKey = getString(R.string.theme_pref_key)
-        if (key == themeKey) applyTheme(themeKey, sharedPreferences)
+        if (key == themeKey) applyTheme(themeKey, sharedPreferences ?: return)
     }
-
 }

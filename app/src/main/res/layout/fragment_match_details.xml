@@ -17,14 +17,12 @@
         tools:ignore="UselessParent">
 
         <TextView
-            android:id="@+id/txt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/match_detail"
-            android:textSize="20dp"
-            android:textStyle="bold">
-
-        </TextView>
+            android:textAlignment="center"
+            android:text="@string/personal_statistics"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
 
         <TableRow
@@ -40,18 +38,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="Player" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="Opponent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="Outcome" />
         </TableRow>
     </TableLayout>

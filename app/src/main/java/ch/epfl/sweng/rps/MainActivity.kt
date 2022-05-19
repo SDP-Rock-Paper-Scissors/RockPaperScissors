@@ -1,14 +1,16 @@
 package ch.epfl.sweng.rps
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.databinding.ActivityMainBinding
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -20,9 +22,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var currentUser: User
+    private lateinit var cache:Cache
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
         super.onCreate(savedInstanceState)
+        cache = Cache.getInstance() ?: Cache.createInstance(this)
 
         if(intent.action.equals("fromCamera")){
             val extras = intent.extras
@@ -50,6 +55,8 @@ class MainActivity : AppCompatActivity() {
 
 
         SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
+
+        navView.setupWithNavController(navController)
 
     }
 

@@ -17,7 +17,7 @@
     <string name="rock_image">rock image</string>
     <string name="paper_image">paper image</string>
     <string name="scissors_image">scissors image</string>
-    <string name="counter_value">3</string>
+    <string name="counter_value"> </string>
     <string name="user_username">username</string>
     <string name="user_rank">rank</string>
     <string name="match_result">3:1</string>
@@ -45,6 +45,17 @@
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
     <item name="test_for_stats_row" type="id" />
+
+    <!-- game -->
+    <string name="game_over">Game Over</string>
+    <string name="win">You win</string>
+    <string name="lose">You lose</string>
+    <string name="draw">Draw</string>
+    <string name="play_again">Play Again</string>
+    <string name="back_home">Home</string>
+    <string name="init_player_score">0</string>
+    <string name="infinity">&#8734;</string>
+
     <!-- Preference Titles -->
     <string name="appearance_header">Appearance</string>
     <string name="sync_header">Sync</string>
@@ -75,4 +86,15 @@
     <string name="add_artificial_game_settings">add_artificial_game_settings</string>
     <string name="copy_fb_uid">Copy Firebase Uid</string>
     <string name="add_artificial_game">Add artificial game</string>
+    <string name="join_queue_now_key">join_queue_now</string>
+    <string name="_2nd">2ND 🥈</string>
+    <string name="_1st">1ST 🥇</string>
+    <string name="_3rd">3RD 🥉</string>
+    <string name="personal_statistics">Personal Statistics</string>
+    <string name="is_first_time">is_first_time</string>
+    <string name="settings_clear_shared_prefs">settings_shared_prefs_clear</string>
+    <string name="settings_show_onboard">settings_show_onboard</string>
+    <string name="show_welcome_screen_text_settings">Show the welcome screen</string>
+    <string name="clear_shared_prefs_settings_text">Clear all settings</string>
+    <string name="leaderboard">L E A D E R B O A R D</string>
 </resources>

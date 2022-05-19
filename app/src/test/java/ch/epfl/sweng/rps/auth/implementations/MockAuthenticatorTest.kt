@@ -9,7 +9,7 @@ class MockAuthenticatorTest {
     @Test
     fun mockedAuthenticatorCallbackIsCalled() {
         val callback = { res: User -> assertEquals(res.username, "username") }
-        val authenticator: Authenticator = object : Authenticator(callback) {
+        val authenticator: Authenticator = object : Authenticator() {
             override fun signInWithGoogle() {
                 callback(User("username", "uid", "PRIVATE", false, "rps@epfl.ch"))
             }

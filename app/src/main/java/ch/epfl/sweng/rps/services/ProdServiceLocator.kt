@@ -1,25 +1,32 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.*
+import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.FirebaseReferences
+import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.db.LocalRepository
 
-/*
-* ServiceLocator is a singleton class that provides access to the different services
-* Services: FirebaseRepository, LocalRepository
-* */
-class ProdServiceLocator() : ServiceLocator {
+/**
+ * ServiceLocator is a singleton class that provides access to the different services
+ *
+ * Repositories: [FirebaseRepository], [LocalRepository]
+ *
+ * Services: [FirebaseGameService]
+ * */
+class ProdServiceLocator : ServiceLocator {
 
     val firebaseReferences by lazy { FirebaseReferences() }
 
-    override val repository by lazy { FirebaseRepository(firebaseReferences) }
+    override val repository by lazy { FirebaseRepository.createInstance(firebaseReferences) }
 
     override fun dispose() {
+        disposeAllGameServices()
     }
 
     override val env: Env = Env.Prod
 
     private val gameServices = mutableMapOf<String, FirebaseGameService>()
 
-    fun getGameServiceForGame(gameId: String, start: Boolean = true): FirebaseGameService {
+    override fun getGameServiceForGame(gameId: String, start: Boolean): FirebaseGameService {
         cleanUpServices()
         val service = gameServices.getOrPut(gameId) {
             FirebaseGameService(
@@ -53,6 +60,8 @@ class ProdServiceLocator() : ServiceLocator {
 
     override val cachedGameServices: List<String>
         get() = gameServices.keys.toList()
+
+    override val matchmakingService: MatchmakingService by lazy { MatchmakingService() }
 
 
 }

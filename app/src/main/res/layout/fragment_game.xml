@@ -1,72 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_game"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.game.GameFragment"
-    android:id="@+id/fragment_game">
+    android:layout_marginBottom="?android:attr/actionBarSize"
+    android:orientation="vertical"
 
-    <LinearLayout
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:context=".ui.game.GameFragment">
+
+    <include
+        android:id="@+id/opponent_match_data"
+        layout="@layout/user_match_data" />
+
+    <RadioGroup
+        android:id="@+id/rps_opponent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/result_text"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/match_result"
-            android:textSize="30sp" />
-
-        <include
-            android:id="@+id/opponent_credentials"
-            layout="@layout/user_credentials" />
-
-        <include
-            layout="@layout/rps_images"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7"
-            android:gravity="center_horizontal|center_vertical" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/counter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/counter_value"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </LinearLayout>
-
-        <include
-            android:id="@+id/user_credentials"
-            layout="@layout/user_credentials"
+        <RadioButton
+            android:id="@+id/rockRB_opponent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@drawable/rock"
+            android:clickable="false"
+            android:gravity="center" />
 
-        <include
-            layout="@layout/rps_buttons"
+        <RadioButton
+            android:id="@+id/paperRB_opponent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="8" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@drawable/paper"
+            android:clickable="false"
+            android:gravity="center" />
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <RadioButton
+            android:id="@+id/scissorsRB_opponent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@drawable/scissors"
+            android:clickable="false"
+            android:gravity="center" />
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:src="@drawable/ic_clock_pastel_col"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/counter_value"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.491" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/user_match_data"
+        layout="@layout/user_match_data" />
+
+    <RadioGroup
+        android:id="@+id/rps_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rockRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@drawable/rock"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/paperRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@drawable/paper"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/scissorsRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:button="@drawable/scissors"
+            android:gravity="center" />
+    </RadioGroup>
+
+</LinearLayout>
