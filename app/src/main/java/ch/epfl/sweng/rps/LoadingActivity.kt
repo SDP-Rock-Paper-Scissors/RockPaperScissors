@@ -8,8 +8,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 class LoadingActivity : AppCompatActivity() {
@@ -17,6 +20,26 @@ class LoadingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
         setupApp()
+    }
+
+    /**
+     * Here logic to setup the app
+     */
+    suspend fun logic() {
+        Log.w("LoadingPage", "logic")
+
+        val isTest = intent.getBooleanExtra("isTest", false)
+        Firebase.initialize(this@LoadingActivity)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            SafetyNetAppCheckProviderFactory.getInstance()
+        )
+        useEmulatorsIfNeeded()
+        delay(1000)
+        if (!isTest) {
+            openLogin()
+            finish()
+        }
     }
 
     private fun openLogin() {
@@ -48,17 +71,6 @@ class LoadingActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Here logic to setup the app
-     */
-    suspend fun logic() {
-        Log.w("LoadingPage", "logic")
-
-        Firebase.initialize(this@LoadingActivity)
-        useEmulatorsIfNeeded()
-
-
-    }
 
     fun nav() {
         Log.w("LoadingPage", "nav")
@@ -73,7 +85,7 @@ class LoadingActivity : AppCompatActivity() {
         }
     }
 
-    
+
     private val isTest get() = intent.getBooleanExtra("isTest", false)
 
     companion object {
