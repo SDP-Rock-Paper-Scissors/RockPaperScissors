@@ -148,7 +148,7 @@ class MatchmakingFragment : Fragment() {
         write("Game found: ${joined.gameService.gameId}")
         val gameService = joined.gameService
         timeout(twoMinutes, "getting the game") {
-            gameService.awaitForGame()
+            gameService.refreshGame()
         }
         val opponentsNbr =
             createDisplayOpponentsFunction(gameService.currentGame.gameMode.playerCount)

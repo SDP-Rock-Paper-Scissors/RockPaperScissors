@@ -62,7 +62,7 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
                     cont.resume(Unit)
                 }
             }
-            addListener(listener!!)
+            addListener(listener)
             cont.invokeOnCancellation {
                 removeListener(listener)
             }

@@ -59,6 +59,7 @@ sealed class Game {
     }
 
     object FIELDS {
+        const val STARTED = "started"
         const val PLAYERS = "players"
         const val ROUNDS = "rounds"
         const val CURRENT_ROUND = "current_round"

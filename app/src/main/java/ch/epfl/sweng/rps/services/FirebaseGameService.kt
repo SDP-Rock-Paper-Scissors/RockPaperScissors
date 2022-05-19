@@ -12,7 +12,6 @@ import ch.epfl.sweng.rps.utils.L
 import ch.epfl.sweng.rps.utils.consume
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
@@ -106,7 +105,7 @@ class FirebaseGameService(
 
     override suspend fun refreshGame(): Game {
         checkNotDisposed()
-        val g = gameRef.get().await().toObject<Game>()!!
+        val g = gameRef.get().await().toGame()!!
         game = g
         return g
     }
@@ -180,7 +179,14 @@ class FirebaseGameService(
         return awaitFor { game != null }
     }
 
+    val imTheOwner get() = game?.players?.first() == firebaseRepository.getCurrentUid()
+
     suspend fun waitForGameStart(): Boolean {
+        if (imTheOwner) {
+            firebase.gamesCollection.document(gameId).update(mapOf(Game.FIELDS.STARTED to true))
+                .await()
+            return true
+        }
         if (started) {
             return true
         }

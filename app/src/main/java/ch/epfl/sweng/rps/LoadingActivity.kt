@@ -8,8 +8,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
-import com.google.firebase.appcheck.FirebaseAppCheck
-import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.delay
@@ -30,10 +28,6 @@ class LoadingActivity : AppCompatActivity() {
 
         val isTest = intent.getBooleanExtra("isTest", false)
         Firebase.initialize(this@LoadingActivity)
-        val firebaseAppCheck = FirebaseAppCheck.getInstance()
-        firebaseAppCheck.installAppCheckProviderFactory(
-            SafetyNetAppCheckProviderFactory.getInstance()
-        )
         useEmulatorsIfNeeded()
         delay(1000)
         if (!isTest) {
