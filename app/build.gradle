@@ -145,6 +145,7 @@ dependencies {
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0'
 
     // For UI dependency
     implementation 'de.hdodenhof:circleimageview:3.1.0'
