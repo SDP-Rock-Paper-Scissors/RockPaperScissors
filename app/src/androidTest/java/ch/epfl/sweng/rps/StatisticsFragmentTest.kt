@@ -61,7 +61,7 @@ class StatisticsFragmentTest {
                         "player1" to Hand.ROCK,
                         "player2" to Hand.SCISSORS
                     ),
-                    Timestamp(Date(0))
+                        Timestamp(Date(0))
                 ),
                 "1" to Round.Rps(
                     mapOf(

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.*
@@ -18,7 +19,10 @@ import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.db.FirebaseHelper
+import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.FakeFriendsData
+import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
@@ -33,8 +37,7 @@ import org.junit.Test
 
 class FriendsFragmentTest {
 
-    val LIST_ITEM = FakeFriendsData.myFriendsData.size - 1
-    val thisFriend = FakeFriendsData.myFriendsData[LIST_ITEM]
+
 
 
    private fun createIntent(): Intent {
@@ -50,13 +53,15 @@ class FriendsFragmentTest {
 
     @Before
     fun setUp() {
-        ServiceLocator.setCurrentEnv(Env.Prod)
+            ServiceLocator.setCurrentEnv(Env.Prod)
+            IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+        }
 
-    }
     @After
-    fun tearDown() {
-        ServiceLocator.setCurrentEnv(Env.Prod)
-    }
+        fun tearDown() {
+            ServiceLocator.setCurrentEnv(Env.Prod)
+            IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+        }
 
     @Test
     fun testEnv() {
@@ -97,7 +102,7 @@ class FriendsFragmentTest {
 
     @Test
     fun test_CorrectGamesPlayedShows_onInfoButtonClick(){
-        val gamesPlayed = thisFriend.gamesPlayed
+        val gamesPlayed = 0
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
@@ -107,7 +112,7 @@ class FriendsFragmentTest {
     }
     @Test
     fun test_CorrectGamesWonShows_onInfoButtonClick(){
-        val gamesWon = thisFriend.gamesWon
+        val gamesWon = 0
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
@@ -124,12 +129,12 @@ class FriendsFragmentTest {
         onView(withId(R.id.friendListRecyclerView))
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
 
-        onView(withId(R.id.userName_infoPage)).check(matches(withText(thisFriend.username)))
+        onView(withId(R.id.userName_infoPage)).check(matches(withText("V Jab")))
     }
 
     @Test
     fun test_CorrectWinRateShows_onInfoButtonClick(){
-        val winRate = thisFriend.winRate
+        val winRate ="0.0"
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))

@@ -58,9 +58,11 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         }
 
         //Get friends from cache
+        EspressoIdlingResource.increment()
         cache = Cache.getInstance()!!
         model.getFriends().observe(viewLifecycleOwner) { f ->
             recyclerView.adapter = FriendListAdapter(f, this)
+            EspressoIdlingResource.decrement()
         }
 
 
