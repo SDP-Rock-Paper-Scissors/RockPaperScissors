@@ -2,143 +2,124 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ticTacToeChoiceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="10"
-    tools:context=".ui.tictactoe.TicTacToeChoiceFragment"
-    android:id="@+id/ticTacToeChoiceFragment">
+    tools:context=".ui.tictactoe.TicTacToeChoiceFragment">
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"></View>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Pick your side"
+        android:layout_height="135dp"
         android:layout_gravity="center"
-        android:textStyle="bold"
+        android:layout_weight="0"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Pick your side"
         android:textColor="#454545"
         android:textSize="20dp"
-        android:gravity="center"></TextView>
+        android:textStyle="bold"></TextView>
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.75"></View>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.25"></View>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <ImageView
             android:id="@+id/ai_pick_side_cross_img"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3.5"
+            android:layout_height="115dp"
+            android:layout_weight="1"
             android:padding="10dp"
             android:src="@drawable/cross"></ImageView>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"></View>
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_img"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3.5"
+            android:layout_height="115dp"
+            android:layout_weight="1"
             android:alpha=".4"
             android:src="@drawable/nought"></ImageView>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.25"></View>
     </LinearLayout>
 
-    <View
+
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"></View>
-
-
-
+        android:layout_height="47dp"
+        android:layout_weight="0" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.25"></View>
+        android:layout_height="114dp"
+        android:layout_weight="0"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <ImageView
             android:id="@+id/ai_pick_side_cross_radio"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:padding="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3.5"
             android:src="@drawable/radio_button_checked"></ImageView>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"></View>
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_radio"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:padding="15dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3.5"
             android:src="@drawable/radio_button_unchecked"></ImageView>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.25"></View>
+
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.75"></View>
 
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/ai_pick_side_continue_btn"
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.85"
-        android:layout_gravity="center"
-        android:padding="2dp"
-        android:gravity="center"
-        android:text="Continue"
-        android:textAllCaps="false"
-        android:textSize="21dp"
-        android:textColor="#454545"
-        android:layout_marginLeft="110dp"
-        android:background="@drawable/button_2"
-        android:layout_marginRight="110dp"></androidx.appcompat.widget.AppCompatButton>
+        android:layout_height="47dp"
+        android:layout_weight="0" />
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.65"></View>
+        android:layout_height="97dp"
+        android:orientation="horizontal"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:weightSum="2">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ai_pick_side_continue_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/button_2"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Vs PC"
+            android:textAllCaps="false"
+            android:textColor="#454545"
+            android:textSize="21dp"></androidx.appcompat.widget.AppCompatButton>
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/multButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/button_2"
+            android:text="MULTIPLAYER"
+            android:textAllCaps="false"
+            android:textColor="#454545"
+            android:textSize="21dp"></androidx.appcompat.widget.AppCompatButton>
+
+    </LinearLayout>
 
 </LinearLayout>
