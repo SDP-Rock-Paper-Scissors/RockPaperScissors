@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.ui.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -53,11 +54,10 @@ class MatchViewModel : ViewModel() {
         gameService = gameService_
         val opponentUid = (gameService as FirebaseGameService).currentGame.players[1]
         viewModelScope.launch {
-            val opponent = ServiceLocator.getInstance().repository.getUser(opponentUid)
+            opponent = ServiceLocator.getInstance().repository.getUser(opponentUid)
         }
 
         this.nEvents = (gameService as FirebaseGameService).currentGame.gameMode.rounds
-        this.opponent = opponent
     }
 
     fun startOfflineGameService() {
@@ -148,7 +148,13 @@ class MatchViewModel : ViewModel() {
         resetUIScoresCallback: () -> Unit
     ) {
         job = viewModelScope.launch {
+            Log.d("gameFlow", "in the launch")
+            gameService?.awaitForRoundAdded()
+            Log.d("gameFlow", "round added awaiting done")
             gameService?.playHand(userHand)
+            Log.d("gameFlow", "play hand in gameService done")
+            gameService?.awaitForAllHands()
+            Log.d("gameFlow", "await for all hands done")
             opponentsMoveUIUpdateCallback()
             scoreBasedUpdatesCallback()
             // add round can be called only from suspend function or from coroutine
@@ -163,4 +169,6 @@ class MatchViewModel : ViewModel() {
             resetUIScoresCallback()
         }
     }
+
+
 }

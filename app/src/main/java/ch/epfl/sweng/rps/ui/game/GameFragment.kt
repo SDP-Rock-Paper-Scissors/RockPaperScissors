@@ -49,11 +49,10 @@ class GameFragment : Fragment() {
         val gameId = arguments?.getString("game_id")
         if (gameId != null) {
             Toast.makeText(context, "Game ID: $gameId", Toast.LENGTH_LONG).show()
-//            matchViewModel.gameService = ServiceLocator.getInstance().getGameServiceForGame(gameId)
             matchViewModel.setGameServiceSettingsOnline(
                 ServiceLocator.getInstance().getGameServiceForGame(gameId)
             )
-
+            matchViewModel.gameService?.startListening()
         }
     }
 
@@ -64,7 +63,7 @@ class GameFragment : Fragment() {
         if (matchViewModel.job == null ||
             (matchViewModel.job != null && !matchViewModel.job?.isActive!!)
         ) {
-
+            println("in the rps pressed")
             matchViewModel.managePlayHand(hand,
                 opponentsMoveUIUpdateCallback = {
                     opponentMoveUIUpdate(

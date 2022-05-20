@@ -126,4 +126,14 @@ class OfflineGameService(
             throw GameServiceException("GameService is disposed")
         }
     }
+
+    override val imTheOwner get() = true
+
+    override suspend fun awaitForAllHands() {
+        awaitFor { currentRound.hands.size == 2 }// 2 is the number of players, for now hardcoded
+    }
+
+    override suspend fun awaitForRoundAdded() {
+        awaitFor { true }
+    }
 }
