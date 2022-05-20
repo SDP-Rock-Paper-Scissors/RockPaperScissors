@@ -52,7 +52,8 @@ class MatchViewModel : ViewModel() {
 
     fun setGameServiceSettingsOnline(gameService_: FirebaseGameService) {
         gameService = gameService_
-        val opponentUid = (gameService as FirebaseGameService).currentGame.players[1]
+        val opponentUid =
+            (gameService as FirebaseGameService).currentGame.players.filter { it -> it != uid }[0]
         viewModelScope.launch {
             opponent = ServiceLocator.getInstance().repository.getUser(opponentUid)
         }
@@ -148,18 +149,34 @@ class MatchViewModel : ViewModel() {
         resetUIScoresCallback: () -> Unit
     ) {
         job = viewModelScope.launch {
-            Log.d("gameFlow", "in the launch")
-            gameService?.awaitForRoundAdded()
-            Log.d("gameFlow", "round added awaiting done")
+            Log.i("gameFlow", "in the launch")
+//            gameService?.awaitForRoundAdded()
+            while (true) {
+                gameService?.refreshGame()
+                delay(100L)
+                if (gameService?.imTheOwner == true || gameService?.currentRound?.hands?.size == 1) {
+                    break
+                }
+            }
+            Log.i("gameFlow", "round added awaiting done")
             gameService?.playHand(userHand)
-            Log.d("gameFlow", "play hand in gameService done")
-            gameService?.awaitForAllHands()
-            Log.d("gameFlow", "await for all hands done")
+            Log.i("gameFlow", "play hand in gameService done")
+//            gameService?.awaitForAllHands()
+            Log.i("gameFlow", gameService?.currentRound?.hands?.size.toString())
+            while (true) {
+                gameService?.refreshGame()
+                delay(100L)
+                Log.i("gameFlow", gameService?.currentRound?.hands?.size.toString())
+                if (gameService?.currentRound?.hands?.size == 2) {
+                    break
+                }
+            }
+            Log.i("gameFlow", "await for all hands done")
             opponentsMoveUIUpdateCallback()
             scoreBasedUpdatesCallback()
             // add round can be called only from suspend function or from coroutine
             // therefore I use it here here
-            if (!gameService?.isGameOver!!) {
+            if (!gameService?.isGameOver!! && gameService!!.imTheOwner) {
                 gameService?.addRound()
             }
             // the delay to let the user see the opponent's choice (rock/paper/scissors)

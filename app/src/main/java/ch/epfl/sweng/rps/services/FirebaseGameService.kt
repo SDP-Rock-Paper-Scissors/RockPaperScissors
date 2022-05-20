@@ -201,6 +201,7 @@ class FirebaseGameService(
         }
     }
 
+    //two below functions don't work for me as expected, either I use them in a wrong way or there is a bug
     override suspend fun awaitForAllHands() {
         awaitFor { currentRound.hands.size == 2 }// 2 is the number of players, for now hardcoded
     }
