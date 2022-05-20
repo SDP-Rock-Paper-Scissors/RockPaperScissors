@@ -125,7 +125,7 @@ class FirebaseGameService(
         val game = refreshGame()
         val me = firebaseRepository.getCurrentUid()
         firebase.gamesCollection.document(gameId)
-            .update(mapOf("${Game.FIELDS.ROUNDS}.${game.current_round}.${me}" to hand))
+            .update(mapOf("${Game.FIELDS.ROUNDS}.${game.current_round}.hands.${me}" to hand))
             .await()
     }
 

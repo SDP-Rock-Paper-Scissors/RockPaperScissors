@@ -49,7 +49,6 @@ class CacheTests {
 
     @After
     fun tearDown() {
-        storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
         storage.removeFile(Storage.FILES.STATSDATA)
         storage.removeFile(Storage.FILES.USERINFO)
         storage.removeFile(Storage.FILES.LEADERBOARDDATA)
