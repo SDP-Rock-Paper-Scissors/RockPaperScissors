@@ -82,6 +82,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.databinding:databinding-runtime:7.2.0'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation 'com.google.firebase:firebase-appcheck:16.0.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.hamcrest:hamcrest:2.2'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
@@ -146,6 +147,7 @@ dependencies {
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0'
 
     // For UI dependency
     implementation 'de.hdodenhof:circleimageview:3.1.0'
