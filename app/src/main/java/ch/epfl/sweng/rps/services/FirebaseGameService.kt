@@ -179,7 +179,7 @@ class FirebaseGameService(
         return awaitFor { game != null }
     }
 
-    val imTheOwner get() = game?.players?.first() == firebaseRepository.getCurrentUid()
+    override val imTheOwner get() = game?.players?.first() == firebaseRepository.getCurrentUid()
 
     suspend fun waitForGameStart(): Boolean {
         if (imTheOwner) {
@@ -199,5 +199,18 @@ class FirebaseGameService(
             addListener(cb)
             continuation.invokeOnCancellation { removeListener(cb) }
         }
+    }
+
+    //two below functions don't work for me as expected, either I use them in a wrong way or there is a bug
+    override suspend fun awaitForAllHands() {
+        awaitFor { currentRound.hands.size == 2 }// 2 is the number of players, for now hardcoded
+    }
+
+    /**
+     * Utility function to wait for the owner of the game to add a round.
+     * (it's needed because of the previous design decisions - only owner can add a round)
+     */
+    override suspend fun awaitForRoundAdded() {
+        awaitFor { imTheOwner || currentRound.hands.size == 1 }
     }
 }

@@ -63,7 +63,7 @@ class OfflineGameService(
     private suspend fun makeComputerMoves() {
         for (pc in computerPlayers) {
             delay(artificialMovesDelay)
-            currentHands[pc.computerPlayerId] = pc.makeMove()
+            currentHands[pc.uid] = pc.makeMove()
         }
     }
 
@@ -110,7 +110,7 @@ class OfflineGameService(
         )
         game = Game.Rps(
             gameId,
-            computerPlayers.map { it.computerPlayerId },
+            computerPlayers.map { it.uid },
             mutableMapOf("0" to round),
             0,
             gameMode.toGameModeString(),
@@ -125,5 +125,15 @@ class OfflineGameService(
         if (_disposed) {
             throw GameServiceException("GameService is disposed")
         }
+    }
+
+    override val imTheOwner get() = true
+
+    override suspend fun awaitForAllHands() {
+        awaitFor { currentRound.hands.size == 2 }// 2 is the number of players, for now hardcoded
+    }
+
+    override suspend fun awaitForRoundAdded() {
+        awaitFor { true }
     }
 }

@@ -1,12 +1,11 @@
 package ch.epfl.sweng.rps.ui.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ch.epfl.sweng.rps.models.ComputerPlayer
-import ch.epfl.sweng.rps.models.GameMode
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.OfflineGameService
 import ch.epfl.sweng.rps.services.ServiceLocator
@@ -25,7 +24,7 @@ class MatchViewModel : ViewModel() {
     var currentRoundResult: Hand.Result? = null
     var gameResult: Hand.Result? = null
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
-    var computerPlayer: ComputerPlayer? = null
+    var opponent: AbstractUser? = null
     var nEvents: Int? = null
     var artificialMovesDelay: Long? = null
     var timeLimit: Int? = 0 // this will be modifiable when the options allow it
@@ -35,7 +34,7 @@ class MatchViewModel : ViewModel() {
     val computerPlayerCurrentPoints: String
         get() =
             cumulativeScore.value?.filter { score ->
-                score.uid == computerPlayer!!.computerPlayerId
+                score.uid == opponent!!.uid
             }?.get(0)?.points.toString()
     val userPlayerCurrentPoints: String
         get() = cumulativeScore.value?.filter { score -> score.uid == uid }
@@ -43,12 +42,23 @@ class MatchViewModel : ViewModel() {
 
     fun setGameServiceSettings(
         nEvents: Int,
-        computerPlayer: ComputerPlayer,
+        opponent: AbstractUser,
         artificialMovesDelay: Long = 1_000
     ) {
         this.nEvents = nEvents
-        this.computerPlayer = computerPlayer
+        this.opponent = opponent
         this.artificialMovesDelay = artificialMovesDelay
+    }
+
+    fun setGameServiceSettingsOnline(gameService_: FirebaseGameService) {
+        gameService = gameService_
+        val opponentUid =
+            (gameService as FirebaseGameService).currentGame.players.filter { it -> it != uid }[0]
+        viewModelScope.launch {
+            opponent = ServiceLocator.getInstance().repository.getUser(opponentUid)
+        }
+
+        this.nEvents = (gameService as FirebaseGameService).currentGame.gameMode.rounds
     }
 
     fun startOfflineGameService() {
@@ -57,7 +67,7 @@ class MatchViewModel : ViewModel() {
         gameService = OfflineGameService(
             gameId,
             ServiceLocator.getInstance().repository,
-            listOf(computerPlayer!!),
+            listOf(opponent!! as ComputerPlayer),
             GameMode(2, GameMode.Type.PC, nEvents!!, 0, GameMode.GameEdition.RockPaperScissors),
             artificialMovesDelay!!
         )
@@ -121,7 +131,7 @@ class MatchViewModel : ViewModel() {
     fun reInit() {
         if (gameService!!.isGameOver) {
             gameService = null
-            computerPlayer = null
+            opponent = null
             resetResults()
         }
     }
@@ -139,12 +149,34 @@ class MatchViewModel : ViewModel() {
         resetUIScoresCallback: () -> Unit
     ) {
         job = viewModelScope.launch {
+            Log.i("gameFlow", "in the launch")
+//            gameService?.awaitForRoundAdded()
+            while (true) {
+                gameService?.refreshGame()
+                delay(100L)
+                if (gameService?.imTheOwner == true || gameService?.currentRound?.hands?.size == 1) {
+                    break
+                }
+            }
+            Log.i("gameFlow", "round added awaiting done")
             gameService?.playHand(userHand)
+            Log.i("gameFlow", "play hand in gameService done")
+//            gameService?.awaitForAllHands()
+            Log.i("gameFlow", gameService?.currentRound?.hands?.size.toString())
+            while (true) {
+                gameService?.refreshGame()
+                delay(100L)
+                Log.i("gameFlow", gameService?.currentRound?.hands?.size.toString())
+                if (gameService?.currentRound?.hands?.size == 2) {
+                    break
+                }
+            }
+            Log.i("gameFlow", "await for all hands done")
             opponentsMoveUIUpdateCallback()
             scoreBasedUpdatesCallback()
             // add round can be called only from suspend function or from coroutine
             // therefore I use it here here
-            if (!gameService?.isGameOver!!) {
+            if (!gameService?.isGameOver!! && gameService!!.imTheOwner) {
                 gameService?.addRound()
             }
             // the delay to let the user see the opponent's choice (rock/paper/scissors)
@@ -154,4 +186,6 @@ class MatchViewModel : ViewModel() {
             resetUIScoresCallback()
         }
     }
+
+
 }
