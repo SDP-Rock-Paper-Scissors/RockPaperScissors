@@ -12,14 +12,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.runBlocking
 
 class FirebaseAuthenticator private constructor(
     private val context: ComponentActivity,
     val callback: (User) -> Unit
-):
+) :
     Authenticator() {
 
     companion object {
@@ -34,7 +32,6 @@ class FirebaseAuthenticator private constructor(
         private const val TAG = "GoogleActivity"
     }
 
-    private var auth: FirebaseAuth = Firebase.auth
     private val repo = ServiceLocator.getInstance().repository
     private val resultLauncher =
         context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->

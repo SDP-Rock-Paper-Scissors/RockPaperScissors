@@ -123,8 +123,25 @@
         android:label="tic_tac_toe_choice_page"
         tools:layout="@layout/fragment_tictactoe_choice">
         <action
-            android:id="@+id/action_ticTacToeChoiceFragment_to_nav_home"
+            android:id="@+id/action_ticTacToeChoiceFragment_to_ticTacToeFragment2"
+            app:destination="@id/ticTacToeFragment2" />
+        <action
+            android:id="@+id/startTicTacToe"
+            app:destination="@id/ticTacToeFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/ticTacToeFragment2"
+        android:name="ch.epfl.sweng.rps.ui.tictactoe.TicTacToeFragment"
+        android:label="TicTacToeFragment" >
+        <action
+            android:id="@+id/action_ticTacToeFragment2_to_nav_home"
             app:destination="@id/nav_home" />
+        <argument
+            android:name="PLAYER"
+            app:argType="ch.epfl.sweng.rps.services.TicTacToeGame$MOVES" />
+        <argument
+            android:name="MODE"
+            app:argType="ch.epfl.sweng.rps.services.TicTacToeGame$MODE" />
     </fragment>
     <fragment
         android:id="@+id/matchmakingFragment"
