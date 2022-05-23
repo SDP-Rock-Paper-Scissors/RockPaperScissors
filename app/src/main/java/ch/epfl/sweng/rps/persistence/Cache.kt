@@ -12,7 +12,7 @@ import ch.epfl.sweng.rps.services.ServiceLocator
 import java.net.InetAddress
 
 
-class Cache private constructor(private val ctx: Context, val preferFresh: Boolean = false) {
+class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) {
 
 
     private var fbRepo = ServiceLocator.getInstance().repository

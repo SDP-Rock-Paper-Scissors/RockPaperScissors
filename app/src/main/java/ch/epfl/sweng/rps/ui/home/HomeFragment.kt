@@ -11,8 +11,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
-import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.RandomPlayer
+import ch.epfl.sweng.rps.models.remote.Hand
 
 class HomeFragment : Fragment() {
 

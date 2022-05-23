@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
@@ -58,12 +57,12 @@ class StatisticsFragment : Fragment() {
                     adapter = StatsItemAdapter(fragmentManager)
                     setHasFixedSize(true)
                 }
-                model.getStats(position).observe(viewLifecycleOwner, { stats ->
+                model.getStats(position).observe(viewLifecycleOwner) { stats ->
                     showStats(
                         itemView, stats
                     )
 
-                })
+                }
 
             }
 

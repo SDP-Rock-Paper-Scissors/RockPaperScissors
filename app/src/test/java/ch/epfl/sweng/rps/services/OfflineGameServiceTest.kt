@@ -1,10 +1,10 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.remote.Repository
-import ch.epfl.sweng.rps.models.xbstract.ComputerPlayer
+import ch.epfl.sweng.rps.models.RandomPlayer
 import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand
-import ch.epfl.sweng.rps.models.RandomPlayer
+import ch.epfl.sweng.rps.models.xbstract.ComputerPlayer
+import ch.epfl.sweng.rps.remote.Repository
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat

@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.remote
 
 import ch.epfl.sweng.rps.remote.Repository.UserNotLoggedIn
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 
 class UserNotLoggedInTest {

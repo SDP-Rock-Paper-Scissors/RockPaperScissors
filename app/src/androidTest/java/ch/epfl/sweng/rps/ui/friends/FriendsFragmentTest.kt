@@ -9,11 +9,14 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
-import ch.epfl.sweng.rps.*
+import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
+import ch.epfl.sweng.rps.MainActivity
+import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.TestFlow
+import ch.epfl.sweng.rps.models.ui.FakeFriendsData
 import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.remote.LocalRepository
-import ch.epfl.sweng.rps.models.ui.FakeFriendsData
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matcher
 import org.junit.After
