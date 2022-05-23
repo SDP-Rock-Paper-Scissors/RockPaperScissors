@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.services
 abstract class TicTacToeGame(var player: MOVES) {
     val matrix = Array(3) { Array(3) { MOVES.EMPTY } }
     var gameRunning = true
+
     abstract fun putChoice(square: Int)
     abstract fun gameOver(winner: MOVES)
     fun calculate(): Boolean {

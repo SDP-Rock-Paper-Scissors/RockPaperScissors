@@ -3,33 +3,17 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import ch.epfl.sweng.rps.remote.FirebaseHelper
-import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.models.ui.UserStat
+import ch.epfl.sweng.rps.remote.FirebaseHelper
+import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.net.InetAddress
 
 
 class Cache private constructor(private val ctx: Context, val preferFresh: Boolean = false) {
-    companion object {
-        var cache: Cache? = null
-        fun getInstance(): Cache? {
-            return cache
-        }
 
-        fun createInstance(ctx: Context): Cache {
-            cache = Cache(ctx.applicationContext, true)
-            return cache!!
-        }
-
-        fun createInstance(ctx: Context, repository: FirebaseRepository): Cache {
-            cache = Cache(ctx.applicationContext)
-            cache!!.fbRepo = repository
-            return cache!!
-        }
-    }
 
     private var fbRepo = ServiceLocator.getInstance().repository
     private val storage: Storage = PrivateStorage(ctx)
@@ -113,7 +97,6 @@ class Cache private constructor(private val ctx: Context, val preferFresh: Boole
         return userStatData
     }
 
-
     fun updateLeaderBoardData(lBData: List<LeaderBoardInfo>) {
         leaderBoardData = lBData
         storage.writeBackLeaderBoardData(lBData)
@@ -136,7 +119,6 @@ class Cache private constructor(private val ctx: Context, val preferFresh: Boole
         return leaderBoardData
     }
 
-
     private fun isInternetAvailable(): Boolean {
         return try {
             val ipAddr: InetAddress = InetAddress.getByName("www.google.com")
@@ -145,6 +127,24 @@ class Cache private constructor(private val ctx: Context, val preferFresh: Boole
         } catch (e: Exception) {
             Log.d("Cache", e.toString())
             false
+        }
+    }
+
+    companion object {
+        var cache: Cache? = null
+        fun getInstance(): Cache? {
+            return cache
+        }
+
+        fun createInstance(ctx: Context): Cache {
+            cache = Cache(ctx.applicationContext, true)
+            return cache!!
+        }
+
+        fun createInstance(ctx: Context, repository: FirebaseRepository): Cache {
+            cache = Cache(ctx.applicationContext)
+            cache!!.fbRepo = repository
+            return cache!!
         }
     }
 }

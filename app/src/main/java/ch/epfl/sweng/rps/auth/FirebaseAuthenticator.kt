@@ -20,18 +20,6 @@ class FirebaseAuthenticator private constructor(
 ) :
     Authenticator() {
 
-    companion object {
-        fun registerFor(
-            context: ComponentActivity,
-            callback: (User) -> Unit
-        ): FirebaseAuthenticator {
-            return FirebaseAuthenticator(context, callback)
-        }
-
-        private const val RC_SIGN_IN = 9001
-        private const val TAG = "GoogleActivity"
-    }
-
     private val repo = ServiceLocator.getInstance().repository
     private val resultLauncher =
         context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
@@ -74,5 +62,16 @@ class FirebaseAuthenticator private constructor(
 
         val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
         resultLauncher.launch(mGoogleSignInClient.signInIntent)
+    }
+
+    companion object {
+
+        private const val RC_SIGN_IN = 9001
+        fun registerFor(
+            context: ComponentActivity,
+            callback: (User) -> Unit
+        ): FirebaseAuthenticator {
+            return FirebaseAuthenticator(context, callback)
+        }
     }
 }

@@ -16,6 +16,8 @@ data class User(
 
     val email: String? = "",
 ) : AbstractUser() {
+
+
     enum class Field(val value: String) {
         USERNAME("username"),
         GAMES_HISTORY_PRIVACY("games_history_privacy"),
@@ -27,7 +29,5 @@ data class User(
     enum class Privacy {
         PUBLIC, PRIVATE, FRIENDS_ONLY
     }
-
-    fun gamesHistoryPrivacyEnum(): Privacy = Privacy.valueOf(games_history_privacy)
 }
 

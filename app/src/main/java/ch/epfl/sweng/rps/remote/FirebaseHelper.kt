@@ -12,6 +12,8 @@ import java.util.*
 
 
 object FirebaseHelper {
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
+
     fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
         return pairs.associate { t -> t.first.value to t.second }
     }
@@ -25,8 +27,6 @@ object FirebaseHelper {
             uid = uid,
         )
     }
-
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
 
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
@@ -127,7 +127,6 @@ object FirebaseHelper {
 
         return allDetailsList
     }
-
 
     suspend fun getLeaderBoard(selectMode: Int): List<LeaderBoardInfo> {
         val repo = ServiceLocator.getInstance().repository

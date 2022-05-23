@@ -24,16 +24,10 @@ class FirebaseRepository private constructor(
     val firebase: FirebaseReferences
 ) : Repository {
 
-    companion object {
-        internal fun createInstance(firebaseReferences: FirebaseReferences): FirebaseRepository {
-            return FirebaseRepository(firebaseReferences)
-        }
-    }
 
     override val friends: FriendsRepository by lazy {
         FirebaseFriendsRepository(this)
     }
-
     override val games: GamesRepository by lazy {
         FirebaseGamesRepository(this)
     }
@@ -80,7 +74,6 @@ class FirebaseRepository private constructor(
             task.await()
     }
 
-
     override suspend fun createThisUser(name: String?, email: String?): User {
         val uid = getCurrentUid()
         val user = FirebaseHelper.userFrom(uid, name, email)
@@ -89,11 +82,14 @@ class FirebaseRepository private constructor(
     }
 
     override fun rawCurrentUid(): String? = FirebaseAuth.getInstance().currentUser?.uid
-
-
     private fun Uri.toURI(): URI = URI(toString())
-
     private operator fun <T> List<T>.div(el: T): T = first { it != el }
+
+    companion object {
+        internal fun createInstance(firebaseReferences: FirebaseReferences): FirebaseRepository {
+            return FirebaseRepository(firebaseReferences)
+        }
+    }
 }
 
 

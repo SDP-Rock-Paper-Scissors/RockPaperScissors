@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.models.remote
 
-import ch.epfl.sweng.rps.models.xbstract.PointSystem
 import ch.epfl.sweng.rps.models.remote.Hand.Result
+import ch.epfl.sweng.rps.models.xbstract.PointSystem
 import ch.epfl.sweng.rps.models.xbstract.PointSystem.DefaultPointSystem
 import com.google.firebase.Timestamp
 import java.util.*
@@ -17,6 +17,9 @@ sealed class Round {
     abstract val timestamp: Timestamp
     abstract val edition: GameMode.GameEdition
 
+
+    abstract fun computeScores(pointSystem: PointSystem = DefaultPointSystem()): List<Score>
+    abstract fun getWinner(): String?
     data class Rps(
         override val hands: Map<String, Hand> = mapOf(),
         override val timestamp: Timestamp = Timestamp(Date(0))
@@ -65,7 +68,11 @@ sealed class Round {
         val turn: String = "",
         override val timestamp: Timestamp = Timestamp(Date(0))
     ) : Round() {
+
         override val edition: GameMode.GameEdition = GameMode.GameEdition.TicTacToe
+
+        private val isGameOver: Boolean
+            get() = board.none { it == null }
 
         override fun computeScores(pointSystem: PointSystem): List<Score> {
             val winner = computeWinner()
@@ -96,11 +103,8 @@ sealed class Round {
             } else {
                 null
             }
-        }
+        }// Look for a diagonal, a row or a column full of the same value
 
-        private val isGameOver: Boolean get() = board.none { it == null }
-
-        // Look for a diagonal, a row or a column full of the same value
         // Return the value if found, null otherwise
         private fun computeWinner(): Int? {
             val diag = listOf(0, 4, 8).map { board[it] }
@@ -129,16 +133,11 @@ sealed class Round {
         }
     }
 
-    abstract fun computeScores(pointSystem: PointSystem = DefaultPointSystem()): List<Score>
-
-    abstract fun getWinner(): String?
-
     class Score(
         val uid: String,
         val results: List<Result>,
         val points: Int
     )
-
 
     object FIELDS {
         const val UID = "uid"

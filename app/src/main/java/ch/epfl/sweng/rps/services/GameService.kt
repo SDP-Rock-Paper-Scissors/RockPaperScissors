@@ -16,22 +16,10 @@ import ch.epfl.sweng.rps.utils.StateNotifier
  * This class needs to be disposed when you don't need it anymore.
  */
 abstract class GameService : ChangeNotifier<GameService>() {
+
+
     abstract val gameId: String
-
-    /**
-     * Starts the service.
-     * This should be called only once.
-     *
-     * In [FirebaseGameService] this listens to the game document.
-     */
-    abstract fun startListening(): GameService
-    abstract fun stopListening()
-
-
     abstract val isGameFull: Boolean
-
-    abstract suspend fun addRound(): Round
-
     private var _game: Game? = null
     protected var game: Game?
         get() = _game
@@ -42,34 +30,10 @@ abstract class GameService : ChangeNotifier<GameService>() {
             }
         }
     abstract val currentGame: Game
-    abstract suspend fun refreshGame(): Game
-
     abstract val currentRound: Round
-
-    abstract suspend fun playHand(hand: Hand)
-
-    @CallSuper
-    override fun dispose() {
-        _game = null
-        _error.dispose()
-        super.dispose()
-    }
-
     abstract val isGameOver: Boolean
-
     abstract val isDisposed: Boolean
     abstract val started: Boolean
-
-
-    fun addErrorListener(listener: () -> Unit) {
-        _error.addListener(listener)
-    }
-
-
-    fun removeErrorListener(listener: () -> Unit) {
-        _error.removeListener(listener)
-    }
-
     private val _error = StateNotifier<Exception?>(null)
     var error: Exception?
         get() = _error.value
@@ -79,19 +43,42 @@ abstract class GameService : ChangeNotifier<GameService>() {
                 notifyListeners()
             }
         }
-
     val owner: String
         get() = currentGame.players.first()
-
     abstract val imTheOwner: Boolean
 
+    /**
+     * Starts the service.
+     * This should be called only once.
+     *
+     * In [FirebaseGameService] this listens to the game document.
+     */
+    abstract fun startListening(): GameService
+    abstract fun stopListening()
+    abstract suspend fun addRound(): Round
+    abstract suspend fun refreshGame(): Game
+    abstract suspend fun playHand(hand: Hand)
+
+    @CallSuper
+    override fun dispose() {
+        _game = null
+        _error.dispose()
+        super.dispose()
+    }
+
+    fun addErrorListener(listener: () -> Unit) {
+        _error.addListener(listener)
+    }
+
+    fun removeErrorListener(listener: () -> Unit) {
+        _error.removeListener(listener)
+    }
+
+    abstract suspend fun awaitForAllHands()
+    abstract suspend fun awaitForRoundAdded()
     class GameServiceException : Exception {
         constructor(message: String) : super(message)
         constructor(message: String, cause: Throwable) : super(message, cause)
         constructor(cause: Throwable) : super(cause)
     }
-
-    abstract suspend fun awaitForAllHands()
-
-    abstract suspend fun awaitForRoundAdded()
 }

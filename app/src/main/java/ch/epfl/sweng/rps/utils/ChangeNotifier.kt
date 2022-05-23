@@ -5,8 +5,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
-
     private val listeners = ArrayList<() -> Unit>()
+    val listenerCount get() = listeners.size
 
     fun notifyListeners() {
         for (n in listeners) {
@@ -20,9 +20,6 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
             }
         }
     }
-
-
-    val listenerCount get() = listeners.size
 
     fun addListener(listener: () -> Unit) {
         listeners.add(listener)
@@ -42,18 +39,6 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
         listeners.clear()
     }
 
-
-    class ListenerException : Exception {
-        constructor(message: String?, cause: Throwable?) : super(message, cause)
-        constructor(message: String) : super(message)
-    }
-
-
-    class ListenerNotFoundException : Exception {
-        constructor(message: String?, cause: Throwable?) : super(message, cause)
-        constructor(message: String) : super(message)
-    }
-
     @Suppress("UNCHECKED_CAST")
     suspend fun awaitFor(predicate: (T) -> Boolean) =
         suspendCancellableCoroutine<Unit> { cont ->
@@ -67,4 +52,14 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
                 removeListener(listener)
             }
         }
+
+    class ListenerException : Exception {
+        constructor(message: String?, cause: Throwable?) : super(message, cause)
+        constructor(message: String) : super(message)
+    }
+
+    class ListenerNotFoundException : Exception {
+        constructor(message: String?, cause: Throwable?) : super(message, cause)
+        constructor(message: String) : super(message)
+    }
 }

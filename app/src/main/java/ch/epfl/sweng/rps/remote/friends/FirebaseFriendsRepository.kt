@@ -8,9 +8,9 @@ import kotlinx.coroutines.tasks.await
 
 class FirebaseFriendsRepository(val repository: FirebaseRepository) : FriendsRepository {
 
-    fun getCurrentUid() = repository.getCurrentUid()
-    val firebase get() = repository.firebase
 
+    val firebase get() = repository.firebase
+    fun getCurrentUid() = repository.getCurrentUid()
     override suspend fun sendFriendRequestTo(uid: String) {
         firebase.usersFriendRequest
             .add(FriendRequest.build(from = getCurrentUid(), to = uid, timestamp = Timestamp.now()))
@@ -36,7 +36,6 @@ class FirebaseFriendsRepository(val repository: FirebaseRepository) : FriendsRep
     private infix fun <T> List<T>.firstNot(other: String): T {
         return first { it != other }
     }
-
 
     override suspend fun changeFriendRequestToStatus(
         userUid: String,

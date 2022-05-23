@@ -37,6 +37,10 @@ class FriendListAdapter(
 
     }
 
+    override fun getItemCount(): Int {
+        return friends.size
+    }
+
     inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
         val friendName: TextView = itemView.findViewById(R.id.friendName)
@@ -63,9 +67,5 @@ class FriendListAdapter(
 
     interface OnButtonClickListener {
         fun onButtonClick(position: Int, friends: List<FriendsInfo>, view: View)
-    }
-
-    override fun getItemCount(): Int {
-        return friends.size
     }
 }

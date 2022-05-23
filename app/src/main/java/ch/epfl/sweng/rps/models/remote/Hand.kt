@@ -26,7 +26,6 @@ enum class Hand(val id: Int) {
         SCISSORS -> "✌️"
     }
 
-
     private fun losesTo(hand: Hand): Boolean {
         val loss = when (this) {
             ROCK -> listOf(PAPER)
@@ -35,6 +34,16 @@ enum class Hand(val id: Int) {
             NONE -> values().filter { it != NONE }
         }
         return loss.contains(hand)
+    }
+
+    enum class Result {
+        WIN, LOSS, TIE;
+
+        fun asEmoji(): String = when (this) {
+            WIN -> "🏆"
+            LOSS -> "😢"
+            TIE -> "🤝"
+        }
     }
 
     companion object {
@@ -55,16 +64,6 @@ enum class Hand(val id: Int) {
                 }
             }
             return true
-        }
-    }
-
-    enum class Result {
-        WIN, LOSS, TIE;
-
-        fun asEmoji(): String = when (this) {
-            WIN -> "🏆"
-            LOSS -> "😢"
-            TIE -> "🤝"
         }
     }
 }

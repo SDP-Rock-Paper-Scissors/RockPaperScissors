@@ -14,17 +14,17 @@ import ch.epfl.sweng.rps.remote.LocalRepository
  * */
 class ProdServiceLocator : ServiceLocator {
 
+
     val firebaseReferences by lazy { FirebaseReferences() }
-
     override val repository by lazy { FirebaseRepository.createInstance(firebaseReferences) }
-
+    override val env: Env = Env.Prod
+    private val gameServices = mutableMapOf<String, FirebaseGameService>()
+    override val cachedGameServices: List<String>
+        get() = gameServices.keys.toList()
+    override val matchmakingService: MatchmakingService by lazy { MatchmakingService() }
     override fun dispose() {
         disposeAllGameServices()
     }
-
-    override val env: Env = Env.Prod
-
-    private val gameServices = mutableMapOf<String, FirebaseGameService>()
 
     override fun getGameServiceForGame(gameId: String, start: Boolean): FirebaseGameService {
         cleanUpServices()
@@ -56,12 +56,6 @@ class ProdServiceLocator : ServiceLocator {
         }
         gameServices.clear()
     }
-
-
-    override val cachedGameServices: List<String>
-        get() = gameServices.keys.toList()
-
-    override val matchmakingService: MatchmakingService by lazy { MatchmakingService() }
 
 
 }

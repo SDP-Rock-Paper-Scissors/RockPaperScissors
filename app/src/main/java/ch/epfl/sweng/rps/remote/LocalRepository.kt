@@ -11,18 +11,20 @@ import java.net.URI
 class LocalRepository(private var uid: String? = null) : Repository, GamesRepository,
     FriendsRepository {
 
-    fun setCurrentUid(newUid: String?) {
-        uid = newUid
-    }
-
     val users = mutableMapOf<String, User>()
-
     private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
-
     override val friends: FriendsRepository
         get() = this
     override val games: GamesRepository
         get() = this
+    val gamesMap = mutableMapOf<String, Game>()
+    var leaderBoardScore = mutableListOf<TotalScore>()
+
+    @VisibleForTesting
+    val invitations = mutableMapOf<String, Invitation>()
+    fun setCurrentUid(newUid: String?) {
+        uid = newUid
+    }
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         var user = getUser(getCurrentUid())
@@ -92,17 +94,13 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         )
     }
 
-    val gamesMap = mutableMapOf<String, Game>()
-
     override suspend fun getGame(gameId: String): Game? {
         return gamesMap[gameId]
     }
 
-    var leaderBoardScore = mutableListOf<TotalScore>()
     override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
         return leaderBoardScore
     }
-
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return gamesMap.values.filter { uid in it.players }
@@ -120,13 +118,9 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         )
     }
 
-    @VisibleForTesting
-    val invitations = mutableMapOf<String, Invitation>()
-
     override suspend fun listInvitations(): List<Invitation> {
         return invitations.values.toList()
     }
-
 
     override suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean) {
 
