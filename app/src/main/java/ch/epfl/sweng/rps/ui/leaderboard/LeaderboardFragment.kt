@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
-import ch.epfl.sweng.rps.models.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.persistence.Cache
 import coil.load
 
@@ -43,11 +43,17 @@ class LeaderboardFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
         cache = Cache.getInstance()!!
-        val leaderBoardRecyclerView = itemView.findViewById<RecyclerView>(R.id.leaderboard_recycler_view)
+        val leaderBoardRecyclerView =
+            itemView.findViewById<RecyclerView>(R.id.leaderboard_recycler_view)
         val modeSpinner = itemView.findViewById(R.id.modeSelect_leaderboard) as Spinner
-        val model:LeaderBoardViewModel by viewModels()
+        val model: LeaderBoardViewModel by viewModels()
         modeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
                 leaderBoardRecyclerView.removeAllViews()
                 leaderBoardRecyclerView?.apply {
                     // set a LinearLayoutManager to handle Android
@@ -75,19 +81,21 @@ class LeaderboardFragment : Fragment() {
     }
 
 
-
-    private fun loadPlayersUI(itemView: View, players: List<LeaderBoardInfo>){
+    private fun loadPlayersUI(itemView: View, players: List<LeaderBoardInfo>) {
         val champions = players.take(3)
         showPlayersPosition(itemView, players)
-        showChampions(itemView,champions)
+        showChampions(itemView, champions)
 
     }
 
     private fun showChampions(itemView: View, championPlayers: List<LeaderBoardInfo>) {
 
-        itemView.findViewById<ImageView>(R.id.iv_champion1).load(championPlayers[0].userProfilePictureUrl)
-        itemView.findViewById<ImageView>(R.id.iv_champion2).load(championPlayers[1].userProfilePictureUrl)
-        itemView.findViewById<ImageView>(R.id.iv_champion3).load(championPlayers[2].userProfilePictureUrl)
+        itemView.findViewById<ImageView>(R.id.iv_champion1)
+            .load(championPlayers[0].userProfilePictureUrl)
+        itemView.findViewById<ImageView>(R.id.iv_champion2)
+            .load(championPlayers[1].userProfilePictureUrl)
+        itemView.findViewById<ImageView>(R.id.iv_champion3)
+            .load(championPlayers[2].userProfilePictureUrl)
 
     }
 
@@ -95,7 +103,8 @@ class LeaderboardFragment : Fragment() {
         itemView: View,
         players: List<LeaderBoardInfo>
     ) {
-        val adapter = itemView.findViewById<RecyclerView>(R.id.leaderboard_recycler_view).adapter as LeaderBoardPlayerAdapter
+        val adapter =
+            itemView.findViewById<RecyclerView>(R.id.leaderboard_recycler_view).adapter as LeaderBoardPlayerAdapter
         adapter.addPlayers(players)
 
     }

@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.db
 
 import android.graphics.Bitmap
-import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.remote.*
 import java.net.URI
 
 interface Repository {

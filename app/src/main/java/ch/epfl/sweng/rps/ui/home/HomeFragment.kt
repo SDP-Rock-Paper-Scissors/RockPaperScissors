@@ -11,7 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
-import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.RandomPlayer
 
 class HomeFragment : Fragment() {
@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
-        
+
         binding.apply {
             buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
             buttonPlay5GamesOffline.setOnClickListener { playNRoundsWithComputer(5) }

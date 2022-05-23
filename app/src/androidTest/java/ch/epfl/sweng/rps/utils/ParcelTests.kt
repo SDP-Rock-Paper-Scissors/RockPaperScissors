@@ -3,7 +3,7 @@ package ch.epfl.sweng.rps.utils
 import android.os.Parcel
 import androidx.test.core.os.Parcelables
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.Move
 import org.junit.Test
 import org.junit.runner.RunWith

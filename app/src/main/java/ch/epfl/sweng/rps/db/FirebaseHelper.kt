@@ -1,9 +1,13 @@
 package ch.epfl.sweng.rps.db
 
 
-import android.net.Uri
 import android.R
-import ch.epfl.sweng.rps.models.*
+import android.net.Uri
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.RoundStat
+import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
 import java.util.*

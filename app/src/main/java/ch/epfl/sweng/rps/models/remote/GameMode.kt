@@ -1,6 +1,6 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
-import ch.epfl.sweng.rps.models.GameMode.Type.*
+import ch.epfl.sweng.rps.models.remote.GameMode.Type.*
 
 /**
  * Represents a game mode.
@@ -76,7 +76,7 @@ data class GameMode(
             val edition = map.getSafely("GE")
             return GameMode(
                 playerCount = maxPlayerCount,
-                type = Type.valueOf(gameType),
+                type = valueOf(gameType),
                 timeLimit = timeLimit,
                 rounds = rounds,
                 edition = GameEdition.fromId(edition)

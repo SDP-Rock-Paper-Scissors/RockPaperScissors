@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.remote.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

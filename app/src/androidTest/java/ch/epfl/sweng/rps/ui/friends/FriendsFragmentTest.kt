@@ -13,7 +13,7 @@ import ch.epfl.sweng.rps.*
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.models.FakeFriendsData
+import ch.epfl.sweng.rps.models.ui.FakeFriendsData
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matcher
 import org.junit.After

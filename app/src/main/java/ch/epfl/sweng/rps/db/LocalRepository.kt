@@ -2,7 +2,7 @@ package ch.epfl.sweng.rps.db
 
 import android.graphics.Bitmap
 import androidx.annotation.VisibleForTesting
-import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.remote.*
 import com.google.firebase.Timestamp
 import java.net.URI
 
@@ -38,7 +38,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
         return users[uid]!!
     }
 
-    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
+    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
         val cond = getUser(uid).has_profile_photo
         return if (cond) {
             URI("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
@@ -91,7 +91,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
     }
 
     var leaderBoardScore = mutableListOf<TotalScore>()
-    override suspend fun getLeaderBoardScore(scoreMode:String): List<TotalScore> {
+    override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
         return leaderBoardScore
     }
 
@@ -124,7 +124,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
     }
 
-    override suspend fun getUserProfilePictureImage(uid:String): Bitmap?{
+    override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
         TODO("Not yet implemented")
     }
 }

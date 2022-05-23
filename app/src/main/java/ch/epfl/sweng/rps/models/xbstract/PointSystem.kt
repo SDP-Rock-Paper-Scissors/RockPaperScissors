@@ -1,6 +1,6 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.xbstract
 
-import ch.epfl.sweng.rps.models.Hand.Result
+import ch.epfl.sweng.rps.models.remote.Hand.Result
 
 interface PointSystem {
     val tie: Int

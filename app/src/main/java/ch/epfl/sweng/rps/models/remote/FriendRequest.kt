@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName

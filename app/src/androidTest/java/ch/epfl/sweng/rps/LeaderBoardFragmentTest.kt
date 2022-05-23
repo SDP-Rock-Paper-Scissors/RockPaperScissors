@@ -11,8 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.models.TotalScore
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.TotalScore
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matchers.anything
 import org.junit.After
@@ -116,9 +116,6 @@ class LeaderBoardFragmentTest {
         onData(anything()).atPosition(0).perform(click())
         onView(withText("250")).check(doesNotExist())
         onView(withText("200")).check(matches(isDisplayed()))
-
-
-
 
 
     }

@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
-import ch.epfl.sweng.rps.models.UserStat
+import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.persistence.Cache
 
 
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
-    private lateinit var cache:Cache
+    private lateinit var cache: Cache
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,25 +42,31 @@ class StatisticsFragment : Fragment() {
         cache = Cache.getInstance()!!
         val modeSpinner = itemView.findViewById(R.id.modeSelect) as Spinner
         val statsRecyclerView = itemView.findViewById<RecyclerView>(R.id.stats_recycler_view)
-        val model:StatisticsViewModel by viewModels()
-        val fragmentManager =  requireActivity().supportFragmentManager
+        val model: StatisticsViewModel by viewModels()
+        val fragmentManager = requireActivity().supportFragmentManager
 
         modeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>?, selectedItemView: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
                 statsRecyclerView.removeAllViews()
                 statsRecyclerView.apply {
                     layoutManager = LinearLayoutManager(activity)
                     adapter = StatsItemAdapter(fragmentManager)
                     setHasFixedSize(true)
                 }
-                model.getStats(position).observe(viewLifecycleOwner, Observer { stats->
+                model.getStats(position).observe(viewLifecycleOwner, Observer { stats ->
                     showStats(
-                        itemView,stats
+                        itemView, stats
                     )
 
                 })
 
             }
+
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
@@ -70,12 +76,12 @@ class StatisticsFragment : Fragment() {
     }
 
 
-    private fun showStats(itemView: View,stat: List<UserStat>) {
-        val adapter = itemView.findViewById<RecyclerView>(R.id.stats_recycler_view).adapter as StatsItemAdapter
+    private fun showStats(itemView: View, stat: List<UserStat>) {
+        val adapter =
+            itemView.findViewById<RecyclerView>(R.id.stats_recycler_view).adapter as StatsItemAdapter
         adapter.addStats(stat)
 
     }
-
 
 
     private fun getGameModes(): Array<String> {

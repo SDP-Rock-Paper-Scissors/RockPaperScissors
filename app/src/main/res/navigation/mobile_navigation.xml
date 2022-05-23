@@ -132,7 +132,7 @@
     <fragment
         android:id="@+id/ticTacToeFragment2"
         android:name="ch.epfl.sweng.rps.ui.tictactoe.TicTacToeFragment"
-        android:label="TicTacToeFragment" >
+        android:label="TicTacToeFragment">
         <action
             android:id="@+id/action_ticTacToeFragment2_to_nav_home"
             app:destination="@id/nav_home" />

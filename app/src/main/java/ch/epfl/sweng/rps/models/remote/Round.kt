@@ -1,7 +1,8 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
-import ch.epfl.sweng.rps.models.Hand.Result
-import ch.epfl.sweng.rps.models.PointSystem.DefaultPointSystem
+import ch.epfl.sweng.rps.models.xbstract.PointSystem
+import ch.epfl.sweng.rps.models.remote.Hand.Result
+import ch.epfl.sweng.rps.models.xbstract.PointSystem.DefaultPointSystem
 import com.google.firebase.Timestamp
 import java.util.*
 

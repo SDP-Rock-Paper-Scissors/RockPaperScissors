@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
 enum class Hand(val id: Int) {
     NONE(-1), ROCK(0), PAPER(1), SCISSORS(2);

@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 import com.google.firebase.ktx.Firebase
 import org.hamcrest.Matchers.equalTo
 import org.junit.Rule

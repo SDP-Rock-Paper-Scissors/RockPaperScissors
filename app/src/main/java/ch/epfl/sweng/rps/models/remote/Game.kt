@@ -1,6 +1,6 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
-import ch.epfl.sweng.rps.models.GameMode.GameEdition
+import ch.epfl.sweng.rps.models.remote.GameMode.GameEdition
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import java.util.*

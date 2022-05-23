@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.material.appbar.MaterialToolbar
 
@@ -31,14 +31,16 @@ class ProfileFragment : Fragment() {
     private lateinit var user: User
     private lateinit var image: ImageView
 
-    val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
-        if(res.resultCode == Activity.RESULT_OK) {
-            val uri: Uri = res.data?.data!!
-            val bitmap: Bitmap = getBitmap(requireContext().contentResolver, uri)!!
-            viewModel.updateProfilePicture(bitmap)
-            image.setImageBitmap(bitmap)
+    val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+            if (res.resultCode == Activity.RESULT_OK) {
+                val uri: Uri = res.data?.data!!
+                val bitmap: Bitmap = getBitmap(requireContext().contentResolver, uri)!!
+                viewModel.updateProfilePicture(bitmap)
+                image.setImageBitmap(bitmap)
+            }
         }
-    }
+
     private fun getBitmap(contentResolver: ContentResolver, fileUri: Uri?): Bitmap? {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -46,18 +48,19 @@ class ProfileFragment : Fragment() {
             } else {
                 MediaStore.Images.Media.getBitmap(contentResolver, fileUri)
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             null
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-        val view =  inflater.inflate(R.layout.profile_fragment, container, false)
-        val button:Button = view.findViewById(R.id.editProfilePic)
-        button.setOnClickListener{ getPicture()}
+        val view = inflater.inflate(R.layout.profile_fragment, container, false)
+        val button: Button = view.findViewById(R.id.editProfilePic)
+        button.setOnClickListener { getPicture() }
         return view
     }
 
@@ -70,8 +73,8 @@ class ProfileFragment : Fragment() {
         image = view.findViewById<ImageView>(R.id.profileImage)
         var cachedimg = viewModel.getCachedUserPicture()
         cachedimg?.let { image.setImageBitmap(it) }
-        viewModel.getProfilePicture().observe(viewLifecycleOwner) {
-            bitmap -> bitmap?.let {  image.setImageBitmap(it)}
+        viewModel.getProfilePicture().observe(viewLifecycleOwner) { bitmap ->
+            bitmap?.let { image.setImageBitmap(it) }
         }
         view.findViewById<MaterialToolbar>(R.id.profile_top_toolbar)
             .setOnMenuItemClickListener { menuItem ->
@@ -85,12 +88,14 @@ class ProfileFragment : Fragment() {
                 }
             }
     }
-    private fun getPicture(){
+
+    private fun getPicture() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_PICK
-        intent.setDataAndType ( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*" )
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         resultLauncher.launch(intent)
     }
+
     companion object
 }

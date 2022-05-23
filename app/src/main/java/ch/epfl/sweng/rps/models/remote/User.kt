@@ -1,4 +1,6 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
+
+import ch.epfl.sweng.rps.models.xbstract.AbstractUser
 
 /**
  *

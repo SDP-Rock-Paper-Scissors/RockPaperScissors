@@ -1,9 +1,9 @@
 package ch.epfl.sweng.rps.services
 
 import androidx.annotation.CallSuper
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.models.remote.Game
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.Round
 import ch.epfl.sweng.rps.utils.ChangeNotifier
 import ch.epfl.sweng.rps.utils.StateNotifier
 

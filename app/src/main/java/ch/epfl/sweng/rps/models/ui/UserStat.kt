@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.ui
 
 data class UserStat(
 
@@ -10,4 +10,4 @@ data class UserStat(
     var opponentScore: String = "",
     var outCome: Int = 0,
 
-)
+    )

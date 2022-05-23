@@ -1,9 +1,9 @@
 package ch.epfl.sweng.rps.db
 
 import ch.epfl.sweng.rps.db.Repository.UserNotLoggedIn
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Invitation
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.Game
+import ch.epfl.sweng.rps.models.remote.Invitation
+import ch.epfl.sweng.rps.models.remote.User
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -11,7 +11,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.util.*
 
 @ExperimentalCoroutinesApi
 class LocalRepositoryTest {

@@ -4,8 +4,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.db.Repository
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ProdServiceLocator

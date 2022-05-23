@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.persistence.Cache
 
 class LoginActivity : AppCompatActivity() {
@@ -29,7 +29,8 @@ class LoginActivity : AppCompatActivity() {
         finish() // removes the activity from the Activity stack and prevents main from being launched twice
     }
 
-    private var authenticator: FirebaseAuthenticator = FirebaseAuthenticator.registerFor(this, callback)
+    private var authenticator: FirebaseAuthenticator =
+        FirebaseAuthenticator.registerFor(this, callback)
     private lateinit var cache: Cache
     private var user: User? = null
 

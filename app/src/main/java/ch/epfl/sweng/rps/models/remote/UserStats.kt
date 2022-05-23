@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
 data class UserStats(
     val userId: String = "",

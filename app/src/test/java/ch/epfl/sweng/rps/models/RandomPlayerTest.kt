@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.remote.Hand
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers.hasItem
 import org.junit.jupiter.api.Assertions.assertEquals

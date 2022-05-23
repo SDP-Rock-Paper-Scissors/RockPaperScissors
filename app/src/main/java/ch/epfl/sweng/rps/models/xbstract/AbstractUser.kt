@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.xbstract
 
 abstract class AbstractUser(
     open val username: String? = "",
