@@ -34,7 +34,7 @@ class FirebaseGameServiceTest {
             FirebaseRepository.createInstance(FirebaseReferences()),
             "game_id"
         )
-        assertEquals(false, gameService.active)
+        assertEquals(false, gameService.started)
         assertThrows(GameService.GameServiceException::class.java) {
             gameService.currentGame
         }

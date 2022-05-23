@@ -55,20 +55,16 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
     }
 
     @Suppress("UNCHECKED_CAST")
-    suspend fun awaitFor(predicate: (T) -> Boolean) {
-        var listener: (() -> Unit)? = null
+    suspend fun awaitFor(predicate: (T) -> Boolean) =
         suspendCancellableCoroutine<Unit> { cont ->
-            listener = {
+            val listener = {
                 if (predicate(this@ChangeNotifier as T)) {
                     cont.resume(Unit)
                 }
             }
-            addListener(listener!!)
+            addListener(listener)
+            cont.invokeOnCancellation {
+                removeListener(listener)
+            }
         }
-        listener?.let { removeListener(it) }
-    }
-
-    suspend fun await() {
-        awaitFor { true }
-    }
 }

@@ -58,7 +58,7 @@ abstract class GameService : ChangeNotifier<GameService>() {
     abstract val isGameOver: Boolean
 
     abstract val isDisposed: Boolean
-    abstract val active: Boolean
+    abstract val started: Boolean
 
 
     fun addErrorListener(listener: () -> Unit) {
@@ -83,9 +83,15 @@ abstract class GameService : ChangeNotifier<GameService>() {
     val owner: String
         get() = currentGame.players.first()
 
+    abstract val imTheOwner: Boolean
+
     class GameServiceException : Exception {
         constructor(message: String) : super(message)
         constructor(message: String, cause: Throwable) : super(message, cause)
         constructor(cause: Throwable) : super(cause)
     }
+
+    abstract suspend fun awaitForAllHands()
+
+    abstract suspend fun awaitForRoundAdded()
 }

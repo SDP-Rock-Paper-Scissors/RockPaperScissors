@@ -28,13 +28,21 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
+        
         binding.apply {
             buttonPlay1GamesOffline.setOnClickListener { playNRoundsWithComputer(1) }
             buttonPlay5GamesOffline.setOnClickListener { playNRoundsWithComputer(5) }
+
+            buttonPlay1GamesOnline.setOnClickListener { playOnlineGame(1) }
+            buttonPlay5GamesOnline.setOnClickListener { playOnlineGame(5) }
         }
         return binding.root
     }
 
+    private fun playOnlineGame(rounds: Int) {
+        val action = HomeFragmentDirections.actionNavHomeToMatchmakingFragment(rounds)
+        findNavController().navigate(action)
+    }
 
     /**
      * @param nEvents: number of Wins or Rounds depending on the game implementation

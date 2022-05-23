@@ -4,16 +4,16 @@ package ch.epfl.sweng.rps.models
  *
  */
 data class User(
-    val username: String? = "",
+    override val username: String? = "",
 
-    val uid: String = "",
+    override val uid: String = "",
 
-    val games_history_privacy: String = "",
+    override val games_history_privacy: String = "",
 
-    val has_profile_photo: Boolean = false,
+    override val has_profile_photo: Boolean = false,
 
     val email: String? = "",
-) {
+) : AbstractUser() {
     enum class Field(val value: String) {
         USERNAME("username"),
         GAMES_HISTORY_PRIVACY("games_history_privacy"),
