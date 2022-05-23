@@ -26,11 +26,11 @@ class MatchViewModel : ViewModel() {
 
     var gameService: GameService? = null
     var currentRoundResult: Hand.Result? = null
-    var gameResult: Hand.Result? = null
+    private var gameResult: Hand.Result? = null
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
     var opponent: AbstractUser? = null
-    var nEvents: Int? = null
-    var artificialMovesDelay: Long? = null
+    private var nEvents: Int? = null
+    private var artificialMovesDelay: Long? = null
     var timeLimit: Int? = 0 // this will be modifiable when the options allow it
     var job: Job? = null
     var repository = ServiceLocator.getInstance().repository
@@ -57,7 +57,7 @@ class MatchViewModel : ViewModel() {
     fun setGameServiceSettingsOnline(gameService_: FirebaseGameService) {
         gameService = gameService_
         val opponentUid =
-            (gameService as FirebaseGameService).currentGame.players.filter { it -> it != uid }[0]
+            (gameService as FirebaseGameService).currentGame.players.filter { it != uid }[0]
         viewModelScope.launch {
             opponent = ServiceLocator.getInstance().repository.getUser(opponentUid)
         }

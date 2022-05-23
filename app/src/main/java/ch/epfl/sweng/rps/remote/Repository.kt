@@ -1,10 +1,16 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.remote
 
 import android.graphics.Bitmap
-import ch.epfl.sweng.rps.models.remote.*
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.remote.friends.FriendsRepository
+import ch.epfl.sweng.rps.remote.games.GamesRepository
 import java.net.URI
 
 interface Repository {
+
+    val friends: FriendsRepository
+    val games: GamesRepository
+
     suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
     fun rawCurrentUid(): String?
     fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn()
@@ -17,25 +23,7 @@ interface Repository {
     suspend fun getUserProfilePictureImage(uid: String): Bitmap?
 
     suspend fun createThisUser(name: String?, email: String?): User
-    suspend fun sendFriendRequestTo(uid: String)
 
-    suspend fun listFriendRequests(): List<FriendRequest>
-    suspend fun getFriends(): List<String>
-    suspend fun changeFriendRequestToStatus(userUid: String, status: FriendRequest.Status)
-    suspend fun acceptFriendRequest(userUid: String) =
-        changeFriendRequestToStatus(userUid, FriendRequest.Status.ACCEPTED)
-
-    suspend fun rejectFriendRequest(userUid: String) =
-        changeFriendRequestToStatus(userUid, FriendRequest.Status.REJECTED)
-
-    suspend fun getGame(gameId: String): Game?
-    suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore>
-    suspend fun gamesOfUser(uid: String): List<Game>
-    suspend fun myActiveGames(): List<Game>
-
-    suspend fun statsOfUser(uid: String): UserStats
-
-    suspend fun listInvitations(): List<Invitation>
 
     class UserNotLoggedIn : Exception {
         constructor() : super("User not logged in")

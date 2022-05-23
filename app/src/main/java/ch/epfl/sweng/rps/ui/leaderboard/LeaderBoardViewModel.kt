@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class LeaderBoardViewModel : ViewModel() {
     private val cache = Cache.getInstance()!!
     fun getLeaderBoard(position: Int): LiveData<List<LeaderBoardInfo>> {
-        var livedata = MutableLiveData<List<LeaderBoardInfo>>()
+        val livedata = MutableLiveData<List<LeaderBoardInfo>>()
         viewModelScope.launch(Dispatchers.IO) {
             livedata.postValue(cache.getLeaderBoardDataAsync(position))
         }

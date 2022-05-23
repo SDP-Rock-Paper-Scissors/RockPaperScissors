@@ -1,7 +1,5 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.remote
 
-
-import android.R
 import android.net.Uri
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
@@ -33,7 +31,7 @@ object FirebaseHelper {
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
-        val userGameList = firebaseRepository.gamesOfUser(userid)
+        val userGameList = firebaseRepository.games.gamesOfUser(userid)
         val allStatsResult = mutableListOf<UserStat>()
         for (userGame in userGameList) {
             val userStat = UserStat()
@@ -48,7 +46,7 @@ object FirebaseHelper {
             val allRoundScores = gameRounds.map { it.value.computeScores() }
             val userScore = allRoundScores.asSequence().map { scores ->
                 val max = scores.maxOf { it.points }
-                if (scores.any { it.points == max && it.uid == userid && !scores.all { it.points == max } })
+                if (scores.any { it.points == max && it.uid == userid && !scores.all { score -> score.points == max } })
                     1
                 else
                     0
@@ -102,7 +100,7 @@ object FirebaseHelper {
         val repo = ServiceLocator.getInstance().repository
         val userid = repo.rawCurrentUid()
 
-        val game = repo.getGame(gid) ?: throw Exception("Game not found")
+        val game = repo.games.getGame(gid) ?: throw Exception("Game not found")
         // note: 1 v 1 db, if we support pvp mode, the table should be iterated to change as well.
         // get opponent user id from player list
         val opponentId: String = game.players.first { it != userid }
@@ -137,7 +135,7 @@ object FirebaseHelper {
             0 -> "RPSScore"
             else -> "TTTScore"
         }
-        val scores = repo.getLeaderBoardScore(scoreMode)
+        val scores = repo.games.getLeaderBoardScore(scoreMode)
         val allPlayers = mutableListOf<LeaderBoardInfo>()
         for (score in scores) {
             val leaderBoardInfo = LeaderBoardInfo()
@@ -151,7 +149,7 @@ object FirebaseHelper {
                 repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
             if (leaderBoardInfo.userProfilePictureUrl == null) {
                 leaderBoardInfo.userProfilePictureUrl =
-                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon)
+                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + android.R.drawable.sym_def_app_icon)
 
             }
             leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!

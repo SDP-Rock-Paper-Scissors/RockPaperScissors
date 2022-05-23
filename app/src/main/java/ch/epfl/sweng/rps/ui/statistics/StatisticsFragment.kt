@@ -58,7 +58,7 @@ class StatisticsFragment : Fragment() {
                     adapter = StatsItemAdapter(fragmentManager)
                     setHasFixedSize(true)
                 }
-                model.getStats(position).observe(viewLifecycleOwner, Observer { stats ->
+                model.getStats(position).observe(viewLifecycleOwner, { stats ->
                     showStats(
                         itemView, stats
                     )

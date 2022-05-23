@@ -1,9 +1,9 @@
 package ch.epfl.sweng.rps.services
 
 import androidx.annotation.VisibleForTesting
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.db.Repository
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.LocalRepository
+import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.models.remote.GameMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -78,7 +78,7 @@ interface ServiceLocator {
         override val matchmakingService: MatchmakingService
             get() = object : MatchmakingService() {
                 override fun queue(gameMode: GameMode): Flow<QueueStatus> = flow { }
-                override suspend fun currentGame(): FirebaseGameService? =
+                override suspend fun currentGame(): FirebaseGameService =
                     throw IllegalArgumentException()
             }
     }

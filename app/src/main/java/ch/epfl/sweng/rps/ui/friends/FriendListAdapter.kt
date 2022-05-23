@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps
+package ch.epfl.sweng.rps.ui.friends
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.ui.FriendsInfo
 
 class FriendListAdapter(
@@ -44,8 +45,8 @@ class FriendListAdapter(
         val gamesWon: TextView = itemView.findViewById(R.id.gamesWonText)
         val onlineImage: ImageView = itemView.findViewById(R.id.onlineImage)
         val offlineImage: ImageView = itemView.findViewById(R.id.offlineImage)
-        val playButton: ImageButton = itemView.findViewById(R.id.playButton)
-        val infoButton: ImageButton = itemView.findViewById(R.id.infoButton)
+        private val playButton: ImageButton = itemView.findViewById(R.id.playButton)
+        private val infoButton: ImageButton = itemView.findViewById(R.id.infoButton)
 
         init {
             playButton.setOnClickListener(this)

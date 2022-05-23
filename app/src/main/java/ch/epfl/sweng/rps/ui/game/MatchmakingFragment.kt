@@ -49,7 +49,7 @@ class MatchmakingFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch { startMatchmaking() }
     }
 
-    suspend fun wait() {
+    private suspend fun wait() {
         delay(1000)
     }
 
@@ -108,7 +108,7 @@ class MatchmakingFragment : Fragment() {
 
     class MatchmakingTimeoutException(
         val action: String,
-        val timeout: Long?,
+        private val timeout: Long?,
         throwable: Throwable? = null
     ) : Exception(throwable) {
         override val message: String
@@ -123,7 +123,7 @@ class MatchmakingFragment : Fragment() {
         }
     }
 
-    val twoMinutes = 2 * 60 * 1000L
+    private val twoMinutes = 2 * 60 * 1000L
     val thirtySeconds = 30 * 1000L
 
     @Throws(MatchmakingTimeoutException::class)
@@ -165,7 +165,7 @@ class MatchmakingFragment : Fragment() {
     }
 
 
-    fun createDisplayOpponentsFunction(total: Int): (Int) -> Unit =
+    private fun createDisplayOpponentsFunction(total: Int): (Int) -> Unit =
         { i: Int -> write("Waiting for opponent ($i/${total})") }
 
     @Throws(MatchmakingTimeoutException::class)

@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.Repository
+import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.models.remote.Game
 import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand

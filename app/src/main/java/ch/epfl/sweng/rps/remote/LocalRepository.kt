@@ -1,12 +1,15 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.remote
 
 import android.graphics.Bitmap
 import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.remote.*
+import ch.epfl.sweng.rps.remote.friends.FriendsRepository
+import ch.epfl.sweng.rps.remote.games.GamesRepository
 import com.google.firebase.Timestamp
 import java.net.URI
 
-class LocalRepository(private var uid: String? = null) : Repository {
+class LocalRepository(private var uid: String? = null) : Repository, GamesRepository,
+    FriendsRepository {
 
     fun setCurrentUid(newUid: String?) {
         uid = newUid
@@ -15,6 +18,11 @@ class LocalRepository(private var uid: String? = null) : Repository {
     val users = mutableMapOf<String, User>()
 
     private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
+
+    override val friends: FriendsRepository
+        get() = this
+    override val games: GamesRepository
+        get() = this
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         var user = getUser(getCurrentUid())
@@ -84,10 +92,10 @@ class LocalRepository(private var uid: String? = null) : Repository {
         )
     }
 
-    val games = mutableMapOf<String, Game>()
+    val gamesMap = mutableMapOf<String, Game>()
 
     override suspend fun getGame(gameId: String): Game? {
-        return games[gameId]
+        return gamesMap[gameId]
     }
 
     var leaderBoardScore = mutableListOf<TotalScore>()
@@ -97,11 +105,11 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
-        return games.values.filter { uid in it.players }
+        return gamesMap.values.filter { uid in it.players }
     }
 
     override suspend fun myActiveGames(): List<Game> {
-        return games.values.filter { it.players.contains(getCurrentUid()) && !it.done }
+        return gamesMap.values.filter { it.players.contains(getCurrentUid()) && !it.done }
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {

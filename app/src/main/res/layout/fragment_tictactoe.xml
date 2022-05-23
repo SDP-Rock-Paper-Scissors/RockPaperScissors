@@ -33,7 +33,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25"></View>
+            android:layout_weight="0.25" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"></View>
+                android:layout_weight="1" />
 
             <LinearLayout
 
@@ -74,7 +74,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"></View>
+                android:layout_weight="4" />
 
 
             <LinearLayout
@@ -87,7 +87,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/player_two_img"
@@ -100,7 +100,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.25"></View>
+                    android:layout_weight="0.25" />
 
                 <TextView
                     android:id="@+id/player_two_name_txt"
@@ -111,7 +111,7 @@
                     android:gravity="center"
                     android:text="Jason B."
                     android:textColor="#353535"
-                    android:textSize="14dp"></TextView>
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
@@ -120,14 +120,14 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"></View>
+                android:layout_weight="0.5" />
         </LinearLayout>
 
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25"></View>
+            android:layout_weight="0.25" />
 
         <LinearLayout
             android:id="@+id/matrix"
@@ -143,7 +143,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"></View>
+                android:layout_weight="0.5" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -156,7 +156,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_1"
@@ -164,12 +164,12 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="1"></ImageView>
+                    android:tag="1" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_2"
@@ -177,13 +177,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="2"></ImageView>
+                    android:tag="2" />
 
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_3"
@@ -191,18 +191,18 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="3"></ImageView>
+                    android:tag="3" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.25"></View>
+                    android:layout_weight="0.25" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.15"></View>
+                android:layout_weight="0.15" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -215,7 +215,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_4"
@@ -223,12 +223,12 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="4"></ImageView>
+                    android:tag="4" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_5"
@@ -236,13 +236,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="5"></ImageView>
+                    android:tag="5" />
 
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_6"
@@ -250,18 +250,18 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="6"></ImageView>
+                    android:tag="6" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.15"></View>
+                android:layout_weight="0.15" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -274,7 +274,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_7"
@@ -282,12 +282,12 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="7"></ImageView>
+                    android:tag="7" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_8"
@@ -295,13 +295,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="8"></ImageView>
+                    android:tag="8" />
 
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <ImageView
                     android:id="@+id/img_9"
@@ -309,19 +309,19 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3.1"
                     android:padding="15dp"
-                    android:tag="9"></ImageView>
+                    android:tag="9" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
             </LinearLayout>
 
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"></View>
+                android:layout_weight="0.5" />
 
         </LinearLayout>
 
@@ -329,7 +329,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25"></View>
+            android:layout_weight="0.25" />
 
 
         <LinearLayout
@@ -342,7 +342,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"></View>
+                android:layout_weight="0.5" />
 
 
             <LinearLayout
@@ -355,7 +355,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.15"></View>
+                    android:layout_weight="0.15" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/player_one_img"
@@ -368,7 +368,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="0.25"></View>
+                    android:layout_weight="0.25" />
 
                 <TextView
                     android:id="@+id/player_one_name_txt"
@@ -379,7 +379,7 @@
                     android:gravity="center"
                     android:text="Jason B."
                     android:textColor="#353535"
-                    android:textSize="14dp"></TextView>
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
@@ -388,7 +388,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4.5"></View>
+                android:layout_weight="4.5" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -409,14 +409,14 @@
                     android:gravity="center"
                     android:text="6"
                     android:textColor="#353535"
-                    android:textSize="20dp"></TextView>
+                    android:textSize="20dp" />
             </LinearLayout>
 
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"></View>
+                android:layout_weight="0.5" />
 
 
         </LinearLayout>
@@ -425,7 +425,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.6"></View>
+            android:layout_weight="0.6" />
 
         <TextView
             android:id="@+id/outcomeTTT"

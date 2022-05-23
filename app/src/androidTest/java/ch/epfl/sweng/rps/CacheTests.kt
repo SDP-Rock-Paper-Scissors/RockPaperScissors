@@ -7,8 +7,8 @@ import androidx.annotation.ColorInt
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.models.ui.UserStat

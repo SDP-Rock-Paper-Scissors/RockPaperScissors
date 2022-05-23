@@ -71,7 +71,7 @@ sealed class Game {
 
     companion object {
 
-        fun fromDocumentSnapshot(document: DocumentSnapshot): Game? {
+        private fun fromDocumentSnapshot(document: DocumentSnapshot): Game? {
             val editionString = document["edition"] as String?
             val gameMode = document["game_mode"] as String?
             val edition =

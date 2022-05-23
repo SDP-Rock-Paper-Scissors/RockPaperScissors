@@ -1,6 +1,6 @@
-package ch.epfl.sweng.rps.db.implementations
+package ch.epfl.sweng.rps.remote.implementations
 
-import ch.epfl.sweng.rps.db.FirebaseHelper
+import ch.epfl.sweng.rps.remote.FirebaseHelper
 import ch.epfl.sweng.rps.models.remote.User
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

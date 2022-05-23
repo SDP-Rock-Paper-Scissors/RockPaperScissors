@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         b.putString("email", user.email)
         b.putString("display_name", user.username)
         b.putString("uid", user.uid)
-        b.putString("privacy", user.games_history_privacy.toString())
+        b.putString("privacy", user.games_history_privacy)
         intent.putExtra("User", b)
         startActivity(intent)
         finish() // removes the activity from the Activity stack and prevents main from being launched twice

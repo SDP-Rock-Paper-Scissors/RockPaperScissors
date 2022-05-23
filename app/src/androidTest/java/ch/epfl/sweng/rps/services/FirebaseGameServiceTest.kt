@@ -1,8 +1,8 @@
 package ch.epfl.sweng.rps.services
 
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.db.FirebaseReferences
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.remote.FirebaseReferences
+import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.models.remote.Game
 import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand

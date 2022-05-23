@@ -3,8 +3,8 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import ch.epfl.sweng.rps.db.FirebaseHelper
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.remote.FirebaseHelper
+import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.models.ui.UserStat
@@ -137,7 +137,7 @@ class Cache private constructor(private val ctx: Context, val preferFresh: Boole
     }
 
 
-    fun isInternetAvailable(): Boolean {
+    private fun isInternetAvailable(): Boolean {
         return try {
             val ipAddr: InetAddress = InetAddress.getByName("www.google.com")
             //You can replace it with your name

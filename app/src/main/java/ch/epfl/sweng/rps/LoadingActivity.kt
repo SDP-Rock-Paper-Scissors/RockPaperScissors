@@ -23,7 +23,7 @@ class LoadingActivity : AppCompatActivity() {
     /**
      * Here logic to setup the app
      */
-    suspend fun logic() {
+    private suspend fun logic() {
         Log.w("LoadingPage", "logic")
 
         Firebase.initialize(this@LoadingActivity)
@@ -68,7 +68,7 @@ class LoadingActivity : AppCompatActivity() {
     }
 
 
-    fun nav() {
+    private fun nav() {
         Log.w("LoadingPage", "nav")
         val doneOnBoarding =
             intent.extras?.getBoolean(OnBoardingActivity.DONE_ONBOARDING_EXTRA, false) ?: false
@@ -89,7 +89,7 @@ class LoadingActivity : AppCompatActivity() {
 
 
     companion object {
-        const val HELP_ME_NAV_EXTRA = "helpMeNav"
+        private const val HELP_ME_NAV_EXTRA = "helpMeNav"
         const val IS_TEST_EXTRA = "isTest"
 
         private var hasRunLogic = false
@@ -101,7 +101,7 @@ class LoadingActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        fun Intent.putExtra(key: String, value: Any) {
+        private fun Intent.putExtra(key: String, value: Any) {
             when (value) {
                 is String -> putExtra(key, value)
                 is Int -> putExtra(key, value)

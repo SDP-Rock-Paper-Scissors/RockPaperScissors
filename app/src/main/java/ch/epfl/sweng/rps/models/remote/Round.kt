@@ -98,7 +98,7 @@ sealed class Round {
             }
         }
 
-        val isGameOver: Boolean get() = board.none { it == null }
+        private val isGameOver: Boolean get() = board.none { it == null }
 
         // Look for a diagonal, a row or a column full of the same value
         // Return the value if found, null otherwise

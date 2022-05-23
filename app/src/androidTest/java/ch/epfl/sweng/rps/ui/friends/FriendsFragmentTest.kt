@@ -11,8 +11,8 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import ch.epfl.sweng.rps.*
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.models.ui.FakeFriendsData
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matcher

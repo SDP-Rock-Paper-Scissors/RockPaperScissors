@@ -1,9 +1,9 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.FirebaseReferences
-import ch.epfl.sweng.rps.db.FirebaseRepository
-import ch.epfl.sweng.rps.db.LocalRepository
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.FirebaseReferences
+import ch.epfl.sweng.rps.remote.FirebaseRepository
+import ch.epfl.sweng.rps.remote.LocalRepository
 
 /**
  * ServiceLocator is a singleton class that provides access to the different services

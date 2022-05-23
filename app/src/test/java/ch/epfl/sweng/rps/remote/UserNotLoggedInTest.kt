@@ -1,6 +1,6 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.remote
 
-import ch.epfl.sweng.rps.db.Repository.UserNotLoggedIn
+import ch.epfl.sweng.rps.remote.Repository.UserNotLoggedIn
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

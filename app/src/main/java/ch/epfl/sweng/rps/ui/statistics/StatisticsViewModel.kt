@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class StatisticsViewModel : ViewModel() {
     private val cache = Cache.getInstance()!!
     fun getStats(position: Int): LiveData<List<UserStat>> {
-        var livedata = MutableLiveData<List<UserStat>>()
+        val livedata = MutableLiveData<List<UserStat>>()
         viewModelScope.launch(Dispatchers.IO) {
             livedata.postValue(cache.getStatsDataAsync(position))
         }

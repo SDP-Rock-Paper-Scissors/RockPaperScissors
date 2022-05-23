@@ -31,7 +31,7 @@ class ProfileFragment : Fragment() {
     private lateinit var user: User
     private lateinit var image: ImageView
 
-    val resultLauncher =
+    private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
             if (res.resultCode == Activity.RESULT_OK) {
                 val uri: Uri = res.data?.data!!
@@ -70,8 +70,8 @@ class ProfileFragment : Fragment() {
         view.findViewById<TextView>(R.id.TextEmail).text = user.email
         view.findViewById<TextView>(R.id.TextDisplayName).text = user.username
         view.findViewById<TextView>(R.id.TextPrivacy).text = user.games_history_privacy
-        image = view.findViewById<ImageView>(R.id.profileImage)
-        var cachedimg = viewModel.getCachedUserPicture()
+        image = view.findViewById(R.id.profileImage)
+        val cachedimg = viewModel.getCachedUserPicture()
         cachedimg?.let { image.setImageBitmap(it) }
         viewModel.getProfilePicture().observe(viewLifecycleOwner) { bitmap ->
             bitmap?.let { image.setImageBitmap(it) }

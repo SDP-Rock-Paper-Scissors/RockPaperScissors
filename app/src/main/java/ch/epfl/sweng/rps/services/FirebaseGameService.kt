@@ -2,8 +2,8 @@ package ch.epfl.sweng.rps.services
 
 import android.util.Log
 import androidx.annotation.VisibleForTesting
-import ch.epfl.sweng.rps.db.FirebaseReferences
-import ch.epfl.sweng.rps.db.FirebaseRepository
+import ch.epfl.sweng.rps.remote.FirebaseReferences
+import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.models.remote.Game
 import ch.epfl.sweng.rps.models.remote.Game.Companion.toGame
 import ch.epfl.sweng.rps.models.remote.Hand

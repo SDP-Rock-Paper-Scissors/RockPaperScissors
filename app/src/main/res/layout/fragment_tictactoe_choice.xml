@@ -17,7 +17,7 @@
         android:text="Pick your side"
         android:textColor="#454545"
         android:textSize="20dp"
-        android:textStyle="bold"></TextView>
+        android:textStyle="bold" />
 
 
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_height="115dp"
             android:layout_weight="1"
             android:padding="10dp"
-            android:src="@drawable/cross"></ImageView>
+            android:src="@drawable/cross" />
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_img"
@@ -40,7 +40,7 @@
             android:layout_height="115dp"
             android:layout_weight="1"
             android:alpha=".4"
-            android:src="@drawable/nought"></ImageView>
+            android:src="@drawable/nought" />
 
     </LinearLayout>
 
@@ -63,7 +63,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/radio_button_checked"></ImageView>
+            android:src="@drawable/radio_button_checked" />
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_radio"
@@ -71,7 +71,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/radio_button_unchecked"></ImageView>
+            android:src="@drawable/radio_button_unchecked" />
 
     </LinearLayout>
 
@@ -101,7 +101,7 @@
             android:text="Vs PC"
             android:textAllCaps="false"
             android:textColor="#454545"
-            android:textSize="21dp"></androidx.appcompat.widget.AppCompatButton>
+            android:textSize="21dp" />
 
         <Space
             android:layout_width="8dp"
@@ -117,7 +117,7 @@
             android:text="MULTIPLAYER"
             android:textAllCaps="false"
             android:textColor="#454545"
-            android:textSize="21dp"></androidx.appcompat.widget.AppCompatButton>
+            android:textSize="21dp" />
 
     </LinearLayout>
 
