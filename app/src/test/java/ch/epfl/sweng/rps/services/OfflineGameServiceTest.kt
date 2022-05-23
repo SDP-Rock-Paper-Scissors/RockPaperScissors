@@ -95,7 +95,7 @@ class OfflineGameServiceTest {
             GameMode(2, GameMode.Type.PC, 1, 0, GameMode.GameEdition.RockPaperScissors),
         )
         gameService.startListening()
-        assertThat(gameService.owner, `is`(gameService.currentGame.players.first()))
+        assertThat(gameService.host, `is`(gameService.currentGame.players.first()))
     }
 
 }

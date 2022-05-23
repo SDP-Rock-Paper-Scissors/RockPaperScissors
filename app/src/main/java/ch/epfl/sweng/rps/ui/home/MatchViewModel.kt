@@ -158,7 +158,7 @@ class MatchViewModel : ViewModel() {
             while (true) {
                 gameService?.refreshGame()
                 delay(100L)
-                if (gameService?.imTheOwner == true || gameService?.currentRound?.hands?.size == 1) {
+                if (gameService?.amITheHost == true || gameService?.currentRound?.hands?.size == 1) {
                     break
                 }
             }
@@ -180,7 +180,7 @@ class MatchViewModel : ViewModel() {
             scoreBasedUpdatesCallback()
             // add round can be called only from suspend function or from coroutine
             // therefore I use it here here
-            if (!gameService?.isGameOver!! && gameService!!.imTheOwner) {
+            if (!gameService?.isGameOver!! && gameService!!.amITheHost) {
                 gameService?.addRound()
             }
             // the delay to let the user see the opponent's choice (rock/paper/scissors)

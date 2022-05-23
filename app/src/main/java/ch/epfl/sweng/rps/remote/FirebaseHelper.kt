@@ -11,13 +11,24 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+/**
+ *  This class is a helper class for to transform the data from the remote database
+ *  to a more usable format.
+ */
 object FirebaseHelper {
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
 
-    fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
+    /**
+     * This function transforms a list of provided [Pair] of [User.Field] and [T]
+     * to a map of [String] and [T] where the key is the [User.Field] value and the value is the [T].
+     */
+    fun <T> processUserArguments(vararg pairs: Pair<User.Field, T>): Map<String, T> {
         return pairs.associate { t -> t.first.value to t.second }
     }
 
+    /**
+     * This function creates a [User] from the provided parameters.
+     */
     fun userFrom(uid: String, name: String?, email: String?): User {
         return User(
             email = email,
@@ -28,6 +39,9 @@ object FirebaseHelper {
         )
     }
 
+    /**
+     * This function returns stats for all users.
+     */
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
@@ -96,6 +110,9 @@ object FirebaseHelper {
 
     }
 
+    /**
+     * This function returns the details of a game.
+     */
     suspend fun getMatchDetailData(gid: String): List<RoundStat> {
         val repo = ServiceLocator.getInstance().repository
         val userid = repo.rawCurrentUid()
@@ -128,6 +145,9 @@ object FirebaseHelper {
         return allDetailsList
     }
 
+    /**
+     * This function returns the leaderboard.
+     */
     suspend fun getLeaderBoard(selectMode: Int): List<LeaderBoardInfo> {
         val repo = ServiceLocator.getInstance().repository
         val scoreMode: String = when (selectMode) {

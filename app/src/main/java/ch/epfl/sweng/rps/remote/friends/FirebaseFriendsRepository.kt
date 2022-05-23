@@ -7,11 +7,16 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
-class FirebaseFriendsRepository(val repository: FirebaseRepository) : FriendsRepository {
+/**
+ * Repository for friends requests and friend management in firebase.
+ */
+class FirebaseFriendsRepository(internal val repository: FirebaseRepository) :
+    FriendsRepository {
+
+    private val firebase get() = repository.firebase
+    private fun getCurrentUid() = repository.getCurrentUid()
 
 
-    val firebase get() = repository.firebase
-    fun getCurrentUid() = repository.getCurrentUid()
     override suspend fun sendFriendRequestTo(uid: String) {
         firebase.usersFriendRequest
             .add(FriendRequest.build(from = getCurrentUid(), to = uid, timestamp = Timestamp.now()))

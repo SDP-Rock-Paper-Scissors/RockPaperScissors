@@ -12,15 +12,17 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 
-class FirebaseGamesRepository(val repository: FirebaseRepository) : GamesRepository {
+/**
+ * Repository for games in firebase
+ */
+class FirebaseGamesRepository(internal val repository: FirebaseRepository) : GamesRepository {
 
-    val firebase get() = repository.firebase
+    private val firebase get() = repository.firebase
 
     override suspend fun getGame(gameId: String): Game? {
         val doc: DocumentSnapshot = firebase.gamesCollection.document(gameId).get().await()
         return doc.toGame()
     }
-
 
     override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
         return firebase.scoresCollection.orderBy(scoreMode, Query.Direction.DESCENDING).get()

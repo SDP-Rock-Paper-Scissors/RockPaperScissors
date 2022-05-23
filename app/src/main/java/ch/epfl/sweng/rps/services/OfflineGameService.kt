@@ -53,7 +53,7 @@ class OfflineGameService(
         get() = _disposed
     override val started: Boolean
         get() = game != null
-    override val imTheOwner get() = true
+    override val amITheHost get() = true
     override suspend fun addRound(): Round {
         checkNotDisposed()
         val round = Round.Rps(
