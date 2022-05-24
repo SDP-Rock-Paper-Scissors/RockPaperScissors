@@ -90,12 +90,23 @@ class FriendsFragmentTest {
         onView(withId(R.id.fragment_info_page)).check(matches(isDisplayed()))
     }
 
-    @Test
+    /*@Test
     fun test_GameFragmentShown_onPlayButtonClick() {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
+
+        onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
+    } */
+    @Test
+    fun test_goesToGameFragment_onPlayButtonClick(){
+        onView(withId(R.id.nav_friends)).perform(click())
+
+        onView(withId(R.id.friendListRecyclerView))
+            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+
+        onView(withId(R.id.infoPage_playButton)).perform(click())
 
         onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
     }
@@ -165,17 +176,6 @@ class FriendsFragmentTest {
         onView(withId(R.id.fragment_friends)).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun test_goesToGameFragment_onPlayButtonClick(){
-        onView(withId(R.id.nav_friends)).perform(click())
-
-        onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
-
-        onView(withId(R.id.infoPage_playButton)).perform(click())
-
-        onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
-    }
     @Test
     fun test_goesToRequestFragment_onRequestButtonClicked(){
         onView(withId(R.id.nav_friends)).perform(click())
