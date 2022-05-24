@@ -58,7 +58,7 @@ sealed class Game {
         override val edition: GameEdition = GameEdition.TicTacToe
     }
 
-    object FIELDS {
+    internal object FIELDS {
         const val STARTED = "started"
         const val PLAYERS = "players"
         const val ROUNDS = "rounds"
@@ -71,7 +71,10 @@ sealed class Game {
 
     companion object {
 
-        private fun fromDocumentSnapshot(document: DocumentSnapshot): Game? {
+        /**
+         * Creates a game from a document snapshot
+         */
+        fun fromDocumentSnapshot(document: DocumentSnapshot): Game? {
             val editionString = document["edition"] as String?
             val gameMode = document["game_mode"] as String?
             val edition =
@@ -85,7 +88,5 @@ sealed class Game {
             }
             return document.toObject(type)
         }
-
-        fun DocumentSnapshot.toGame(): Game? = fromDocumentSnapshot(this)
     }
 }

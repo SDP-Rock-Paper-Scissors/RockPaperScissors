@@ -3,7 +3,6 @@ package ch.epfl.sweng.rps.services
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.remote.Game
-import ch.epfl.sweng.rps.models.remote.Game.Companion.toGame
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.Round
 import ch.epfl.sweng.rps.remote.FirebaseReferences
@@ -76,7 +75,7 @@ class FirebaseGameService(
                     error = e
                 } else {
                     if (value?.exists() == true) {
-                        game = value.toGame()
+                        game = Game.fromDocumentSnapshot(value)
                     } else {
                         Log.e("FirebaseGameService", "Game $gameId does not exist")
                         error = IllegalStateException("Game $gameId does not exist")
@@ -119,7 +118,7 @@ class FirebaseGameService(
 
     override suspend fun refreshGame(): Game {
         checkNotDisposed()
-        val g = gameRef.get().await().toGame()!!
+        val g = Game.fromDocumentSnapshot(gameRef.get().await())!!
         game = g
         return g
     }

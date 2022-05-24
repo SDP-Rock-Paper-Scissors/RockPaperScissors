@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.remote.games
 
 import ch.epfl.sweng.rps.models.remote.Game
-import ch.epfl.sweng.rps.models.remote.Game.Companion.toGame
 import ch.epfl.sweng.rps.models.remote.Invitation
 import ch.epfl.sweng.rps.models.remote.TotalScore
 import ch.epfl.sweng.rps.models.remote.UserStats
@@ -21,7 +20,7 @@ class FirebaseGamesRepository(internal val repository: FirebaseRepository) : Gam
 
     override suspend fun getGame(gameId: String): Game? {
         val doc: DocumentSnapshot = firebase.gamesCollection.document(gameId).get().await()
-        return doc.toGame()
+        return Game.fromDocumentSnapshot(doc)
     }
 
     override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
@@ -35,14 +34,14 @@ class FirebaseGamesRepository(internal val repository: FirebaseRepository) : Gam
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains(Game.FIELDS.PLAYERS, uid).get()
-            .await().documents.map { it.toGame()!! }
+            .await().documents.map { Game.fromDocumentSnapshot(it)!! }
     }
 
     override suspend fun myActiveGames(): List<Game> {
         return firebase.gamesCollection
             .whereArrayContains(Game.FIELDS.PLAYERS, repository.getCurrentUid())
             .whereEqualTo(Game.FIELDS.DONE, false)
-            .get().await().documents.map { it.toGame()!! }
+            .get().await().documents.map { Game.fromDocumentSnapshot(it)!! }
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
