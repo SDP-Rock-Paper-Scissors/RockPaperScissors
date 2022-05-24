@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
-import ch.epfl.sweng.rps.models.GameMode
+import ch.epfl.sweng.rps.models.remote.GameMode
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
@@ -31,7 +31,7 @@ open class MatchmakingService {
 
     open suspend fun currentGame(): FirebaseGameService? {
         val repo = ServiceLocator.getInstance().repository
-        val games = repo.gamesOfUser(repo.getCurrentUid())
+        val games = repo.games.gamesOfUser(repo.getCurrentUid())
         if (games.isEmpty()) {
             return null
         }

@@ -3,9 +3,9 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import ch.epfl.sweng.rps.models.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.User
-import ch.epfl.sweng.rps.models.UserStat
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.UserStat
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -66,14 +66,14 @@ class PrivateStorage constructor(val context: Context) : Storage {
         return arr.toList()
     }
 
-    override fun writeBackStatsData(data : List<UserStat>){
+    override fun writeBackStatsData(data: List<UserStat>) {
         val gson = Gson()
         val json = gson.toJson(data.toTypedArray(), Array<UserStat>::class.java)
         val f = getFile(Storage.FILES.STATSDATA)
         f.writeText(json)
     }
 
-    override fun writeBackLeaderBoardData(data : List<LeaderBoardInfo>){
+    override fun writeBackLeaderBoardData(data: List<LeaderBoardInfo>) {
         val gson = Gson()
         val json = gson.toJson(data.toTypedArray(), Array<LeaderBoardInfo>::class.java)
         val f = getFile(Storage.FILES.LEADERBOARDDATA)

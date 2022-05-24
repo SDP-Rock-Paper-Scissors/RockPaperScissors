@@ -1,3 +1,5 @@
+package ch.epfl.sweng.rps.ui.leaderboard
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -5,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import coil.load
 
 

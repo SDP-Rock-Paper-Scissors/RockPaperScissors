@@ -10,7 +10,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 import com.google.firebase.ktx.Firebase
 import org.junit.Rule
 import org.junit.Test
@@ -43,6 +43,7 @@ class ProfileFragmentTest {
 
     @get:Rule
     val testRule = ActivityScenarioRuleWithSetup.default<MainActivity>(createIntent())
+
     @Test
     fun testFields() {
         onView(withId(R.id.nav_profile)).perform(click())
@@ -59,8 +60,9 @@ class ProfileFragmentTest {
         pressBack()
         onView(withId(R.id.profile_appbar_settings_btn)).check(matches(isDisplayed()))
     }
+
     @Test
-    fun tapEditStartsIntent(){
+    fun tapEditStartsIntent() {
         Intents.init()
         onView(withId(R.id.nav_profile)).perform(click())
         onView(withId(R.id.editProfilePic)).perform(click())

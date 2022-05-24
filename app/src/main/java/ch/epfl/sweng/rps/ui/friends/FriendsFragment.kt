@@ -10,10 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.epfl.sweng.rps.FriendListAdapter
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.FakeFriendsData
-import ch.epfl.sweng.rps.models.FriendsInfo
+import ch.epfl.sweng.rps.models.ui.FakeFriendsData
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
 
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {

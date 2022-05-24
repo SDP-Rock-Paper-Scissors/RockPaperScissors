@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.services
 abstract class TicTacToeGame(var player: MOVES) {
     val matrix = Array(3) { Array(3) { MOVES.EMPTY } }
     var gameRunning = true
+
     abstract fun putChoice(square: Int)
     abstract fun gameOver(winner: MOVES)
     fun calculate(): Boolean {
@@ -19,7 +20,7 @@ abstract class TicTacToeGame(var player: MOVES) {
         val dirx = arrayOf(0, 1, 1, -1) // 0 = ↓ 1 = ↘ 2 = ↙
         val diry = arrayOf(1, 0, 1, 1)
         var cnt = 0
-        var choice = matrix[cy][cx]
+        val choice = matrix[cy][cx]
         if (choice == MOVES.EMPTY)
             return false
         for (i in 0..2) {

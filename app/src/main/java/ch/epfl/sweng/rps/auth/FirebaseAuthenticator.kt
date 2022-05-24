@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -19,18 +19,6 @@ class FirebaseAuthenticator private constructor(
     val callback: (User) -> Unit
 ) :
     Authenticator() {
-
-    companion object {
-        fun registerFor(
-            context: ComponentActivity,
-            callback: (User) -> Unit
-        ): FirebaseAuthenticator {
-            return FirebaseAuthenticator(context, callback)
-        }
-
-        private const val RC_SIGN_IN = 9001
-        private const val TAG = "GoogleActivity"
-    }
 
     private val repo = ServiceLocator.getInstance().repository
     private val resultLauncher =
@@ -74,5 +62,16 @@ class FirebaseAuthenticator private constructor(
 
         val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
         resultLauncher.launch(mGoogleSignInClient.signInIntent)
+    }
+
+    companion object {
+
+        private const val RC_SIGN_IN = 9001
+        fun registerFor(
+            context: ComponentActivity,
+            callback: (User) -> Unit
+        ): FirebaseAuthenticator {
+            return FirebaseAuthenticator(context, callback)
+        }
     }
 }

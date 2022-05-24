@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/matchDetailTable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="10dp"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
-    android:id="@+id/matchDetailTable"
     tools:context=".ui.statistics.MatchDetailsFragment">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/match_detail"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold">
 
     </TextView>

@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.services.ServiceLocator.TestServiceLocator
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
@@ -22,6 +22,9 @@ class ProdServiceLocatorTest {
         assertEquals(serviceLocatorProd::class, ProdServiceLocator::class)
         assertEquals(serviceLocatorTest::class, TestServiceLocator::class)
 
-        assertEquals(ServiceLocator.getInstance(Env.Test).repository, ServiceLocator.localRepository)
+        assertEquals(
+            ServiceLocator.getInstance(Env.Test).repository,
+            ServiceLocator.localRepository
+        )
     }
 }

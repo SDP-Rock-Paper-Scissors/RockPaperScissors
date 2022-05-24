@@ -1,7 +1,8 @@
 package ch.epfl.sweng.rps.models
 
-import ch.epfl.sweng.rps.models.Hand.*
-import ch.epfl.sweng.rps.models.Hand.Result.*
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.Hand.*
+import ch.epfl.sweng.rps.models.remote.Hand.Result.*
 import okio.utf8Size
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

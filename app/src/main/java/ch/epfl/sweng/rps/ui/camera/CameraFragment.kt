@@ -43,16 +43,17 @@ class CameraFragment : Fragment() {
     private lateinit var cameraExecutor: ExecutorService
 
 
-    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        //Callback what to do with the response of the permissions
-        if (isGranted) {
-            // permission granted continue the normal workflow of app
-            Log.i("DEBUG", "permission granted")
-        } else {
-            navigateBackHome()
-            Log.i("DEBUG", "permission denied")
+    private val requestPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            //Callback what to do with the response of the permissions
+            if (isGranted) {
+                // permission granted continue the normal workflow of app
+                Log.i("DEBUG", "permission granted")
+            } else {
+                navigateBackHome()
+                Log.i("DEBUG", "permission denied")
+            }
         }
-    }
 
     private var _binding: FragmentLeaderboardBinding? = null
 
@@ -63,7 +64,8 @@ class CameraFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+        savedInstanceState: Bundle?
+    ): View {
 
         requestPermission.launch(Manifest.permission.CAMERA)
         _fragmentCameraBinding = FragmentCameraBinding.inflate(inflater, container, false)
@@ -78,10 +80,13 @@ class CameraFragment : Fragment() {
 
     private fun navigateBackHome() {
         lifecycleScope.launchWhenStarted {
-            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main).navigate(
-                CameraFragmentDirections.actionCameraFragmentToNavHome())
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main)
+                .navigate(
+                    CameraFragmentDirections.actionCameraFragmentToNavHome()
+                )
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -107,7 +112,7 @@ class CameraFragment : Fragment() {
     /** Initialize CameraX, and prepare to bind the camera use cases  */
     private fun setUpCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener(Runnable {
+        cameraProviderFuture.addListener({
 
             // CameraProvider
             cameraProvider = cameraProviderFuture.get()
@@ -142,7 +147,8 @@ class CameraFragment : Fragment() {
             // A variable number of use-cases can be passed here -
             // camera provides access to CameraControl & CameraInfo
             camera = cameraProvider.bindToLifecycle(
-                this, cameraSelector, preview)
+                this, cameraSelector, preview
+            )
 
             // Attach the viewfinder's surface provider to preview use case
             preview?.setSurfaceProvider(fragmentCameraBinding.viewFinder.surfaceProvider)
@@ -150,7 +156,6 @@ class CameraFragment : Fragment() {
             Log.e(TAG, "Use case binding failed", exc)
         }
     }
-
 
 
 }

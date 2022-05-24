@@ -10,7 +10,6 @@ object L {
     private val instances = mutableMapOf<String, LogService>()
 
     fun of(name: String): LogService = instances.getOrPut(name) { LogService(name) }
-
     fun of(activity: Activity): LogService = of(activity::class.java)
     fun of(fragment: Fragment): LogService = of(fragment::class.java)
     fun <T> of(clazz: Class<T>): LogService = of(clazz.simpleName)

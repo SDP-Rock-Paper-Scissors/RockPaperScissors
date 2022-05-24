@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.services
 
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.models.GameMode
+import ch.epfl.sweng.rps.models.remote.GameMode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.ktx.Firebase
