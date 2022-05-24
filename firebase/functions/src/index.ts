@@ -23,14 +23,6 @@ export const queue = eu.https.onCall(async (data, context) => {
       }\` is invalid because it is not in the list of available gamemodes : ${gamemodes.map(gm => gm.toString()).join(", ")}`);
   }
 
-  const games = await prod.collection("games")
-    .where("game_mode", "==", game_mode.toString())
-    .where("player_count", "<", game_mode.max_player_count)
-    .where("done", "==", false)
-    .orderBy("player_count", "desc")
-    .orderBy("timestamp", 'asc')
-    .get();
-
   const games_im_in =
     await prod.collection("games")
       .where("done", "==", false)
@@ -39,6 +31,14 @@ export const queue = eu.https.onCall(async (data, context) => {
   if (games_im_in.size > 0) {
     throw new https.HttpsError("invalid-argument", "You are already in a game");
   }
+
+  const games = await prod.collection("games")
+    .where("game_mode", "==", game_mode.toString())
+    .where("player_count", "<", game_mode.max_player_count)
+    .where("done", "==", false)
+    .orderBy("player_count", "desc")
+    .orderBy("timestamp", 'asc').limit(1).get();
+
 
   let game: Game;
 

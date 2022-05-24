@@ -10,7 +10,7 @@
         android:id="@+id/nav_home"
         android:name="ch.epfl.sweng.rps.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_gameFragment"
             app:destination="@id/gameFragment" />
@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_nav_home_to_ticTacToeChoiceFragment"
             app:destination="@id/ticTacToeChoiceFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_matchmakingFragment"
+            app:destination="@id/matchmakingFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_leaderboard"
@@ -40,10 +43,14 @@
         android:id="@+id/gameFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameFragment"
         android:label="@string/menu_game"
-        tools:layout="@layout/fragment_game" >
+        tools:layout="@layout/fragment_game">
         <action
             android:id="@+id/action_gameFragment_to_gameResultFragment"
             app:destination="@id/gameResultFragment" />
+        <argument
+            android:name="game_id"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_gameFragment_self"
             app:destination="@id/gameFragment" />
@@ -52,7 +59,7 @@
         android:id="@+id/gameResultFragment"
         android:name="ch.epfl.sweng.rps.ui.game.GameResultFragment"
         android:label="result_fragment"
-        tools:layout="@layout/fragment_game_result" >
+        tools:layout="@layout/fragment_game_result">
         <action
             android:id="@+id/action_gameResultFragment_to_nav_home"
             app:destination="@id/nav_home" />
@@ -64,7 +71,7 @@
         android:id="@+id/nav_friends"
         android:name="ch.epfl.sweng.rps.ui.friends.FriendsFragment"
         android:label="Friends"
-        tools:layout="@layout/fragment_friends" >
+        tools:layout="@layout/fragment_friends">
         <action
             android:id="@+id/action_nav_friends_to_infoPage_Fragment3"
             app:destination="@id/infoPage_Fragment" />
@@ -75,12 +82,12 @@
             android:id="@+id/action_nav_friends_to_requestFragment"
             app:destination="@id/requestFragment" />
     </fragment>
-    
+
     <fragment
         android:id="@+id/infoPage_Fragment"
         android:name="ch.epfl.sweng.rps.ui.friends.InfoPageFragment"
         android:label="fragment_info_page_"
-        tools:layout="@layout/fragment_info_page_" >
+        tools:layout="@layout/fragment_info_page_">
         <action
             android:id="@+id/action_infoPage_Fragment_to_nav_friends2"
             app:destination="@id/nav_friends" />
@@ -107,7 +114,7 @@
         android:id="@+id/cameraFragment"
         android:name="ch.epfl.sweng.rps.ui.camera.CameraFragment"
         android:label="Camera"
-        tools:layout="@layout/fragment_camera" >
+        tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/action_cameraFragment_to_nav_home"
             app:destination="@id/nav_home" />
@@ -126,7 +133,7 @@
         android:id="@+id/ticTacToeChoiceFragment"
         android:name="ch.epfl.sweng.rps.ui.tictactoe.TicTacToeChoiceFragment"
         android:label="tic_tac_toe_choice_page"
-        tools:layout="@layout/fragment_tictactoe_choice" >
+        tools:layout="@layout/fragment_tictactoe_choice">
         <action
             android:id="@+id/action_ticTacToeChoiceFragment_to_ticTacToeFragment2"
             app:destination="@id/ticTacToeFragment2" />
@@ -147,6 +154,18 @@
         <argument
             android:name="MODE"
             app:argType="ch.epfl.sweng.rps.services.TicTacToeGame$MODE" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchmakingFragment"
+        android:name="ch.epfl.sweng.rps.ui.game.MatchmakingFragment"
+        android:label="fragment_matchmaking"
+        tools:layout="@layout/fragment_matchmaking">
+        <argument
+            android:name="rounds"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_matchmakingFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
     </fragment>
 
 
