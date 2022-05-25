@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -33,6 +34,7 @@ class CacheTests {
     private lateinit var cache: Cache
     private lateinit var cacheWithoutAuth: Cache
     private lateinit var storage: Storage
+
 
     @Before
     fun setUp() {
@@ -76,6 +78,7 @@ class CacheTests {
     fun cacheCorrectlySavesUser() {
         val user = User(username = "USERNAME", uid = "01234", email = "test@test.org")
         cache.setUserDetails(user)
+        cache.clearLocalVars()
         assertEquals(cache.getUserDetailsFromCache()!!, user)
     }
 
@@ -88,6 +91,7 @@ class CacheTests {
             UserStat(gameId = "12134", date = "14/07/3020", opponents = "Opp2", "Best 1", "0"),
         )
         cache.updateStatsData(lst)
+        cache.clearLocalVars()
         val result = cache.getStatsDataFromCache(0)
         assertEquals(result, lst)
     }
@@ -96,25 +100,25 @@ class CacheTests {
     fun cacheCorrectlySavesLeaderBoardData() {
         assertTrue(cache.getLeaderBoardDataFromCache(0).isEmpty())
         val user1 =
-            LeaderBoardInfo("jinglun", "1", null, 100)
+            LeaderBoardInfo("jinglun", "1", Uri.parse("https://example.com/"), 100)
         val user2 =
             LeaderBoardInfo("Leonardo", "2", null, 80)
         val user3 =
             LeaderBoardInfo("Adam", "3", null, 60)
         val allPlayers = listOf(user1, user2, user3)
         cache.updateLeaderBoardData(allPlayers)
+        cache.clearLocalVars()
         val result = cache.getLeaderBoardDataFromCache(0)
         assertEquals(result, allPlayers)
     }
 
     @Test
-    fun cacheCorrectlySavesProfileImage() {
-        runBlocking {
-            assertNull(cacheWithoutAuth.getUserPicture())
-            val btm = createTestBitmap(30, 30, null)
-            cacheWithoutAuth.updateUserPicture(btm)
-            assertEquals(cacheWithoutAuth.getUserPicture(), btm)
-        }
+    fun cacheCorrectlySavesProfileImage() = runBlocking {
+        assertNull(cacheWithoutAuth.getUserPicture())
+        val btm = createTestBitmap(30, 30, null)
+        cacheWithoutAuth.updateUserPicture(btm)
+        cache.clearLocalVars()
+        assertEquals(cacheWithoutAuth.getUserPicture(), btm)
     }
 
     @Test
@@ -122,6 +126,7 @@ class CacheTests {
         assertNull(cache.getUserPicture())
         val bitmap = createTestBitmap(20, 20, Color.RED)
         storage.writeBackUserPicture(bitmap)
+        cache.clearLocalVars()
         assertNotNull(cache.getUserPicture())
     }
 

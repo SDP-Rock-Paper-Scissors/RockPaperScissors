@@ -3,17 +3,22 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.models.ui.UserStat
-import com.google.gson.Gson
+import com.google.gson.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.reflect.Type
 import java.util.*
 
 class PrivateStorage constructor(val context: Context) : Storage {
-    private val gson = Gson()
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(Uri::class.java, UriDeserializer())
+        .registerTypeAdapter(Uri::class.java, UriSerializer())
+        .create()
 
     override fun getFile(file: Storage.FILES): File {
         return File(context.filesDir, file.file)
@@ -78,5 +83,28 @@ class PrivateStorage constructor(val context: Context) : Storage {
         if (!userFile.exists())
             return null
         return BitmapFactory.decodeFile(getFile(Storage.FILES.USERPICTURE).path)
+    }
+
+    internal class UriDeserializer : JsonDeserializer<Uri> {
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: Type?,
+            context: JsonDeserializationContext?
+        ): Uri {
+            val uri = json.asString
+            return Uri.parse(uri)
+        }
+    }
+
+    internal class UriSerializer : JsonSerializer<Uri> {
+        override fun serialize(
+            src: Uri?,
+            typeOfSrc: Type?,
+            context: JsonSerializationContext?
+        ): JsonElement {
+            if (src == null)
+                return JsonNull.INSTANCE
+            return JsonPrimitive(src.toString())
+        }
     }
 }

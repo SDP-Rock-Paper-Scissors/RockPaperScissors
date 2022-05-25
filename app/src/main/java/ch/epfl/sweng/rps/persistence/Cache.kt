@@ -11,7 +11,8 @@ import ch.epfl.sweng.rps.remote.FirebaseHelper
 import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.services.ServiceLocator
-import java.net.InetAddress
+import ch.epfl.sweng.rps.utils.L
+import ch.epfl.sweng.rps.utils.isInternetAvailable
 
 
 class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) {
@@ -19,11 +20,19 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
 
     private var user: User? = null
     private var userPicture: Bitmap? = null
-    private lateinit var userStatData: List<UserStat>
-    private lateinit var leaderBoardData: List<LeaderBoardInfo>
+    private var userStatData: List<UserStat>? = null
+    private var leaderBoardData: List<LeaderBoardInfo>? = null
 
     private val repo get() = repoOverride ?: ServiceLocator.getInstance().repository
     private var repoOverride: Repository? = null
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun clearLocalVars() {
+        user = null
+        userPicture = null
+        userStatData = null
+        leaderBoardData = null
+    }
 
 
     fun getUserDetailsFromCache(): User? {
@@ -31,6 +40,8 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         user = storage.getUser()
         return user
     }
+
+    val log = L.of("RPSCache")
 
     suspend fun getUserDetails(): User? {
         val uid = repo.rawCurrentUid()
@@ -92,20 +103,20 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
     }
 
     fun getStatsDataFromCache(position: Int): List<UserStat> {
-        if (::userStatData.isInitialized) return userStatData
+        if (userStatData != null) return userStatData!!
         userStatData = storage.getStatsData() ?: listOf()
-        return userStatData
+        return userStatData!!
     }
 
     suspend fun getStatsData(position: Int): List<UserStat> {
         if (!isInternetAvailable()) {
-            Log.d("CACHE", "INTERNET NOT AVAILABLE")
+            log.d("INTERNET NOT AVAILABLE")
             return getStatsDataFromCache(position)
         }
         userStatData = FirebaseHelper.getStatsData(position)
-        Log.d("Cache", userStatData.size.toString())
-        storage.writeBackStatsData(userStatData)
-        return userStatData
+        log.d(userStatData!!.size.toString())
+        storage.writeBackStatsData(userStatData!!)
+        return userStatData!!
     }
 
     fun updateLeaderBoardData(lBData: List<LeaderBoardInfo>) {
@@ -114,38 +125,20 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
     }
 
     fun getLeaderBoardDataFromCache(position: Int): List<LeaderBoardInfo> {
-        if (::leaderBoardData.isInitialized) return leaderBoardData
+        if (leaderBoardData != null) return leaderBoardData!!
         leaderBoardData = storage.getLeaderBoardData() ?: listOf()
-        return leaderBoardData
+        return leaderBoardData!!
     }
 
     suspend fun getLeaderBoardData(position: Int): List<LeaderBoardInfo> {
         if (!isInternetAvailable()) {
-            Log.d("CACHE", "INTERNET NOT AVAILABLE")
+            log.d("INTERNET NOT AVAILABLE")
             return getLeaderBoardDataFromCache(position)
         }
         leaderBoardData = FirebaseHelper.getLeaderBoard(position)
-        Log.d("Cache", leaderBoardData.size.toString())
-        storage.writeBackLeaderBoardData(leaderBoardData)
-        return leaderBoardData
-    }
-
-    private var lastResult = Pair(0L, false)
-
-    private fun isInternetAvailable(): Boolean {
-        val now = System.currentTimeMillis()
-        if (now - lastResult.first < 1000 && lastResult.second)
-            return true
-        val res = try {
-            val ipAddr: InetAddress = InetAddress.getByName("www.google.com")
-            //You can replace it with your name
-            !ipAddr.equals("")
-        } catch (e: Exception) {
-            Log.d("Cache", e.toString())
-            false
-        }
-        lastResult = Pair(now, res)
-        return res
+        log.d(leaderBoardData!!.size.toString())
+        storage.writeBackLeaderBoardData(leaderBoardData!!)
+        return leaderBoardData!!
     }
 
     companion object {
@@ -170,4 +163,6 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
             return cache
         }
     }
+
+
 }

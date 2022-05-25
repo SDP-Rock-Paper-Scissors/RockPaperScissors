@@ -187,7 +187,7 @@ class SettingsActivity : AppCompatActivity(),
                 true
             }
             findPreference<Preference>(getString(R.string.settings_show_onboard))?.setOnPreferenceClickListener {
-                OnBoardingActivity.launch(
+                OnBoardingActivity.createIntent(
                     requireActivity(),
                     onDone = OnBoardingActivity.AfterOnboardingAction.FINISH
                 )

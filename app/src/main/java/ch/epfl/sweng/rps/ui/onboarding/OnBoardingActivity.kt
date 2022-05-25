@@ -32,13 +32,13 @@ class OnBoardingActivity : AppCompatActivity() {
             ).apply()
         }
 
-        fun launch(
+        fun createIntent(
             context: Activity,
             onDone: AfterOnboardingAction = AfterOnboardingAction.FINISH
-        ) {
+        ): Intent {
             val intent = Intent(context, OnBoardingActivity::class.java)
             intent.putExtra(AFTER_ONBOARDING_DONE_EXTRA, onDone)
-            context.startActivityForResult(intent, 0)
+            return intent
         }
 
         const val RESULT_ONBOARDING_FINISHED = 0x42069
