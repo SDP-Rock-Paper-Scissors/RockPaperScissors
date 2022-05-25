@@ -135,6 +135,13 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         return leaderBoardData!!
     }
 
+    fun clear() {
+        clearLocalVars()
+        for (file in Storage.FILES.values()) {
+            storage.deleteFile(file)
+        }
+    }
+
     companion object {
         lateinit var cache: Cache
 
