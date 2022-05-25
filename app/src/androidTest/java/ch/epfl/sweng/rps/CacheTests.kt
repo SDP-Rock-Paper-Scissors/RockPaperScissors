@@ -23,7 +23,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -66,12 +65,10 @@ class CacheTests {
     }
 
     @Test
-    fun cacheCorrectlyRetrievesUserDetailsFromStorage() {
-        runBlocking {
-            assertNull(cacheWithoutAuth.getUserDetailsFromCache())
-            cacheWithoutAuth.updateUserDetails(User(uid = "RAND"))
-            assertEquals(cacheWithoutAuth.getUserDetailsFromCache()?.uid, "RAND")
-        }
+    fun cacheCorrectlyRetrievesUserDetailsFromStorage() = runBlocking {
+        assertNull(cacheWithoutAuth.getUserDetailsFromCache())
+        cacheWithoutAuth.setUserDetails(User(uid = "RAND"))
+        assertEquals(cacheWithoutAuth.getUserDetailsFromCache()?.uid, "RAND")
     }
 
     @Test
@@ -115,7 +112,7 @@ class CacheTests {
     @Test
     fun cacheCorrectlySavesProfileImage() = runBlocking {
         assertNull(cacheWithoutAuth.getUserPicture())
-        val btm = createTestBitmap(30, 30, null)
+        val btm = createTestBitmap(30, 30, Color.GREEN)
         cacheWithoutAuth.updateUserPicture(btm)
         cache.clearLocalVars()
         assertEquals(cacheWithoutAuth.getUserPicture(), btm)
@@ -131,17 +128,12 @@ class CacheTests {
     }
 
     private fun createTestBitmap(w: Int, h: Int, @ColorInt color: Int?): Bitmap {
-        var c = color
+        val c = color ?: intArrayOf(
+            Color.BLUE, Color.GREEN, Color.RED,
+            Color.YELLOW, Color.WHITE
+        ).random()
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        if (c == null) {
-            val colors = intArrayOf(
-                Color.BLUE, Color.GREEN, Color.RED,
-                Color.YELLOW, Color.WHITE
-            )
-            val rgen = Random()
-            c = colors[rgen.nextInt(colors.size - 1)]
-        }
         canvas.drawColor(c)
         return bitmap
     }

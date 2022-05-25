@@ -57,12 +57,6 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         return user
     }
 
-    suspend fun updateUserDetails(user: User, vararg pairs: Pair<User.Field, Any>) {
-        this.user = user
-        storage.writeBackUser(user)
-        repo.updateUser(*pairs)
-    }
-
     fun setUserDetails(user: User?) {
         if (user == null) {
             this.user = null
