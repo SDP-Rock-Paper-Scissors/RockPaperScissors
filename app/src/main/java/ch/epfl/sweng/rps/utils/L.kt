@@ -12,8 +12,8 @@ object L {
     fun of(name: String): LogService = instances.getOrPut(name) { LogService(name) }
     fun of(activity: Activity): LogService = of(activity::class.java)
     fun of(fragment: Fragment): LogService = of(fragment::class.java)
-    fun <T> of(clazz: Class<T>): LogService = of(clazz.simpleName)
-    inline fun <reified T> of() = of(T::class.java)
+    fun of(clazz: Class<*>): LogService = of(clazz.simpleName)
+    // inline fun <reified T> of() = of(T::class.java)
 
     fun dispose(name: String) {
         instances[name]?.dispose()

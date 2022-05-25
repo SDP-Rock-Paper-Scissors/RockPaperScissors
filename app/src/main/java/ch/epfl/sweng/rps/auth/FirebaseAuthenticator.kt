@@ -37,9 +37,8 @@ class FirebaseAuthenticator private constructor(
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { res ->
             val user = res.result.user!!
-            var userData: User
             runBlocking {
-                userData = createOrGetUser(user.uid, user.displayName, user.email)
+                val userData = createOrGetUser(user.uid, user.displayName, user.email)
                 callback(userData)
             }
         }

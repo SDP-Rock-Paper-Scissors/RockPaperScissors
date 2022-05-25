@@ -14,7 +14,6 @@ import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.persistence.PrivateStorage
 import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.remote.Env
-import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
 import io.mockk.mockk
@@ -24,76 +23,78 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class CacheTests {
-    lateinit var cache: Cache
-    lateinit var cacheWithoutAuth: Cache
-    lateinit var storage: Storage
+    private lateinit var cache: Cache
+    private lateinit var cacheWithoutAuth: Cache
+    private lateinit var storage: Storage
 
     @Before
     fun setUp() {
         ServiceLocator.setCurrentEnv(Env.Prod)
         Firebase.initializeForTest()
-        cacheWithoutAuth = Cache.createInstance(
+        cacheWithoutAuth = Cache.initialize(
             InstrumentationRegistry.getInstrumentation().targetContext,
-            mockk<FirebaseRepository>(relaxed = true)
+            mockk(relaxed = true)
         )
-        cache = Cache.createInstance(InstrumentationRegistry.getInstrumentation().targetContext)
+        cache = Cache.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
         storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
-        storage.removeFile(Storage.FILES.STATSDATA)
-        storage.removeFile(Storage.FILES.USERINFO)
-        storage.removeFile(Storage.FILES.LEADERBOARDDATA)
-        storage.removeFile(Storage.FILES.USERPICTURE)
+        for (file in Storage.FILES.values()) {
+            storage.deleteFile(file)
+        }
     }
 
     @After
     fun tearDown() {
-        storage.removeFile(Storage.FILES.STATSDATA)
-        storage.removeFile(Storage.FILES.USERINFO)
-        storage.removeFile(Storage.FILES.LEADERBOARDDATA)
-        storage.removeFile(Storage.FILES.USERPICTURE)
+        for (file in Storage.FILES.values()) {
+            storage.deleteFile(file)
+        }
     }
 
     @Test
     fun cacheContainsNoDataWhenCreated() {
-        assert(cache.getUserDetails() == null)
-        assert(cache.getStatsData(0).isEmpty())
-        assert(cache.getLeaderBoardData(0).isEmpty())
+        assertNull(cache.getUserDetailsFromCache())
+        assertTrue(cache.getStatsDataFromCache(0).isEmpty())
+        assertTrue(cache.getLeaderBoardDataFromCache(0).isEmpty())
     }
 
     @Test
     fun cacheCorrectlyRetrievesUserDetailsFromStorage() {
         runBlocking {
-            assert(cacheWithoutAuth.getUserDetails() == null)
+            assertNull(cacheWithoutAuth.getUserDetailsFromCache())
             cacheWithoutAuth.updateUserDetails(User(uid = "RAND"))
-            assert(cacheWithoutAuth.getUserDetails()?.uid == "RAND")
+            assertEquals(cacheWithoutAuth.getUserDetailsFromCache()?.uid, "RAND")
         }
     }
 
     @Test
     fun cacheCorrectlySavesUser() {
-        val user: User? = User(username = "USERNAME", uid = "01234", email = "test@test.org")
-        cache.updateUserDetails(user)
-        assert(cache.getUserDetails()!! == user)
+        val user = User(username = "USERNAME", uid = "01234", email = "test@test.org")
+        cache.setUserDetails(user)
+        assertEquals(cache.getUserDetailsFromCache()!!, user)
     }
 
     @Test
     fun cacheCorrectlySavesStatsData() {
-        assert(cache.getStatsData(0).isEmpty())
-        val lst = listOf<UserStat>(
+        assertTrue(cache.getStatsDataFromCache(0).isEmpty())
+        val lst = listOf(
             UserStat(gameId = "1234", date = "14/07/2020", opponents = "Opp", "Best 5", "0"),
             UserStat(gameId = "1244", date = "14/07/1020", opponents = "Opp1", "Best 3", "0"),
             UserStat(gameId = "12134", date = "14/07/3020", opponents = "Opp2", "Best 1", "0"),
         )
         cache.updateStatsData(lst)
-        val result = cache.getStatsData(0)
-        assert(result == lst)
+        val result = cache.getStatsDataFromCache(0)
+        assertEquals(result, lst)
     }
 
     @Test
     fun cacheCorrectlySavesLeaderBoardData() {
-        assert(cache.getLeaderBoardData(0).isEmpty())
+        assertTrue(cache.getLeaderBoardDataFromCache(0).isEmpty())
         val user1 =
             LeaderBoardInfo("jinglun", "1", null, 100)
         val user2 =
@@ -102,41 +103,41 @@ class CacheTests {
             LeaderBoardInfo("Adam", "3", null, 60)
         val allPlayers = listOf(user1, user2, user3)
         cache.updateLeaderBoardData(allPlayers)
-        val result = cache.getLeaderBoardData(0)
-        assert(result == allPlayers)
+        val result = cache.getLeaderBoardDataFromCache(0)
+        assertEquals(result, allPlayers)
     }
 
     @Test
     fun cacheCorrectlySavesProfileImage() {
-        assert(cacheWithoutAuth.getUserPicture() == null)
-        val btm = createTestBitmap(30, 30, null)
         runBlocking {
+            assertNull(cacheWithoutAuth.getUserPicture())
+            val btm = createTestBitmap(30, 30, null)
             cacheWithoutAuth.updateUserPicture(btm)
+            assertEquals(cacheWithoutAuth.getUserPicture(), btm)
         }
-        assert(cacheWithoutAuth.getUserPicture() == btm)
     }
 
     @Test
     fun cacheCorrectlyRetrievesProfileImageFromStorage() {
-        assert(cache.getUserPicture() == null)
+        assertNull(cache.getUserPicture())
         val bitmap = createTestBitmap(20, 20, Color.RED)
         storage.writeBackUserPicture(bitmap)
-        assert(cache.getUserPicture() != null)
+        assertNotNull(cache.getUserPicture())
     }
 
-    fun createTestBitmap(w: Int, h: Int, @ColorInt color: Int?): Bitmap {
-        var color = color
+    private fun createTestBitmap(w: Int, h: Int, @ColorInt color: Int?): Bitmap {
+        var c = color
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        if (color == null) {
+        if (c == null) {
             val colors = intArrayOf(
                 Color.BLUE, Color.GREEN, Color.RED,
                 Color.YELLOW, Color.WHITE
             )
             val rgen = Random()
-            color = colors[rgen.nextInt(colors.size - 1)]
+            c = colors[rgen.nextInt(colors.size - 1)]
         }
-        canvas.drawColor(color)
+        canvas.drawColor(c)
         return bitmap
     }
 }

@@ -188,8 +188,8 @@ class SettingsActivity : AppCompatActivity(),
             }
             findPreference<Preference>(getString(R.string.settings_show_onboard))?.setOnPreferenceClickListener {
                 OnBoardingActivity.launch(
-                    requireContext(),
-                    destination = OnBoardingActivity.Destination.FINISH
+                    requireActivity(),
+                    onDone = OnBoardingActivity.AfterOnboardingAction.FINISH
                 )
                 true
             }

@@ -99,4 +99,6 @@
     <string name="placeholder_text">PLACEHOLDER TEXT</string>
     <string name="cancel_text">Cancel</string>§
     <string name="leaderboard">L E A D E R B O A R D</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="loading">Loading...</string>
 </resources>

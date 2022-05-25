@@ -6,8 +6,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.databinding.ActivityMainBinding
-import ch.epfl.sweng.rps.models.remote.User
-import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -18,23 +16,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var currentUser: User
-    private lateinit var cache: Cache
 
     override fun onCreate(savedInstanceState: Bundle?) {
         SettingsActivity.applyTheme(getString(R.string.theme_pref_key), sharedPreferences)
         super.onCreate(savedInstanceState)
-        cache = Cache.getInstance() ?: Cache.createInstance(this)
-        val userData: Bundle? = intent.extras?.getBundle("User")
-        if (userData != null) {
-            currentUser = User(
-                userData.getString("display_name"),
-                userData.getString("uid")!!,
-                userData.getString("privacy")!!,
-                false,
-                userData.getString("email")
-            )
-        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -45,11 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         navView.setupWithNavController(navController)
 
-    }
-
-
-    fun getUserDetails(): User {
-        return currentUser
     }
 
     /*  private fun setupNav() {
