@@ -190,7 +190,7 @@ class SettingsActivity : AppCompatActivity(),
                 OnBoardingActivity.createIntent(
                     requireActivity(),
                     onDone = OnBoardingActivity.AfterOnboardingAction.FINISH
-                )
+                ).apply { startActivity(this) }
                 true
             }
             val gameSettings =
