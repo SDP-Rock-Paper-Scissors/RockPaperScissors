@@ -33,6 +33,10 @@
             android:exported="false"
             android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
         <activity
+            android:name=".vision.GraphicOverlayActivity"
+            android:exported="false"
+            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="false"
             android:theme="@style/Theme.RockPaperScissors.NoActionBar"
@@ -43,7 +47,11 @@
             android:exported="false"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity" />
-
+        <activity
+            android:name=".ui.camera.CameraXLivePreviewActivity"
+            android:exported="false"
+            android:label="Camera"
+            android:parentActivityName=".MainActivity" />
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
             android:authorities="${applicationId}.firebaseinitprovider"

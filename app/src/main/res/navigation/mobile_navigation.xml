@@ -15,8 +15,8 @@
             android:id="@+id/action_nav_home_to_gameFragment"
             app:destination="@id/gameFragment" />
         <action
-            android:id="@+id/action_nav_home_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/action_nav_home_to_cameraXLivePreviewActivity"
+            app:destination="@id/cameraXLivePreviewActivity" />
         <action
             android:id="@+id/action_nav_home_to_ticTacToeChoiceFragment"
             app:destination="@id/ticTacToeChoiceFragment" />
@@ -78,9 +78,6 @@
         <action
             android:id="@+id/action_nav_friends_to_gameFragment2"
             app:destination="@id/gameFragment" />
-        <action
-            android:id="@+id/action_nav_friends_to_requestFragment"
-            app:destination="@id/requestFragment" />
     </fragment>
 
     <fragment
@@ -110,24 +107,11 @@
             android:name="isOnline"
             app:argType="boolean" />
     </fragment>
-    <fragment
-        android:id="@+id/cameraFragment"
-        android:name="ch.epfl.sweng.rps.ui.camera.CameraFragment"
-        android:label="Camera"
-        tools:layout="@layout/fragment_camera">
-        <action
-            android:id="@+id/action_cameraFragment_to_nav_home"
-            app:destination="@id/nav_home" />
-    </fragment>
-    <fragment
-        android:id="@+id/requestFragment"
-        android:name="ch.epfl.sweng.rps.ui.friends.RequestFragment"
-        android:label="request_fragment"
-        tools:layout="@layout/request_fragment" >
-        <action
-            android:id="@+id/action_requestFragment_to_nav_friends"
-            app:destination="@id/nav_friends" />
-    </fragment>
+
+    <activity
+        android:id="@+id/cameraXLivePreviewActivity"
+        android:name="ch.epfl.sweng.rps.ui.camera.CameraXLivePreviewActivity"
+        android:label="CameraXLivePreviewActivity" />
 
     <fragment
         android:id="@+id/ticTacToeChoiceFragment"
@@ -144,7 +128,7 @@
     <fragment
         android:id="@+id/ticTacToeFragment2"
         android:name="ch.epfl.sweng.rps.ui.tictactoe.TicTacToeFragment"
-        android:label="TicTacToeFragment" >
+        android:label="TicTacToeFragment">
         <action
             android:id="@+id/action_ticTacToeFragment2_to_nav_home"
             app:destination="@id/nav_home" />

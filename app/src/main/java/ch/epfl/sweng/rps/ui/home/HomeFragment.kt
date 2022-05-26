@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
+        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraXLivePreviewActivity)
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
         
         binding.apply {
@@ -36,6 +36,7 @@ class HomeFragment : Fragment() {
             buttonPlay1GamesOnline.setOnClickListener { playOnlineGame(1) }
             buttonPlay5GamesOnline.setOnClickListener { playOnlineGame(5) }
         }
+
         return binding.root
     }
 
