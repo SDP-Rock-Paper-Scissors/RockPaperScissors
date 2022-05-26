@@ -28,15 +28,4 @@ class LoadingActivityTest {
     fun start() {
         onView(withId(R.id.loadingActivityProgressBar)).check(matches(isDisplayed()))
     }
-
-    @Test
-    fun testNav() {
-        rule.scenario.onActivity {
-            onView(withId(R.id.loadingActivityProgressBar)).check(matches(isDisplayed()))
-            runBlocking {
-                it.nav()
-            }
-        }
-
-    }
 }
