@@ -51,7 +51,7 @@ class FriendsFragmentTest {
 
         val repo = ServiceLocator.getInstance().repository as LocalRepository
 
-        repo.setCurrentUid("Player 1")
+        repo.setCurrentUid("player1")
         repo.users.clear()
         repo.friendRequests.clear()
 
