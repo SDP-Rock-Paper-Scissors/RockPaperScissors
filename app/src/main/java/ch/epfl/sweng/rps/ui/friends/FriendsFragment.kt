@@ -51,8 +51,6 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
 
         val model:FriendsViewModel by viewModels()
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-
         requestBtn.setOnClickListener{
             findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToRequestFragment())
         }
@@ -62,6 +60,7 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         cache = Cache.getInstance()!!
         model.getFriends().observe(viewLifecycleOwner) { f ->
             recyclerView.adapter = FriendListAdapter(f, this)
+            recyclerView.layoutManager = LinearLayoutManager(activity)
             EspressoIdlingResource.decrement()
         }
 

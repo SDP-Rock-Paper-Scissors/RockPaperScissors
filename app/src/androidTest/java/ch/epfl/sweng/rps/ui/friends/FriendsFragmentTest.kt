@@ -54,6 +54,7 @@ class FriendsFragmentTest {
         repo.setCurrentUid("player1")
         repo.users.clear()
         repo.friendRequests.clear()
+        repo.games.clear()
 
 
         repo.users["player1"] = User(
@@ -119,7 +120,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
 
         onView(withId(R.id.userName_infoPage)).check(matches(withText("player2")))
         onView(withId(R.id.gamesPlayedText_infoPage)).check(matches(withText("Games Played: $gamesPlayed")))
@@ -144,7 +145,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
 
         onView(withId(R.id.infoPage_playButton)).perform(click())
 
