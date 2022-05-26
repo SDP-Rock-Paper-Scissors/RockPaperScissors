@@ -53,11 +53,10 @@ class SettingsActivity : AppCompatActivity(),
             }
         }
 
-        fun applyTheme(context: Context, sharedPreferences: SharedPreferences?) {
-            val prefs = sharedPreferences ?: PreferenceManager.getDefaultSharedPreferences(context)
+        fun applyTheme(context: Context, sharedPreferences: SharedPreferences? = null) {
             applyTheme(
                 context.getString(R.string.theme_pref_key),
-                prefs
+                sharedPreferences ?: PreferenceManager.getDefaultSharedPreferences(context)
             )
         }
     }
