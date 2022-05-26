@@ -14,7 +14,7 @@ class LocalRepository(private var uid: String? = null) : Repository {
 
     val users = mutableMapOf<String, User>()
 
-    private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
+    val friendRequests = mutableListOf<FriendRequest>()
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
         var user = getUser(getCurrentUid())
@@ -59,30 +59,25 @@ class LocalRepository(private var uid: String? = null) : Repository {
     }
 
     override suspend fun sendFriendRequestTo(uid: String) {
-        val map = (friendRequests[uid] ?: mutableMapOf())
-        map[getCurrentUid()] = FriendRequest.build(getCurrentUid(), uid, Timestamp.now())
-        friendRequests[uid] = map
+        val fr = FriendRequest.build(getCurrentUid(), uid, Timestamp.now())
+        friendRequests.add(fr)
     }
 
     override suspend fun listFriendRequests(): List<FriendRequest> {
-        return friendRequests[getCurrentUid()]?.entries?.map { it.value } ?: emptyList()
+        return friendRequests
     }
 
     override suspend fun getFriends(): List<String> {
-        return friendRequests[getCurrentUid()]
-            ?.filter { it.value.status == FriendRequest.Status.ACCEPTED }
-            ?.map { entry -> entry.value.users.first { it != getCurrentUid() } }
-            ?.toList() ?: emptyList()
+        return friendRequests.filter { it.status == FriendRequest.Status.ACCEPTED }
+            .map { it.users.first { it != getCurrentUid() } }
     }
 
     override suspend fun changeFriendRequestToStatus(
         userUid: String,
         status: FriendRequest.Status
     ) {
-        friendRequests[getCurrentUid()]?.set(
-            userUid,
-            friendRequests[getCurrentUid()]!![userUid]!!.copy(status = status)
-        )
+        val i = friendRequests.indexOfFirst { it.users.contains(userUid) }
+        friendRequests[i] = friendRequests[i].copy(status = status)
     }
 
     val games = mutableMapOf<String, Game>()
