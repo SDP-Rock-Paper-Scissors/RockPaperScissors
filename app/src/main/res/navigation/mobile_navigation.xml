@@ -15,8 +15,8 @@
             android:id="@+id/action_nav_home_to_gameFragment"
             app:destination="@id/gameFragment" />
         <action
-            android:id="@+id/action_nav_home_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            android:id="@+id/action_nav_home_to_cameraXLivePreviewActivity"
+            app:destination="@id/cameraXLivePreviewActivity" />
         <action
             android:id="@+id/action_nav_home_to_ticTacToeChoiceFragment"
             app:destination="@id/ticTacToeChoiceFragment" />
@@ -107,15 +107,11 @@
             android:name="isOnline"
             app:argType="boolean" />
     </fragment>
-    <fragment
-        android:id="@+id/cameraFragment"
-        android:name="ch.epfl.sweng.rps.ui.camera.CameraFragment"
-        android:label="Camera"
-        tools:layout="@layout/fragment_camera">
-        <action
-            android:id="@+id/action_cameraFragment_to_nav_home"
-            app:destination="@id/nav_home" />
-    </fragment>
+
+    <activity
+        android:id="@+id/cameraXLivePreviewActivity"
+        android:name="ch.epfl.sweng.rps.ui.camera.CameraXLivePreviewActivity"
+        android:label="CameraXLivePreviewActivity" />
 
     <fragment
         android:id="@+id/ticTacToeChoiceFragment"
