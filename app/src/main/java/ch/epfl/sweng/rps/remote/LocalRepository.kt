@@ -27,7 +27,7 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
     }
 
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
-        var user = getUser(getCurrentUid())
+        var user = getUser(getCurrentUid())!!
         pairs.forEach {
             user = when (it.first) {
                 User.Field.EMAIL -> user.copy(email = it.second as String)
@@ -44,12 +44,12 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         return uid
     }
 
-    override suspend fun getUser(uid: String): User {
-        return users[uid]!!
+    override suspend fun getUser(uid: String): User? {
+        return users[uid]
     }
 
     override suspend fun getUserProfilePictureUrl(uid: String): URI? {
-        val cond = getUser(uid).has_profile_photo
+        val cond = getUser(uid)!!.has_profile_photo
         return if (cond) {
             URI("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
         } else {

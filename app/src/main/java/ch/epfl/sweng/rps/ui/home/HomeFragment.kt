@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
@@ -26,7 +25,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraFragment)
+        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraXLivePreviewActivity)
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
 
         binding.apply {
@@ -36,6 +35,7 @@ class HomeFragment : Fragment() {
             buttonPlay1GamesOnline.setOnClickListener { playOnlineGame(1) }
             buttonPlay5GamesOnline.setOnClickListener { playOnlineGame(5) }
         }
+
         return binding.root
     }
 
@@ -60,8 +60,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int) {
-        buttonToBind.setOnClickListener { view: View ->
-            Navigation.findNavController(view).navigate(fragmentID)
-        }
+        buttonToBind.setOnClickListener { findNavController().navigate(fragmentID) }
     }
 }
