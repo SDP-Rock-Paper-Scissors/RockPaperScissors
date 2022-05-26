@@ -40,7 +40,7 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
 
     private fun ensureNotDisposed() {
         if (debugDisposed) {
-            throw Exception(
+            throw DisposedException(
                 "This ${this::class.java.simpleName} has been disposed and cannot be used anymore."
             )
         }
@@ -66,13 +66,9 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
         }
     }
 
-    class ListenerException : Exception {
-        constructor(message: String?, cause: Throwable?) : super(message, cause)
-        constructor(message: String) : super(message)
-    }
+    class ListenerException(message: String?, cause: Throwable?) : Exception(message, cause)
 
-    class ListenerNotFoundException : Exception {
-        constructor(message: String?, cause: Throwable?) : super(message, cause)
-        constructor(message: String) : super(message)
-    }
+    class ListenerNotFoundException(message: String) : Exception(message)
+
+    class DisposedException(message: String) : Exception(message)
 }
