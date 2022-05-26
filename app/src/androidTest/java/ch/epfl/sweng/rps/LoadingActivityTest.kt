@@ -6,6 +6,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 
@@ -21,7 +22,7 @@ class LoadingActivityTest {
     }
 
     @get:Rule
-    val rule = ActivityScenarioRuleWithSetup.default<LoginActivity>(createIntent())
+    val rule = ActivityScenarioRuleWithSetup.default<LoadingActivity>(createIntent())
 
     @Test
     fun start() {

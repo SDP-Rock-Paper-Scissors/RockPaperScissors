@@ -7,8 +7,10 @@ import kotlin.coroutines.resume
 open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
     private val listeners = ArrayList<() -> Unit>()
     val listenerCount get() = listeners.size
+    private var debugDisposed = false
 
     fun notifyListeners() {
+        ensureNotDisposed()
         for (n in listeners) {
             try {
                 n()
@@ -22,10 +24,12 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
     }
 
     fun addListener(listener: () -> Unit) {
+        ensureNotDisposed()
         listeners.add(listener)
     }
 
     fun removeListener(listener: () -> Unit) {
+        ensureNotDisposed()
         if (!listeners.remove(listener)) {
             throw ListenerNotFoundException(
                 "Listener to remove was not found. " +
@@ -34,32 +38,37 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
         }
     }
 
+    private fun ensureNotDisposed() {
+        if (debugDisposed) {
+            throw DisposedException(
+                "This ${this::class.java.simpleName} has been disposed and cannot be used anymore."
+            )
+        }
+    }
+
     @CallSuper
     open fun dispose() {
         listeners.clear()
+        debugDisposed = true
     }
 
-    @Suppress("UNCHECKED_CAST")
-    suspend fun awaitFor(predicate: (T) -> Boolean) =
-        suspendCancellableCoroutine<Unit> { cont ->
+    suspend fun awaitFor(predicate: (T) -> Boolean) {
+        ensureNotDisposed()
+        suspendCancellableCoroutine<Unit> {
+            @Suppress("UNCHECKED_CAST")
             val listener = {
                 if (predicate(this@ChangeNotifier as T)) {
-                    cont.resume(Unit)
+                    it.resume(Unit)
                 }
             }
             addListener(listener)
-            cont.invokeOnCancellation {
-                removeListener(listener)
-            }
+            it.invokeOnCancellation { removeListener(listener) }
         }
-
-    class ListenerException : Exception {
-        constructor(message: String?, cause: Throwable?) : super(message, cause)
-        constructor(message: String) : super(message)
     }
 
-    class ListenerNotFoundException : Exception {
-        constructor(message: String?, cause: Throwable?) : super(message, cause)
-        constructor(message: String) : super(message)
-    }
+    class ListenerException(message: String?, cause: Throwable?) : Exception(message, cause)
+
+    class ListenerNotFoundException(message: String) : Exception(message)
+
+    class DisposedException(message: String) : Exception(message)
 }
