@@ -44,20 +44,21 @@ object FirebaseHelper {
             val gameModeName: String
             val gameModeID: Int
             val date = dateFormat.format(userGame.timestamp.toDate())
-            val allRoundScores = gameRounds.map { it.value.computeScores() }
-            val userScore = allRoundScores.asSequence().map { scores ->
+            val allRoundScores =
+                gameRounds.map { it.value.computeScores() }.filter { it.isNotEmpty() }
+            val userScore = allRoundScores.sumOf { scores ->
                 val max = scores.maxOf { it.points }
                 if (scores.any { it.points == max && it.uid == userid && !scores.all { score -> score.points == max } })
-                    1
+                    1L
                 else
-                    0
+                    0L
 
-            }.sum()
+            }
             val opponentScore = roundMode.minus(userScore)
             val score = userScore - opponentScore
             val outcome: Int = when {
                 score < 0 -> -1
-                score == 0 -> 0
+                score == 0L -> 0
                 else -> 1
             }
 

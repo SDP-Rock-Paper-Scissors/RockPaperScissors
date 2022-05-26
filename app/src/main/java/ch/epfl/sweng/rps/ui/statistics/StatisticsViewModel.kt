@@ -14,7 +14,7 @@ class StatisticsViewModel : ViewModel() {
     fun getStats(position: Int): LiveData<List<UserStat>> {
         val livedata = MutableLiveData<List<UserStat>>()
         viewModelScope.launch(Dispatchers.IO) {
-            livedata.postValue(cache.getStatsDataAsync(position))
+            livedata.postValue(cache.getStatsData(position))
         }
         return livedata
     }

@@ -12,6 +12,7 @@ import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.delay
+import java.net.InetAddress
 
 fun consume(block: () -> Any?): () -> Unit = { block() }
 
@@ -91,3 +92,15 @@ inline fun <reified T> List<DocumentSnapshot>.toListOf(): List<T> =
 
 inline fun <reified T> List<DocumentSnapshot>.toListOfNullable(): List<T?> =
     map { it.toObject(T::class.java) }
+
+fun isInternetAvailable(): Boolean {
+    val res = try {
+        val ipAddr: InetAddress = InetAddress.getByName("www.google.com")
+        //You can replace it with your name
+        !ipAddr.equals("")
+    } catch (e: Exception) {
+        Log.d("Cache", e.toString())
+        false
+    }
+    return res
+}

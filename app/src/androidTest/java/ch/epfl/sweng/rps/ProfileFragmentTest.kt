@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps
 
 import android.content.Intent
-import android.os.Bundle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -9,36 +8,19 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.models.remote.User
-import com.google.firebase.ktx.Firebase
+import ch.epfl.sweng.rps.persistence.Cache
 import org.junit.Rule
 import org.junit.Test
 
 
 class ProfileFragmentTest {
 
-    private val bundle = run {
-        val b: Bundle = Bundle()
-        val data = mapOf(
-            "email" to "asd@gmail.com",
-            "display_name" to "asdino",
-            "uid" to "123",
-            "privacy" to User.Privacy.PUBLIC.toString()
-        )
-        data.forEach { (k, v) -> b.putString(k, v) }
-        b
-    }
-
-
     private fun createIntent(): Intent {
-        Firebase.initializeForTest()
-        val i: Intent = Intent(
+        return Intent(
             InstrumentationRegistry.getInstrumentation().targetContext,
             MainActivity::class.java
         )
-        i.putExtra("User", bundle)
-        return i
     }
 
     @get:Rule
@@ -46,10 +28,18 @@ class ProfileFragmentTest {
 
     @Test
     fun testFields() {
+        val user = User(
+            username = "test",
+            uid = "uid",
+            games_history_privacy = User.Privacy.PUBLIC.name,
+            has_profile_photo = false,
+            email = "email",
+        )
+        Cache.getInstance().setUserDetails(user)
         onView(withId(R.id.nav_profile)).perform(click())
-        onView(withId(R.id.TextDisplayName)).check(matches(withText(bundle.getString("display_name"))))
-        onView(withId(R.id.TextEmail)).check(matches(withText(bundle.getString("email"))))
-        onView(withId(R.id.TextPrivacy)).check(matches(withText(bundle.getString("privacy"))))
+        onView(withId(R.id.TextDisplayName)).check(matches(withText(user.username)))
+        onView(withId(R.id.TextEmail)).check(matches(withText(user.email)))
+        onView(withId(R.id.TextPrivacy)).check(matches(withText(user.games_history_privacy)))
     }
 
     @Test
