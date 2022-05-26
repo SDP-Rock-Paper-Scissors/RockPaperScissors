@@ -4,15 +4,17 @@ import android.content.Intent
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.utils.L
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class FirebaseAuthenticator private constructor(
     private val context: ComponentActivity,
@@ -24,27 +26,30 @@ class FirebaseAuthenticator private constructor(
     private val resultLauncher =
         context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
             val data: Intent? = res.data
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                val account = task.getResult(ApiException::class.java)!!
-                signInWithToken(account.idToken!!)
-            } catch (e: ApiException) {
-
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                context.lifecycleScope.launch {
+                    val account = task.await()
+                    val userData = signInWithToken(account.idToken!!)
+                    callback(userData)
+                }
+            } catch (e: Exception) {
+                L.of(FirebaseAuthenticator::class.java).e("", e)
             }
         }
 
-    private fun signInWithToken(idToken: String) {
+    private suspend fun signInWithToken(idToken: String): User {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { res ->
-            val user = res.result.user!!
-            runBlocking {
-                val userData = createOrGetUser(user.uid, user.displayName, user.email)
-                callback(userData)
-            }
-        }
+        val res = FirebaseAuth.getInstance().signInWithCredential(credential).await()
+        val user = res.user!!
+        return createOrGetUser(user.uid, user.displayName, user.email)
     }
 
-    private suspend fun createOrGetUser(uid: String, displayName: String?, email: String?): User {
+    private suspend fun createOrGetUser(
+        uid: String,
+        displayName: String?,
+        email: String?
+    ): User {
         Log.d("DsName", displayName.orEmpty())
         var user = repo.getUser(uid)
         if (user == null) {
@@ -64,8 +69,6 @@ class FirebaseAuthenticator private constructor(
     }
 
     companion object {
-
-        private const val RC_SIGN_IN = 9001
         fun registerFor(
             context: ComponentActivity,
             callback: (User) -> Unit

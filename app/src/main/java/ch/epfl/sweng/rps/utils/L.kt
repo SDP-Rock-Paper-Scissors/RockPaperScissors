@@ -69,9 +69,14 @@ object L {
                 notifyListeners()
             }
 
-        fun log(message: String, level: Level = Level.INFO) {
+        fun log(message: String, level: Level = Level.INFO, throwable: Throwable? = null) {
             val e = LogEntry(name, message, Date(), level)
-            Log.println(e.level.priority, e.tag, e.message)
+            val msg = if (throwable != null) {
+                message + '\n' + Log.getStackTraceString(throwable)
+            } else {
+                message
+            }
+            Log.println(e.level.priority, e.tag, msg)
             logs.add(e)
             if (logs.size > logsSize) {
                 logs.removeFirst()
@@ -79,8 +84,8 @@ object L {
             notifyListeners()
         }
 
-        fun e(message: String) {
-            log(message, Level.ERROR)
+        fun e(message: String, throwable: Throwable? = null) {
+            log(message, Level.ERROR, throwable = throwable)
         }
 
         fun w(message: String) {

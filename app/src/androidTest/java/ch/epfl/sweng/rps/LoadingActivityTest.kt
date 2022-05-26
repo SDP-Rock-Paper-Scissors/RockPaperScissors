@@ -6,6 +6,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 
@@ -32,7 +33,9 @@ class LoadingActivityTest {
     fun testNav() {
         rule.scenario.onActivity {
             onView(withId(R.id.loadingActivityProgressBar)).check(matches(isDisplayed()))
-            it.nav()
+            runBlocking {
+                it.nav()
+            }
         }
 
     }
