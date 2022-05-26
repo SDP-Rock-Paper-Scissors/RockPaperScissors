@@ -20,6 +20,7 @@ import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
+import ch.epfl.sweng.rps.utils.L
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ class SettingsActivity : AppCompatActivity(),
     companion object {
         private const val TITLE_TAG = "settingsActivityTitle"
 
-        fun applyTheme(
+        private fun applyTheme(
             themeKey: String,
             sharedPreferences: SharedPreferences
         ) {
@@ -46,8 +47,18 @@ class SettingsActivity : AppCompatActivity(),
                 "system" -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 }
+                else -> {
+                    L.of(SettingsActivity::class.java).e("Unknown theme: $themeKey")
+                }
             }
+        }
 
+        fun applyTheme(context: Context, sharedPreferences: SharedPreferences?) {
+            val prefs = sharedPreferences ?: PreferenceManager.getDefaultSharedPreferences(context)
+            applyTheme(
+                context.getString(R.string.theme_pref_key),
+                prefs
+            )
         }
     }
 
@@ -236,21 +247,7 @@ class SettingsActivity : AppCompatActivity(),
                 }
                 true
             }
-
         }
-
-
-//    class AppearanceFragment : PreferenceFragmentCompat() {
-//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-//            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
-//        }
-//    }
-//
-//    class SyncFragment : PreferenceFragmentCompat() {
-//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-//            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
-//        }
-//    }
     }
 
     override fun onResume() {
@@ -268,6 +265,6 @@ class SettingsActivity : AppCompatActivity(),
         key: String?
     ) {
         val themeKey = getString(R.string.theme_pref_key)
-        if (key == themeKey) applyTheme(themeKey, sharedPreferences ?: return)
+        if (key == themeKey) applyTheme(this, sharedPreferences)
     }
 }

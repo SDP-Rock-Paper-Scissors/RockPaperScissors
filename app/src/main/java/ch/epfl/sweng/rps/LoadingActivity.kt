@@ -3,10 +3,12 @@ package ch.epfl.sweng.rps
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
+import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import ch.epfl.sweng.rps.utils.L
 import com.google.firebase.ktx.Firebase
@@ -24,7 +26,7 @@ class LoadingActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted { setupApp() }
     }
 
-    val startOnboarding =
+    private val startOnBoarding =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == OnBoardingActivity.RESULT_ONBOARDING_FINISHED) {
                 log.log("Onboarding finished")
@@ -45,12 +47,9 @@ class LoadingActivity : AppCompatActivity() {
         Firebase.initialize(this@LoadingActivity)
         Cache.initialize(this@LoadingActivity)
         useEmulatorsIfNeeded()
-        delay(1000)
-    }
+        SettingsActivity.applyTheme(this)
 
-    private fun openLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+        delay(1000)
     }
 
     private fun useEmulatorsIfNeeded() {
@@ -68,7 +67,8 @@ class LoadingActivity : AppCompatActivity() {
     val isTest: Boolean
         get() = intent.getBooleanExtra("isTest", false)
 
-    private suspend fun setupApp() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    suspend fun setupApp() {
         // All the logic here is to check if the user is logged in or not
         logic()
 
@@ -80,13 +80,13 @@ class LoadingActivity : AppCompatActivity() {
 
     val log = L.of(this)
 
-
-    private suspend fun nav() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    suspend fun nav() {
         log.log("nav")
 
         if (!hasAlreadyOnboarded && OnBoardingActivity.isFirstTime(this)) {
             log.log("nav to onboarding")
-            startOnboarding.launch(OnBoardingActivity.createIntent(this))
+            startOnBoarding.launch(OnBoardingActivity.createIntent(this))
             return
         }
         val user = Cache.getInstance().getUserDetails()
