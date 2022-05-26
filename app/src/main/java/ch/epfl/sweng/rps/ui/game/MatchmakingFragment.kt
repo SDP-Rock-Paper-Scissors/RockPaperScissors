@@ -54,7 +54,7 @@ class MatchmakingFragment : Fragment() {
     }
 
     private fun write(text: String, level: L.Level = L.Level.WARN) {
-        L.of(this).log(text, level = level)
+        L.of<MatchmakingFragment>().log(text, level = level)
         binding.matchmakingStatusTextview.text = text
     }
 

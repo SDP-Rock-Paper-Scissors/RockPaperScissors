@@ -10,24 +10,24 @@
         android:id="@+id/matchDetailTable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10sp"
-        android:paddingLeft="5sp"
-        android:paddingRight="5sp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         tools:context=".ui.statistics.MatchDetailsFragment"
         tools:ignore="UselessParent">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/match_detail"
             android:textAlignment="center"
+            android:text="@string/personal_statistics"
             android:textSize="18sp"
             android:textStyle="bold" />
 
 
         <TableRow
             android:background="#0F51B435"
-            android:padding="10sp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,22 +38,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/player"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:text="Player" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/opponent"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:text="Opponent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/outcome"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:text="Outcome" />
         </TableRow>
     </TableLayout>
 </FrameLayout>

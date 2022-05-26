@@ -1,6 +1,5 @@
 package ch.epfl.sweng.rps.ui.onboarding
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -32,20 +31,42 @@ class OnBoardingActivity : AppCompatActivity() {
             ).apply()
         }
 
-        fun createIntent(
-            context: Activity,
-            onDone: AfterOnboardingAction = AfterOnboardingAction.FINISH
-        ): Intent {
-            val intent = Intent(context, OnBoardingActivity::class.java)
-            intent.putExtra(AFTER_ONBOARDING_DONE_EXTRA, onDone)
-            return intent
+
+        private fun newIntent(context: Context): Intent {
+            return Intent(context, OnBoardingActivity::class.java)
         }
 
-        const val RESULT_ONBOARDING_FINISHED = 0x42069
-        const val AFTER_ONBOARDING_DONE_EXTRA = "after_onboarding_done"
+        fun launch(context: Context, destination: Destination) {
+            val intent = newIntent(context)
+            intent.putExtra(
+                DESTINATION_EXTRA,
+                destination
+            )
+            context.startActivity(intent)
+        }
+
+
+        const val DESTINATION_EXTRA = "destination"
+        const val DONE_ONBOARDING_EXTRA = "done_onboarding"
+
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+        fun navOut(onBoardingActivity: OnBoardingActivity, onDestroy: (() -> Unit)? = null) {
+            setFirstTime(onBoardingActivity, false)
+            val destination =
+                onBoardingActivity.intent.getSerializableExtra(DESTINATION_EXTRA) as Destination
+            Log.i("OnBoardingActivity", "onboarding finished")
+            Log.i("OnBoardingActivity", "destination: $destination")
+            when (destination) {
+                Destination.FINISH -> {
+                    onBoardingActivity.finish()
+                }
+            }
+        }
+
+
     }
 
-    enum class AfterOnboardingAction {
+    enum class Destination {
         FINISH,
     }
 
@@ -59,7 +80,7 @@ class OnBoardingActivity : AppCompatActivity() {
         // new instance is created and data is took from an
         // array list known as getDataonborading
         val paperOnboardingFragment = PaperOnboardingFragment.newInstance(getDataforOnboarding())
-        paperOnboardingFragment.setOnRightOutListener { navOut() }
+        paperOnboardingFragment.setOnRightOutListener { navOut(this) }
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         // fragmentTransaction method is used
@@ -70,7 +91,6 @@ class OnBoardingActivity : AppCompatActivity() {
         // all the changes are committed
         fragmentTransaction.commit()
     }
-
 
     private fun getDataforOnboarding(): ArrayList<PaperOnboardingPage> {
 
@@ -106,20 +126,5 @@ class OnBoardingActivity : AppCompatActivity() {
             source1,
             source2
         ).toCollection(ArrayList())
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun navOut() {
-        setFirstTime(this, false)
-        val destination =
-            intent.getSerializableExtra(AFTER_ONBOARDING_DONE_EXTRA) as AfterOnboardingAction
-        Log.i("OnBoardingActivity", "onboarding finished")
-        Log.i("OnBoardingActivity", "destination: $destination")
-        when (destination) {
-            AfterOnboardingAction.FINISH -> {
-                setResult(RESULT_ONBOARDING_FINISHED)
-                finish()
-            }
-        }
     }
 }

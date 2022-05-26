@@ -1,19 +1,17 @@
 package ch.epfl.sweng.rps
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.VisibleForTesting
+import android.os.Parcelable
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
-import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
-import ch.epfl.sweng.rps.utils.L
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 class LoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,55 +20,47 @@ class LoadingActivity : AppCompatActivity() {
     }
 
 
-    init {
-        lifecycleScope.launchWhenStarted { setupApp() }
-    }
-
-    private val startOnBoarding =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == OnBoardingActivity.RESULT_ONBOARDING_FINISHED) {
-                log.log("Onboarding finished")
-                hasAlreadyOnboarded = true
-                lifecycleScope.launchWhenStarted {
-                    nav()
-                }
-            }
-        }
-
-
     /**
      * Here logic to setup the app
      */
-    private suspend fun logic() {
-        log.log("logic")
+    suspend fun logic() {
+        Log.w("LoadingPage", "logic")
 
         Firebase.initialize(this@LoadingActivity)
-        Cache.initialize(this@LoadingActivity)
         useEmulatorsIfNeeded()
-        SettingsActivity.applyTheme(this)
-
         delay(1000)
+        if (!isTest) {
+            openLogin()
+            finish()
+        }
+    }
+
+    private fun openLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     private fun useEmulatorsIfNeeded() {
         val use = intent.getStringExtra("USE_EMULATORS")
-        log.log("USE_EMULATORS: $use")
+        Log.d("MainActivity", "USE_EMULATORS: $use")
         if (use == "true") {
             if (isTest) {
                 throw IllegalStateException("Emulators should not be used in tests")
             }
             FirebaseEmulatorsUtils.useEmulators()
-            log.w("Using emulators")
+            Log.w("MainActivity", "Using emulators")
         }
     }
 
     val isTest: Boolean
         get() = intent.getBooleanExtra("isTest", false)
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    suspend fun setupApp() {
+    private fun setupApp() {
         // All the logic here is to check if the user is logged in or not
-        logic()
+        if (!hasRunLogic) {
+            runBlocking { logic() }
+            hasRunLogic = true
+        }
 
         if (!isTest) {
             nav()
@@ -78,34 +68,52 @@ class LoadingActivity : AppCompatActivity() {
     }
 
 
-    val log = L.of(this)
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    suspend fun nav() {
-        log.log("nav")
-
-        if (!hasAlreadyOnboarded && OnBoardingActivity.isFirstTime(this)) {
-            log.log("nav to onboarding")
-            startOnBoarding.launch(OnBoardingActivity.createIntent(this))
-            return
-        }
-        val user = Cache.getInstance().getUserDetails()
-        log.log("user: $user")
-        if (user == null) {
-            log.log("nav to login")
+    fun nav() {
+        Log.w("LoadingPage", "nav")
+        val doneOnBoarding =
+            intent.extras?.getBoolean(OnBoardingActivity.DONE_ONBOARDING_EXTRA, false) ?: false
+        if (OnBoardingActivity.isFirstTime(this) && !doneOnBoarding) {
+            Log.w("LoadingPage", "nav to onboarding")
+            OnBoardingActivity.launch(this, OnBoardingActivity.Destination.FINISH)
+        } else {
+            Log.w("LoadingPage", "nav to main")
             startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-            return
         }
-        log.log("nav to main")
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
     }
 
-    private var hasAlreadyOnboarded = false
+
+    override fun onResume() {
+        super.onResume()
+        setupApp()
+    }
 
 
     companion object {
+        const val HELP_ME_NAV_EXTRA = "helpMeNav"
         const val IS_TEST_EXTRA = "isTest"
+
+        private var hasRunLogic = false
+
+        fun launch(context: Context, helpMeNav: Boolean, vararg extras: Pair<String, Any>) {
+            val intent = Intent(context, LoadingActivity::class.java)
+            intent.putExtra(HELP_ME_NAV_EXTRA, helpMeNav)
+            extras.forEach { intent.putExtra(it.first, it.second) }
+            context.startActivity(intent)
+        }
+
+        fun Intent.putExtra(key: String, value: Any) {
+            when (value) {
+                is String -> putExtra(key, value)
+                is Int -> putExtra(key, value)
+                is Boolean -> putExtra(key, value)
+                is Bundle -> putExtra(key, value)
+                is Array<*> -> putExtra(key, value)
+                is Parcelable -> putExtra(key, value)
+                is Double -> putExtra(key, value)
+                is Float -> putExtra(key, value)
+                is Long -> putExtra(key, value)
+                else -> throw IllegalArgumentException("Type of ${value.javaClass.name} is not supported")
+            }
+        }
     }
 }

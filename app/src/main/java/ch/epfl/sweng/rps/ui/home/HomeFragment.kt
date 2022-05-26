@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
@@ -60,6 +61,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setNavigationOnButton(buttonToBind: Button, fragmentID: Int) {
-        buttonToBind.setOnClickListener { findNavController().navigate(fragmentID) }
+        buttonToBind.setOnClickListener { view: View ->
+            Navigation.findNavController(view).navigate(fragmentID)
+        }
     }
 }

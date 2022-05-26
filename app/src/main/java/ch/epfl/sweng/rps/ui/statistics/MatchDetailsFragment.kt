@@ -18,25 +18,49 @@ import kotlinx.coroutines.launch
 
 
 class MatchDetailsFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
+    companion object {
+        // TODO: Rename parameter arguments, choose names that match
+        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        // Inflate the layout for this fragment
         container?.removeAllViews()
+        // fetch game uuid for match details from last fragment
         val matchUuid = this.arguments?.getString("uuid")
+
         val newView = inflater.inflate(R.layout.fragment_match_details, container, false)
+        //for test
+        // addDetailRow(newView, "3", "paper", "rock", "win")
+
         viewLifecycleOwner.lifecycleScope.launch {
             val matchDetailsList = FirebaseHelper.getMatchDetailData(matchUuid!!)
             Log.i("matchDetailsList", matchDetailsList.toString())
-            for ((index, _, userHand, opponentHand, outcome) in matchDetailsList) {
+            for (matchDetails in matchDetailsList) {
                 addDetailRow(
                     newView,
-                    index.toString(),
-                    userHand.asHandEmoji(),
-                    opponentHand.asHandEmoji(),
-                    outcome.asEmoji()
+                    matchDetails.index.toString(),
+                    matchDetails.userHand.asHandEmoji(),
+                    matchDetails.opponentHand.asHandEmoji(),
+                    matchDetails.outcome.asEmoji()
                 )
             }
         }

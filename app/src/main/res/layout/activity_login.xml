@@ -1,59 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/login_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
 
     <Button
         android:id="@+id/signIn"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:text="@string/sign_in_with_google" />
+        android:layout_width="180dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="88dp"
+        android:onClick="signIn"
+        android:text="Sign in"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/not_signed_in_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/userName"
+        android:layout_width="233dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="144dp"
         android:fontFamily="@font/montserrat"
-        android:paddingHorizontal="32dp"
-        android:layout_marginTop="12dp"
-        android:text="You do not seem to be signed in"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
-
-    <!--Here we display a row of a circular progress indicator and a text saying 'loading' -->
-    <LinearLayout
-        android:id="@+id/loading_layout_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="48dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="invisible">
-
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/loading_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-
-        <android.widget.Space
-            android:layout_width="12dp"
-            android:layout_height="12dp" />
-
-        <TextView
-            android:id="@+id/loading_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/loading"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-    </LinearLayout>
-
-</LinearLayout>
+        android:text="Not Logged In"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

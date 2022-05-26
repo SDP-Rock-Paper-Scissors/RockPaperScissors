@@ -13,14 +13,8 @@ object L {
 
     fun of(activity: Activity): LogService = of(activity::class.java)
     fun of(fragment: Fragment): LogService = of(fragment::class.java)
-    fun of(clazz: Class<*>): LogService = of(clazz.simpleName)
-
-    fun Log.of(name: String): LogService = L.of(name)
-    fun Log.of(activity: Activity): LogService = L.of(activity)
-    fun Log.of(fragment: Fragment): LogService = L.of(fragment)
-    fun Log.of(clazz: Class<*>): LogService = L.of(clazz)
-
-    // inline fun <reified T> of() = of(T::class.java)
+    fun <T> of(clazz: Class<T>): LogService = of(clazz.simpleName)
+    inline fun <reified T> of() = of(T::class.java)
 
     fun dispose(name: String) {
         instances[name]?.dispose()
@@ -70,14 +64,9 @@ object L {
                 notifyListeners()
             }
 
-        fun log(message: String, level: Level = Level.INFO, throwable: Throwable? = null) {
+        fun log(message: String, level: Level = Level.INFO) {
             val e = LogEntry(name, message, Date(), level)
-            val msg = if (throwable != null) {
-                message + '\n' + Log.getStackTraceString(throwable)
-            } else {
-                message
-            }
-            Log.println(e.level.priority, e.tag, msg)
+            Log.println(e.level.priority, e.tag, e.message)
             logs.add(e)
             if (logs.size > logsSize) {
                 logs.removeFirst()
@@ -85,8 +74,8 @@ object L {
             notifyListeners()
         }
 
-        fun e(message: String, throwable: Throwable? = null) {
-            log(message, Level.ERROR, throwable = throwable)
+        fun e(message: String) {
+            log(message, Level.ERROR)
         }
 
         fun w(message: String) {

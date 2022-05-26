@@ -23,7 +23,7 @@ class LocalRepositoryTest {
         assertEquals("user1234", localRepository.getCurrentUid())
 
         localRepository.createThisUser("User", "user@company.org")
-        val user = localRepository.getUser(localRepository.getCurrentUid())!!
+        val user = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
         assertEquals("user1234", user.uid)
@@ -37,7 +37,7 @@ class LocalRepositoryTest {
             User.Field.GAMES_HISTORY_PRIVACY to User.Privacy.PRIVATE.name,
             User.Field.HAS_PROFILE_PHOTO to true,
         )
-        val updatedUser = localRepository.getUser(localRepository.getCurrentUid())!!
+        val updatedUser = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("NewUser", updatedUser.username)
         assertEquals("example@example.com", updatedUser.email)
         assertEquals("user1234", updatedUser.uid)
@@ -52,7 +52,7 @@ class LocalRepositoryTest {
         assertEquals("user1234", localRepository.getCurrentUid())
 
         localRepository.createThisUser("User", "user@company.org")
-        val user = localRepository.getUser(localRepository.getCurrentUid())!!
+        val user = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
 
@@ -60,7 +60,7 @@ class LocalRepositoryTest {
         assertEquals("user5678", localRepository.getCurrentUid())
 
         localRepository.createThisUser(null, "email@email.com")
-        val user2 = localRepository.getUser(localRepository.getCurrentUid())!!
+        val user2 = localRepository.getUser(localRepository.getCurrentUid())
         assertEquals("", user2.username)
         assertEquals("email@email.com", user2.email)
     }

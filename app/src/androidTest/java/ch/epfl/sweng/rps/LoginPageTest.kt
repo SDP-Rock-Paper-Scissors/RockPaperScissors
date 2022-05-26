@@ -24,18 +24,18 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class LoginPageTest {
-    private lateinit var scenario: ActivityScenario<LoginActivity>
+    lateinit var scenario: ActivityScenario<LoginActivity>
 
     @Before
     fun setUp() {
         Firebase.initializeForTest()
         FirebaseAuth.getInstance().signOut()
-        PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext).deleteFile(
+        PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext).removeFile(
             Storage.FILES.USERINFO
         )
         Intents.init()
-        Cache.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
-            .setUserDetails(null)
+        Cache.createInstance(InstrumentationRegistry.getInstrumentation().targetContext)
+            .updateUserDetails(null)
         scenario = ActivityScenario.launch(LoginActivity::class.java)
     }
 

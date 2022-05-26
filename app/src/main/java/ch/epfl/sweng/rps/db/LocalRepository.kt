@@ -1,33 +1,23 @@
-package ch.epfl.sweng.rps.remote
+package ch.epfl.sweng.rps.db
 
 import android.graphics.Bitmap
 import androidx.annotation.VisibleForTesting
-import ch.epfl.sweng.rps.models.remote.*
-import ch.epfl.sweng.rps.remote.friends.FriendsRepository
-import ch.epfl.sweng.rps.remote.games.GamesRepository
+import ch.epfl.sweng.rps.models.*
 import com.google.firebase.Timestamp
 import java.net.URI
 
-class LocalRepository(private var uid: String? = null) : Repository, GamesRepository,
-    FriendsRepository {
+class LocalRepository(private var uid: String? = null) : Repository {
 
-    val users = mutableMapOf<String, User>()
-    private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
-    override val friends: FriendsRepository
-        get() = this
-    override val games: GamesRepository
-        get() = this
-    val gamesMap = mutableMapOf<String, Game>()
-    var leaderBoardScore = mutableListOf<TotalScore>()
-
-    @VisibleForTesting
-    val invitations = mutableMapOf<String, Invitation>()
     fun setCurrentUid(newUid: String?) {
         uid = newUid
     }
 
+    val users = mutableMapOf<String, User>()
+
+    val friendRequests = mutableListOf<FriendRequest>()
+
     override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
-        var user = getUser(getCurrentUid())!!
+        var user = getUser(getCurrentUid())
         pairs.forEach {
             user = when (it.first) {
                 User.Field.EMAIL -> user.copy(email = it.second as String)
@@ -44,12 +34,13 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         return uid
     }
 
-    override suspend fun getUser(uid: String): User? {
-        return users[uid]
+    override suspend fun getUser(uid: String): User {
+        return users[uid]!!
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
-        val cond = getUser(uid)!!.has_profile_photo
+
+    override suspend fun getUserProfilePictureUrl(uid:String): URI? {
+        val cond = getUser(uid).has_profile_photo
         return if (cond) {
             URI("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
         } else {
@@ -68,46 +59,45 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
     }
 
     override suspend fun sendFriendRequestTo(uid: String) {
-        val map = (friendRequests[uid] ?: mutableMapOf())
-        map[getCurrentUid()] = FriendRequest.build(getCurrentUid(), uid, Timestamp.now())
-        friendRequests[uid] = map
+        val fr = FriendRequest.build(getCurrentUid(), uid, Timestamp.now())
+        friendRequests.add(fr)
     }
 
     override suspend fun listFriendRequests(): List<FriendRequest> {
-        return friendRequests[getCurrentUid()]?.entries?.map { it.value } ?: emptyList()
+        return friendRequests
     }
 
     override suspend fun getFriends(): List<String> {
-        return friendRequests[getCurrentUid()]
-            ?.filter { it.value.status == FriendRequest.Status.ACCEPTED }
-            ?.map { entry -> entry.value.users.first { it != getCurrentUid() } }
-            ?.toList() ?: emptyList()
+        return friendRequests.filter { it.status == FriendRequest.Status.ACCEPTED }
+            .map { it.users.first { it != getCurrentUid() } }
     }
 
     override suspend fun changeFriendRequestToStatus(
         userUid: String,
         status: FriendRequest.Status
     ) {
-        friendRequests[getCurrentUid()]?.set(
-            userUid,
-            friendRequests[getCurrentUid()]!![userUid]!!.copy(status = status)
-        )
+        val i = friendRequests.indexOfFirst { it.users.contains(userUid) }
+        friendRequests[i] = friendRequests[i].copy(status = status)
     }
+
+    val games = mutableMapOf<String, Game>()
 
     override suspend fun getGame(gameId: String): Game? {
-        return gamesMap[gameId]
+        return games[gameId]
     }
 
-    override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
+    var leaderBoardScore = mutableListOf<TotalScore>()
+    override suspend fun getLeaderBoardScore(scoreMode:String): List<TotalScore> {
         return leaderBoardScore
     }
 
+
     override suspend fun gamesOfUser(uid: String): List<Game> {
-        return gamesMap.values.filter { uid in it.players }
+        return games.values.filter { uid in it.players }
     }
 
     override suspend fun myActiveGames(): List<Game> {
-        return gamesMap.values.filter { it.players.contains(getCurrentUid()) && !it.done }
+        return games.values.filter { it.players.contains(getCurrentUid()) && !it.done }
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
@@ -118,15 +108,19 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         )
     }
 
+    @VisibleForTesting
+    val invitations = mutableMapOf<String, Invitation>()
+
     override suspend fun listInvitations(): List<Invitation> {
         return invitations.values.toList()
     }
+
 
     override suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean) {
 
     }
 
-    override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
+    override suspend fun getUserProfilePictureImage(uid:String): Bitmap?{
         TODO("Not yet implemented")
     }
 }

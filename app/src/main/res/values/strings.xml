@@ -38,6 +38,9 @@
     <string name="mode">Mode</string>
     <string name="score">Score</string>
     <string name="match_detail">Match Detail</string>
+    <string name="player">Player</string>
+    <string name="opponent">Opponent</string>
+    <string name="outcome">Outcome</string>
 
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
@@ -96,14 +99,4 @@
     <string name="placeholder_text">PLACEHOLDER TEXT</string>
     <string name="cancel_text">Cancel</string>§
     <string name="leaderboard">L E A D E R B O A R D</string>
-    <string name="sign_in_with_google">Sign in with Google</string>
-    <string name="loading">Loading...</string>
-    <string name="you_lose">YOU LOSE</string>
-    <string name="player">Player</string>
-    <string name="outcome">Outcome</string>
-    <string name="opponent">Opponent</string>
-    <string name="points">points</string>
-    <string name="pick_your_side">Pick your side</string>
-    <string name="vs_pc">Vs PC</string>
-    <string name="multiplayer">MULTIPLAYER</string>
 </resources>
