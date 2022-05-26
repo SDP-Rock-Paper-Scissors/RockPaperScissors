@@ -19,8 +19,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:text="@string/personal_statistics"
+            android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -38,22 +38,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                android:text="Player" />
+                android:text="Player"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                android:text="Opponent" />
+                android:text="Opponent"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                android:text="Outcome" />
+                android:text="Outcome"
+                android:textSize="18sp" />
         </TableRow>
     </TableLayout>
 </FrameLayout>

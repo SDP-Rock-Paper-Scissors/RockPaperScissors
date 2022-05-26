@@ -16,9 +16,9 @@ import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
-import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.remote.*
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.Timestamp
 import com.google.firebase.ktx.Firebase
@@ -53,9 +53,9 @@ class StatisticsFragmentTest {
         ServiceLocator.setCurrentEnv(Env.Test)
         val repo = ServiceLocator.getInstance().repository as LocalRepository
         repo.setCurrentUid("player1")
-        repo.games.clear()
+        repo.gamesMap.clear()
         repo.users.clear()
-        repo.games["game1"] = Game.Rps(
+        repo.gamesMap["game1"] = Game.Rps(
             "game1",
             listOf("player1", "player2"),
             mapOf(

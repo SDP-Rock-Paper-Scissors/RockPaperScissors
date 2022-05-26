@@ -2,6 +2,7 @@ package ch.epfl.sweng.rps.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import ch.epfl.sweng.rps.models.remote.Hand
 
 data class Move(val playerUid: String?, val hand: Hand?, val gameId: String?) : Parcelable {
 

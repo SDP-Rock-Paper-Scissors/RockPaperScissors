@@ -11,19 +11,21 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
     private val cache = Cache.getInstance()!!
-    fun getProfilePicture() : LiveData<Bitmap> {
-        var livedata = MutableLiveData<Bitmap>()
+    fun getProfilePicture(): LiveData<Bitmap> {
+        val livedata = MutableLiveData<Bitmap>()
         viewModelScope.launch(Dispatchers.IO) {
             livedata.postValue(cache.getUserPictureAsync())
         }
         return livedata
     }
-    fun updateProfilePicture(bitmap: Bitmap){
+
+    fun updateProfilePicture(bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
             cache.updateUserPicture(bitmap)
         }
     }
-    fun getCachedUserPicture() : Bitmap?{
+
+    fun getCachedUserPicture(): Bitmap? {
         return cache.getUserPicture()
     }
 }

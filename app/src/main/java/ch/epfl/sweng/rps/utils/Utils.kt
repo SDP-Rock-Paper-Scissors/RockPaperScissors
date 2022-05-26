@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package ch.epfl.sweng.rps.utils
 
 import android.util.Log

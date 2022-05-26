@@ -12,10 +12,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.GameMode
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.models.remote.Game
+import ch.epfl.sweng.rps.models.remote.GameMode
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.Round
 import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
@@ -145,9 +145,9 @@ class SettingsActivity : AppCompatActivity(),
             }
             joinQueue?.setOnPreferenceClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val TAG = "Matchmaking"
-                    val games = ServiceLocator.getInstance().repository.myActiveGames()
-                    Log.w(TAG, "games: $games")
+                    val tag = "Matchmaking"
+                    val games = ServiceLocator.getInstance().repository.games.myActiveGames()
+                    Log.w(tag, "games: $games")
                     if (games.isNotEmpty()) {
                         Toast.makeText(
                             context,
@@ -156,7 +156,7 @@ class SettingsActivity : AppCompatActivity(),
                         ).show()
                         return@launch
                     }
-                    Log.d(TAG, "Joining queue")
+                    Log.d(tag, "Joining queue")
                     try {
                         ServiceLocator.getInstance().matchmakingService.queue(
                             GameMode(
@@ -167,10 +167,10 @@ class SettingsActivity : AppCompatActivity(),
                                 GameMode.GameEdition.RockPaperScissors
                             )
                         ).collect {
-                            Log.i(TAG, it.toString())
+                            Log.i(tag, it.toString())
                         }
                     } catch (e: Exception) {
-                        Log.e(TAG, e.toString(), e)
+                        Log.e(tag, e.toString(), e)
                     }
                 }
                 true

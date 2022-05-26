@@ -34,8 +34,8 @@ class InfoPageFragment : Fragment() {
         val winRate = view.findViewById<TextView>(R.id.winRateText_infoPage)
         val isOnline = InfoPageFragmentArgs.fromBundle(requireArguments()).isOnline
 
-        onlineImage.visibility = if(isOnline) View.VISIBLE else View.INVISIBLE
-        offlineImage.visibility = if(isOnline) View.INVISIBLE else View.VISIBLE
+        onlineImage.visibility = if (isOnline) View.VISIBLE else View.INVISIBLE
+        offlineImage.visibility = if (isOnline) View.INVISIBLE else View.VISIBLE
 
         username.text = InfoPageFragmentArgs.fromBundle(requireArguments()).username
         gamesPlayed.text = InfoPageFragmentArgs.fromBundle(requireArguments()).gamesPlayedText
@@ -50,7 +50,11 @@ class InfoPageFragment : Fragment() {
         }
 
         playButton.setOnClickListener {
-            findNavController().navigate(InfoPageFragmentDirections.actionInfoPageFragmentToGameFragment2())
+            findNavController().navigate(
+                InfoPageFragmentDirections.actionInfoPageFragmentToGameFragment2(
+                    null
+                )
+            )
         }
 
     }

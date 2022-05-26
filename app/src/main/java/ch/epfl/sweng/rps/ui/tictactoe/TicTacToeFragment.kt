@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.ui.tictactoe
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.services.MultiplayerTicTacToe
 import ch.epfl.sweng.rps.services.OfflineTicTacToe
 import ch.epfl.sweng.rps.services.TicTacToeGame
 
@@ -20,9 +19,8 @@ class TicTacToeFragment : Fragment() {
 
     private lateinit var viewModel: TicTacToeViewModel
     private var boxList = mutableListOf<ImageView>()
-    val game = OfflineTicTacToe(this)
-    lateinit var outcomeText: TextView
-    lateinit var choice: TicTacToeGame.MOVES
+    lateinit var game: TicTacToeGame
+    private lateinit var outcomeText: TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +32,14 @@ class TicTacToeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         outcomeText = view.findViewById(R.id.outcomeTTT)
         val argument: Int = requireArguments().getInt("choice")
-        choice = if (argument == 0) TicTacToeGame.MOVES.CROSS else TicTacToeGame.MOVES.CIRCLE
+        val mode: TicTacToeGame.MODE =
+            (requireArguments().get("MODE") ?: TicTacToeGame.MODE.PC) as TicTacToeGame.MODE
+        val choice: TicTacToeGame.MOVES =
+            (requireArguments().get("PLAYER") ?: TicTacToeGame.MOVES.CROSS) as TicTacToeGame.MOVES
+        game = if (mode == TicTacToeGame.MODE.PC)
+            OfflineTicTacToe(this, choice)
+        else
+            MultiplayerTicTacToe(this, choice)
         val boxMatrix = view.findViewById<LinearLayout>(R.id.matrix)
         val boxes = boxMatrix.children
             .filter { it is LinearLayout }
@@ -42,7 +47,7 @@ class TicTacToeFragment : Fragment() {
             .filter { it is ImageView }
             .toList()
         boxes.forEach { boxList.add(it as ImageView) }
-        boxes.forEachIndexed { i, b -> b.setOnClickListener { game.putChoice(choice, i) } }
+        boxes.forEachIndexed { i, b -> b.setOnClickListener { game.putChoice(i) } }
     }
 
     fun updateUI(index: Int, choice: TicTacToeGame.MOVES) {
@@ -53,10 +58,10 @@ class TicTacToeFragment : Fragment() {
 
     fun gameOver(winner: TicTacToeGame.MOVES) {
         outcomeText.visibility = View.VISIBLE
-        if (winner == choice)
-            outcomeText.text = "YOU WIN"
+        if (winner == TicTacToeGame.MOVES.CROSS)
+            outcomeText.text = "CROSS WINS"
         else
-            outcomeText.text = "YOU LOSE"
+            outcomeText.text = "CIRCLE WINS"
     }
 }
 

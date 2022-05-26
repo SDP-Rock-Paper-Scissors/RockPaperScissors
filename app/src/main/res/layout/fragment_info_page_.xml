@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_info_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".ui.friends.InfoPageFragment">
 
 
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:text="Username"
         android:textColor="@color/tertiary2"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/statsText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,11 +83,11 @@
         android:layout_marginVertical="8dp"
         android:text="Stats"
         android:textColor="@color/tertiary2"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/statsCardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userName_infoPage"/>
+        app:layout_constraintTop_toBottomOf="@+id/userName_infoPage" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/statsCardView"
@@ -113,7 +113,7 @@
                 android:layout_marginBottom="5dp"
                 android:text="Win Rate"
                 android:textColor="@color/tertiary2"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/globalRankingText_infoPage"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -125,11 +125,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="Ranking(Global)"
+                android:text="Ranking (Global)"
                 android:textColor="@color/tertiary2"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/localRankingText_infoPage"
                 app:layout_constraintTop_toBottomOf="@+id/localRankingText_infoPage" />
@@ -140,9 +140,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="Ranking(Local)"
+                android:text="Ranking (Local)"
                 android:textColor="@color/tertiary2"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/globalRankingText_infoPage"
                 app:layout_constraintStart_toStartOf="@+id/tournamentWonText_infoPage"
                 app:layout_constraintTop_toBottomOf="@+id/tournamentWonText_infoPage" />
@@ -152,10 +152,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:text="Tournaments Won"
                 android:textColor="@color/tertiary2"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/gamesPlayedText_infoPage"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -169,7 +169,7 @@
                 android:layout_marginBottom="5dp"
                 android:text="Games Won"
                 android:textColor="@color/tertiary2"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/winRateText_infoPage"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gamesPlayedText_infoPage" />
@@ -182,7 +182,7 @@
                 android:layout_marginBottom="4dp"
                 android:text="Games Played"
                 android:textColor="@color/tertiary2"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/gamesWonText_infoPage"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -198,7 +198,7 @@
         android:layout_marginVertical="8dp"
         android:text="Match History"
         android:textColor="@color/tertiary2"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/matchHistoryScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

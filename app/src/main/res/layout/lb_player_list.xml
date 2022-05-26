@@ -3,25 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#26ffffff"
-    android:layout_marginBottom="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="#26ffffff"
     android:orientation="horizontal">
 
     <RelativeLayout
         android:layout_width="32dp"
         android:layout_height="match_parent"
-        android:padding="5dp"
-        android:background="#33f58220">
+        android:background="#33f58220"
+        android:padding="5dp">
+
         <TextView
             android:id="@+id/tv_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textStyle="bold"
             android:textSize="18sp"
-            tools:text="11"/>
+            android:textStyle="bold"
+            tools:text="11" />
     </RelativeLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -44,19 +45,19 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            tools:text="awidiyadew"
-            android:textStyle="bold"
             android:textAllCaps="true"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="awidiyadew" />
 
         <TextView
             android:id="@+id/tv_nationality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
-            android:textSize="16sp"
             android:paddingEnd="10dp"
-            tools:text="Indonesia"/>
+            android:textSize="16sp"
+            tools:text="Indonesia" />
 
     </LinearLayout>
 

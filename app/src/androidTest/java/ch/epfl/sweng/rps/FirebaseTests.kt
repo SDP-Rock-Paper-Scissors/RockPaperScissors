@@ -2,10 +2,10 @@ package ch.epfl.sweng.rps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.Repository
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ProdServiceLocator
@@ -82,19 +82,19 @@ class FirebaseTests {
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                db.sendFriendRequestTo("user1")
+                db.friends.sendFriendRequestTo("user1")
             }
         }
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                db.listFriendRequests()
+                db.friends.listFriendRequests()
             }
         }
 
         assertThrows(Exception::class.java) {
             runBlocking {
-                db.acceptFriendRequest("user1")
+                db.friends.acceptFriendRequest("user1")
             }
         }
     }

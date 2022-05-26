@@ -17,7 +17,7 @@
     <string name="rock_image">rock image</string>
     <string name="paper_image">paper image</string>
     <string name="scissors_image">scissors image</string>
-    <string name="counter_value"> </string>
+    <string name="counter_value" />
     <string name="user_username">username</string>
     <string name="user_rank">rank</string>
     <string name="match_result">3:1</string>
@@ -96,5 +96,7 @@
     <string name="settings_show_onboard">settings_show_onboard</string>
     <string name="show_welcome_screen_text_settings">Show the welcome screen</string>
     <string name="clear_shared_prefs_settings_text">Clear all settings</string>
+    <string name="placeholder_text">PLACEHOLDER TEXT</string>
+    <string name="cancel_text">Cancel</string>§
     <string name="leaderboard">L E A D E R B O A R D</string>
 </resources>

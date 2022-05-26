@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
-import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
 
 class GameFragment : Fragment() {
@@ -42,6 +44,18 @@ class GameFragment : Fragment() {
         uiSetup()
     }
 
+    override fun onStart() {
+        super.onStart()
+        val gameId = arguments?.getString("game_id")
+        if (gameId != null) {
+            Toast.makeText(context, "Game ID: $gameId", Toast.LENGTH_LONG).show()
+            matchViewModel.setGameServiceSettingsOnline(
+                ServiceLocator.getInstance().getGameServiceForGame(gameId)
+            )
+            matchViewModel.gameService?.startListening()
+        }
+    }
+
     private fun rpsPressed(hand: Hand) {
         // the button activates an asynchronous tasks
         // while the task is still running the clicking on the other radio buttons should NOT
@@ -49,11 +63,12 @@ class GameFragment : Fragment() {
         if (matchViewModel.job == null ||
             (matchViewModel.job != null && !matchViewModel.job?.isActive!!)
         ) {
+            println("in the rps pressed")
             matchViewModel.managePlayHand(hand,
                 opponentsMoveUIUpdateCallback = {
                     opponentMoveUIUpdate(
                         matchViewModel.gameService?.currentRound?.hands?.get(
-                            matchViewModel.computerPlayer!!.computerPlayerId
+                            matchViewModel.opponent!!.uid
                         )!!
                     )
                 },
