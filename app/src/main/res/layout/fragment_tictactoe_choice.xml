@@ -16,7 +16,7 @@
         android:gravity="center_horizontal|center_vertical"
         android:text="Pick your side"
         android:textColor="#454545"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
 
@@ -45,7 +45,7 @@
     </LinearLayout>
 
 
-    <Space
+    <android.widget.Space
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:layout_weight="0" />
@@ -76,7 +76,7 @@
     </LinearLayout>
 
 
-    <Space
+    <android.widget.Space
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:layout_weight="0" />
@@ -101,9 +101,9 @@
             android:text="Vs PC"
             android:textAllCaps="false"
             android:textColor="#454545"
-            android:textSize="21dp" />
+            android:textSize="21sp" />
 
-        <Space
+        <android.widget.Space
             android:layout_width="8dp"
             android:layout_height="wrap_content"
             android:layout_weight="0" />
@@ -117,7 +117,7 @@
             android:text="MULTIPLAYER"
             android:textAllCaps="false"
             android:textColor="#454545"
-            android:textSize="21dp" />
+            android:textSize="21sp" />
 
     </LinearLayout>
 
