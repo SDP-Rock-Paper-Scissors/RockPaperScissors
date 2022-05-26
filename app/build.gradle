@@ -202,7 +202,10 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             '**/*Hilt*.*',
             'hilt_aggregated_deps/**',
             '**/*_Factory.class',
-            '**/*_MembersInjector.class'
+            '**/*_MembersInjector.class',
+            //Exclude ml pipeline
+            '**/ch/epfl/sweng/rps/vision/*',
+            '**/ch/epfl/sweng/rps/ui/camera/*'
     ]
     def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
