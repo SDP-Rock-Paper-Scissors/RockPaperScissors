@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ticTacToeChoiceFragment"
     android:layout_width="match_parent"
@@ -15,10 +14,10 @@
         android:layout_gravity="center"
         android:layout_weight="0"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Pick your side"
+        android:text="@string/pick_your_side"
         android:textColor="#454545"
-        android:textSize="20dp"
-        android:textStyle="bold"></TextView>
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
     <LinearLayout
@@ -33,7 +32,8 @@
             android:layout_height="115dp"
             android:layout_weight="1"
             android:padding="10dp"
-            android:src="@drawable/cross"></ImageView>
+            android:src="@drawable/cross"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_img"
@@ -41,12 +41,13 @@
             android:layout_height="115dp"
             android:layout_weight="1"
             android:alpha=".4"
-            android:src="@drawable/nought"></ImageView>
+            android:src="@drawable/nought"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
 
-    <Space
+    <android.widget.Space
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:layout_weight="0" />
@@ -64,7 +65,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/radio_button_checked"></ImageView>
+            android:src="@drawable/radio_button_checked"
+            tools:ignore="ContentDescription,NestedWeights" />
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_radio"
@@ -72,12 +74,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/radio_button_unchecked"></ImageView>
+            android:src="@drawable/radio_button_unchecked"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
 
-    <Space
+    <android.widget.Space
         android:layout_width="match_parent"
         android:layout_height="47dp"
         android:layout_weight="0" />
@@ -99,12 +102,12 @@
             android:background="@drawable/button_2"
             android:gravity="center"
             android:padding="2dp"
-            android:text="Vs PC"
+            android:text="@string/vs_pc"
             android:textAllCaps="false"
             android:textColor="#454545"
-            android:textSize="21dp"></androidx.appcompat.widget.AppCompatButton>
+            android:textSize="21sp" />
 
-        <Space
+        <android.widget.Space
             android:layout_width="8dp"
             android:layout_height="wrap_content"
             android:layout_weight="0" />
@@ -115,10 +118,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_2"
-            android:text="MULTIPLAYER"
+            android:text="@string/multiplayer"
             android:textAllCaps="false"
             android:textColor="#454545"
-            android:textSize="21dp"></androidx.appcompat.widget.AppCompatButton>
+            android:textSize="21sp" />
 
     </LinearLayout>
 

@@ -14,7 +14,7 @@ class LeaderBoardViewModel : ViewModel(){
     fun getLeaderBoard(position:Int) : LiveData<List<LeaderBoardInfo>> {
         var livedata = MutableLiveData<List<LeaderBoardInfo>>()
         viewModelScope.launch(Dispatchers.IO) {
-            livedata.postValue(cache.getLeaderBoardDataAsync(position))
+            livedata.postValue(cache.getLeaderBoardData(position))
         }
         return livedata
     }

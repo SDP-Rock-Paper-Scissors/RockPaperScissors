@@ -1,15 +1,20 @@
-package ch.epfl.sweng.rps.db
-
+package ch.epfl.sweng.rps.remote
 
 import android.net.Uri
-import android.R
-import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.RoundStat
+import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 object FirebaseHelper {
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
+
     fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
         return pairs.associate { t -> t.first.value to t.second }
     }
@@ -24,12 +29,10 @@ object FirebaseHelper {
         )
     }
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
-
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
-        val userGameList = firebaseRepository.gamesOfUser(userid)
+        val userGameList = firebaseRepository.games.gamesOfUser(userid)
         val allStatsResult = mutableListOf<UserStat>()
         for (userGame in userGameList) {
             val userStat = UserStat()
@@ -41,20 +44,21 @@ object FirebaseHelper {
             val gameModeName: String
             val gameModeID: Int
             val date = dateFormat.format(userGame.timestamp.toDate())
-            val allRoundScores = gameRounds.map { it.value.computeScores() }
-            val userScore = allRoundScores.asSequence().map { scores ->
+            val allRoundScores =
+                gameRounds.map { it.value.computeScores() }.filter { it.isNotEmpty() }
+            val userScore = allRoundScores.sumOf { scores ->
                 val max = scores.maxOf { it.points }
-                if (scores.any { it.points == max && it.uid == userid && !scores.all { it.points == max } })
-                    1
+                if (scores.any { it.points == max && it.uid == userid && !scores.all { score -> score.points == max } })
+                    1L
                 else
-                    0
+                    0L
 
-            }.sum()
+            }
             val opponentScore = roundMode.minus(userScore)
             val score = userScore - opponentScore
             val outcome: Int = when {
                 score < 0 -> -1
-                score == 0 -> 0
+                score == 0L -> 0
                 else -> 1
             }
 
@@ -98,7 +102,7 @@ object FirebaseHelper {
         val repo = ServiceLocator.getInstance().repository
         val userid = repo.rawCurrentUid()
 
-        val game = repo.getGame(gid) ?: throw Exception("Game not found")
+        val game = repo.games.getGame(gid) ?: throw Exception("Game not found")
         // note: 1 v 1 db, if we support pvp mode, the table should be iterated to change as well.
         // get opponent user id from player list
         val opponentId: String = game.players.first { it != userid }
@@ -126,14 +130,13 @@ object FirebaseHelper {
         return allDetailsList
     }
 
-
     suspend fun getLeaderBoard(selectMode: Int): List<LeaderBoardInfo> {
         val repo = ServiceLocator.getInstance().repository
         val scoreMode: String = when (selectMode) {
             0 -> "RPSScore"
             else -> "TTTScore"
         }
-        val scores = repo.getLeaderBoardScore(scoreMode)
+        val scores = repo.games.getLeaderBoardScore(scoreMode)
         val allPlayers = mutableListOf<LeaderBoardInfo>()
         for (score in scores) {
             val leaderBoardInfo = LeaderBoardInfo()
@@ -147,7 +150,7 @@ object FirebaseHelper {
                 repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
             if (leaderBoardInfo.userProfilePictureUrl == null) {
                 leaderBoardInfo.userProfilePictureUrl =
-                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.sym_def_app_icon)
+                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.profile_img)
 
             }
             leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
@@ -158,44 +161,6 @@ object FirebaseHelper {
         return allPlayers
     }
 
-    suspend fun getFriends(): List<FriendsInfo> {
-        val fbRepo = ServiceLocator.getInstance().repository
-        val friends = fbRepo.getFriends()
-        val friendList = mutableListOf<FriendsInfo>()
-
-        for (friend in friends) {
-            val user = fbRepo.getUser(friend)?:continue
-            val userStats = fbRepo.statsOfUser(friend)
-            val friendsInfo = FriendsInfo(
-                username = user.username?:"UsernameEmpty",
-                gamesPlayed = userStats.total_games,
-                gamesWon = userStats.wins,
-                winRate = userStats.winRate,
-                isOnline = true)
-
-            friendList.add(friendsInfo)
-        }
-        return friendList
-    }
-
-    suspend fun getFriendReqs(): List<FriendRequestInfo> {
-        val fbRepo = ServiceLocator.getInstance().repository
-        val friendRequest = fbRepo.listFriendRequests()
-        val reqList = mutableListOf<FriendRequestInfo>()
-        val uid = fbRepo.rawCurrentUid()
-
-        for (req in friendRequest) {
-            if (req.from != uid) {
-                val user = fbRepo.getUser(req.from) ?: continue
-                val friendsReq = FriendRequestInfo(
-                    username = user.username ?: "UsernameEmpty",
-                    uid = req.from
-                )
-                reqList.add(friendsReq)
-            }
-        }
-        return reqList
-    }
 
 }
 
