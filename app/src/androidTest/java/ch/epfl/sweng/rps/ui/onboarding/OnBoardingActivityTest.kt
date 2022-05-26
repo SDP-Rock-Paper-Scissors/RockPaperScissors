@@ -20,7 +20,10 @@ class OnBoardingActivityTest {
             InstrumentationRegistry.getInstrumentation().targetContext,
             OnBoardingActivity::class.java
         )
-        intent.putExtra(OnBoardingActivity.DESTINATION_EXTRA, OnBoardingActivity.Destination.FINISH)
+        intent.putExtra(
+            OnBoardingActivity.AFTER_ONBOARDING_DONE_EXTRA,
+            OnBoardingActivity.AfterOnboardingAction.FINISH
+        )
         return intent
     }
 
@@ -29,7 +32,7 @@ class OnBoardingActivityTest {
         val scenario = ActivityScenario.launch<OnBoardingActivity>(createIntent())
         onView(withId(R.id.onboarding_layout)).check(matches(isDisplayed()))
         val activity = TestUtils.getActivityInstance<OnBoardingActivity>()
-        OnBoardingActivity.navOut(activity)
+        activity.navOut()
         TestUtils.retryPredicate(retryDelay = 200, maxRetries = 10) {
             scenario.state == Lifecycle.State.DESTROYED
         }
