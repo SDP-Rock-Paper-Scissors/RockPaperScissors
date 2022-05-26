@@ -106,4 +106,8 @@
     <string name="pick_your_side">Pick your side</string>
     <string name="vs_pc">Vs PC</string>
     <string name="multiplayer">MULTIPLAYER</string>
+    <string name="edit">Edit</string>
+    <string name="text">Text</string>
+    <string name="value">Value</string>
+    <string name="edit_icon_desc">edit icon</string>
 </resources>
