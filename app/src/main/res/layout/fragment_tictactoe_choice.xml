@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:layout_weight="0"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Pick your side"
+        android:text="@string/pick_your_side"
         android:textColor="#454545"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -32,7 +32,8 @@
             android:layout_height="115dp"
             android:layout_weight="1"
             android:padding="10dp"
-            android:src="@drawable/cross" />
+            android:src="@drawable/cross"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_img"
@@ -40,7 +41,8 @@
             android:layout_height="115dp"
             android:layout_weight="1"
             android:alpha=".4"
-            android:src="@drawable/nought" />
+            android:src="@drawable/nought"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
@@ -63,7 +65,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/radio_button_checked" />
+            android:src="@drawable/radio_button_checked"
+            tools:ignore="ContentDescription,NestedWeights" />
 
         <ImageView
             android:id="@+id/ai_pick_side_circle_radio"
@@ -71,7 +74,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/radio_button_unchecked" />
+            android:src="@drawable/radio_button_unchecked"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
@@ -98,7 +102,7 @@
             android:background="@drawable/button_2"
             android:gravity="center"
             android:padding="2dp"
-            android:text="Vs PC"
+            android:text="@string/vs_pc"
             android:textAllCaps="false"
             android:textColor="#454545"
             android:textSize="21sp" />
@@ -114,7 +118,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_2"
-            android:text="MULTIPLAYER"
+            android:text="@string/multiplayer"
             android:textAllCaps="false"
             android:textColor="#454545"
             android:textSize="21sp" />

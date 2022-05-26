@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.remote
 
 import android.net.Uri
+import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
@@ -149,7 +150,7 @@ object FirebaseHelper {
                 repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
             if (leaderBoardInfo.userProfilePictureUrl == null) {
                 leaderBoardInfo.userProfilePictureUrl =
-                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + android.R.drawable.sym_def_app_icon)
+                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.profile_img)
 
             }
             leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
