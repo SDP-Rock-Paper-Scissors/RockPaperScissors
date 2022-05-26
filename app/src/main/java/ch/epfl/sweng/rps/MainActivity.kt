@@ -30,25 +30,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         cache = Cache.getInstance() ?: Cache.createInstance(this)
 
-        if(intent.action.equals("fromCamera")){
-            val extras = intent.extras
-            if (extras != null) {
-                val value = extras.getString("result")
-                Toast.makeText(this, "The pose $value was detected", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            val userData: Bundle? = intent.extras?.getBundle("User")
-            if (userData != null) {
-                currentUser = User(
-                    userData.getString("display_name"),
-                    userData.getString("uid")!!,
-                    userData.getString("privacy")!!,
-                    false,
-                    userData.getString("email")
-                )
-            }
+        val userData: Bundle? = intent.extras?.getBundle("User")
+        if (userData != null) {
+            currentUser = User(
+                userData.getString("display_name"),
+                userData.getString("uid")!!,
+                userData.getString("privacy")!!,
+                false,
+                userData.getString("email")
+            )
         }
-
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

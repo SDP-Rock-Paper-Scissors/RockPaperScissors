@@ -2,8 +2,6 @@
     <string name="app_name">Rock Paper Scissors</string>
     <string name="default_web_client_id1">896605409351-a1hlsfr6dkigthpbeul0ug46c8774uoa.apps.googleusercontent.com</string>
     <string name="title_activity_main">main_activity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -45,6 +43,9 @@
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
     <item name="test_for_stats_row" type="id" />
+
+    <!-- home -->
+
 
     <!-- game -->
     <string name="game_over">Game Over</string>
@@ -97,6 +98,13 @@
     <string name="show_welcome_screen_text_settings">Show the welcome screen</string>
     <string name="clear_shared_prefs_settings_text">Clear all settings</string>
     <string name="placeholder_text">PLACEHOLDER TEXT</string>
-    <string name="cancel_text">Cancel</string>§
+    <string name="cancel_text">Cancel</string>
     <string name="leaderboard">L E A D E R B O A R D</string>
+
+    <!-- Content Description -->
+    <string name="clock_description">Clock showing how much time passed</string>
+    <string name="camera_description">Clock showing how much time passed</string>
+    <string name="add_new_game">Add new game</string>
+    <string name="tic_tac_toe">Tic Tac Toe</string>
+
 </resources>

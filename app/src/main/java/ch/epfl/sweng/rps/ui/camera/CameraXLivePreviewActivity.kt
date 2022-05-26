@@ -50,7 +50,6 @@ import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
 
 /** Live preview demo app for ML Kit APIs using CameraX. */
 @KeepName
-@RequiresApi(VERSION_CODES.LOLLIPOP)
 class CameraXLivePreviewActivity :
   AppCompatActivity() {
 
@@ -96,12 +95,11 @@ class CameraXLivePreviewActivity :
       .observe(
         this,
         Observer { result: String ->
-           Intent(this, MainActivity::class.java )
-             .putExtra("result", result)
-             .setAction("fromCamera").also{
-             startActivity(it)
+           setResult(Activity.RESULT_OK,
+             Intent(this, MainActivity::class.java )
+             .putExtra("result", result))
+           finish()
           }
-        }
       )
 
 
