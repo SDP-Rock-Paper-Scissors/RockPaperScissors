@@ -60,8 +60,8 @@ class CacheTests {
     @Test
     fun cacheContainsNoDataWhenCreated() {
         assertNull(cache.getUserDetailsFromCache())
-        assertTrue(cache.getStatsDataFromCache(0).isEmpty())
-        assertTrue(cache.getLeaderBoardDataFromCache(0).isEmpty())
+        assertTrue(cache.getStatsDataFromCache().isEmpty())
+        assertTrue(cache.getLeaderBoardDataFromCache().isEmpty())
     }
 
     @Test
@@ -81,7 +81,7 @@ class CacheTests {
 
     @Test
     fun cacheCorrectlySavesStatsData() {
-        assertTrue(cache.getStatsDataFromCache(0).isEmpty())
+        assertTrue(cache.getStatsDataFromCache().isEmpty())
         val lst = listOf(
             UserStat(gameId = "1234", date = "14/07/2020", opponents = "Opp", "Best 5", "0"),
             UserStat(gameId = "1244", date = "14/07/1020", opponents = "Opp1", "Best 3", "0"),
@@ -89,13 +89,13 @@ class CacheTests {
         )
         cache.updateStatsData(lst)
         cache.clearLocalVars()
-        val result = cache.getStatsDataFromCache(0)
+        val result = cache.getStatsDataFromCache()
         assertEquals(result, lst)
     }
 
     @Test
     fun cacheCorrectlySavesLeaderBoardData() {
-        assertTrue(cache.getLeaderBoardDataFromCache(0).isEmpty())
+        assertTrue(cache.getLeaderBoardDataFromCache().isEmpty())
         val user1 =
             LeaderBoardInfo("jinglun", "1", Uri.parse("https://example.com/"), 100)
         val user2 =
@@ -105,7 +105,7 @@ class CacheTests {
         val allPlayers = listOf(user1, user2, user3)
         cache.updateLeaderBoardData(allPlayers)
         cache.clearLocalVars()
-        val result = cache.getLeaderBoardDataFromCache(0)
+        val result = cache.getLeaderBoardDataFromCache()
         assertEquals(result, allPlayers)
     }
 
