@@ -30,8 +30,8 @@ class MatchViewModel : ViewModel() {
     var currentRoundResult: Hand.Result? = null
     private var gameResult: Hand.Result? = null
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
-    var cache = Cache.getInstance()!!
-    var host = MutableLiveData(cache.getUserDetails()!!)
+    var cache = Cache.getInstance()
+    var host: MutableLiveData<AbstractUser?> = MutableLiveData(null)
     var opponent: MutableLiveData<AbstractUser?> = MutableLiveData(User("opponent"))
     private var nEvents: Int? = null
     private var artificialMovesDelay: Long? = null
@@ -48,6 +48,12 @@ class MatchViewModel : ViewModel() {
     val userPlayerCurrentPoints: String
         get() = cumulativeScore.value?.filter { score -> score.uid == uid }
             ?.get(0)?.points.toString()
+
+    init {
+        viewModelScope.launch {
+            host.value = cache.getUserDetails()
+        }
+    }
 
     fun setGameServiceSettings(
         nEvents: Int,
