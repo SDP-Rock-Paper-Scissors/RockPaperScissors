@@ -13,6 +13,7 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.services.MultiplayerTicTacToe
 import ch.epfl.sweng.rps.services.OfflineTicTacToe
 import ch.epfl.sweng.rps.services.TicTacToeGame
+import ch.epfl.sweng.rps.services.TicTacToeGame.MOVES
 
 class TicTacToeFragment : Fragment() {
 
@@ -58,10 +59,11 @@ class TicTacToeFragment : Fragment() {
 
     fun gameOver(winner: TicTacToeGame.MOVES) {
         outcomeText.visibility = View.VISIBLE
-        if (winner == TicTacToeGame.MOVES.CROSS)
-            outcomeText.text = "CROSS WINS"
-        else
-            outcomeText.text = "CIRCLE WINS"
+        when (winner) {
+            MOVES.CROSS -> outcomeText.text = "CROSS WINS"
+            MOVES.CROSS -> outcomeText.text = "CIRCLE WINS"
+            MOVES.EMPTY -> outcomeText.text = "DRAW"
+        }
     }
 }
 
