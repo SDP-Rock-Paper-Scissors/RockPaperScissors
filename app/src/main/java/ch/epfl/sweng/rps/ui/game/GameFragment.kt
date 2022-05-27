@@ -62,9 +62,15 @@ class GameFragment : Fragment() {
         matchViewModel.cumulativeScore.observe(
             viewLifecycleOwner
         ) {
-            binding.opponentMatchData.currentPoints.text =
+            binding.opponentData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
-            binding.userMatchData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
+            binding.hostData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
+        }
+        matchViewModel.host.observe(viewLifecycleOwner) {
+            binding.hostData.username.text = matchViewModel.host.value!!.username
+        }
+        matchViewModel.opponent.observe(viewLifecycleOwner) {
+            binding.opponentData.username.text = matchViewModel.opponent.value!!.username
         }
         uiSetup()
     }
@@ -93,7 +99,7 @@ class GameFragment : Fragment() {
                 opponentsMoveUIUpdateCallback = {
                     opponentMoveUIUpdate(
                         matchViewModel.gameService?.currentRound?.hands?.get(
-                            matchViewModel.opponent!!.uid
+                            matchViewModel.opponent.value!!.uid
                         )!!
                     )
                 },
@@ -141,8 +147,8 @@ class GameFragment : Fragment() {
 
     private fun resetScores() {
         if (matchViewModel.gameService?.isGameOver!!) {
-            binding.opponentMatchData.currentPoints.text = "0"
-            binding.userMatchData.currentPoints.text = "0"
+            binding.opponentData.currentPoints.text = "0"
+            binding.hostData.currentPoints.text = "0"
         }
     }
 

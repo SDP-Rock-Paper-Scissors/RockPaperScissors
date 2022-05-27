@@ -9,15 +9,23 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup.Companion.defaultTestFlow
 import ch.epfl.sweng.rps.MainActivity
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.TestFlow
+import ch.epfl.sweng.rps.TestUtils.initializeForTest
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.models.ui.FakeFriendsData
+import ch.epfl.sweng.rps.persistence.Cache
+import ch.epfl.sweng.rps.persistence.PrivateStorage
+import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Before
@@ -29,6 +37,8 @@ class FriendsFragmentTest {
 
     val LIST_ITEM = FakeFriendsData.myFriendsData.size - 1
     val thisFriend = FakeFriendsData.myFriendsData[LIST_ITEM]
+    lateinit var cache: Cache
+    lateinit var storage: Storage
 
     @get:Rule
     val activityRule = ActivityScenarioRuleWithSetup(MainActivity::class.java,
@@ -38,8 +48,13 @@ class FriendsFragmentTest {
     @Before
     fun setUp() {
         ServiceLocator.setCurrentEnv(Env.Test)
-        val repo = ServiceLocator.getInstance().repository as LocalRepository
-        repo.setCurrentUid("test")
+        ServiceLocator.localRepository.setCurrentUid("test")
+        Firebase.initializeForTest()
+        cache = Cache.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
+        storage = PrivateStorage(InstrumentationRegistry.getInstrumentation().targetContext)
+        runBlocking {
+            cache.setUserDetails(User(uid = "user_test_uid", username = "test name"))
+        }
     }
 
     @After

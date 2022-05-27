@@ -17,7 +17,7 @@
     <string name="scissors_image">scissors image</string>
     <string name="counter_value" />
     <string name="user_username">username</string>
-    <string name="user_rank">rank</string>
+    <string name="user_rank"> </string>
     <string name="match_result">3:1</string>
     <string name="menu_game">Game</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -117,5 +117,8 @@
     <string name="pick_your_side">Pick your side</string>
     <string name="vs_pc">Vs PC</string>
     <string name="multiplayer">MULTIPLAYER</string>
-
+    <string name="edit">Edit</string>
+    <string name="text">Text</string>
+    <string name="value">Value</string>
+    <string name="edit_icon_desc">edit icon</string>
 </resources>
