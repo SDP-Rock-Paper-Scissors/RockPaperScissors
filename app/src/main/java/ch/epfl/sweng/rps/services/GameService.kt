@@ -79,7 +79,7 @@ abstract class GameService : ChangeNotifier<GameService>() {
         }
 
     /**
-     * The host of the game. This is the first player in the player list.
+     * The host of the game.The first player in the player list.
      */
     val host: String
         get() = currentGame.players.first()

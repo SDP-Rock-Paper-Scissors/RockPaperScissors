@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.vision
 
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 import java.util.concurrent.Executors
 
 class ScopedExecutorTest {
@@ -14,11 +13,12 @@ class ScopedExecutorTest {
         executorScoped.shutdown()
         executorScoped.execute(Runnable {
             run() {
-               while(true){
+                while (true) {
+                }
             }
-        }})
+        })
 
-    assert(!executor.isShutdown)
+        assert(!executor.isShutdown)
     }
 
 }

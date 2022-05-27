@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.databinding.GraphicOverlayTestBinding
 
 
-
 class GraphicOverlayActivity : AppCompatActivity() {
 
 

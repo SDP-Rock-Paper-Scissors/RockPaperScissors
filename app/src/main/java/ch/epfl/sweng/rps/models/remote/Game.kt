@@ -12,7 +12,7 @@ import java.util.*
  * @property players The players of the game
  * @property gameMode The game mode
  * @property rounds an array of rounds (Note that this is a map, not an actual array)
- * @property current_round This is the current round
+ * @property current_round The current round
  * @property timestamp The timestamp of the game
  */
 sealed class Game {

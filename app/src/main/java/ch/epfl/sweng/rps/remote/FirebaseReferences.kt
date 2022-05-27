@@ -11,27 +11,27 @@ class FirebaseReferences {
     private val storageRoot = FirebaseStorage.getInstance().reference
 
     /**
-     * This is the friend request collection.
+     * Thefriend request collection.
      */
     val usersFriendRequest = root.collection("friend_requests")
 
     /**
-     * This is the users collection.
+     * Theusers collection.
      */
     val usersCollection = root.collection("users")
 
     /**
-     * This is the profile pictures folder.
+     * Theprofile pictures folder.
      */
     val profilePicturesFolder = storageRoot.child("profile_pictures")
 
     /**
-     * This is the games collection.
+     * Thegames collection.
      */
     val gamesCollection = root.collection("games")
 
     /**
-     * This is the scores collection.
+     * Thescores collection.
      */
     val scoresCollection = root.collection("scores")
 

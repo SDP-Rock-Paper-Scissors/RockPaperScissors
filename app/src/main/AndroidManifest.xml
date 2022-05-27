@@ -50,6 +50,7 @@
             android:exported="false"
             android:label="Camera"
             android:parentActivityName=".MainActivity" />
+
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
             android:authorities="${applicationId}.firebaseinitprovider"
