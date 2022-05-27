@@ -46,9 +46,9 @@ class ProfileFragmentTest {
     @Test
     fun testFields() {
         onView(withId(R.id.nav_profile)).perform(click())
-        onView(withId(R.id.TextDisplayName)).check(matches(withText(bundle.getString("display_name"))))
-        onView(withId(R.id.TextEmail)).check(matches(withText(bundle.getString("email"))))
-        onView(withId(R.id.TextPrivacy)).check(matches(withText(bundle.getString("privacy"))))
+
+        onView(withText(user.username)).check(matches(isDisplayed()))
+        onView(withText(user.email)).check(matches(isDisplayed()))
     }
 
     @Test
