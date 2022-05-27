@@ -17,7 +17,7 @@
     <string name="rock_image">rock image</string>
     <string name="paper_image">paper image</string>
     <string name="scissors_image">scissors image</string>
-    <string name="counter_value"></string>
+    <string name="counter_value" />
     <string name="user_username">username</string>
     <string name="user_rank"> </string>
     <string name="match_result">3:1</string>
@@ -38,9 +38,6 @@
     <string name="mode">Mode</string>
     <string name="score">Score</string>
     <string name="match_detail">Match Detail</string>
-    <string name="player">Player</string>
-    <string name="opponent">Opponent</string>
-    <string name="outcome">Outcome</string>
 
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>

@@ -1,29 +1,29 @@
 package ch.epfl.sweng.rps.ui.profile
 
 import android.graphics.Bitmap
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.epfl.sweng.rps.persistence.Cache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProfileViewModel : ViewModel() {
-    private val cache = Cache.getInstance()!!
-    fun getProfilePicture() : LiveData<Bitmap> {
-        var livedata = MutableLiveData<Bitmap>()
-        viewModelScope.launch(Dispatchers.IO) {
-            livedata.postValue(cache.getUserPictureAsync())
-        }
-        return livedata
+    private val cache = Cache.getInstance()
+
+    suspend fun getProfilePicture(): Bitmap? {
+        return cache.getUserPictureAsync()
     }
-    fun updateProfilePicture(bitmap: Bitmap){
+
+    fun updateProfilePicture(bitmap: Bitmap) {
         viewModelScope.launch(Dispatchers.IO) {
             cache.updateUserPicture(bitmap)
         }
     }
-    fun getCachedUserPicture() : Bitmap?{
-        return cache.getUserPicture()
+
+    suspend fun getCachedUserPicture(): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            cache.getUserPicture()
+        }
     }
 }

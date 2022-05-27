@@ -20,11 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/user_rank" />
+
     <TextView
         android:id="@+id/current_points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/init_player_score"
-        />
+        android:text="@string/init_player_score" />
 </LinearLayout>

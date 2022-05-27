@@ -1,8 +1,8 @@
 package ch.epfl.sweng.rps.auth.implementations
 
 import ch.epfl.sweng.rps.auth.Authenticator
-import ch.epfl.sweng.rps.models.User
-import org.junit.jupiter.api.Assertions.*
+import ch.epfl.sweng.rps.models.remote.User
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class MockAuthenticatorTest {

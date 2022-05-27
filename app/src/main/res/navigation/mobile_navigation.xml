@@ -78,9 +78,6 @@
         <action
             android:id="@+id/action_nav_friends_to_gameFragment2"
             app:destination="@id/gameFragment" />
-        <action
-            android:id="@+id/action_nav_friends_to_requestFragment"
-            app:destination="@id/requestFragment" />
     </fragment>
 
     <fragment
@@ -154,11 +151,6 @@
             android:id="@+id/action_matchmakingFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/requestFragment"
-        android:name="ch.epfl.sweng.rps.ui.friends.RequestFragment"
-        android:label="request_fragment"
-        tools:layout="@layout/request_fragment" />
 
 
 </navigation>

@@ -2,12 +2,12 @@ package ch.epfl.sweng.rps.services
 
 import android.util.Log
 import androidx.annotation.VisibleForTesting
-import ch.epfl.sweng.rps.db.FirebaseReferences
-import ch.epfl.sweng.rps.db.FirebaseRepository
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.Game.Companion.toGame
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.models.remote.Game
+import ch.epfl.sweng.rps.models.remote.Game.Companion.toGame
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.Round
+import ch.epfl.sweng.rps.remote.FirebaseReferences
+import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.utils.L
 import ch.epfl.sweng.rps.utils.consume
 import com.google.firebase.Timestamp
@@ -24,9 +24,39 @@ class FirebaseGameService(
     private val firebaseRepository: FirebaseRepository,
     override val gameId: String,
 ) : GameService() {
+
+
     private var _disposed = false
     private val gameRef = firebase.gamesCollection.document(gameId)
     private var listenerRegistration: ListenerRegistration? = null
+    override val currentGame: Game
+        get() {
+            checkNotDisposed()
+            if (game == null) {
+                throw error ?: GameServiceException("Game service has not received a game yet")
+            } else {
+                return game!!
+            }
+        }
+    override val isGameFull: Boolean
+        get() {
+            return currentGame.players.size == currentGame.gameMode.playerCount
+        }
+    override val currentRound: Round
+        get() {
+            checkNotDisposed()
+            val game = currentGame
+            if (game.rounds.isEmpty()) {
+                throw GameServiceException("Game has no rounds")
+            }
+            return game.rounds[game.current_round.toString()]!!
+        }
+    val isListening get() = listenerRegistration != null
+    override val isGameOver: Boolean get() = game?.done ?: false
+    override val isDisposed: Boolean get() = _disposed
+    override val started: Boolean
+        get() = game?.started ?: false
+    override val imTheOwner get() = game?.players?.first() == firebaseRepository.getCurrentUid()
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun setGameTest(game: Game) {
@@ -61,22 +91,6 @@ class FirebaseGameService(
         listenerRegistration?.remove()
     }
 
-
-    override val currentGame: Game
-        get() {
-            checkNotDisposed()
-            if (game == null) {
-                throw error ?: GameServiceException("Game service has not received a game yet")
-            } else {
-                return game!!
-            }
-        }
-
-    override val isGameFull: Boolean
-        get() {
-            return currentGame.players.size == currentGame.gameMode.playerCount
-        }
-
     /**
      * Because it updates the data in this database,
      * it is not sure that the [currentGame] will up to date after this call.
@@ -110,16 +124,6 @@ class FirebaseGameService(
         return g
     }
 
-    override val currentRound: Round
-        get() {
-            checkNotDisposed()
-            val game = currentGame
-            if (game.rounds.isEmpty()) {
-                throw GameServiceException("Game has no rounds")
-            }
-            return game.rounds[game.current_round.toString()]!!
-        }
-
     override suspend fun playHand(hand: Hand) {
         checkNotDisposed()
         val game = refreshGame()
@@ -136,11 +140,6 @@ class FirebaseGameService(
 
         _disposed = true
         super.dispose()
-    }
-
-    sealed class PlayerCount(val playerCount: Int) {
-        class Some(playerCount: Int) : PlayerCount(playerCount)
-        class Full(playerCount: Int) : PlayerCount(playerCount)
     }
 
     suspend fun opponentCount(): Flow<PlayerCount> = callbackFlow {
@@ -162,13 +161,6 @@ class FirebaseGameService(
         }
     }
 
-    val isListening get() = listenerRegistration != null
-
-    override val isGameOver: Boolean get() = game?.done ?: false
-    override val isDisposed: Boolean get() = _disposed
-    override val started: Boolean
-        get() = game?.started ?: false
-
     private fun checkNotDisposed() {
         if (_disposed) {
             throw GameServiceException("GameService is disposed")
@@ -178,8 +170,6 @@ class FirebaseGameService(
     suspend fun awaitForGame() {
         return awaitFor { game != null }
     }
-
-    override val imTheOwner get() = game?.players?.first() == firebaseRepository.getCurrentUid()
 
     suspend fun waitForGameStart(): Boolean {
         if (imTheOwner) {
@@ -212,5 +202,10 @@ class FirebaseGameService(
      */
     override suspend fun awaitForRoundAdded() {
         awaitFor { imTheOwner || currentRound.hands.size == 1 }
+    }
+
+    sealed class PlayerCount(val playerCount: Int) {
+        class Some(playerCount: Int) : PlayerCount(playerCount)
+        class Full(playerCount: Int) : PlayerCount(playerCount)
     }
 }

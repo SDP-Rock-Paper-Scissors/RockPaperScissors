@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
-import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
 

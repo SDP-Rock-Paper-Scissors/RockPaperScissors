@@ -1,5 +1,7 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.remote.Game
+import ch.epfl.sweng.rps.models.remote.Round
 import com.google.firebase.Timestamp
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

@@ -13,6 +13,7 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.services.MultiplayerTicTacToe
 import ch.epfl.sweng.rps.services.OfflineTicTacToe
 import ch.epfl.sweng.rps.services.TicTacToeGame
+import ch.epfl.sweng.rps.services.TicTacToeGame.MOVES
 
 class TicTacToeFragment : Fragment() {
 
@@ -20,7 +21,7 @@ class TicTacToeFragment : Fragment() {
     private lateinit var viewModel: TicTacToeViewModel
     private var boxList = mutableListOf<ImageView>()
     lateinit var game: TicTacToeGame
-    lateinit var outcomeText: TextView
+    private lateinit var outcomeText: TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,10 +37,10 @@ class TicTacToeFragment : Fragment() {
             (requireArguments().get("MODE") ?: TicTacToeGame.MODE.PC) as TicTacToeGame.MODE
         val choice: TicTacToeGame.MOVES =
             (requireArguments().get("PLAYER") ?: TicTacToeGame.MOVES.CROSS) as TicTacToeGame.MOVES
-        if (mode == TicTacToeGame.MODE.PC)
-            game = OfflineTicTacToe(this, choice)
+        game = if (mode == TicTacToeGame.MODE.PC)
+            OfflineTicTacToe(this, choice)
         else
-            game = MultiplayerTicTacToe(this, choice)
+            MultiplayerTicTacToe(this, choice)
         val boxMatrix = view.findViewById<LinearLayout>(R.id.matrix)
         val boxes = boxMatrix.children
             .filter { it is LinearLayout }
@@ -58,10 +59,11 @@ class TicTacToeFragment : Fragment() {
 
     fun gameOver(winner: TicTacToeGame.MOVES) {
         outcomeText.visibility = View.VISIBLE
-        if (winner == TicTacToeGame.MOVES.CROSS)
-            outcomeText.text = "CROSS WINS"
-        else
-            outcomeText.text = "CIRCLE WINS"
+        when (winner) {
+            MOVES.CROSS -> outcomeText.text = "CROSS WINS"
+            MOVES.CROSS -> outcomeText.text = "CIRCLE WINS"
+            MOVES.EMPTY -> outcomeText.text = "DRAW"
+        }
     }
 }
 

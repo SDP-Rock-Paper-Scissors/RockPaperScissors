@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.ui.statistics
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.UserStat
+import ch.epfl.sweng.rps.models.ui.UserStat
 import coil.load
 
 
@@ -31,7 +32,6 @@ class StatsItemAdapter(private val fragmentManager: FragmentManager) :
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(statsList[position])
         holder.itemView.findViewById<CardView>(R.id.stats_card).isClickable
-        //holder.itemView.findViewById<CardView>(R.id.stats_card).id = statsList[position].gameId.toInt()
         holder.itemView.setOnClickListener {
             val matchDetailFragment = MatchDetailsFragment()
             val bundle = Bundle()
@@ -44,6 +44,7 @@ class StatsItemAdapter(private val fragmentManager: FragmentManager) :
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun addStats(stat: List<UserStat>) {
         this.statsList.apply {
             clear()

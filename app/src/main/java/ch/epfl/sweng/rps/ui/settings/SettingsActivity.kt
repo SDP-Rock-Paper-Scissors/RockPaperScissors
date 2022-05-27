@@ -12,14 +12,15 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.Game
-import ch.epfl.sweng.rps.models.GameMode
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.models.remote.Game
+import ch.epfl.sweng.rps.models.remote.GameMode
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.Round
 import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
+import ch.epfl.sweng.rps.utils.L
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ class SettingsActivity : AppCompatActivity(),
     companion object {
         private const val TITLE_TAG = "settingsActivityTitle"
 
-        fun applyTheme(
+        private fun applyTheme(
             themeKey: String,
             sharedPreferences: SharedPreferences
         ) {
@@ -46,8 +47,17 @@ class SettingsActivity : AppCompatActivity(),
                 "system" -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 }
+                else -> {
+                    L.of(SettingsActivity::class.java).e("Unknown theme: $themeKey")
+                }
             }
+        }
 
+        fun applyTheme(context: Context, sharedPreferences: SharedPreferences? = null) {
+            applyTheme(
+                context.getString(R.string.theme_pref_key),
+                sharedPreferences ?: PreferenceManager.getDefaultSharedPreferences(context)
+            )
         }
     }
 
@@ -145,9 +155,9 @@ class SettingsActivity : AppCompatActivity(),
             }
             joinQueue?.setOnPreferenceClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    val TAG = "Matchmaking"
-                    val games = ServiceLocator.getInstance().repository.myActiveGames()
-                    Log.w(TAG, "games: $games")
+                    val tag = "Matchmaking"
+                    val games = ServiceLocator.getInstance().repository.games.myActiveGames()
+                    Log.w(tag, "games: $games")
                     if (games.isNotEmpty()) {
                         Toast.makeText(
                             context,
@@ -156,7 +166,7 @@ class SettingsActivity : AppCompatActivity(),
                         ).show()
                         return@launch
                     }
-                    Log.d(TAG, "Joining queue")
+                    Log.d(tag, "Joining queue")
                     try {
                         ServiceLocator.getInstance().matchmakingService.queue(
                             GameMode(
@@ -167,10 +177,10 @@ class SettingsActivity : AppCompatActivity(),
                                 GameMode.GameEdition.RockPaperScissors
                             )
                         ).collect {
-                            Log.i(TAG, it.toString())
+                            Log.i(tag, it.toString())
                         }
                     } catch (e: Exception) {
-                        Log.e(TAG, e.toString(), e)
+                        Log.e(tag, e.toString(), e)
                     }
                 }
                 true
@@ -187,10 +197,10 @@ class SettingsActivity : AppCompatActivity(),
                 true
             }
             findPreference<Preference>(getString(R.string.settings_show_onboard))?.setOnPreferenceClickListener {
-                OnBoardingActivity.launch(
-                    requireContext(),
-                    destination = OnBoardingActivity.Destination.FINISH
-                )
+                OnBoardingActivity.createIntent(
+                    requireActivity(),
+                    onDone = OnBoardingActivity.AfterOnboardingAction.FINISH
+                ).apply { startActivity(this) }
                 true
             }
             val gameSettings =
@@ -236,21 +246,7 @@ class SettingsActivity : AppCompatActivity(),
                 }
                 true
             }
-
         }
-
-
-//    class AppearanceFragment : PreferenceFragmentCompat() {
-//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-//            setPreferencesFromResource(R.xml.appearance_preferences, rootKey)
-//        }
-//    }
-//
-//    class SyncFragment : PreferenceFragmentCompat() {
-//        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-//            setPreferencesFromResource(R.xml.sync_preferences, rootKey)
-//        }
-//    }
     }
 
     override fun onResume() {
@@ -268,6 +264,6 @@ class SettingsActivity : AppCompatActivity(),
         key: String?
     ) {
         val themeKey = getString(R.string.theme_pref_key)
-        if (key == themeKey) applyTheme(themeKey, sharedPreferences ?: return)
+        if (key == themeKey) applyTheme(this, sharedPreferences)
     }
 }

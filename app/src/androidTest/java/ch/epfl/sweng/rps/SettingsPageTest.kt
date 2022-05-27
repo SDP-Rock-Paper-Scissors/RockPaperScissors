@@ -15,8 +15,8 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import ch.epfl.sweng.rps.TestUtils.getActivityInstance
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.TestUtils.waitFor
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -55,12 +55,10 @@ class SettingsPageTest {
         return themeIdToAppCompatThemeId[themeId]!!
     }
 
-    private fun getThemeIdFromAppCompatTheme(appCompatThemeId: Int): String {
-        val filtered = themeIdToAppCompatThemeId.entries.filter { it.value == appCompatThemeId }
-        if (filtered.isEmpty()) {
-            throw IllegalArgumentException("No theme id found for appCompatThemeId $appCompatThemeId")
-        }
-        return filtered.first().key
+    private fun getThemeIdFromAppCompatTheme(appCompatThemeId: Int): String? {
+        val filtered =
+            themeIdToAppCompatThemeId.entries.firstOrNull { it.value == appCompatThemeId }
+        return filtered?.key
     }
 
 
@@ -75,7 +73,6 @@ class SettingsPageTest {
     }
 
 
-
     @Test
     fun testSettingsPage() {
         onView(withId(R.id.settings)).check(matches(isDisplayed()))
@@ -85,21 +82,23 @@ class SettingsPageTest {
         // the activity's onPause method has been called at this point
         scenarioRule.scenario.moveToState(Lifecycle.State.RESUMED)
 
-        for (entry in computeThemeMap()) {
-            Log.i("SettingsPageTest", "Testing theme ${entry.key}")
+        for ((key, value) in computeThemeMap()) {
+            Log.i("SettingsPageTest", "Testing theme ${key}")
             onView(withText(R.string.theme_mode)).perform(click())
-            onView(withText(entry.key)).perform(click())
+            onView(withText(key)).perform(click())
             onView(isRoot()).perform(waitFor(1000))
 
             val appCompatThemeId = getCurrentNightMode()
-
-            assertEquals(
-                getAppCompatThemeFromThemeId(entry.value),
-                appCompatThemeId,
-                "Theme should be ${entry.value} (${getAppCompatThemeFromThemeId(entry.value)}) after clicking ${entry.key}, but is $appCompatThemeId (${
-                    getThemeIdFromAppCompatTheme(appCompatThemeId)
-                })"
-            )
+            val themeId = getAppCompatThemeFromThemeId(value)
+            if (appCompatThemeId != AppCompatDelegate.MODE_NIGHT_UNSPECIFIED) {
+                assertEquals(
+                    themeId,
+                    appCompatThemeId,
+                    "Theme should be $value ($themeId) after clicking $key, but is $appCompatThemeId (${
+                        getThemeIdFromAppCompatTheme(appCompatThemeId)
+                    })"
+                )
+            }
 
         }
     }
@@ -126,7 +125,7 @@ class SettingsPageTest {
         ServiceLocator.setCurrentEnv(Env.Test)
         val repo = ServiceLocator.getInstance().repository as LocalRepository
         repo.setCurrentUid("player1")
-        repo.games.clear()
+        repo.gamesMap.clear()
         repo.users.clear()
     }
 
