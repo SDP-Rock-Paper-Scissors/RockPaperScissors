@@ -23,7 +23,7 @@ object FirebaseHelper {
      * This function transforms a list of provided [Pair] of [User.Field] and [T]
      * to a map of [String] and [T] where the key is the [User.Field] value and the value is the [T].
      */
-    fun <T> processUserArguments(vararg pairs: Pair<User.Field, T>): Map<String, T> {
+    fun <T : Any> processUserArguments(vararg pairs: Pair<User.Field, T>): Map<String, T> {
         return pairs.associate { t -> t.first.value to t.second }
     }
 

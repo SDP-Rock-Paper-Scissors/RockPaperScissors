@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.services
 
 import ch.epfl.sweng.rps.remote.Env
-import ch.epfl.sweng.rps.services.ServiceLocator.TestServiceLocator
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
