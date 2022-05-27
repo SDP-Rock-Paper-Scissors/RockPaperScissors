@@ -37,9 +37,8 @@ class ProfileFragmentTest {
         )
         Cache.getInstance().setUserDetails(user)
         onView(withId(R.id.nav_profile)).perform(click())
-        onView(withId(R.id.TextDisplayName)).check(matches(withText(user.username)))
-        onView(withId(R.id.TextEmail)).check(matches(withText(user.email)))
-        onView(withId(R.id.TextPrivacy)).check(matches(withText(user.games_history_privacy)))
+        onView(withText(user.username)).check(matches(isDisplayed()))
+        onView(withText(user.email)).check(matches(isDisplayed()))
     }
 
     @Test
