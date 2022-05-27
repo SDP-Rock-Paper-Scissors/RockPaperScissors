@@ -18,6 +18,7 @@ package ch.epfl.sweng.rps.ui.camera
 
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -73,15 +74,29 @@ class CameraXLivePreviewActivity :
         if (previewView == null) {
             Log.d(TAG, "previewView is null")
         }
+
         graphicOverlay = findViewById(R.id.graphic_overlay)
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null")
         }
 
+
         model = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[CameraXViewModel::class.java]
+
+        model!!.running
+          .observe(
+            this,
+            Observer { result: String ->
+               setResult(
+                   Activity.RESULT_OK,
+                 Intent(this, MainActivity::class.java )
+                 .putExtra("result", result))
+               finish()
+              }
+          )
 
         model!!.processCameraProvider
             .observe(

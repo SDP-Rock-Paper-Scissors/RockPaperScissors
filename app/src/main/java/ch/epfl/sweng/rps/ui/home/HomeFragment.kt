@@ -13,6 +13,7 @@ import ch.epfl.sweng.rps.databinding.FragmentHomeBinding
 import ch.epfl.sweng.rps.models.RandomPlayer
 import ch.epfl.sweng.rps.models.remote.Hand
 
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -25,7 +26,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        setNavigationOnButton(_binding!!.buttonActivateCamera, R.id.cameraXLivePreviewActivity)
         setNavigationOnButton(_binding!!.buttonTikTacToe, R.id.ticTacToeChoiceFragment)
 
         binding.apply {
