@@ -81,11 +81,11 @@ class LeaderboardFragment : Fragment() {
 
 
     private fun loadPlayersUI(itemView: View, players: List<LeaderBoardInfo>) {
-        if(players.size > 3) {
+        if(players.size >= 3) {
             val champions = players.take(3)
-            showPlayersPosition(itemView, players)
             showChampions(itemView, champions)
         }
+        showPlayersPosition(itemView, players)
 
     }
 
