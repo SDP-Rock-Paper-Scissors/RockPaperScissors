@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.Round
@@ -51,7 +52,7 @@ class MatchViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            host.value = cache.getUserDetails()
+            host.value = cache?.getUserDetails()
         }
     }
 
