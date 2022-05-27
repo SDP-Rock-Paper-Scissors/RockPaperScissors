@@ -6,6 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="?android:attr/actionBarSize"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
     android:orientation="vertical"
 
     app:layout_constraintBottom_toBottomOf="parent"
@@ -15,7 +18,7 @@
     tools:context=".ui.game.GameFragment">
 
     <include
-        android:id="@+id/opponent_match_data"
+        android:id="@+id/opponent_data"
         layout="@layout/user_match_data" />
 
     <RadioGroup
@@ -88,7 +91,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
-        android:id="@+id/user_match_data"
+        android:id="@+id/host_data"
         layout="@layout/user_match_data" />
 
     <RadioGroup
