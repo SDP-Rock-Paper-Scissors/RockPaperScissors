@@ -89,14 +89,14 @@ import kotlin.math.min
   private val confidenceQueueRock: Queue<Double> = LinkedList(listOf(0.0, 0.0 ,0.0))
   private val confidenceQueuePaper: Queue<Double> = LinkedList(listOf(0.0, 0.0 ,0.0))
   private val confidenceQueueScissors: Queue<Double> = LinkedList(listOf(0.0, 0.0 ,0.0))
-  private val threshold: Double = 0.85
+  private val threshold: Double = 0.80
 
 
 
 
 
   // -----------------Code for processing live preview frame from CameraX API-----------------------
-  @RequiresApi(VERSION_CODES.LOLLIPOP)
+
   @ExperimentalGetImage
   override fun processImageProxy(image: ImageProxy?, graphicOverlay: GraphicOverlay?) {
     val frameStartMs = SystemClock.elapsedRealtime()
@@ -260,14 +260,14 @@ import kotlin.math.min
     graphicOverlay.add(LabelGraphic(graphicOverlay, results))
     logExtrasForTesting(results)
 
-    if (!results.isNullOrEmpty()) {
+    if (results.isNotEmpty()) {
       updateQueue(confidenceQueuePaper, "paper", results)
       updateQueue(confidenceQueueRock, "rock", results)
       updateQueue(confidenceQueueScissors, "scissors", results)
 
       if (confidenceQueuePaper.all{it > threshold} ||
         confidenceQueueRock.all{it > threshold} ||
-        confidenceQueuePaper.all{it > threshold}) {
+          confidenceQueueScissors.all{it > threshold}) {
         this.model.running.postValue(results.first().text)
         stop()
       }

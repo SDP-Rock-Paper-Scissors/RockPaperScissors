@@ -49,7 +49,7 @@
             android:name=".ui.camera.CameraXLivePreviewActivity"
             android:exported="false"
             android:label="Camera"
-            android:parentActivityName=".MainActivity" />
+            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
             android:authorities="${applicationId}.firebaseinitprovider"
