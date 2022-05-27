@@ -13,6 +13,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
+import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
@@ -170,9 +171,11 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
             {
                 ServiceLocator.setCurrentEnv(Env.Test)
                 Firebase.initializeForTest()
+                Cache.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
                 ServiceLocator.localRepository.setCurrentUid("test")
             },
             {
+                Cache.getInstance().clear()
                 FirebaseAuth.getInstance().signOut()
                 FirebaseApp.clearInstancesForTest()
                 ServiceLocator.setCurrentEnv(Env.Prod)

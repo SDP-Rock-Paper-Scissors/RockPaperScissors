@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment">
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -23,107 +23,52 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/profileImage"
-            android:layout_width="178dp"
-            android:layout_height="147dp"
-            android:layout_marginTop="80dp"
-            android:contentDescription="@string/profile_picture_desc"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.068"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher"
-            tools:src="@tools:sample/avatars[11]" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:gravity="center">
 
-        <Button
-            android:id="@+id/editProfilePic"
-            android:layout_width="114dp"
-            android:layout_height="57dp"
-            android:layout_marginTop="136dp"
-            android:layout_marginEnd="56dp"
-            android:text="Edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="170dp"
+                android:layout_height="140dp"
+                android:contentDescription="@string/profile_picture_desc"
+                app:srcCompat="@mipmap/ic_launcher"
+                tools:src="@tools:sample/avatars[11]" />
 
-        <TextView
-            android:id="@+id/LabelEmail"
-            android:layout_width="106dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="32dp"
-            android:ems="10"
-            android:text="Email"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+            <Button
+                android:id="@+id/editProfilePic"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/edit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/LabelDisplayName"
-            android:layout_width="331dp"
-            android:layout_height="51dp"
-            android:layout_marginTop="32dp"
-            android:ems="10"
-            android:text="Display Name"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextEmail" />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="32dp" />
 
-        <TextView
-            android:id="@+id/LabelPrivacy"
-            android:layout_width="335dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="40dp"
-            android:ems="10"
-            android:text="Privacy:"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextDisplayName" />
+        <include
+            android:id="@+id/email_row"
+            layout="@layout/profile_row"
+            android:layout_width="match_parent"
+            android:layout_height="64dp" />
 
-        <TextView
-            android:id="@+id/TextEmail"
-            android:layout_width="417dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="32dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LabelEmail" />
+        <include
+            android:id="@+id/username_row"
+            layout="@layout/profile_row"
+            android:layout_width="match_parent"
+            android:layout_height="64dp" />
 
-        <TextView
-            android:id="@+id/TextDisplayName"
-            android:layout_width="328dp"
-            android:layout_height="51dp"
-            android:layout_marginTop="28dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LabelDisplayName" />
 
-        <TextView
-            android:id="@+id/TextPrivacy"
-            android:layout_width="339dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="44dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.518"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LabelPrivacy" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

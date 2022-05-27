@@ -14,11 +14,13 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
      * The number of listeners.
      */
     val listenerCount get() = listeners.size
+    private var debugDisposed = false
 
     /**
      * Notifies all listeners of a change.
      */
     fun notifyListeners() {
+        ensureNotDisposed()
         for (n in listeners) {
             try {
                 n()
@@ -32,6 +34,7 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
      * Adds a listener to the list of listeners.
      */
     fun addListener(listener: () -> Unit) {
+        ensureNotDisposed()
         listeners.add(listener)
     }
 
@@ -39,6 +42,7 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
      * Removes a listener from the list of listeners.
      */
     fun removeListener(listener: () -> Unit) {
+        ensureNotDisposed()
         if (!listeners.remove(listener)) {
             throw ListenerNotFoundException(
                 "Listener to remove was not found. " +
@@ -47,7 +51,18 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
         }
     }
 
-    /**
+
+
+
+    private fun ensureNotDisposed() {
+        if (debugDisposed) {
+            throw DisposedException(
+                "This ${this::class.java.simpleName} has been disposed and cannot be used anymore."
+            )
+        }
+    }
+
+     /**
      * Disposes of this notifier.
      * This method should be called when this notifier is no longer needed.
      * When overriding this method, call the super method.
@@ -55,23 +70,24 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
     @CallSuper
     open fun dispose() {
         listeners.clear()
+        debugDisposed = true
     }
 
     /**
      * Suspennd function continuing a change is notified and the [predicate] is satisfied.
      */
-    suspend fun awaitFor(predicate: (T) -> Boolean) =
-        suspendCancellableCoroutine<Unit> { cont ->
+    suspend fun awaitFor(predicate: (T) -> Boolean) {
+        ensureNotDisposed()
+        suspendCancellableCoroutine<Unit> {
+
             val listener = {
                 @Suppress("UNCHECKED_CAST")
                 if (predicate(this@ChangeNotifier as T)) {
-                    cont.resume(Unit)
+                    it.resume(Unit)
                 }
             }
             addListener(listener)
-            cont.invokeOnCancellation {
-                removeListener(listener)
-            }
+            it.invokeOnCancellation { removeListener(listener) }
         }
 
     /**
@@ -103,4 +119,6 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
         constructor(message: String?, cause: Throwable?) : super(message, cause)
         constructor(message: String) : super(message)
     }
+
+    class DisposedException(message: String) : Exception(message)
 }

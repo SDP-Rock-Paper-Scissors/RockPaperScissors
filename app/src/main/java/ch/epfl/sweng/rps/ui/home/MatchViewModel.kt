@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.Round
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.models.xbstract.AbstractUser
 import ch.epfl.sweng.rps.models.xbstract.ComputerPlayer
+import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.OfflineGameService
@@ -28,21 +30,30 @@ class MatchViewModel : ViewModel() {
     var currentRoundResult: Hand.Result? = null
     private var gameResult: Hand.Result? = null
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
-    var opponent: AbstractUser? = null
+    var cache = Cache.getInstance()
+    var host: MutableLiveData<AbstractUser?> = MutableLiveData(null)
+    var opponent: MutableLiveData<AbstractUser?> = MutableLiveData(User("opponent"))
     private var nEvents: Int? = null
     private var artificialMovesDelay: Long? = null
     var timeLimit: Int? = 0 // this will be modifiable when the options allow it
     var job: Job? = null
     var repository = ServiceLocator.getInstance().repository
     var uid: String = repository.getCurrentUid()
+
     val computerPlayerCurrentPoints: String
         get() =
             cumulativeScore.value?.filter { score ->
-                score.uid == opponent!!.uid
+                score.uid == opponent.value!!.uid
             }?.get(0)?.points.toString()
     val userPlayerCurrentPoints: String
         get() = cumulativeScore.value?.filter { score -> score.uid == uid }
             ?.get(0)?.points.toString()
+
+    init {
+        viewModelScope.launch {
+            host.value = cache.getUserDetails()
+        }
+    }
 
     fun setGameServiceSettings(
         nEvents: Int,
@@ -50,7 +61,7 @@ class MatchViewModel : ViewModel() {
         artificialMovesDelay: Long = 1_000
     ) {
         this.nEvents = nEvents
-        this.opponent = opponent
+        this.opponent.value = opponent
         this.artificialMovesDelay = artificialMovesDelay
     }
 
@@ -59,7 +70,7 @@ class MatchViewModel : ViewModel() {
         val opponentUid =
             (gameService as FirebaseGameService).currentGame.players.filter { it != uid }[0]
         viewModelScope.launch {
-            opponent = ServiceLocator.getInstance().repository.getUser(opponentUid)
+            opponent.value = ServiceLocator.getInstance().repository.getUser(opponentUid)
         }
 
         this.nEvents = (gameService as FirebaseGameService).currentGame.gameMode.rounds
@@ -71,7 +82,7 @@ class MatchViewModel : ViewModel() {
         gameService = OfflineGameService(
             gameId,
             ServiceLocator.getInstance().repository,
-            listOf(opponent!! as ComputerPlayer),
+            listOf(opponent.value!! as ComputerPlayer),
             GameMode(2, GameMode.Type.PC, nEvents!!, 0, GameMode.GameEdition.RockPaperScissors),
             artificialMovesDelay!!
         )
@@ -135,7 +146,7 @@ class MatchViewModel : ViewModel() {
     fun reInit() {
         if (gameService!!.isGameOver) {
             gameService = null
-            opponent = null
+            opponent.value = null
             resetResults()
         }
     }

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.remote
 
 import android.net.Uri
+import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
@@ -57,20 +58,21 @@ object FirebaseHelper {
             val gameModeName: String
             val gameModeID: Int
             val date = dateFormat.format(userGame.timestamp.toDate())
-            val allRoundScores = gameRounds.map { it.value.computeScores() }
-            val userScore = allRoundScores.asSequence().map { scores ->
+            val allRoundScores =
+                gameRounds.map { it.value.computeScores() }.filter { it.isNotEmpty() }
+            val userScore = allRoundScores.sumOf { scores ->
                 val max = scores.maxOf { it.points }
                 if (scores.any { it.points == max && it.uid == userid && !scores.all { score -> score.points == max } })
-                    1
+                    1L
                 else
-                    0
+                    0L
 
-            }.sum()
+            }
             val opponentScore = roundMode.minus(userScore)
             val score = userScore - opponentScore
             val outcome: Int = when {
                 score < 0 -> -1
-                score == 0 -> 0
+                score == 0L -> 0
                 else -> 1
             }
 
@@ -168,7 +170,7 @@ object FirebaseHelper {
                 repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
             if (leaderBoardInfo.userProfilePictureUrl == null) {
                 leaderBoardInfo.userProfilePictureUrl =
-                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + android.R.drawable.sym_def_app_icon)
+                    Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.profile_img)
 
             }
             leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
