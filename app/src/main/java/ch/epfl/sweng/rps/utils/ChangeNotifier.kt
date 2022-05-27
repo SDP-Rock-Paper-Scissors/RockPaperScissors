@@ -52,8 +52,6 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
     }
 
 
-
-
     private fun ensureNotDisposed() {
         if (debugDisposed) {
             throw DisposedException(
@@ -62,7 +60,7 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
         }
     }
 
-     /**
+    /**
      * Disposes of this notifier.
      * This method should be called when this notifier is no longer needed.
      * When overriding this method, call the super method.
@@ -89,6 +87,7 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
             addListener(listener)
             it.invokeOnCancellation { removeListener(listener) }
         }
+    }
 
     /**
      * An exception thrown when an exception occurs while dispatching notifications.
