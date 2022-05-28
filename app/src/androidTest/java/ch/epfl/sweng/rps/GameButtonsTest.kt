@@ -15,7 +15,6 @@ import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -24,7 +23,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class GameButtonsTest {
     lateinit var cache: Cache
@@ -52,17 +50,17 @@ class GameButtonsTest {
 
     @Test
     fun pressedRock() {
-        checkPressedButton(R.id.rockRB)
+        checkPressedButton(R.id.rockIM)
     }
 
     @Test
     fun pressedPaper() {
-        checkPressedButton(R.id.paperRB)
+        checkPressedButton(R.id.paperIM)
     }
 
     @Test
     fun pressedScissors() {
-        checkPressedButton(R.id.scissorsRB)
+        checkPressedButton(R.id.scissorsIM)
     }
 
     private fun checkPressedButton(radioButtonId: Int) = runBlocking {
