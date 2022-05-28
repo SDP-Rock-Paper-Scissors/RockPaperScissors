@@ -53,7 +53,10 @@
     <string name="back_home">Home</string>
     <string name="init_player_score">0</string>
     <string name="infinity">&#8734;</string>
-
+    <string name="rock_button_des">Host rock button</string>
+    <string name="paper_button_des">Host paper button</string>
+    <string name="scissors_button_des">Host scissors button</string>
+    <string name="autodetect">Auto\nDetect</string>
     <!-- Preference Titles -->
     <string name="appearance_header">Appearance</string>
     <string name="sync_header">Sync</string>
