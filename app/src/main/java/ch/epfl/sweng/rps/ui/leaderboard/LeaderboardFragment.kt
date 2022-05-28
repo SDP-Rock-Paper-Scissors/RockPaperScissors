@@ -81,23 +81,19 @@ class LeaderboardFragment : Fragment() {
 
 
     private fun loadPlayersUI(itemView: View, players: List<LeaderBoardInfo>) {
-        if(players.size >= 3) {
-            val champions = players.take(3)
-            showChampions(itemView, champions)
-        }
+        val champions = players.take(3)
+        showChampions(itemView, champions)
         showPlayersPosition(itemView, players)
 
     }
 
     private fun showChampions(itemView: View, championPlayers: List<LeaderBoardInfo>) {
-
-        itemView.findViewById<ImageView>(R.id.iv_champion1)
-            .load(championPlayers[0].userProfilePictureUrl)
-        itemView.findViewById<ImageView>(R.id.iv_champion2)
-            .load(championPlayers[1].userProfilePictureUrl)
-        itemView.findViewById<ImageView>(R.id.iv_champion3)
-            .load(championPlayers[2].userProfilePictureUrl)
-
+        val championImgViewList = listOf<ImageView>(itemView.findViewById(R.id.iv_champion1),itemView.findViewById(R.id.iv_champion2), itemView.findViewById(R.id.iv_champion3))
+        var index = 0
+        for (championPlayer in championPlayers) {
+            championImgViewList[index].load(championPlayer.userProfilePictureUrl)
+            index += 1
+        }
     }
 
     private fun showPlayersPosition(
