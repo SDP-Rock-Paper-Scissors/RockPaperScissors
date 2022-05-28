@@ -89,10 +89,8 @@ class LeaderboardFragment : Fragment() {
 
     private fun showChampions(itemView: View, championPlayers: List<LeaderBoardInfo>) {
         val championImgViewList = listOf<ImageView>(itemView.findViewById(R.id.iv_champion1),itemView.findViewById(R.id.iv_champion2), itemView.findViewById(R.id.iv_champion3))
-        var index = 0
-        for (championPlayer in championPlayers) {
-            championImgViewList[index].load(championPlayer.userProfilePictureUrl)
-            index += 1
+        for ((i, championPlayer) in championPlayers.withIndex()) {
+            championImgViewList[i].load(championPlayer.userProfilePictureUrl)
         }
     }
 
