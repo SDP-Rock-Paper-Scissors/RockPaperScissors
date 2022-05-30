@@ -1,3 +1,6 @@
+package ch.epfl.sweng.rps.ui.leaderboard
+
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -5,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import coil.load
 
 
@@ -25,6 +28,7 @@ class LeaderBoardPlayerAdapter : RecyclerView.Adapter<LeaderBoardPlayerAdapter.P
         holder.bind(players[position], position)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun addPlayers(players: List<LeaderBoardInfo>) {
         this.players.apply {
             clear()
@@ -34,6 +38,7 @@ class LeaderBoardPlayerAdapter : RecyclerView.Adapter<LeaderBoardPlayerAdapter.P
     }
 
     inner class PlayerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @SuppressLint("SetTextI18n")
         fun bind(player: LeaderBoardInfo, position: Int) {
 
             itemView.findViewById<TextView>(R.id.tv_position).text = (position + 1).toString()

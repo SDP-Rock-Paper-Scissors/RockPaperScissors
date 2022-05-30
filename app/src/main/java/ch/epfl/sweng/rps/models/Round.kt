@@ -113,10 +113,6 @@ sealed class Round {
                 acc
             }
             val all = rows + cols + listOf(diag, diag2)
-            println("Rows: $rows")
-            println("Cols: $cols")
-            println("Diag: $diag")
-            println("Diag2: $diag2")
             return all.firstNotNullOfOrNull { list ->
                 val first = list.first()
                 if (list.all { it == first }) {

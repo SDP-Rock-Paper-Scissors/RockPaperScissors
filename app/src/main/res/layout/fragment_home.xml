@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_home"
     android:layout_width="match_parent"
@@ -70,26 +69,6 @@
         android:text="@string/play_five_games"
         android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/text_camera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:text="Camera options"/>
-
-    <Button
-        android:id="@+id/button_activate_camera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textSize="15sp"
-        android:text="Open camera" />
 
     <TextView
         android:id="@+id/text_new_game"
@@ -98,9 +77,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:text="@string/add_new_game"
         android:textAlignment="center"
-        android:textSize="20sp"
-        android:text="Add new game"/>
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/button_tik_tac_toe"
@@ -109,11 +88,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Tic Tac Toe"
+        android:text="@string/tic_tac_toe"
         android:textSize="15sp" />
-
-
-
 
 
 </LinearLayout>

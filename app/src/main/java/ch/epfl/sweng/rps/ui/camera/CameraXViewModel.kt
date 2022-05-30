@@ -16,19 +16,15 @@
 package ch.epfl.sweng.rps.ui.camera
 
 import android.app.Application
-import androidx.annotation.RequiresApi
-import android.os.Build.VERSION_CODES
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.lifecycle.LiveData
-import ch.epfl.sweng.rps.ui.camera.CameraXViewModel
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import java.util.concurrent.ExecutionException
 
 /** View model for interacting with CameraX.  */
-@RequiresApi(VERSION_CODES.LOLLIPOP)
 class CameraXViewModel
 /**
  * Create an instance which interacts with the camera service via the given application context.

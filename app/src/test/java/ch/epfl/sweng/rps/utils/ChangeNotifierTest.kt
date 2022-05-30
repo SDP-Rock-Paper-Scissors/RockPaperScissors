@@ -83,7 +83,9 @@ class ChangeNotifierTest {
 
         notifier.dispose()
 
-        notifier.notifyListeners()
+        assertThrows<ChangeNotifier.DisposedException> {
+            notifier.notifyListeners()
+        }
 
         called.entries.forEach {
             assertEquals(1, it.value)

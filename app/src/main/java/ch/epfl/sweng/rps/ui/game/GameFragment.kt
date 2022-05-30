@@ -1,9 +1,13 @@
 package ch.epfl.sweng.rps.ui.game
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -13,6 +17,7 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.ui.camera.CameraXLivePreviewActivityContract
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
 
 class GameFragment : Fragment() {
@@ -20,6 +25,24 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
     private val matchViewModel: MatchViewModel by activityViewModels()
+    val activityLauncher = registerForActivityResult(CameraXLivePreviewActivityContract()) { result ->
+
+        result ?: return@registerForActivityResult
+
+        when(result){
+            Hand.ROCK ->  binding.rockRB.isChecked = true
+            Hand.PAPER -> binding.paperRB.isChecked = true
+            Hand.SCISSORS -> binding.scissorsRB.isChecked = true
+            Hand.NONE -> {}
+        }
+        val r = Runnable {
+            rpsPressed(result)
+        }
+        //delays call to rpsPressed by 1s. Otherwise the result would be
+        //showed too quickly
+        Handler(Looper.getMainLooper()).postDelayed(r, 1000)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,12 +57,20 @@ class GameFragment : Fragment() {
         binding.rockRB.setOnClickListener { rpsPressed(Hand.ROCK) }
         binding.paperRB.setOnClickListener { rpsPressed(Hand.PAPER) }
         binding.scissorsRB.setOnClickListener { rpsPressed(Hand.SCISSORS) }
+        binding.buttonActivateCamera.setOnClickListener{ activityLauncher.launch(null)}
+        setImageButtonColor(binding.buttonActivateCamera)
         matchViewModel.cumulativeScore.observe(
             viewLifecycleOwner
         ) {
-            binding.opponentMatchData.currentPoints.text =
+            binding.opponentData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
-            binding.userMatchData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
+            binding.hostData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
+        }
+        matchViewModel.host.observe(viewLifecycleOwner) {
+            binding.hostData.username.text = matchViewModel.host.value!!.username
+        }
+        matchViewModel.opponent.observe(viewLifecycleOwner) {
+            binding.opponentData.username.text = matchViewModel.opponent.value!!.username
         }
         uiSetup()
     }
@@ -68,7 +99,7 @@ class GameFragment : Fragment() {
                 opponentsMoveUIUpdateCallback = {
                     opponentMoveUIUpdate(
                         matchViewModel.gameService?.currentRound?.hands?.get(
-                            matchViewModel.opponent!!.uid
+                            matchViewModel.opponent.value!!.uid
                         )!!
                     )
                 },
@@ -116,8 +147,8 @@ class GameFragment : Fragment() {
 
     private fun resetScores() {
         if (matchViewModel.gameService?.isGameOver!!) {
-            binding.opponentMatchData.currentPoints.text = "0"
-            binding.userMatchData.currentPoints.text = "0"
+            binding.opponentData.currentPoints.text = "0"
+            binding.hostData.currentPoints.text = "0"
         }
     }
 
@@ -131,4 +162,17 @@ class GameFragment : Fragment() {
             else -> binding.counter.text = matchViewModel.timeLimit?.toString()
         }
     }
+    /**
+     * Applys theme color to ImageButton
+    */
+    private fun setImageButtonColor(button: ImageButton){
+        val typedValue = TypedValue()
+        requireActivity().getTheme().resolveAttribute(
+            R.attr.colorPrimary,
+            typedValue,
+            true
+        )
+        button.drawable.setTint(typedValue.data)
+    }
+
 }
