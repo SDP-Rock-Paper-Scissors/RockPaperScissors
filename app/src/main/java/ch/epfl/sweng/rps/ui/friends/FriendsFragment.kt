@@ -47,10 +47,11 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.friendListRecyclerView)
         val requestBtn = view.findViewById<ImageButton>(R.id.requestButton)
-
-
         val model:FriendsViewModel by viewModels()
+        val friendList = listOf<FriendsInfo>()
+        val friendListAdapter = FriendListAdapter(friendList,this)
 
+        recyclerView.adapter = friendListAdapter
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         requestBtn.setOnClickListener{
@@ -64,7 +65,7 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
             recyclerView.adapter = FriendListAdapter(f, this)
             EspressoIdlingResource.decrement()
         }
-
+        recyclerView.adapter?.notifyDataSetChanged()
 
 
        /* val friends = mutableListOf<FriendsInfo>()
