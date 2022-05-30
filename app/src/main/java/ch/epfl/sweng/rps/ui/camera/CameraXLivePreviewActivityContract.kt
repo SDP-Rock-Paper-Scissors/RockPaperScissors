@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
-import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.Hand
 
 class CameraXLivePreviewActivityContract : ActivityResultContract<String?, Hand?>() {
 

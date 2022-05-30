@@ -7,6 +7,7 @@ import android.util.Log
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.Game.Companion.toGame
+import ch.epfl.sweng.rps.remote.FirebaseHelper
 import ch.epfl.sweng.rps.utils.toListOf
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

@@ -15,16 +15,10 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.epfl.sweng.rps.RequestListAdapter
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.FriendsInfo
-import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.FriendListAdapter
-import ch.epfl.sweng.rps.MainActivity
-import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.persistence.Cache
-import com.google.firebase.FirebaseApp
-import kotlinx.coroutines.launch
 
 
 class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {

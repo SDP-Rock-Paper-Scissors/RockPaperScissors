@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ch.epfl.sweng.rps.models.remote.GameMode
-import ch.epfl.sweng.rps.models.remote.Hand
-import ch.epfl.sweng.rps.models.remote.Round
-import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ComputerPlayer
+import ch.epfl.sweng.rps.models.GameMode
+import ch.epfl.sweng.rps.models.Hand
+import ch.epfl.sweng.rps.models.Round
+import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.models.xbstract.AbstractUser
-import ch.epfl.sweng.rps.models.xbstract.ComputerPlayer
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService

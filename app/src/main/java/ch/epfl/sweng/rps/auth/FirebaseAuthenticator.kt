@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.L
 import com.google.android.gms.auth.api.signin.GoogleSignIn

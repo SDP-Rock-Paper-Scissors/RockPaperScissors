@@ -3,19 +3,14 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.*
 import androidx.annotation.VisibleForTesting
-import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.remote.User
-import ch.epfl.sweng.rps.models.ui.UserStat
+import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.remote.FirebaseHelper
-import ch.epfl.sweng.rps.remote.FirebaseRepository
-import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.L
-import ch.epfl.sweng.rps.utils.isInternetAvailable
+import java.net.InetAddress
 
 /**
  * This class is to be used as the main reference for all data operations.
@@ -33,6 +28,8 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
     private var userPicture: Bitmap? = null
     private var userStatData: List<UserStat>? = null
     private var leaderBoardData: List<LeaderBoardInfo>? = null
+    private lateinit var myFriends: List<FriendsInfo>
+    private lateinit var myFriendReqs: List<FriendRequestInfo>
 
     private val repo get() = repoOverride ?: ServiceLocator.getInstance().repository
     private var repoOverride: Repository? = null

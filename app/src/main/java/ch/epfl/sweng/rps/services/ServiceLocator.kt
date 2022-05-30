@@ -2,9 +2,9 @@ package ch.epfl.sweng.rps.services
 
 import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.GameMode
+import ch.epfl.sweng.rps.remote.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

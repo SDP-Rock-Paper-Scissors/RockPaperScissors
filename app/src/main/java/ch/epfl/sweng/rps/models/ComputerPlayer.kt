@@ -1,5 +1,7 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.xbstract.AbstractUser
+
 abstract class ComputerPlayer(
     override val username: String? = "",
     override val uid: String,

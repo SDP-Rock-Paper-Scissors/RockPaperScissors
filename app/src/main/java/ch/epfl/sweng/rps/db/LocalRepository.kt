@@ -2,6 +2,7 @@ package ch.epfl.sweng.rps.remote
 
 import android.graphics.Bitmap
 import androidx.annotation.VisibleForTesting
+import ch.epfl.sweng.rps.db.Repository
 import ch.epfl.sweng.rps.models.*
 import com.google.firebase.Timestamp
 import java.net.URI

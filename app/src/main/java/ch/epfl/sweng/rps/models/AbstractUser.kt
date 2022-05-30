@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.models.xbstract
 
-import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.User
 
 abstract class AbstractUser {
     abstract val username: String?
@@ -8,5 +8,5 @@ abstract class AbstractUser {
     abstract val games_history_privacy: String
     abstract val has_profile_photo: Boolean
 
-    fun gamesHistoryPrivacyEnum(): User.Privacy = User.Privacy.valueOf(games_history_privacy)
+    open fun gamesHistoryPrivacyEnum(): User.Privacy = User.Privacy.valueOf(games_history_privacy)
 }

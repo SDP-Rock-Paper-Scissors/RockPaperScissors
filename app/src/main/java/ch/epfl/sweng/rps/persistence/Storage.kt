@@ -4,11 +4,8 @@ import ch.epfl.sweng.rps.models.*
 import java.io.File
 
 interface Storage {
-    fun getFile(file : FILES) : File
     fun removeFile(file : FILES) : Boolean
     fun getUserDetails() : User?
-    fun getStatsData() : List<UserStat>?
-    fun getLeaderBoardData() : List<LeaderBoardInfo>?
     fun getFriends(): List<FriendsInfo>?
     fun getFriendReqs(): List<FriendRequestInfo>?
     fun getFile(file: FILES): File

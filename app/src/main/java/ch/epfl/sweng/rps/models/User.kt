@@ -1,5 +1,7 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.xbstract.AbstractUser
+
 /**
  *
  */
@@ -26,6 +28,6 @@ data class User(
         PUBLIC, PRIVATE, FRIENDS_ONLY
     }
 
-    fun gamesHistoryPrivacyEnum(): Privacy = Privacy.valueOf(games_history_privacy)
+    override fun gamesHistoryPrivacyEnum(): Privacy = Privacy.valueOf(games_history_privacy)
 }
 

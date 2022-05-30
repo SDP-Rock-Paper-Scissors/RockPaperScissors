@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.RequestListAdapter
-import ch.epfl.sweng.rps.db.FirebaseHelper
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.FriendRequestInfo
 import ch.epfl.sweng.rps.persistence.Cache

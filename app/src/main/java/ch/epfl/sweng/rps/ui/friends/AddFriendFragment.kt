@@ -11,10 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.db.FirebaseHelper
-import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
 

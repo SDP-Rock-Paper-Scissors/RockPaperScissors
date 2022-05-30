@@ -25,11 +25,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
-import ch.epfl.sweng.rps.utils.L
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
 

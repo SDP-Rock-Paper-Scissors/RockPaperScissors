@@ -6,9 +6,6 @@ import android.graphics.BitmapFactory
 import ch.epfl.sweng.rps.models.*
 import com.google.gson.Gson
 import android.net.Uri
-import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.remote.User
-import ch.epfl.sweng.rps.models.ui.UserStat
 import com.google.gson.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -51,6 +48,15 @@ class PrivateStorage constructor(val context: Context) : Storage {
         val arr = gson.fromJson(json, Array<UserStat>::class.java)
         return arr.toList()
     }
+
+    override fun removeFile(file: Storage.FILES): Boolean {
+        return false
+    }
+
+    override fun getUserDetails(): User? {
+        return null
+    }
+
     override fun getFriends(): List<FriendsInfo>? {
         val statsFile = getFile(Storage.FILES.FRIENDS)
         if (!statsFile.exists())
