@@ -10,9 +10,9 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.TotalScore
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matchers.anything
 import org.junit.After

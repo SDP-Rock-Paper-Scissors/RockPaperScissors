@@ -14,9 +14,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.LocalRepository
 import ch.epfl.sweng.rps.models.FriendRequest
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.friends.EspressoIdlingResource
 import com.google.firebase.Timestamp

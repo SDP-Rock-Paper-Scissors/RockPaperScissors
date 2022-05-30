@@ -4,6 +4,7 @@ import ch.epfl.sweng.rps.db.Repository.UserNotLoggedIn
 import ch.epfl.sweng.rps.models.Game
 import ch.epfl.sweng.rps.models.Invitation
 import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.remote.LocalRepository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking

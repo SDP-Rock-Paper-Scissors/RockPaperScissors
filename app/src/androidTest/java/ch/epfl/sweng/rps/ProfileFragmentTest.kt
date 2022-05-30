@@ -8,7 +8,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.User
 import ch.epfl.sweng.rps.persistence.Cache
 import org.junit.Rule
 import org.junit.Test
