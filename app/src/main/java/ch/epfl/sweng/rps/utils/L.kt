@@ -9,6 +9,8 @@ import java.util.*
 object L {
     private val instances = mutableMapOf<String, LogService>()
 
+    fun allInstances(): Map<String, LogService> = instances
+
     fun of(name: String): LogService = instances.getOrPut(name) { LogService(name) }
     fun of(activity: Activity): LogService = of(activity::class.java)
     fun of(fragment: Fragment): LogService = of(fragment::class.java)
@@ -48,7 +50,8 @@ object L {
         val tag: String,
         val message: String,
         val time: Date,
-        val level: Level
+        val level: Level,
+        val throwable: Throwable? = null
     )
 
     class LogService(val name: String) : ChangeNotifier<LogService>() {

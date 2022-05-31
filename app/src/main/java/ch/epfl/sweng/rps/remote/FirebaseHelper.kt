@@ -8,6 +8,8 @@ import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.models.ui.RoundStat
 import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.utils.Option
+import ch.epfl.sweng.rps.utils.toOption
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +36,11 @@ object FirebaseHelper {
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
         val userGameList = firebaseRepository.games.gamesOfUser(userid)
         val allStatsResult = mutableListOf<UserStat>()
+
+        // We cache the users to avoid multiple calls to the database
+        // We use options to differentiate between the case where the user is not found
+        // and the case where the user hasn't been cached yet
+        val users = mutableMapOf<String, Option<User>>()
         for (userGame in userGameList) {
             val userStat = UserStat()
             val players = userGame.players
@@ -64,10 +71,11 @@ object FirebaseHelper {
 
             for (p in players) {
                 if (p != userid) {
-                    val user = firebaseRepository.getUser(p)
+                    val user =
+                        users.getOrPut(p) { firebaseRepository.getUser(p).getOrThrow().toOption() }
 
-                    if (user != null)
-                        opponents.add(user.username ?: p)
+                    if (user is Option.Some)
+                        opponents.add(user.value.username ?: p)
                 }
             }
 
@@ -113,9 +121,9 @@ object FirebaseHelper {
             val userHand = hand[userid]!!
             val opponentHand = hand[opponentId]!!
             val outcome = when {
-                score[0].uid == userid -> Hand.Result.WIN
-                score[0].points == 0 -> Hand.Result.TIE
-                else -> Hand.Result.LOSS
+                score[0].uid == userid -> Hand.Outcome.WIN
+                score[0].points == 0 -> Hand.Outcome.TIE
+                else -> Hand.Outcome.LOSS
             }
 
             RoundStat(
@@ -147,21 +155,17 @@ object FirebaseHelper {
             }
             // The *load* function only support "android.net.Uri" but not "java.net.URI" package
             leaderBoardInfo.userProfilePictureUrl =
-                repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
+                repo.getUserProfilePictureUrl(score.uid).asData?.value.let { Uri.parse(it.toString()) }
             if (leaderBoardInfo.userProfilePictureUrl == null) {
                 leaderBoardInfo.userProfilePictureUrl =
                     Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.profile_img)
 
             }
-            leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
+            leaderBoardInfo.username = repo.getUser(score.uid).asData?.value?.username ?: "Unknown"
             allPlayers.add(leaderBoardInfo)
         }
-
-
         return allPlayers
     }
-
-
 }
 
 

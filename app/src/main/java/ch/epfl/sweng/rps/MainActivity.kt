@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import ch.epfl.sweng.rps.databinding.ActivityMainBinding
@@ -10,11 +11,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    lateinit var coordinatorLayout: CoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        coordinatorLayout = binding.coordinatorLayout
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
 

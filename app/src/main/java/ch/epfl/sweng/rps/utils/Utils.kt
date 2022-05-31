@@ -2,7 +2,16 @@
 
 package ch.epfl.sweng.rps.utils
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.util.Log
+import android.view.View
+import androidx.core.content.FileProvider
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,8 +20,17 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.google.gson.GsonBuilder
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import java.net.InetAddress
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
+import java.net.SocketException
+
 
 fun consume(block: () -> Any?): () -> Unit = { block() }
 
@@ -93,14 +111,213 @@ inline fun <reified T> List<DocumentSnapshot>.toListOf(): List<T> =
 inline fun <reified T> List<DocumentSnapshot>.toListOfNullable(): List<T?> =
     map { it.toObject(T::class.java) }
 
-fun isInternetAvailable(): Boolean {
-    val res = try {
-        val ipAddr: InetAddress = InetAddress.getByName("www.google.com")
-        //You can replace it with your name
-        !ipAddr.equals("")
+
+@Suppress("BlockingMethodInNonBlockingContext")
+suspend fun isInternetAvailable(): Boolean = withContext(Dispatchers.IO) {
+    try {
+        val socket = Socket()
+        socket.connect(InetSocketAddress("1.1.1.1", 53))
+        socket.close()
+        true
+    } catch (e: IOException) {
+        L.of("isInternetAvailable")
+            .i("Got IOException, assuming no internet connection (message: ${e.message})")
+        false
+    } catch (e: SecurityException) {
+        L.of("isInternetAvailable")
+            .i("Got SecurityException, assuming no internet connection (message: ${e.message})")
+        false
+    } catch (e: SocketException) {
+        L.of("isInternetAvailable")
+            .i("Got SocketException, assuming no internet connection (message: ${e.message})")
+        false
     } catch (e: Exception) {
-        Log.d("Cache", e.toString())
+        L.of("isInternetAvailable")
+            .e("Got an unknown exception, assuming no internet connection", e)
         false
     }
-    return res
 }
+
+
+sealed class SuspendResult<T> {
+    data class Success<T>(val value: T) : SuspendResult<T>()
+    data class Failure<T>(val error: Throwable) : SuspendResult<T>()
+
+    val asData
+        get() = when (this) {
+            is Success -> this
+            is Failure -> null
+        }
+
+    @Throws(Throwable::class)
+    fun getOrThrow(): T {
+        when (this) {
+            is Success -> return value
+            is Failure -> throw error
+        }
+    }
+
+    suspend fun <R> whenIs(
+        success: suspend (Success<T>) -> R,
+        failure: suspend (Failure<T>) -> R
+    ): R =
+        when (this) {
+            is Success -> success(this)
+            is Failure -> failure(this)
+        }
+
+    suspend fun <R> then(block: suspend (T) -> R): SuspendResult<R> = when (this) {
+        is Success -> guard { block(value) }
+        is Failure -> Failure(error)
+    }
+
+    companion object {
+        suspend fun <R> guard(block: suspend () -> R): SuspendResult<R> {
+            return try {
+                Success(block())
+            } catch (e: Throwable) {
+                Failure(e)
+            }
+        }
+
+
+        fun <T, R> showSnackbar(
+            context: Context,
+            view: View,
+            duration: Int = Snackbar.LENGTH_LONG,
+            callback: BaseTransientBottomBar.BaseCallback<Snackbar>? = null,
+            block: suspend (Failure<T>) -> R,
+        ): suspend (Failure<T>) -> R {
+            return { f ->
+                val s = Snackbar
+                    .make(view, f.error.message ?: "", duration)
+                    .setTextColor(Color.RED)
+                    .setAction("Open details") {
+                        runBlocking {
+                            val file = dumpDebugInfos(context, f.error)
+                            openJsonFile(context, file)
+                        }
+                    }
+                callback?.let { s.addCallback(it) }
+                s.show()
+                block(f)
+            }
+        }
+
+        fun <T, R> showSnackbar(
+            activity: Activity,
+            duration: Int = Snackbar.LENGTH_LONG,
+            callback: BaseTransientBottomBar.BaseCallback<Snackbar>? = null,
+            block: suspend (Failure<T>) -> R,
+        ): suspend (Failure<T>) -> R = showSnackbar(
+            activity,
+            activity.findViewById(android.R.id.content),
+            duration,
+            callback = callback,
+            block = block
+        )
+
+    }
+}
+
+suspend fun <T> SuspendResult<T>.showSnackbarIfError(
+    activity: Activity,
+    callback: BaseTransientBottomBar.BaseCallback<Snackbar>? = null
+): SuspendResult<T> {
+    return whenIs(
+        success = { it },
+        failure = SuspendResult.showSnackbar(activity, callback = callback) { it }
+    )
+}
+
+suspend fun <T> SuspendResult<T>.whenOrSnackbar(
+    activity: Activity,
+    callback: BaseTransientBottomBar.BaseCallback<Snackbar>? = null,
+    success: suspend (T) -> Unit,
+) {
+    whenIs(
+        success = { success(it.value) },
+        failure = SuspendResult.showSnackbar(activity, callback = callback) {}
+    )
+}
+
+
+suspend fun <T> guardSuspendable(block: suspend () -> T): SuspendResult<T> =
+    SuspendResult.guard(block)
+
+@Suppress("BlockingMethodInNonBlockingContext", "VisibleForTests")
+suspend fun dumpDebugInfos(
+    context: Context,
+    error: Throwable? = null
+): File = withContext(Dispatchers.IO) {
+    val outputDir =
+        context.getExternalFilesDir("external_files")
+    val outputFile = File.createTempFile("dump_${System.currentTimeMillis()}", ".json", outputDir)
+    val m = mutableMapOf<String, Any>(
+        "logs" to L.allInstances().map { (name, log) ->
+            mapOf(
+                "tag" to name,
+                "logs" to log.logs.map { e ->
+                    mapOf(
+                        "text" to "${e.time}: [${e.level}] ${e.message}",
+                        *(e.throwable?.let {
+                            listOf(
+                                "throwable" to mapOf(
+                                    "stackTrace" to it.stackTrace.map { it.toString() },
+                                    "throwable_name" to it.message,
+                                    "throwable_type" to it.javaClass.simpleName
+                                )
+                            )
+                        } ?: listOf<Pair<String, Any>>()).toTypedArray()
+                    )
+                }
+            )
+        }
+    )
+    if (error != null) {
+        m["error"] = mapOf(
+            "error" to mapOf(
+                "message" to error.message,
+                "stackTrace" to error.stackTrace.map { it.toString() },
+                "name" to error.javaClass.simpleName
+            ),
+        )
+    }
+    Log.d("writeErrorDebugFile", m.toString())
+
+    val gson = GsonBuilder().serializeNulls().setPrettyPrinting().create()
+    val text = gson.toJson(m)
+    outputFile.writeText(text)
+    outputFile
+}
+
+fun openJsonFile(context: Context, file: File) {
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.provider",
+        file
+    )
+    val jsonIntent = Intent(Intent.ACTION_VIEW)
+    jsonIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    jsonIntent.setDataAndType(uri, "application/json")
+    try {
+        context.startActivity(jsonIntent)
+    } catch (e: ActivityNotFoundException) {
+        Log.e("Error", "No activity found to handle intent", e)
+        jsonIntent.setDataAndType(uri, "text/plain")
+        try {
+            context.startActivity(jsonIntent)
+        } catch (e: ActivityNotFoundException) {
+            Log.e("Error", "No activity found to handle intent", e)
+        }
+    }
+}
+
+sealed class Option<T> {
+    class Some<T>(val value: T) : Option<T>()
+    class None<T>() : Option<T>()
+}
+
+
+fun <T : Any> T?.toOption(): Option<T> =
+    if (this == null) Option.None() else Option.Some(this)
