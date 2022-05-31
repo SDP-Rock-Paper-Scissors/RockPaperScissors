@@ -54,27 +54,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/displayPicture_infoPage" />
 
-    <ImageView
-        android:id="@+id/onlineImage_infoPage"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/online_vector"
-        app:layout_constraintEnd_toEndOf="@+id/offlineImage_infoPage"
-        app:layout_constraintStart_toEndOf="@+id/userName_infoPage"
-        app:layout_constraintTop_toBottomOf="@+id/displayPicture_infoPage" />
-
-    <ImageView
-        android:id="@+id/offlineImage_infoPage"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="6dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/onlineImage_infoPage"
-        app:layout_constraintStart_toEndOf="@+id/userName_infoPage"
-        app:layout_constraintTop_toBottomOf="@+id/displayPicture_infoPage"
-        app:srcCompat="@drawable/offline_vector" />
-
     <TextView
         android:id="@+id/statsText"
         android:layout_width="wrap_content"

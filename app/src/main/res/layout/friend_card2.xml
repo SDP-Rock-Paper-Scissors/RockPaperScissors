@@ -24,35 +24,13 @@
                 android:id="@+id/friendName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="10dp"
+
                 android:text="RPSKing88"
-
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/onlineImage"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/onlineImage"
-                android:layout_width="39dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="5dp"
-                android:src="@drawable/online_vector"
+                android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/offlineImage"
-                android:layout_width="39dp"
-                android:layout_height="42dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/friendName"
-                app:layout_constraintHorizontal_bias="0.545"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/offline_vector" />
 
             <ImageButton
                 android:id="@+id/playButton"
@@ -79,44 +57,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/playButton"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/winRateText"
-                android:layout_width="100dp"
-                android:layout_height="18dp"
-                android:layout_marginBottom="10dp"
-                android:lines="3"
-                android:maxLines="3"
-                android:text="Win Rate: 63.3%"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/infoButton"
-                app:layout_constraintTop_toBottomOf="@+id/gamesWonText" />
-
-            <TextView
-                android:id="@+id/gamesPlayedText"
-                android:layout_width="100dp"
-                android:layout_height="18dp"
-                android:layout_marginTop="10dp"
-                android:lines="3"
-                android:maxLines="3"
-                android:text="Games Played: 120"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/gamesWonText"
-                app:layout_constraintEnd_toStartOf="@+id/infoButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/gamesWonText"
-                android:layout_width="100dp"
-                android:layout_height="18dp"
-                android:lines="3"
-                android:maxLines="3"
-                android:text="Games Won: 76"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/winRateText"
-                app:layout_constraintEnd_toStartOf="@+id/infoButton"
-                app:layout_constraintTop_toBottomOf="@+id/gamesPlayedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
