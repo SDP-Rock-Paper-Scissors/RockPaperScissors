@@ -31,7 +31,6 @@ class ProfileFragmentTest {
         val user = ServiceLocator.localRepository.let { it.users[it.getCurrentUid()] }!!
         Cache.getInstance().setUserDetails(user)
         onView(withId(R.id.nav_profile)).perform(click())
-        Thread.sleep(2000)
         onView(withText(user.username)).check(matches(isDisplayed()))
         onView(withText(user.email)).check(matches(isDisplayed()))
     }
