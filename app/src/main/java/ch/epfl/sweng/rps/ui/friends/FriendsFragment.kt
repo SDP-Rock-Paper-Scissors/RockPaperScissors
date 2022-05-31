@@ -96,14 +96,16 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
 
         }
         //if play button is clicked
-       /* else if (view == view.findViewById(R.id.playButton)){
+        else if (view == view.findViewById(R.id.playButton)){
             Log.i("Press info", "You will play a game with $username")
             Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT).show()
 
+            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameModeDialogFragment())
+
             //Move to game fragment on button click
-            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameFragment2())
+           // findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameFragment2())
         }
-        */
+
     }
 
 

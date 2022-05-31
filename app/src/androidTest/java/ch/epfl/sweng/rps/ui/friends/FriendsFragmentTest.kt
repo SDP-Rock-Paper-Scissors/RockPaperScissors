@@ -7,6 +7,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -77,6 +78,13 @@ class FriendsFragmentTest {
             true,
             "p3@example.com"
         )
+        repo.users["player4"] = User(
+            "player4",
+            "player4",
+            "public",
+            true,
+            "p4@example.com"
+        )
 
         val friends: List<FriendRequest> = listOf(
                 FriendRequest(listOf("player2","player1"), Timestamp.now() , FriendRequest.Status.ACCEPTED, "player2"),
@@ -129,7 +137,7 @@ class FriendsFragmentTest {
 
     }
 
-    /*@Test
+    @Test
     fun test_GameFragmentShown_onPlayButtonClick() {
         onView(withId(R.id.nav_friends)).perform(click())
 
@@ -137,9 +145,9 @@ class FriendsFragmentTest {
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
 
         onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
-    } */
+    }
 
-    @Test
+   /* @Test
     fun test_goesToGameFragment_onPlayButtonClick(){
         onView(withId(R.id.nav_friends)).perform(click())
 
@@ -149,7 +157,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.infoPage_playButton)).perform(click())
 
         onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
-    }
+    } */
 
     @Test
     fun test_returnsToFriendFragment_onBackButtonClick(){
@@ -181,6 +189,24 @@ class FriendsFragmentTest {
         onView(withId(R.id.addFriendsButton)).perform(click())
 
         onView(withId(R.id.addFriendFragment)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_FriendAdded_onAcceptedRequest(){
+        onView(withId(R.id.nav_friends)).perform(click())
+        onView(withId(R.id.requestButton)).perform(click())
+        onView(withId(R.id.myFriendReqButton)).perform(click())
+
+        onView(withId(R.id.myReqsRecyclerView))
+            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.acceptButton)))
+
+        pressBack()
+
+        onView(withId(R.id.friendListRecyclerView)).check(matches(isDisplayed()))
+        onView(withId(R.id.friendListRecyclerView))
+            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(1,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+
+        onView(withId(R.id.userName_infoPage)).check(matches(withText("player3")))
     }
 
 

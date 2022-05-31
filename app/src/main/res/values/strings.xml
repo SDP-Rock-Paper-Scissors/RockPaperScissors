@@ -121,4 +121,6 @@
     <string name="text">Text</string>
     <string name="value">Value</string>
     <string name="edit_icon_desc">edit icon</string>
+    <string name="choose_game_mode">Choose Game Mode</string>
+    <string name="confirm">Confirm</string>
 </resources>

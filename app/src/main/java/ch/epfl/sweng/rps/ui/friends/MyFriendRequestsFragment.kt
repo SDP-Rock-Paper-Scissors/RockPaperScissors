@@ -50,8 +50,10 @@ class MyFriendRequestsFragment : Fragment(), RequestListAdapter.OnButtonClickLis
 
         // Get requests from cache
         cache = Cache.getInstance()!!
+        EspressoIdlingResource.increment()
         model.getFriendReqs().observe(viewLifecycleOwner) { reqs ->
             recyclerView.adapter = RequestListAdapter(reqs, this)
+            EspressoIdlingResource.decrement()
         }
     }
 
@@ -64,18 +66,20 @@ class MyFriendRequestsFragment : Fragment(), RequestListAdapter.OnButtonClickLis
         if (view == view.findViewById(R.id.acceptButton)) {
             Log.i("Accept req", "You have accepted $username's request")
             Toast.makeText(activity, "You have accepted $username's request", Toast.LENGTH_SHORT).show()
-
+            EspressoIdlingResource.increment()
             viewLifecycleOwner.lifecycleScope.launch{
                 ServiceLocator.getInstance().repository.changeFriendRequestToStatus(uid, FriendRequest.Status.ACCEPTED)
+                EspressoIdlingResource.decrement()
             }
         }
         //if play button is clicked
         else if (view == view.findViewById(R.id.rejectButton)){
             Log.i("Reject req", "You have rejected $username's request")
             Toast.makeText(activity, "You have rejected $username's request", Toast.LENGTH_SHORT).show()
-
+            EspressoIdlingResource.increment()
             viewLifecycleOwner.lifecycleScope.launch{
                 ServiceLocator.getInstance().repository.changeFriendRequestToStatus(uid, FriendRequest.Status.REJECTED)
+                EspressoIdlingResource.decrement()
             }
         }
 

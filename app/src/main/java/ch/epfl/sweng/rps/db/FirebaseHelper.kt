@@ -188,7 +188,7 @@ object FirebaseHelper {
         val uid = fbRepo.rawCurrentUid()
 
         for (req in friendRequest) {
-            if (req.from != uid) {
+            if (req.from != uid && req.status == FriendRequest.Status.PENDING) {
                 val user = fbRepo.getUser(req.from) ?: continue
                 val friendsReq = FriendRequestInfo(
                     username = user.username ?: "UsernameEmpty",

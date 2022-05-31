@@ -50,11 +50,8 @@ class InfoPageFragment : Fragment() {
         }
 
         playButton.setOnClickListener {
-            findNavController().navigate(
-                InfoPageFragmentDirections.actionInfoPageFragmentToGameFragment2(
-                    null
-                )
-            )
+            var dialog = GameModeDialogFragment()
+            dialog.show(parentFragmentManager,"gameModeDialog")
         }
 
     }
