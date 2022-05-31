@@ -17,6 +17,7 @@ module.exports = {
     "import",
   ],
   "rules": {
+    "@typescript-eslint/no-non-null-assertion": "off"
   },
   "ignorePatterns": [
     "/lib/**/*",
