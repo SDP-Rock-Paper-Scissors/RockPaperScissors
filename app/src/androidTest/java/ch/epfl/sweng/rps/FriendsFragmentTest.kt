@@ -3,7 +3,9 @@ package ch.epfl.sweng.rps
 import android.content.Intent
 import android.view.View
 import android.widget.ImageButton
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -78,11 +80,19 @@ class FriendsFragmentTest {
             true,
             "p3@example.com"
         )
+        repo.users["player4"] = User(
+            "player4",
+            "player4",
+            "public",
+            true,
+            "p4@example.com"
+        )
+
 
         val friends: List<FriendRequest> = listOf(
                 FriendRequest(listOf("player2","player1"), Timestamp.now() , FriendRequest.Status.ACCEPTED, "player2"),
                 FriendRequest(listOf("player3","player1"), Timestamp.now(),FriendRequest.Status.PENDING, "player3"),
-                FriendRequest(listOf("player1","player4"), Timestamp.now(), FriendRequest.Status.ACCEPTED,"player4")
+                FriendRequest(listOf("player4","player1"), Timestamp.now(), FriendRequest.Status.ACCEPTED,"player4")
         )
 
         repo.friendRequests.addAll(friends)
@@ -187,6 +197,27 @@ class FriendsFragmentTest {
 
         onView(withId(R.id.addFriendFragment)).check(matches(isDisplayed()))
     }
+
+ /*   @Test
+    fun test_FriendAdded_AfterAccepting(){
+        onView(withId(R.id.nav_friends)).perform(click())
+
+        onView(withId(R.id.requestButton)).perform(click())
+        onView(withId(R.id.myFriendReqButton)).perform(click())
+        onView(withId(R.id.myReqsRecyclerView))
+            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,
+                ClickButtonAction.clickInfoButton(R.id.acceptButton)
+            ))
+
+        Espresso.pressBack()
+
+        onView(withId(R.id.friendListRecyclerView))
+            .perform(actionOnItemAtPosition<FriendListAdapter.CardViewHolder>(3,
+                ClickButtonAction.clickInfoButton(R.id.infoButton)
+            ))
+
+        onView(withId(R.id.userName_infoPage)).check(matches(withText("player3")))
+    } */
 
 
 

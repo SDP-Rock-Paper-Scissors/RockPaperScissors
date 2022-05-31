@@ -12,8 +12,8 @@
         android:id="@+id/infoPage_playButton"
         android:layout_width="73dp"
         android:layout_height="54dp"
-        android:src="@drawable/playgame_vector"
         android:background="@drawable/rounded_corners"
+        android:src="@drawable/ic_baseline_sports_esports_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/displayPicture_infoPage"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,14 +29,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_img"
+        tools:srcCompat="@drawable/profile_img" />
 
     <ImageButton
         android:id="@+id/infoPage_backButton"
         android:layout_width="73dp"
         android:layout_height="54dp"
         android:background="@drawable/rounded_corners"
-        android:src="@drawable/back_vector"
+        android:src="@drawable/ic_baseline_arrow_back_ios_24"
         app:layout_constraintEnd_toStartOf="@+id/displayPicture_infoPage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
