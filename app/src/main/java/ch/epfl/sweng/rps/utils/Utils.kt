@@ -26,10 +26,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
-import java.net.SocketException
 
 
 fun consume(block: () -> Any?): () -> Unit = { block() }
@@ -119,21 +117,9 @@ suspend fun isInternetAvailable(): Boolean = withContext(Dispatchers.IO) {
         socket.connect(InetSocketAddress("1.1.1.1", 53))
         socket.close()
         true
-    } catch (e: IOException) {
-        L.of("isInternetAvailable")
-            .i("Got IOException, assuming no internet connection (message: ${e.message})")
-        false
-    } catch (e: SecurityException) {
-        L.of("isInternetAvailable")
-            .i("Got SecurityException, assuming no internet connection (message: ${e.message})")
-        false
-    } catch (e: SocketException) {
-        L.of("isInternetAvailable")
-            .i("Got SocketException, assuming no internet connection (message: ${e.message})")
-        false
     } catch (e: Exception) {
         L.of("isInternetAvailable")
-            .e("Got an unknown exception, assuming no internet connection", e)
+            .e("Got a ${e::class.java.simpleName}, assuming no internet connection", e)
         false
     }
 }
@@ -300,24 +286,26 @@ fun openJsonFile(context: Context, file: File) {
     val jsonIntent = Intent(Intent.ACTION_VIEW)
     jsonIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     jsonIntent.setDataAndType(uri, "application/json")
-    try {
-        context.startActivity(jsonIntent)
-    } catch (e: ActivityNotFoundException) {
-        Log.e("Error", "No activity found to handle intent", e)
-        jsonIntent.setDataAndType(uri, "text/plain")
+
+    for (type in listOf("application/json", "text/plain")) {
+        jsonIntent.setDataAndType(uri, type)
         try {
-            context.startActivity(jsonIntent)
+            return context.startActivity(jsonIntent)
         } catch (e: ActivityNotFoundException) {
-            Log.e("Error", "No activity found to handle intent", e)
+            continue
         }
     }
+    throw ActivityNotFoundException("No activity found to open file $uri")
 }
 
 sealed class Option<T> {
     class Some<T>(val value: T) : Option<T>()
     class None<T>() : Option<T>()
+
+    companion object {
+        fun <T> fromNullable(value: T?): Option<T> = value?.let { Some(it) } ?: None()
+    }
 }
 
 
-fun <T : Any> T?.toOption(): Option<T> =
-    if (this == null) Option.None() else Option.Some(this)
+

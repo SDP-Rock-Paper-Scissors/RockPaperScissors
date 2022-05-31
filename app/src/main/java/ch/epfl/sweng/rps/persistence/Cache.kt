@@ -60,21 +60,24 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
      */
     suspend fun getUserDetails(): SuspendResult<User?> {
         val uid = repo.rawCurrentUid()
-        if (uid == null) {
+        return if (uid == null) {
             log.d("getUserDetails: no user logged in")
-            return SuspendResult.Success(getUserDetailsFromCache())
-        }
-
-        return if (user != null && user!!.uid == uid)
-            SuspendResult.Success(getUserDetailsFromCache())
-        else
-            repo.getUser(uid).then { u ->
-                u?.let {
-                    user = it
-                    storage.writeBackUser(it)
-                    it
+            guardSuspendable { getUserDetailsFromCache() }
+        } else {
+            log.d("getUserDetails: user logged in with uid $uid")
+            repo.getUser(uid).whenIs(
+                { u ->
+                    SuspendResult.Success(u.value?.let {
+                        user = it
+                        storage.writeBackUser(it)
+                        it
+                    })
+                },
+                {
+                    guardSuspendable { getUserDetailsFromCache() }
                 }
-            }
+            )
+        }
     }
 
     /**
@@ -153,7 +156,6 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
      * @return the stats data for the user.
      */
     suspend fun getStatsData(position: Int): SuspendResult<List<UserStat>> {
-        return SuspendResult.Failure(Exception("Not implemented"))
         return if (!isInternetAvailable()) {
             log.d("INTERNET NOT AVAILABLE")
             guardSuspendable { getStatsDataFromCache() }

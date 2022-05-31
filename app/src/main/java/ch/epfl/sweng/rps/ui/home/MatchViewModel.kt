@@ -33,8 +33,10 @@ class MatchViewModel : ViewModel() {
     private var gameResult: Hand.Outcome? = null
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
     var cache = Cache.getInstance()
+
     var host: MutableLiveData<AbstractUser?> = MutableLiveData(null)
     var opponent: MutableLiveData<AbstractUser?> = MutableLiveData(User("opponent"))
+
     private var nEvents: Int? = null
     private var artificialMovesDelay: Long? = null
     var timeLimit: Int? = 0 // this will be modifiable when the options allow it

@@ -9,7 +9,6 @@ import ch.epfl.sweng.rps.models.ui.RoundStat
 import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.Option
-import ch.epfl.sweng.rps.utils.toOption
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -72,7 +71,7 @@ object FirebaseHelper {
             for (p in players) {
                 if (p != userid) {
                     val user =
-                        users.getOrPut(p) { firebaseRepository.getUser(p).getOrThrow().toOption() }
+                        users.getOrPut(p) { Option.fromNullable(firebaseRepository.getUser(p).getOrThrow()) }
 
                     if (user is Option.Some)
                         opponents.add(user.value.username ?: p)

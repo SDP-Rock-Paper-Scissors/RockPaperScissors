@@ -130,6 +130,6 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         guardSuspendable {}
 
     override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
-        TODO("Not yet implemented")
+        return null
     }
 }

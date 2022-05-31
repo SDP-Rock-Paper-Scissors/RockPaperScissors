@@ -60,18 +60,17 @@ class GameFragment : Fragment() {
         binding.scissorsRB.setOnClickListener { rpsPressed(Hand.SCISSORS) }
         binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
         setImageButtonColor(binding.buttonActivateCamera)
-        matchViewModel.cumulativeScore.observe(
-            viewLifecycleOwner
-        ) {
+
+        matchViewModel.cumulativeScore.observe(viewLifecycleOwner) {
             binding.opponentData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
             binding.hostData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
         }
         matchViewModel.host.observe(viewLifecycleOwner) {
-            binding.hostData.username.text = matchViewModel.host.value!!.username
+            binding.hostData.username.text = it?.username ?: "???"
         }
         matchViewModel.opponent.observe(viewLifecycleOwner) {
-            binding.opponentData.username.text = matchViewModel.opponent.value!!.username
+            binding.opponentData.username.text = it?.username ?: "???"
         }
         uiSetup()
     }

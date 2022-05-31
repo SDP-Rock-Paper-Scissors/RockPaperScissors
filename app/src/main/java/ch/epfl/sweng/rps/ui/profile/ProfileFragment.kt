@@ -52,7 +52,8 @@ class ProfileFragment : Fragment() {
         val view = requireView()
         val cache = Cache.getInstance()
         cache.getUserDetails().whenIs({
-            it.value?.let { user ->
+            val user = it.value
+            if (user != null) {
                 setRow(R.id.email_row, "Email", user.email, onTap = null)
                 setRow(R.id.username_row, "Username", user.username) { setValue ->
                     showDialog(initialValue = user.username) { value ->
