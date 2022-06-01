@@ -6,7 +6,9 @@ import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup
 import ch.epfl.sweng.rps.MainActivity
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import okhttp3.internal.toHexString
 import org.junit.Rule
 import org.junit.Test
@@ -17,6 +19,7 @@ import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class SuspendResultTest {
 
@@ -24,7 +27,7 @@ class SuspendResultTest {
     val rule = ActivityScenarioRuleWithSetup.default(MainActivity::class.java)
 
     @Test
-    fun testBasicUseCases(): Unit = runBlocking {
+    fun testBasicUseCases(): Unit = runTest(UnconfinedTestDispatcher()) {
         assertIs<SuspendResult.Failure<Int>>(guardSuspendable<Int> { throw Exception() })
         assertIs<SuspendResult.Success<Int>>(guardSuspendable { 1 })
 
