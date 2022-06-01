@@ -8,7 +8,6 @@ import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
@@ -182,8 +181,6 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
                     email = "email@example.com",
                     has_profile_photo = true,
                 )
-                Intents.init()
-
             },
             {
                 kotlin.runCatching {
@@ -196,7 +193,6 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
                     leaderBoardScore.clear()
                 }
                 FirebaseApp.clearInstancesForTest()
-                Intents.release()
             }
         )
 
