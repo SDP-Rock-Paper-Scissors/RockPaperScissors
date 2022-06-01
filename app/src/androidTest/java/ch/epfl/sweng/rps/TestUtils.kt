@@ -8,17 +8,16 @@ import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
-import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.ktx.Firebase
@@ -171,7 +170,9 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
         val defaultTestFlow = TestFlow.setupAndTearDown(
             {
                 ServiceLocator.setCurrentEnv(Env.Test)
-                Firebase.initializeForTest()
+                FirebaseApp.initializeApp(InstrumentationRegistry.getInstrumentation().targetContext)
+                FirebaseFirestore.getInstance().firestoreSettings =
+                    FirebaseFirestoreSettings.Builder().setPersistenceEnabled(false).build()
                 Cache.initialize(InstrumentationRegistry.getInstrumentation().targetContext)
                 ServiceLocator.localRepository.setCurrentUid("test_user")
                 ServiceLocator.localRepository.users["test_user"] = User(
@@ -181,12 +182,21 @@ class ActivityScenarioRuleWithSetup<A : Activity?> : ExternalResource {
                     email = "email@example.com",
                     has_profile_photo = true,
                 )
+                Intents.init()
+
             },
             {
-                Cache.getInstance().clear()
-                FirebaseAuth.getInstance().signOut()
+                kotlin.runCatching {
+                    Cache.getInstance().clear()
+                }
+                ServiceLocator.localRepository.apply {
+                    users.clear()
+                    gamesMap.clear()
+                    invitations.clear()
+                    leaderBoardScore.clear()
+                }
                 FirebaseApp.clearInstancesForTest()
-                ServiceLocator.setCurrentEnv(Env.Prod)
+                Intents.release()
             }
         )
 
