@@ -42,10 +42,6 @@
             android:exported="false"
             android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
         <activity
-            android:name=".vision.GraphicOverlayActivity"
-            android:exported="false"
-            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
-        <activity
             android:name=".MainActivity"
             android:exported="false"
             android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
