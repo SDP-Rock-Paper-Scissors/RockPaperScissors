@@ -12,6 +12,8 @@ import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.L
+import ch.epfl.sweng.rps.utils.SuspendResult
+import ch.epfl.sweng.rps.utils.guardSuspendable
 import ch.epfl.sweng.rps.utils.isInternetAvailable
 
 /**
@@ -56,16 +58,26 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
     /**
      * This function returns the details of the user from the cache or from the remote repository.
      */
-    suspend fun getUserDetails(): User? {
-        val uid = repo.rawCurrentUid() ?: return getUserDetailsFromCache()
-
-        if (user != null && user!!.uid == uid) return user
-        repo.getUser(uid)?.apply {
-            user = this
-            storage.writeBackUser(this)
-            return this
+    suspend fun getUserDetails(): SuspendResult<User?> {
+        val uid = repo.rawCurrentUid()
+        return if (uid == null) {
+            log.d("getUserDetails: no user logged in")
+            guardSuspendable { getUserDetailsFromCache() }
+        } else {
+            log.d("getUserDetails: user logged in with uid $uid")
+            repo.getUser(uid).whenIs(
+                { u ->
+                    SuspendResult.Success(u.value?.let {
+                        user = it
+                        storage.writeBackUser(it)
+                        it
+                    })
+                },
+                {
+                    guardSuspendable { getUserDetailsFromCache() }
+                }
+            )
         }
-        return user
     }
 
     /**
@@ -143,15 +155,24 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
      * @param position the position of the stats.
      * @return the stats data for the user.
      */
-    suspend fun getStatsData(position: Int): List<UserStat> {
-        if (!isInternetAvailable()) {
+    suspend fun getStatsData(position: Int): SuspendResult<List<UserStat>> {
+        return if (!isInternetAvailable()) {
             log.d("INTERNET NOT AVAILABLE")
-            return getStatsDataFromCache()
+            guardSuspendable { getStatsDataFromCache() }
+        } else {
+            guardSuspendable { FirebaseHelper.getStatsData(position) }.whenIs(
+                success = { (data) ->
+                    log.d("getStatsData: got " + data.size.toString() + " stats")
+                    storage.writeBackStatsData(data)
+                    userStatData = data
+                    SuspendResult.Success(data)
+                },
+                failure = {
+                    log.e("FAILED TO GET STATS DATA", it.error)
+                    it
+                }
+            )
         }
-        userStatData = FirebaseHelper.getStatsData(position)
-        log.d(userStatData!!.size.toString())
-        storage.writeBackStatsData(userStatData!!)
-        return userStatData!!
     }
 
     /**
@@ -166,7 +187,6 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
 
     /**
      * Gets leaderboard data from cache or local storage
-     * @param position the position of the leaderboard to load.
      * @return A list of LeaderBoardInfo fetched from local storage or cache.
      */
     fun getLeaderBoardDataFromCache(): List<LeaderBoardInfo> {
@@ -180,15 +200,24 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
      * @param position the position of the leaderboard to load.
      * @return A list of LeaderBoardInfo fetched from firebase.
      */
-    suspend fun getLeaderBoardData(position: Int): List<LeaderBoardInfo> {
+    suspend fun getLeaderBoardData(position: Int): SuspendResult<List<LeaderBoardInfo>> {
         if (!isInternetAvailable()) {
             log.d("INTERNET NOT AVAILABLE")
-            return getLeaderBoardDataFromCache()
+            return guardSuspendable { getLeaderBoardDataFromCache() }
+        } else {
+            return guardSuspendable { FirebaseHelper.getLeaderBoard(position) }.whenIs(
+                success = { (data) ->
+                    log.d("getLeaderBoardData: got " + data.size.toString() + " leaderboard")
+                    storage.writeBackLeaderBoardData(data)
+                    leaderBoardData = data
+                    SuspendResult.Success(data)
+                },
+                failure = {
+                    log.e("FAILED TO GET LEADERBOARD DATA", it.error)
+                    it
+                }
+            )
         }
-        leaderBoardData = FirebaseHelper.getLeaderBoard(position)
-        log.d(leaderBoardData!!.size.toString())
-        storage.writeBackLeaderBoardData(leaderBoardData!!)
-        return leaderBoardData!!
     }
 
     /**
