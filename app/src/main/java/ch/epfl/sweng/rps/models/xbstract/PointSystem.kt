@@ -1,17 +1,17 @@
 package ch.epfl.sweng.rps.models.xbstract
 
-import ch.epfl.sweng.rps.models.remote.Hand.Result
+import ch.epfl.sweng.rps.models.remote.Hand.Outcome
 
 interface PointSystem {
     val tie: Int
     val loss: Int
     val win: Int
 
-    fun getPoints(result: Result): Int {
+    fun getPoints(result: Outcome): Int {
         return when (result) {
-            Result.TIE -> tie
-            Result.LOSS -> loss
-            Result.WIN -> win
+            Outcome.TIE -> tie
+            Outcome.LOSS -> loss
+            Outcome.WIN -> win
         }
     }
 
