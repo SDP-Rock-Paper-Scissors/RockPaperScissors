@@ -57,9 +57,7 @@ class ComputerMatchTest {
         Espresso.onView(ViewMatchers.withId(R.id.button_play_1_games_offline))
             .perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(buttonId)).perform(ViewActions.click())
-        delay(3_000)
-
-
+        delay(3_000L)
     }
 
     @Test

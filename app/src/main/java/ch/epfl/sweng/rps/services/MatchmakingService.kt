@@ -31,7 +31,7 @@ open class MatchmakingService {
 
     open suspend fun currentGame(): FirebaseGameService? {
         val repo = ServiceLocator.getInstance().repository
-        val games = repo.games.gamesOfUser(repo.getCurrentUid())
+        val games = repo.games.myActiveGames()
         if (games.isEmpty()) {
             return null
         }
