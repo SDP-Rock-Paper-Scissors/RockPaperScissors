@@ -1,8 +1,6 @@
 package ch.epfl.sweng.rps.ui.game
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +18,6 @@ import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentGameBinding
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.services.ServiceLocator
-import ch.epfl.sweng.rps.ui.camera.CameraXLivePreviewActivityContract
 import ch.epfl.sweng.rps.ui.home.MatchViewModel
 
 class GameFragment : Fragment() {
@@ -28,18 +25,18 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
     private val matchViewModel: MatchViewModel by activityViewModels()
-    private val activityLauncher =
-        registerForActivityResult(CameraXLivePreviewActivityContract()) { result ->
-
-            result ?: return@registerForActivityResult
-
-            val r = Runnable {
-                rpsPressed(result)
-            }
-            //delays call to rpsPressed by 1s. Otherwise the result would be
-            //showed too quickly
-            Handler(Looper.getMainLooper()).postDelayed(r, 1000)
-        }
+//    private val activityLauncher =
+//        registerForActivityResult(CameraXLivePreviewActivityContract()) { result ->
+//
+//            result ?: return@registerForActivityResult
+//
+//            val r = Runnable {
+//                rpsPressed(result)
+//            }
+//            //delays call to rpsPressed by 1s. Otherwise the result would be
+//            //showed too quickly
+//            Handler(Looper.getMainLooper()).postDelayed(r, 1000)
+//        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +51,7 @@ class GameFragment : Fragment() {
         binding.rockIM.setOnClickListener { rpsPressed(Hand.ROCK) }
         binding.paperIM.setOnClickListener { rpsPressed(Hand.PAPER) }
         binding.scissorsIM.setOnClickListener { rpsPressed(Hand.SCISSORS) }
-        binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
+//        binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
         setImageButtonColor(binding.buttonActivateCamera)
 
         matchViewModel.cumulativeScore.observe(viewLifecycleOwner) {
