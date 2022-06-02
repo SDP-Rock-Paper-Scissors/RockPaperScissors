@@ -23,15 +23,4 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        if (intent.action.equals("fromCamera")) {
-            val extras = intent.extras
-            if (extras != null) {
-                val value = extras.getString("result")
-                Toast.makeText(this, "The pose $value was detected", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 }

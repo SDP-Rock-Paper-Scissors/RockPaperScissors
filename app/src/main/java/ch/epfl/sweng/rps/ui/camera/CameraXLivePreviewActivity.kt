@@ -92,7 +92,7 @@ class CameraXLivePreviewActivity :
             Observer { result: String ->
                setResult(
                    Activity.RESULT_OK,
-                 Intent(this, MainActivity::class.java )
+                 Intent()
                  .putExtra("result", result))
                finish()
               }
@@ -104,17 +104,6 @@ class CameraXLivePreviewActivity :
                 Observer { provider: ProcessCameraProvider? ->
                     cameraProvider = provider
                     bindAllCameraUseCases()
-                }
-            )
-        model!!.running
-            .observe(
-                this,
-                Observer { result: String ->
-                    Intent(this, MainActivity::class.java)
-                        .putExtra("result", result)
-                        .setAction("fromCamera").also {
-                            startActivity(it)
-                        }
                 }
             )
 
