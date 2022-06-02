@@ -137,7 +137,7 @@ class FirebaseGameService(
         return game?.current_round == game?.gameMode?.rounds!! - 1
     }
 
-    override suspend fun updateIsDone() {
+    override suspend fun updateDone() {
         checkNotDisposed()
         val previousDoneStatus = game?.done
         val isDone = roundCountBasedDone()

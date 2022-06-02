@@ -58,7 +58,7 @@ abstract class GameService : ChangeNotifier<GameService>() {
     abstract suspend fun addRound(): Round
     abstract suspend fun refreshGame(): Game
     abstract suspend fun playHand(hand: Hand)
-    abstract suspend fun updateIsDone()
+    abstract suspend fun updateDone()
     abstract fun roundCountBasedDone(): Boolean
 
     @CallSuper

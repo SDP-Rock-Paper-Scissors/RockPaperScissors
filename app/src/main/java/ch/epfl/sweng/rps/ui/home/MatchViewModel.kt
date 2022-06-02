@@ -190,7 +190,7 @@ class MatchViewModel : ViewModel() {
             opponentsMoveUIUpdateCallback()
             scoreBasedUpdatesCallback()
             if (gameService?.imTheOwner == true) {
-                gameService?.updateIsDone()
+                gameService?.updateDone()
             }
 
             // add round can be called only from suspend function or from coroutine

@@ -73,7 +73,7 @@ class OfflineGameService(
         makeComputerMoves()
     }
 
-    override suspend fun updateIsDone() {
+    override suspend fun updateDone() {
         val isDone =
             roundCountBasedDone() && game!!.rounds[game!!.current_round.toString()]?.hands?.keys?.containsAll(
                 game!!.players
