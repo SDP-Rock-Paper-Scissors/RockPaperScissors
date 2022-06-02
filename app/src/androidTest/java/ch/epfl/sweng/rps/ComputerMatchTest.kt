@@ -35,9 +35,6 @@ class ComputerMatchTest {
 
     @Before
     fun setUp() {
-//        ServiceLocator.setCurrentEnv(Env.Test)
-//        val repo = ServiceLocator.getInstance().repository as LocalRepository
-//        repo.setCurrentUid("test")
         ServiceLocator.setCurrentEnv(Env.Test)
         ServiceLocator.localRepository.setCurrentUid("test")
         Firebase.initializeForTest()
@@ -56,7 +53,7 @@ class ComputerMatchTest {
     }
 
     private suspend fun run1roundGame() {
-        val buttonId = R.id.scissorsIM
+        val buttonId = R.id.paperIM
         Espresso.onView(ViewMatchers.withId(R.id.button_play_1_games_offline))
             .perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(buttonId)).perform(ViewActions.click())
