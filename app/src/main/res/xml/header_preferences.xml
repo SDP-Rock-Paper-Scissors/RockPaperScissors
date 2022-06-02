@@ -42,6 +42,11 @@
         app:title="@string/show_welcome_screen_text_settings" />
 
     <Preference
+        app:icon="@drawable/ic_baseline_info_24"
+        app:key="@string/dump_sys_settings_key"
+        app:title="@string/dump_dbg_infos_pref_text" />
+
+    <Preference
         app:icon="@drawable/ic_baseline_delete_24"
         app:key="@string/settings_clear_shared_prefs"
         app:title="@string/clear_shared_prefs_settings_text" />

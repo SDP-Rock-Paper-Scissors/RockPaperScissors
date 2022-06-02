@@ -8,5 +8,5 @@ data class RoundStat(
     val date: Date,
     val userHand: Hand,
     val opponentHand: Hand,
-    val outcome: Hand.Result
+    val outcome: Hand.Outcome
 )

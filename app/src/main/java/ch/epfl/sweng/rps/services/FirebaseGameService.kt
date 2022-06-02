@@ -133,6 +133,21 @@ class FirebaseGameService(
             .await()
     }
 
+    override fun roundCountBasedDone(): Boolean {
+        return game?.current_round == game?.gameMode?.rounds!! - 1
+    }
+
+    override suspend fun updateDone() {
+        checkNotDisposed()
+        val previousDoneStatus = game?.done
+        val isDone = roundCountBasedDone()
+        game = (game!! as Game.Rps).copy(done = isDone)
+        if (isDone != previousDoneStatus) {
+            firebase.gamesCollection.document(gameId)
+                .update(mapOf(Game.FIELDS.DONE to isDone))
+        }
+    }
+
     override fun dispose() {
         checkNotDisposed()
 
