@@ -1,26 +1,26 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-
+    <!--
+        <color name="primary">#9C27B0</color>
+        <color name="primary_dark">#7B1FA2</color>
+        <color name="primary_light">#E1BEE7</color>
+        <color name="accent">#FFC107</color>
+        <color name="primary_text">#212121</color>
+        <color name="secondary_text">#757575</color>
+        <color name="icons">#FFFFFF</color>
+        <color name="divider">#BDBDBD</color>
+    -->
     <style name="Theme.RockPaperScissors" parent="Theme.Material3.Light">
         <!-- Primary brand color. -->
         <item name="fontFamily">@font/montserrat</item>
-        <item name="colorPrimary">@color/turquoise</item>
-        <item name="colorPrimaryVariant">@color/turquoise_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorOnSurface">@color/primary_text</item>
     </style>
 
-    <style name="Theme.RockPaperScissors.NoActionBar">
+    <style name="Theme.RockPaperScissors.NoActionBar" parent="Theme.RockPaperScissors">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="Theme.RockPaperScissors.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.RockPaperScissors.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
