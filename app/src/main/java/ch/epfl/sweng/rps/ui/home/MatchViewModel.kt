@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.ui.home
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService
 import ch.epfl.sweng.rps.services.OfflineGameService
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.utils.showSnackbarIfError
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,12 +29,14 @@ import java.util.*
 class MatchViewModel : ViewModel() {
 
     var gameService: GameService? = null
-    var currentRoundResult: Hand.Result? = null
-    private var gameResult: Hand.Result? = null
+    var currentRoundResult: Hand.Outcome? = null
+    private var gameResult: Hand.Outcome? = null
     var cumulativeScore = MutableLiveData<List<Round.Score>?>()
     var cache = Cache.getInstance()
+
     var host: MutableLiveData<AbstractUser?> = MutableLiveData(null)
     var opponent: MutableLiveData<AbstractUser?> = MutableLiveData(User("opponent"))
+
     private var nEvents: Int? = null
     private var artificialMovesDelay: Long? = null
     var timeLimit: Int? = 0 // this will be modifiable when the options allow it
@@ -51,7 +55,7 @@ class MatchViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            host.value = cache.getUserDetails()
+            cache.getUserDetails().then { host.value = it }.getOrThrow()
         }
     }
 
@@ -65,12 +69,16 @@ class MatchViewModel : ViewModel() {
         this.artificialMovesDelay = artificialMovesDelay
     }
 
-    fun setGameServiceSettingsOnline(gameService_: FirebaseGameService) {
+    fun setGameServiceSettingsOnline(
+        activity: Activity,
+        gameService_: FirebaseGameService
+    ) {
         gameService = gameService_
         val opponentUid =
             (gameService as FirebaseGameService).currentGame.players.filter { it != uid }[0]
         viewModelScope.launch {
             opponent.value = ServiceLocator.getInstance().repository.getUser(opponentUid)
+                .showSnackbarIfError(activity).asData?.value
         }
 
         this.nEvents = (gameService as FirebaseGameService).currentGame.gameMode.rounds
@@ -102,18 +110,18 @@ class MatchViewModel : ViewModel() {
         }
     }
 
-    private fun determineResults(scores: List<Round.Score>): Hand.Result {
+    private fun determineResults(scores: List<Round.Score>): Hand.Outcome {
         val best = scores[0]
         val bestPoints = best.points
         val bestScoreList = scores.filter { it.points == bestPoints }
         val result = if (uid in bestScoreList.map { it.uid }) {
             if (bestScoreList.size == 1) {
-                Hand.Result.WIN
+                Hand.Outcome.WIN
             } else {
-                Hand.Result.TIE
+                Hand.Outcome.TIE
             }
         } else {
-            Hand.Result.LOSS
+            Hand.Outcome.LOSS
         }
         return result
     }

@@ -9,12 +9,16 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentStatisticsBinding
 import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.persistence.Cache
+import ch.epfl.sweng.rps.utils.L
+import ch.epfl.sweng.rps.utils.SuspendResult
+import kotlinx.coroutines.launch
 
 
 class StatisticsFragment : Fragment() {
@@ -57,21 +61,23 @@ class StatisticsFragment : Fragment() {
                     adapter = StatsItemAdapter(fragmentManager)
                     setHasFixedSize(true)
                 }
-                model.getStats(position).observe(viewLifecycleOwner) { stats ->
-                    showStats(
-                        itemView, stats
+                lifecycleScope.launch {
+                    model.getStats(position).whenIs(
+                        { (stats) -> showStats(itemView, stats) },
+                        SuspendResult.showSnackbar(
+                            requireContext(),
+                            requireActivity().window.decorView.rootView
+                        ) {
+                            L.of(this@StatisticsFragment).e("Error while loading stats", it.error)
+                        }
                     )
-
                 }
-
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
         }
-
-
     }
 
 
