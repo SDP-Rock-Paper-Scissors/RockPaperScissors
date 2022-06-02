@@ -54,7 +54,7 @@ class GameFragment : Fragment() {
         binding.rockIM.setOnClickListener { rpsPressed(Hand.ROCK) }
         binding.paperIM.setOnClickListener { rpsPressed(Hand.PAPER) }
         binding.scissorsIM.setOnClickListener { rpsPressed(Hand.SCISSORS) }
-//        binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
+        binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
         setImageButtonColor(binding.buttonActivateCamera)
 
         matchViewModel.cumulativeScore.observe(viewLifecycleOwner) {
