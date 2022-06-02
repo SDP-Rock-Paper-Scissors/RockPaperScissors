@@ -5,7 +5,6 @@
     android:id="@+id/fragment_friends"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
     tools:context=".ui.friends.FriendsFragment">
 
     <ImageButton
@@ -25,10 +24,9 @@
         android:layout_height="54dp"
         android:layout_marginTop="3dp"
         android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/tertiary2"
         android:gravity="center"
         android:text="@string/friends"
-        android:textColor="@color/secondary"
+        android:textColor="?colorOnSurface"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/addButton"

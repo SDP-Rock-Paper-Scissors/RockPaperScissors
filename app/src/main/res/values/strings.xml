@@ -73,10 +73,10 @@
     <string name="theme_mode">Theme</string>
     <string name="theme_mode_summary">Use the dark theme</string>
     <string name="theme_pref_key">theme_mode</string>
-    <string name="online">Online</string>
-    <string name="play_one_game">Play one game</string>
-    <string name="play_five_games">Play five games</string>
-    <string name="offline">Offline</string>
+    <string name="online">Play online</string>
+    <string name="play_one_game">1 round</string>
+    <string name="play_five_games">5 rounds</string>
+    <string name="offline">Play offline</string>
     <string name="profile_picture_desc">Profile picture</string>
     <string name="show_license_key">show_licence</string>
     <string name="license_title">License</string>
@@ -102,12 +102,12 @@
     <!-- Content Description -->
     <string name="clock_description">Clock showing how much time passed</string>
     <string name="camera_description">Clock showing how much time passed</string>
-    <string name="add_new_game">Add new game</string>
+    <string name="new_game">New game</string>
     <string name="tic_tac_toe">Tic Tac Toe</string>
 
 
     <string name="sign_in_with_google">Sign in with Google</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
 
     <string name="you_lose">YOU LOSE</string>
     <string name="player">Player</string>
@@ -123,4 +123,5 @@
     <string name="edit_icon_desc">edit icon</string>
     <string name="dump_dbg_infos_pref_text">Dump debug infos</string>
     <string name="dump_sys_settings_key">dump_sys_settings</string>
+    <string name="rock_paper_scissors">Rock Paper Scissors</string>
 </resources>
