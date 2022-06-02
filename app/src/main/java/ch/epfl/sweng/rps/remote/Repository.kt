@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.remote.friends.FriendsRepository
 import ch.epfl.sweng.rps.remote.games.GamesRepository
+import ch.epfl.sweng.rps.utils.SuspendResult
 import java.net.URI
 
 /**
@@ -28,10 +29,10 @@ interface Repository {
     /**
      * Updates the user's profile.
      */
-    suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
+    suspend fun updateUser(vararg pairs: Pair<User.Field, Any>): SuspendResult<Unit>
 
     /**
-     * Returns the current user's uid or null if the user is not logged in.
+     * Returns the current user's uid if loggged in, null otherwise.
      */
     fun rawCurrentUid(): String?
 
@@ -43,27 +44,25 @@ interface Repository {
     /**
      * Returns the user with the given uid or null if the user does not exist.
      */
-    suspend fun getUser(uid: String): User?
+    suspend fun getUser(uid: String): SuspendResult<User?>
 
-    /**
-     * Returns the user's profile picture or null if the user does not have a profile picture.
-     */
-    suspend fun getUserProfilePictureUrl(uid: String): URI?
+     
+    suspend fun getUserProfilePictureUrl(uid: String): SuspendResult<URI?>
 
     /**
      * Sets the user's profile picture to the given bitmap.
      */
-    suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean = false)
+    suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean = false): SuspendResult<Unit>
 
     /**
-     * Returns the user's profile picture bitmap or null if the user does not have a profile picture.
+     * Returns the user's profile picture or null if the user does not have a profile picture.
      */
     suspend fun getUserProfilePictureImage(uid: String): Bitmap?
 
     /**
-     * Creats a new user with the given uid.
+     * Creates a new user with the given uid.
      */
-    suspend fun createThisUser(name: String?, email: String?): User
+    suspend fun createThisUser(name: String?, email: String?): SuspendResult<User>
 
     /**
      * Exception thrown when the user is not logged in.

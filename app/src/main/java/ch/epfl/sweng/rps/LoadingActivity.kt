@@ -11,6 +11,7 @@ import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import ch.epfl.sweng.rps.utils.L
+import ch.epfl.sweng.rps.utils.SuspendResult
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.delay
@@ -89,14 +90,27 @@ class LoadingActivity : AppCompatActivity() {
             startOnBoarding.launch(OnBoardingActivity.createIntent(this))
             return
         }
-        val user = Cache.getInstance().getUserDetails()
-        log.log("user: $user")
-        if (user == null) {
-            log.log("nav to login")
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-            return
-        }
+        Cache.getInstance().getUserDetails().whenIs(
+            { (user) ->
+                if (user == null) {
+                    {
+                        log.log("nav to login")
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    }
+                } else {
+                    null
+                }
+            },
+            SuspendResult.showSnackbar(this, window.decorView.findViewById(android.R.id.content)) {
+                log.e("Error while getting user details", it.error)
+                null
+            }
+        )
+            ?.let {
+                it()
+                return@nav
+            }
         log.log("nav to main")
         startActivity(Intent(this, MainActivity::class.java))
         finish()

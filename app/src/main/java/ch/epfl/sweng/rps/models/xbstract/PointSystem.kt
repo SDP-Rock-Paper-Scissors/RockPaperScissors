@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.models.xbstract
 
-import ch.epfl.sweng.rps.models.remote.Hand.Result
+import ch.epfl.sweng.rps.models.remote.Hand.Outcome
 
 /**
  * Represerts a point system for a game.
@@ -25,11 +25,11 @@ interface PointSystem {
     /**
      * Returns the points awarded for a given result.
      */
-    fun getPoints(result: Result): Int {
+    fun getPoints(result: Outcome): Int {
         return when (result) {
-            Result.TIE -> tie
-            Result.LOSS -> loss
-            Result.WIN -> win
+            Outcome.TIE -> tie
+            Outcome.LOSS -> loss
+            Outcome.WIN -> win
         }
     }
 

@@ -10,13 +10,16 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentLeaderboardBinding
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.persistence.Cache
+import ch.epfl.sweng.rps.utils.SuspendResult
 import coil.load
+import kotlinx.coroutines.launch
 
 
 class LeaderboardFragment : Fragment() {
@@ -61,12 +64,12 @@ class LeaderboardFragment : Fragment() {
                     // set the custom adapter to the RecyclerView
                     adapter = LeaderBoardPlayerAdapter()
                     setHasFixedSize(true)
-                    model.getLeaderBoard(position).observe(viewLifecycleOwner) { leaderboardData ->
-                        loadPlayersUI(
-                            itemView, leaderboardData
+                    lifecycleScope.launch {
+                        model.getLeaderBoard(position).whenIs(
+                            success = { loadPlayersUI(itemView, it.value) },
+                            failure = SuspendResult.showSnackbar(requireContext(), requireView()) {}
                         )
                     }
-
                 }
             }
 
@@ -88,9 +91,13 @@ class LeaderboardFragment : Fragment() {
     }
 
     private fun showChampions(itemView: View, championPlayers: List<LeaderBoardInfo>) {
-        val championImgViewList = listOf<ImageView>(itemView.findViewById(R.id.iv_champion1),itemView.findViewById(R.id.iv_champion2), itemView.findViewById(R.id.iv_champion3))
-        for ((i, championPlayer) in championPlayers.withIndex()) {
-            championImgViewList[i].load(championPlayer.userProfilePictureUrl)
+        val images = listOf<ImageView>(
+            itemView.findViewById(R.id.iv_champion1),
+            itemView.findViewById(R.id.iv_champion2),
+            itemView.findViewById(R.id.iv_champion3)
+        )
+        for ((i, c) in championPlayers.withIndex()) {
+            images[i].load(c.userProfilePictureUrl)
         }
     }
 

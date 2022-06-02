@@ -11,6 +11,10 @@ const eu = region("europe-west1");
 
 export const queue = eu.https.onCall(async (data, context) => {
   const game_mode_s = data.game_mode as string | undefined;
+  const uid = context.auth?.uid;
+  if (uid === undefined) {
+    throw new https.HttpsError("unauthenticated", "User is not authenticated");
+  }
   if (game_mode_s === undefined) {
     throw new https.HttpsError("invalid-argument", "game_mode is required");
   }
@@ -26,23 +30,25 @@ export const queue = eu.https.onCall(async (data, context) => {
   const games_im_in =
     await prod.collection("games")
       .where("done", "==", false)
-      .where("players", "array-contains", context.auth!.uid).limit(1).get();
+      .where("players", "array-contains", uid).limit(1).get();
 
   if (games_im_in.size > 0) {
-    throw new https.HttpsError("invalid-argument", "You are already in a game");
+    throw new https.HttpsError("aborted", "You are already in a game");
   }
+  console.log("Looking for game with mode " + game_mode.toString() + " and player_count < " + game_mode.max_player_count + " and done = false");
 
   const games = await prod.collection("games")
     .where("game_mode", "==", game_mode.toString())
     .where("player_count", "<", game_mode.max_player_count)
     .where("done", "==", false)
+    .where("started", "==", false)
     .orderBy("player_count", "desc")
     .orderBy("timestamp", 'asc').limit(1).get();
 
-
+  console.log("found " + games.size + " games");
   let game: Game;
 
-  if (games.empty) {
+  if (games.size == 0) {
     // Create a new game
     game = createGame(game_mode);
   } else {
@@ -50,10 +56,10 @@ export const queue = eu.https.onCall(async (data, context) => {
     game = games.docs[0].data() as Game;
   }
 
-  addPlayer(game, context.auth!.uid);
+  addPlayer(game, uid);
 
   if (game.player_count > game_mode.max_player_count) {
-    throw new https.HttpsError("invalid-argument", "Too many players");
+    throw new https.HttpsError("aborted", "Too many players");
   }
 
   game.started = game.player_count === game_mode.max_player_count;
@@ -82,6 +88,10 @@ When the HTTPS request is received, a new document is created in the users/{user
 export const invite_player = eu.https.onCall(async (data, context) => {
   const user_id = data.user_id as string | undefined;
   const game_mode = data.game_mode as string | undefined;
+  const uid = context.auth?.uid;
+  if (uid === undefined) {
+    throw new https.HttpsError("unauthenticated", "User is not authenticated");
+  }
   if (user_id === undefined) {
     throw new https.HttpsError("invalid-argument", "user_id is required");
   }
@@ -101,12 +111,12 @@ export const invite_player = eu.https.onCall(async (data, context) => {
   }
 
   const game = createGame(new GameMode(game_mode));
-  addPlayer(game, context.auth!.uid);
+  addPlayer(game, uid);
 
   const invitation = {
     game: game.id,
     timestamp: Timestamp.now(),
-    inviter: context.auth!.uid,
+    inviter: uid,
     invitation_id: randomUUID()
   };
 
@@ -117,12 +127,16 @@ export const invite_player = eu.https.onCall(async (data, context) => {
 
 export const accept_invitation = eu.https.onCall(async (data, context) => {
   const invitation_id = data.invitation_id as string | undefined;
+  const uid = context.auth?.uid;
+  if (uid === undefined) {
+    throw new https.HttpsError("unauthenticated", "User is not authenticated");
+  }
 
   if (invitation_id === undefined) {
     throw new https.HttpsError("invalid-argument", "invitation_id is required");
   }
 
-  const invitation = await prod.collection("users").doc(context.auth!.uid).collection("invitations").doc(invitation_id).get();
+  const invitation = await prod.collection("users").doc(uid).collection("invitations").doc(invitation_id).get();
   if (!invitation.exists) {
     throw new https.HttpsError("not-found", "Invitation not found");
   }
@@ -136,10 +150,10 @@ export const accept_invitation = eu.https.onCall(async (data, context) => {
     throw new https.HttpsError("invalid-argument", "Game is full");
   }
 
-  addPlayer(game.data() as Game, context.auth!.uid);
+  addPlayer(game.data() as Game, uid);
   //! TRANSACTION !!!
   await prod.collection("games").doc(game.id).set(game.data() as Game);
-  await prod.collection("users").doc(context.auth!.uid).collection("invitations").doc(invitation_id).delete();
+  await prod.collection("users").doc(uid).collection("invitations").doc(invitation_id).delete();
   return game.id;
 })
 

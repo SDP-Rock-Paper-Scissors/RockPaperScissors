@@ -3,12 +3,13 @@ package ch.epfl.sweng.rps.remote
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.remote.friends.FirebaseFriendsRepository
 import ch.epfl.sweng.rps.remote.friends.FriendsRepository
 import ch.epfl.sweng.rps.remote.games.FirebaseGamesRepository
 import ch.epfl.sweng.rps.remote.games.GamesRepository
+import ch.epfl.sweng.rps.utils.SuspendResult
+import ch.epfl.sweng.rps.utils.guardSuspendable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
@@ -36,53 +37,58 @@ class FirebaseRepository private constructor(
         FirebaseGamesRepository(this)
     }
 
-    override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>) {
-        val arguments = FirebaseHelper.processUserArguments(*pairs)
-        val uid = getCurrentUid()
-        firebase.usersCollection.document(uid).update(arguments).await()
-    }
+    override suspend fun updateUser(vararg pairs: Pair<User.Field, Any>): SuspendResult<Unit> =
+        guardSuspendable {
+            val arguments = FirebaseHelper.processUserArguments(*pairs)
+            val uid = getCurrentUid()
+            firebase.usersCollection.document(uid).update(arguments).await()
+        }
 
-    override suspend fun getUser(uid: String): User? {
+    override suspend fun getUser(uid: String): SuspendResult<User?> = guardSuspendable {
         val user = firebase.usersCollection.document(uid).get().await()
-        return user?.toObject<User>()
+        user?.toObject<User>()
     }
 
-    override suspend fun getUserProfilePictureUrl(uid: String): URI? {
-        return if (getUser(uid)!!.has_profile_photo)
-            firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
-        else
-            null
-    }
+    override suspend fun getUserProfilePictureUrl(uid: String): SuspendResult<URI?> =
+        getUser(uid).then {
+            if (it != null && it.has_profile_photo)
+                firebase.profilePicturesFolder.child(uid).downloadUrl.await().toURI()
+            else
+                null
+        }
+
 
     override suspend fun getUserProfilePictureImage(uid: String): Bitmap? {
-        return if (getUser(uid)!!.has_profile_photo) {
+        return if (getUser(uid).asData?.value?.has_profile_photo == true) {
             val uri = firebase.profilePicturesFolder.child(uid).downloadUrl.await()
-            Log.d("URI", uri.path!!)
             @Suppress("BlockingMethodInNonBlockingContext")
             withContext(Dispatchers.IO) {
                 val inputStream: InputStream = URL(uri.toString()).openStream()
                 BitmapFactory.decodeStream(inputStream)
             }
-
         } else
             null
     }
 
-    override suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean) {
-        val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        updateUser(Pair(User.Field.HAS_PROFILE_PHOTO, true))
-        val task = firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
-        if (waitForUploadTask)
-            task.await()
-    }
+    override suspend fun setUserProfilePicture(
+        image: Bitmap,
+        waitForUploadTask: Boolean
+    ): SuspendResult<Unit> =
+        guardSuspendable {
+            val stream = ByteArrayOutputStream()
+            image.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            val data = stream.toByteArray()
+            updateUser(Pair(User.Field.HAS_PROFILE_PHOTO, true)).getOrThrow()
+            val task = firebase.profilePicturesFolder.child(getCurrentUid()).putBytes(data)
+            if (waitForUploadTask)
+                task.await()
+        }
 
-    override suspend fun createThisUser(name: String?, email: String?): User {
+    override suspend fun createThisUser(name: String?, email: String?) = guardSuspendable {
         val uid = getCurrentUid()
         val user = FirebaseHelper.userFrom(uid, name, email)
         firebase.usersCollection.document(uid).set(user).await()
-        return user
+        user
     }
 
     override fun rawCurrentUid(): String? = FirebaseAuth.getInstance().currentUser?.uid

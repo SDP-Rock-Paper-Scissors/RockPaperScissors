@@ -25,24 +25,25 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
     private val matchViewModel: MatchViewModel by activityViewModels()
-    val activityLauncher = registerForActivityResult(CameraXLivePreviewActivityContract()) { result ->
+    val activityLauncher =
+        registerForActivityResult(CameraXLivePreviewActivityContract()) { result ->
 
-        result ?: return@registerForActivityResult
+            result ?: return@registerForActivityResult
 
-        when(result){
-            Hand.ROCK ->  binding.rockRB.isChecked = true
-            Hand.PAPER -> binding.paperRB.isChecked = true
-            Hand.SCISSORS -> binding.scissorsRB.isChecked = true
-            Hand.NONE -> {}
+            when (result) {
+                Hand.ROCK -> binding.rockRB.isChecked = true
+                Hand.PAPER -> binding.paperRB.isChecked = true
+                Hand.SCISSORS -> binding.scissorsRB.isChecked = true
+                Hand.NONE -> {}
+            }
+            val r = Runnable {
+                rpsPressed(result)
+            }
+            //delays call to rpsPressed by 1s. Otherwise the result would be
+            //showed too quickly
+            Handler(Looper.getMainLooper()).postDelayed(r, 1000)
+
         }
-        val r = Runnable {
-            rpsPressed(result)
-        }
-        //delays call to rpsPressed by 1s. Otherwise the result would be
-        //showed too quickly
-        Handler(Looper.getMainLooper()).postDelayed(r, 1000)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,20 +58,19 @@ class GameFragment : Fragment() {
         binding.rockRB.setOnClickListener { rpsPressed(Hand.ROCK) }
         binding.paperRB.setOnClickListener { rpsPressed(Hand.PAPER) }
         binding.scissorsRB.setOnClickListener { rpsPressed(Hand.SCISSORS) }
-        binding.buttonActivateCamera.setOnClickListener{ activityLauncher.launch(null)}
+        binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
         setImageButtonColor(binding.buttonActivateCamera)
-        matchViewModel.cumulativeScore.observe(
-            viewLifecycleOwner
-        ) {
+
+        matchViewModel.cumulativeScore.observe(viewLifecycleOwner) {
             binding.opponentData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
             binding.hostData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
         }
         matchViewModel.host.observe(viewLifecycleOwner) {
-            binding.hostData.username.text = matchViewModel.host.value!!.username
+            binding.hostData.username.text = it?.username ?: "???"
         }
         matchViewModel.opponent.observe(viewLifecycleOwner) {
-            binding.opponentData.username.text = matchViewModel.opponent.value!!.username
+            binding.opponentData.username.text = it?.username ?: "???"
         }
         uiSetup()
     }
@@ -81,6 +81,7 @@ class GameFragment : Fragment() {
         if (gameId != null) {
             Toast.makeText(context, "Game ID: $gameId", Toast.LENGTH_LONG).show()
             matchViewModel.setGameServiceSettingsOnline(
+                requireActivity(),
                 ServiceLocator.getInstance().getGameServiceForGame(gameId)
             )
             matchViewModel.gameService?.startListening()
@@ -162,10 +163,11 @@ class GameFragment : Fragment() {
             else -> binding.counter.text = matchViewModel.timeLimit?.toString()
         }
     }
+
     /**
      * Applys theme color to ImageButton
-    */
-    private fun setImageButtonColor(button: ImageButton){
+     */
+    private fun setImageButtonColor(button: ImageButton) {
         val typedValue = TypedValue()
         requireActivity().getTheme().resolveAttribute(
             R.attr.colorPrimary,
