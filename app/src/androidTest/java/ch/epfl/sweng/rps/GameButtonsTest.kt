@@ -3,7 +3,7 @@ package ch.epfl.sweng.rps
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -15,6 +15,7 @@ import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -49,24 +50,24 @@ class GameButtonsTest {
 
     @Test
     fun pressedRock() {
-        checkPressedButton(R.id.rockIM)
+        checkTheComunicateDisplayed(R.id.rockIM)
     }
 
     @Test
     fun pressedPaper() {
-        checkPressedButton(R.id.paperIM)
+        checkTheComunicateDisplayed(R.id.paperIM)
     }
 
     @Test
     fun pressedScissors() {
-        checkPressedButton(R.id.scissorsIM)
+        checkTheComunicateDisplayed(R.id.scissorsIM)
     }
 
-    private fun checkPressedButton(radioButtonId: Int) = runBlocking {
+    private fun checkTheComunicateDisplayed(radioButtonId: Int) = runBlocking {
         onView(withId(R.id.button_play_1_games_offline)).perform(click())
         onView(withId(radioButtonId)).perform(click())
-        onView(withId(radioButtonId)).check(matches(isDisplayingAtLeast(10)))
-
+        delay(3_000L)
+        onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
     }
 }
 
