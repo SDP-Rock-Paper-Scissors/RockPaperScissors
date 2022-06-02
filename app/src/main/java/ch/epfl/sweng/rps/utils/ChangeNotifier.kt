@@ -72,7 +72,7 @@ open class ChangeNotifier<T> where  T : ChangeNotifier<T> {
     }
 
     /**
-     * Suspennd function continuing a change is notified and the [predicate] is satisfied.
+     * Suspend function continuing a change is notified and the [predicate] is satisfied.
      */
     suspend fun awaitFor(predicate: (T) -> Boolean) {
         ensureNotDisposed()
