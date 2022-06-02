@@ -3,11 +3,11 @@ package ch.epfl.sweng.rps.models.remote
 enum class Hand(val id: Int) {
     NONE(-1), ROCK(0), PAPER(1), SCISSORS(2);
 
-    infix fun vs(other: Hand): Result {
+    infix fun vs(other: Hand): Outcome {
         return when (winner(this, other)) {
-            this -> Result.WIN
-            other -> Result.LOSS
-            null -> Result.TIE
+            this -> Outcome.WIN
+            other -> Outcome.LOSS
+            null -> Outcome.TIE
             else -> throw IllegalStateException("Impossible")
         }
     }
@@ -36,7 +36,7 @@ enum class Hand(val id: Int) {
         return loss.contains(hand)
     }
 
-    enum class Result {
+    enum class Outcome {
         WIN, LOSS, TIE;
 
         fun asEmoji(): String = when (this) {

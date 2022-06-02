@@ -21,6 +21,8 @@ import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
 import ch.epfl.sweng.rps.utils.FirebaseEmulatorsUtils
 import ch.epfl.sweng.rps.utils.L
+import ch.epfl.sweng.rps.utils.dumpDebugInfos
+import ch.epfl.sweng.rps.utils.openJsonFile
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
@@ -203,6 +205,15 @@ class SettingsActivity : AppCompatActivity(),
                 ).apply { startActivity(this) }
                 true
             }
+
+            findPreference<Preference>(getString(R.string.dump_sys_settings_key))?.setOnPreferenceClickListener {
+                lifecycleScope.launch {
+                    val f = dumpDebugInfos(requireContext())
+                    openJsonFile(requireContext(), f)
+                }
+                true
+            }
+
             val gameSettings =
                 findPreference<Preference>(getString(R.string.add_artificial_game_settings))
 

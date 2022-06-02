@@ -15,6 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RockPaperScissors">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
         <activity
             android:name=".LoadingActivity"
             android:exported="true"
@@ -30,10 +39,6 @@
             android:theme="@style/OnBoardingTheme" />
         <activity
             android:name=".LoginActivity"
-            android:exported="false"
-            android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
-        <activity
-            android:name=".vision.GraphicOverlayActivity"
             android:exported="false"
             android:theme="@style/Theme.RockPaperScissors.NoActionBar" />
         <activity

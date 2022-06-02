@@ -124,4 +124,6 @@
     <string name="text">Text</string>
     <string name="value">Value</string>
     <string name="edit_icon_desc">edit icon</string>
+    <string name="dump_dbg_infos_pref_text">Dump debug infos</string>
+    <string name="dump_sys_settings_key">dump_sys_settings</string>
 </resources>

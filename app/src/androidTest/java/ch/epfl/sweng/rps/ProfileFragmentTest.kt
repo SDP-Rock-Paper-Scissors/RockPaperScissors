@@ -8,8 +8,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.persistence.Cache
+import ch.epfl.sweng.rps.services.ServiceLocator
 import org.junit.Rule
 import org.junit.Test
 
@@ -28,13 +28,7 @@ class ProfileFragmentTest {
 
     @Test
     fun testFields() {
-        val user = User(
-            username = "test",
-            uid = "uid",
-            games_history_privacy = User.Privacy.PUBLIC.name,
-            has_profile_photo = false,
-            email = "email",
-        )
+        val user = ServiceLocator.localRepository.let { it.users[it.getCurrentUid()] }!!
         Cache.getInstance().setUserDetails(user)
         onView(withId(R.id.nav_profile)).perform(click())
         onView(withText(user.username)).check(matches(isDisplayed()))

@@ -39,7 +39,6 @@ class GameFragment : Fragment() {
             //delays call to rpsPressed by 1s. Otherwise the result would be
             //showed too quickly
             Handler(Looper.getMainLooper()).postDelayed(r, 1000)
-
         }
 
     override fun onCreateView(
@@ -57,18 +56,17 @@ class GameFragment : Fragment() {
         binding.scissorsIM.setOnClickListener { rpsPressed(Hand.SCISSORS) }
         binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
         setImageButtonColor(binding.buttonActivateCamera)
-        matchViewModel.cumulativeScore.observe(
-            viewLifecycleOwner
-        ) {
+
+        matchViewModel.cumulativeScore.observe(viewLifecycleOwner) {
             binding.opponentData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
             binding.hostData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
         }
         matchViewModel.host.observe(viewLifecycleOwner) {
-            binding.hostData.username.text = matchViewModel.host.value!!.username
+            binding.hostData.username.text = it?.username ?: "???"
         }
         matchViewModel.opponent.observe(viewLifecycleOwner) {
-            binding.opponentData.username.text = matchViewModel.opponent.value!!.username
+            binding.opponentData.username.text = it?.username ?: "???"
         }
     }
 
@@ -78,6 +76,7 @@ class GameFragment : Fragment() {
         if (gameId != null) {
             Toast.makeText(context, "Game ID: $gameId", Toast.LENGTH_LONG).show()
             matchViewModel.setGameServiceSettingsOnline(
+                requireActivity(),
                 ServiceLocator.getInstance().getGameServiceForGame(gameId)
             )
             matchViewModel.gameService?.startListening()
