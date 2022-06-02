@@ -17,6 +17,7 @@ import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -67,9 +68,11 @@ class GameButtonsTest {
     }
 
     private fun checkTheComunicateDisplayed(radioButtonId: Int) = runBlocking {
-        onView(withId(R.id.button_play_1_games_offline)).perform(click())
-        onView(withId(radioButtonId)).perform(click())
-        delay(3000L)
+        launch {
+            onView(withId(R.id.button_play_1_games_offline)).perform(click())
+            onView(withId(radioButtonId)).perform(click())
+            delay(3000L)
+        }.join()
         onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
     }
 }
