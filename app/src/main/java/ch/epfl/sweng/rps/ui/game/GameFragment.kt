@@ -55,8 +55,7 @@ class GameFragment : Fragment() {
         binding.paperIM.setOnClickListener { rpsPressed(Hand.PAPER) }
         binding.scissorsIM.setOnClickListener { rpsPressed(Hand.SCISSORS) }
         binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
-        setImageButtonColor(binding.buttonActivateCamera)
-
+        setElementsToThemeColor()
         matchViewModel.cumulativeScore.observe(viewLifecycleOwner) {
             binding.opponentData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
@@ -174,16 +173,17 @@ class GameFragment : Fragment() {
 
 
     /**
-     * Applys theme color to ImageButton
+     * Applys theme color to ImageButton and SpinKit
      */
-    private fun setImageButtonColor(button: ImageButton) {
+    private fun setElementsToThemeColor() {
         val typedValue = TypedValue()
         requireActivity().theme.resolveAttribute(
             R.attr.colorPrimary,
             typedValue,
             true
         )
-        button.drawable.setTint(typedValue.data)
+        binding.buttonActivateCamera.drawable.setTint(typedValue.data)
+        binding.waitingForOpponent.setColor(typedValue.data)
     }
 
 }
