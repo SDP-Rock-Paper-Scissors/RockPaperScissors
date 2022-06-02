@@ -13,6 +13,7 @@ import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.persistence.PrivateStorage
 import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
@@ -45,6 +46,8 @@ class GameButtonsTest {
 
     @After
     fun tearDown() {
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid(null)
         ServiceLocator.setCurrentEnv(Env.Prod)
     }
 
