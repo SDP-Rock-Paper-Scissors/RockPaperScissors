@@ -59,19 +59,22 @@ class GameButtonsTest {
         checkButtonsVisibility(R.id.paperIM)
     }
 
+    @Test
+    fun checkWinLossComunicate() {
+        runBlocking {
+            onView(withId(R.id.button_play_1_games_offline)).perform(click())
+            onView(withId(R.id.paperIM)).perform(click())
+            delay(3000L)
+            onView(withId(R.id.gameResultFragment)).check(matches(isDisplayed()))
+
+        }
+    }
 
     private fun checkButtonsVisibility(radioButtonId: Int) {
         onView(withId(R.id.button_play_1_games_offline)).perform(click())
         onView(withId(radioButtonId)).check(matches(isDisplayed()))
     }
 
-    @Test
-    private fun checkWinLossComunicate() = runBlocking {
-        onView(withId(R.id.button_play_1_games_offline)).perform(click())
-        onView(withId(R.id.paperIM)).perform(click())
-        delay(3000L)
-        onView(withId(R.id.gameResultFragment)).check(matches(isDisplayed()))
 
-    }
 }
 
