@@ -65,7 +65,7 @@ class GameButtonsTest {
             onView(withId(R.id.button_play_1_games_offline)).perform(click())
             onView(withId(R.id.paperIM)).perform(click())
             delay(3000L)
-            onView(withId(R.id.gameResultFragment)).check(matches(isDisplayed()))
+            onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
 
         }
     }
