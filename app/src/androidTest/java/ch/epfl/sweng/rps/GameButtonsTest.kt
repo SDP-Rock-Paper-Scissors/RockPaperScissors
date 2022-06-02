@@ -18,7 +18,6 @@ import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -54,28 +53,25 @@ class GameButtonsTest {
         ServiceLocator.setCurrentEnv(Env.Prod)
     }
 
-    @Test
-    fun pressedRock() {
-        checkTheComunicateDisplayed(R.id.rockIM)
-    }
 
     @Test
     fun pressedPaper() {
-        checkTheComunicateDisplayed(R.id.paperIM)
+        checkButtonsVisibility(R.id.paperIM)
+    }
+
+
+    private fun checkButtonsVisibility(radioButtonId: Int) {
+        onView(withId(R.id.button_play_1_games_offline)).perform(click())
+        onView(withId(radioButtonId)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun pressedScissors() {
-        checkTheComunicateDisplayed(R.id.scissorsIM)
-    }
+    private fun checkWinLossComunicate() = runBlocking {
+        onView(withId(R.id.button_play_1_games_offline)).perform(click())
+        onView(withId(R.id.paperIM)).perform(click())
+        delay(3000L)
+        onView(withId(R.id.gameResultFragment)).check(matches(isDisplayed()))
 
-    private fun checkTheComunicateDisplayed(radioButtonId: Int) = runBlocking {
-        launch {
-            onView(withId(R.id.button_play_1_games_offline)).perform(click())
-            onView(withId(radioButtonId)).perform(click())
-            delay(3000L)
-        }.join()
-        onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
     }
 }
 
