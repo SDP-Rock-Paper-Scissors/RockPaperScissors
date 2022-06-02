@@ -55,7 +55,7 @@ class FirebaseGameService(
     override val isDisposed: Boolean get() = _disposed
     override val started: Boolean
         get() = game?.started ?: false
-    override val amITheHost get() = game?.players?.first() == firebaseRepository.getCurrentUid()
+    override val imTheOwner get() = game?.players?.first() == firebaseRepository.getCurrentUid()
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun setGameTest(game: Game) {
@@ -186,7 +186,7 @@ class FirebaseGameService(
     }
 
     suspend fun waitForGameStart(): Boolean {
-        if (amITheHost) {
+        if (imTheOwner) {
             firebase.gamesCollection.document(gameId).update(mapOf(Game.FIELDS.STARTED to true))
                 .await()
             return true
@@ -215,7 +215,7 @@ class FirebaseGameService(
      * (it's needed because of the previous design decisions - only owner can add a round)
      */
     override suspend fun awaitForRoundAdded() {
-        awaitFor { amITheHost || currentRound.hands.size == 1 }
+        awaitFor { imTheOwner || currentRound.hands.size == 1 }
     }
 
     sealed class PlayerCount(val playerCount: Int) {

@@ -15,7 +15,7 @@ import ch.epfl.sweng.rps.utils.StateNotifier
  *
  * This class needs to be disposed when you don't need it anymore.
  */
-abstract class GameService : ChangeNotifier<GameService>() {
+abstract class  GameService : ChangeNotifier<GameService>() {
     /**
      * The game id of the current game.
      */
@@ -81,13 +81,13 @@ abstract class GameService : ChangeNotifier<GameService>() {
     /**
      * The host of the game.The first player in the player list.
      */
-    val host: String
+    val owner: String
         get() = currentGame.players.first()
 
     /**
      * Whther the current player is the host or not.
      */
-    abstract val amITheHost: Boolean
+    abstract val imTheOwner: Boolean
 
     /**
      * Starts the service.
