@@ -146,7 +146,7 @@ class MatchViewModel : ViewModel() {
     fun reInit() {
         if (gameService!!.isGameOver) {
             gameService = null
-            opponent.value = null
+            opponent.value = User("opponent")
             resetResults()
         }
     }
