@@ -29,10 +29,7 @@ class OfflineGameService(
 
     override val isGameOver: Boolean
         get() {
-            val game = game ?: return false
-            return game.current_round == game.gameMode.rounds - 1 && game.rounds[game.current_round.toString()]?.hands?.keys?.containsAll(
-                game.players
-            ) ?: false
+            return game?.done ?: return false
         }
     private val currentHands get() = currentRound.hands as MutableMap
     override val currentGame: Game
@@ -74,6 +71,18 @@ class OfflineGameService(
         val me: String = repository.getCurrentUid()
         currentHands[me] = hand
         makeComputerMoves()
+    }
+
+    override suspend fun updateDone() {
+        val isDone =
+            roundCountBasedDone() && game!!.rounds[game!!.current_round.toString()]?.hands?.keys?.containsAll(
+                game!!.players
+            ) ?: false
+        game = (game as Game.Rps).copy(done = isDone)
+    }
+
+    override fun roundCountBasedDone(): Boolean {
+        return game?.current_round == game?.gameMode?.rounds!! - 1
     }
 
     private suspend fun makeComputerMoves() {

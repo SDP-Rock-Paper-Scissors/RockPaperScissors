@@ -154,7 +154,7 @@ class MatchViewModel : ViewModel() {
     fun reInit() {
         if (gameService!!.isGameOver) {
             gameService = null
-            opponent.value = null
+            opponent.value = User("opponent")
             resetResults()
         }
     }
@@ -197,6 +197,10 @@ class MatchViewModel : ViewModel() {
             Log.i("gameFlow", "await for all hands done")
             opponentsMoveUIUpdateCallback()
             scoreBasedUpdatesCallback()
+            if (gameService?.imTheOwner == true) {
+                gameService?.updateDone()
+            }
+
             // add round can be called only from suspend function or from coroutine
             // therefore I use it here here
             if (!gameService?.isGameOver!! && gameService!!.amITheHost) {
@@ -205,6 +209,14 @@ class MatchViewModel : ViewModel() {
             // the delay to let the user see the opponent's choice (rock/paper/scissors)
             // otherwise the transition is too fast to notice
             delay(1000L)
+            while (true) {
+                gameService?.refreshGame()
+                delay(100L)
+                if (gameService?.roundCountBasedDone() == gameService?.isGameOver) {
+                    gameService?.stopListening()
+                    break
+                }
+            }
             resultNavigationCallback()
             resetUIScoresCallback()
         }
