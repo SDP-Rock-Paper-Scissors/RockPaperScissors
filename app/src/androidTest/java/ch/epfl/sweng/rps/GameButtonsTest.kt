@@ -68,7 +68,7 @@ class GameButtonsTest {
     private fun checkPressedButton(radioButtonId: Int) = runBlocking {
         onView(withId(R.id.button_play_1_games_offline)).perform(click())
         onView(withId(radioButtonId)).perform(click())
-        delay(2_000)
+        delay(3_000)
         onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
 
     }
