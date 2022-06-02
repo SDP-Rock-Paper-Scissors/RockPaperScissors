@@ -11,7 +11,7 @@
         android:id="@+id/friendCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/secondary"
+        app:cardBackgroundColor="?colorSurfaceVariant"
         app:cardCornerRadius="12sp"
         app:cardElevation="15dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="RPSKing88"
-                android:textColor="@color/tertiary2"
+                android:textColor="?colorOnSurface"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/onlineImage"
@@ -67,7 +67,8 @@
                 android:src="@drawable/challenge_vector"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?colorPrimary" />
 
             <ImageButton
                 android:id="@+id/infoButton"
@@ -80,7 +81,8 @@
                 android:src="@drawable/info_vector"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/playButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?colorPrimary" />
 
             <TextView
                 android:id="@+id/winRateText"
@@ -90,7 +92,7 @@
                 android:lines="3"
                 android:maxLines="3"
                 android:text="Win Rate: 63.3%"
-                android:textColor="@color/tertiary2"
+                android:textColor="?colorOnSurface"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/infoButton"
@@ -104,7 +106,7 @@
                 android:lines="3"
                 android:maxLines="3"
                 android:text="Games Played: 120"
-                android:textColor="@color/tertiary2"
+                android:textColor="?colorOnSurface"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/gamesWonText"
                 app:layout_constraintEnd_toStartOf="@+id/infoButton"
@@ -117,7 +119,7 @@
                 android:lines="3"
                 android:maxLines="3"
                 android:text="Games Won: 76"
-                android:textColor="@color/tertiary2"
+                android:textColor="?colorOnSurface"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/winRateText"
                 app:layout_constraintEnd_toStartOf="@+id/infoButton"
