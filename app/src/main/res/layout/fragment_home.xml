@@ -40,7 +40,7 @@
             android:layout_marginStart="8dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_play_1_games_offline"
+                android:id="@+id/button_play_1_games_online"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
@@ -50,7 +50,7 @@
                 app:icon="@drawable/playgame_vector" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_play_5_games_offline"
+                android:id="@+id/button_play_5_games_online"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
@@ -82,7 +82,7 @@
             android:layout_marginStart="8dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_play_1_games_online"
+                android:id="@+id/button_play_1_games_offline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
@@ -92,7 +92,7 @@
                 app:icon="@drawable/playgame_vector" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_play_5_games_online"
+                android:id="@+id/button_play_5_games_offline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
