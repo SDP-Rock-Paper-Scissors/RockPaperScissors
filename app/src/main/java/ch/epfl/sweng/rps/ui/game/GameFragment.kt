@@ -8,8 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.RadioButton
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,24 +28,18 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
     private val matchViewModel: MatchViewModel by activityViewModels()
-    val activityLauncher = registerForActivityResult(CameraXLivePreviewActivityContract()) { result ->
+    private val activityLauncher =
+        registerForActivityResult(CameraXLivePreviewActivityContract()) { result ->
 
-        result ?: return@registerForActivityResult
+            result ?: return@registerForActivityResult
 
-        when(result){
-            Hand.ROCK ->  binding.rockRB.isChecked = true
-            Hand.PAPER -> binding.paperRB.isChecked = true
-            Hand.SCISSORS -> binding.scissorsRB.isChecked = true
-            Hand.NONE -> {}
+            val r = Runnable {
+                rpsPressed(result)
+            }
+            //delays call to rpsPressed by 1s. Otherwise the result would be
+            //showed too quickly
+            Handler(Looper.getMainLooper()).postDelayed(r, 1000)
         }
-        val r = Runnable {
-            rpsPressed(result)
-        }
-        //delays call to rpsPressed by 1s. Otherwise the result would be
-        //showed too quickly
-        Handler(Looper.getMainLooper()).postDelayed(r, 1000)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,25 +51,22 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rockRB.setOnClickListener { rpsPressed(Hand.ROCK) }
-        binding.paperRB.setOnClickListener { rpsPressed(Hand.PAPER) }
-        binding.scissorsRB.setOnClickListener { rpsPressed(Hand.SCISSORS) }
-        binding.buttonActivateCamera.setOnClickListener{ activityLauncher.launch(null)}
-        setImageButtonColor(binding.buttonActivateCamera)
-        matchViewModel.cumulativeScore.observe(
-            viewLifecycleOwner
-        ) {
+        binding.rockIM.setOnClickListener { rpsPressed(Hand.ROCK) }
+        binding.paperIM.setOnClickListener { rpsPressed(Hand.PAPER) }
+        binding.scissorsIM.setOnClickListener { rpsPressed(Hand.SCISSORS) }
+        binding.buttonActivateCamera.setOnClickListener { activityLauncher.launch(null) }
+        setElementsToThemeColor()
+        matchViewModel.cumulativeScore.observe(viewLifecycleOwner) {
             binding.opponentData.currentPoints.text =
                 matchViewModel.computerPlayerCurrentPoints
             binding.hostData.currentPoints.text = matchViewModel.userPlayerCurrentPoints
         }
         matchViewModel.host.observe(viewLifecycleOwner) {
-            binding.hostData.username.text = matchViewModel.host.value!!.username
+            binding.hostData.username.text = it?.username ?: "???"
         }
         matchViewModel.opponent.observe(viewLifecycleOwner) {
-            binding.opponentData.username.text = matchViewModel.opponent.value!!.username
+            binding.opponentData.username.text = it?.username ?: "???"
         }
-        uiSetup()
     }
 
     override fun onStart() {
@@ -81,6 +75,7 @@ class GameFragment : Fragment() {
         if (gameId != null) {
             Toast.makeText(context, "Game ID: $gameId", Toast.LENGTH_LONG).show()
             matchViewModel.setGameServiceSettingsOnline(
+                requireActivity(),
                 ServiceLocator.getInstance().getGameServiceForGame(gameId)
             )
             matchViewModel.gameService?.startListening()
@@ -94,7 +89,10 @@ class GameFragment : Fragment() {
         if (matchViewModel.job == null ||
             (matchViewModel.job != null && !matchViewModel.job?.isActive!!)
         ) {
-            println("in the rps pressed")
+            //inference of the button happens here due to the e.g. camera functionality
+            val butttonBinding = getHostImageButtonBindingForHand(hand)
+
+            animateChoice(butttonBinding)
             matchViewModel.managePlayHand(hand,
                 opponentsMoveUIUpdateCallback = {
                     opponentMoveUIUpdate(
@@ -117,6 +115,17 @@ class GameFragment : Fragment() {
         }
     }
 
+    /**
+     * Makes other than chosen hands dissapered.
+     */
+    private fun animateChoice(buttonBinding: ImageButton?) {
+        var toDissaperButtons = listOf(binding.rockIM, binding.paperIM, binding.scissorsIM)
+        toDissaperButtons = toDissaperButtons.filter { it != buttonBinding }
+        for (button in toDissaperButtons) {
+            button.isInvisible = true
+        }
+    }
+
 
     private fun resultNavigation() {
         if (matchViewModel.gameService?.isGameOver!!) {
@@ -126,18 +135,28 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun getOpponentRBBindingForHand(hand: Hand): RadioButton? {
+    private fun getHostImageButtonBindingForHand(hand: Hand): ImageButton? {
         return when (hand) {
-            Hand.ROCK -> binding.rockRBOpponent
-            Hand.PAPER -> binding.paperRBOpponent
-            Hand.SCISSORS -> binding.scissorsRBOpponent
+            Hand.ROCK -> binding.rockIM
+            Hand.PAPER -> binding.paperIM
+            Hand.SCISSORS -> binding.scissorsIM
+            Hand.NONE -> null
+        }
+    }
+
+    private fun getOpponentRBBindingForHand(hand: Hand): ImageView? {
+        return when (hand) {
+            Hand.ROCK -> binding.rockOpponnent
+            Hand.PAPER -> binding.paperOpponnent
+            Hand.SCISSORS -> binding.scissorsOpponnent
             Hand.NONE -> null
         }
     }
 
     private fun opponentMoveUIUpdate(hand: Hand) {
-        val radioButtonBinding = getOpponentRBBindingForHand(hand)
-        radioButtonBinding?.isChecked = true
+        val opponentChoice = getOpponentRBBindingForHand(hand)
+        binding.waitingForOpponent.isGone = true
+        opponentChoice?.isVisible = true
     }
 
     override fun onDestroyView() {
@@ -152,27 +171,20 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun uiSetup() {
-        timeLimitSetup()
-    }
 
-    private fun timeLimitSetup() {
-        when (matchViewModel.timeLimit) {
-            0 -> binding.counter.text = getString(R.string.infinity)
-            else -> binding.counter.text = matchViewModel.timeLimit?.toString()
-        }
-    }
     /**
-     * Applys theme color to ImageButton
-    */
-    private fun setImageButtonColor(button: ImageButton){
+     * Applys theme color to ImageButton and SpinKit
+     */
+    private fun setElementsToThemeColor() {
         val typedValue = TypedValue()
-        requireActivity().getTheme().resolveAttribute(
+        requireActivity().theme.resolveAttribute(
             R.attr.colorPrimary,
             typedValue,
             true
         )
-        button.drawable.setTint(typedValue.data)
+        binding.buttonActivateCamera.drawable.setTint(typedValue.data)
+        binding.waitingForOpponent.setColor(typedValue.data)
     }
 
 }
+

@@ -51,9 +51,9 @@ class RoundTest {
     fun testScoringSystem() {
         val pointSystem = PointSystem.DefaultPointSystem()
 
-        assertEquals(1, pointSystem.getPoints(Hand.Result.WIN))
-        assertEquals(-1, pointSystem.getPoints(Hand.Result.LOSS))
-        assertEquals(0, pointSystem.getPoints(Hand.Result.TIE))
+        assertEquals(1, pointSystem.getPoints(Hand.Outcome.WIN))
+        assertEquals(-1, pointSystem.getPoints(Hand.Outcome.LOSS))
+        assertEquals(0, pointSystem.getPoints(Hand.Outcome.TIE))
     }
 
     @Test
@@ -72,9 +72,9 @@ class RoundTest {
         assertEquals("player2", first.uid)
         assertEquals(
             listOf(
-                Hand.Result.WIN,
-                Hand.Result.WIN,
-                Hand.Result.LOSS
+                Hand.Outcome.WIN,
+                Hand.Outcome.WIN,
+                Hand.Outcome.LOSS
             ).sortedBy { it.ordinal }, first.results.sortedBy { it.ordinal })
 
     }

@@ -24,7 +24,7 @@ class LocalRepositoryTest {
         assertEquals("user1234", localRepository.getCurrentUid())
 
         localRepository.createThisUser("User", "user@company.org")
-        val user = localRepository.getUser(localRepository.getCurrentUid())!!
+        val user = localRepository.getUser(localRepository.getCurrentUid()).getOrThrow()!!
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
         assertEquals("user1234", user.uid)
@@ -38,7 +38,7 @@ class LocalRepositoryTest {
             User.Field.GAMES_HISTORY_PRIVACY to User.Privacy.PRIVATE.name,
             User.Field.HAS_PROFILE_PHOTO to true,
         )
-        val updatedUser = localRepository.getUser(localRepository.getCurrentUid())!!
+        val updatedUser = localRepository.getUser(localRepository.getCurrentUid()).getOrThrow()!!
         assertEquals("NewUser", updatedUser.username)
         assertEquals("example@example.com", updatedUser.email)
         assertEquals("user1234", updatedUser.uid)
@@ -53,7 +53,7 @@ class LocalRepositoryTest {
         assertEquals("user1234", localRepository.getCurrentUid())
 
         localRepository.createThisUser("User", "user@company.org")
-        val user = localRepository.getUser(localRepository.getCurrentUid())!!
+        val user = localRepository.getUser(localRepository.getCurrentUid()).getOrThrow()!!
         assertEquals("User", user.username)
         assertEquals("user@company.org", user.email)
 
@@ -61,7 +61,7 @@ class LocalRepositoryTest {
         assertEquals("user5678", localRepository.getCurrentUid())
 
         localRepository.createThisUser(null, "email@email.com")
-        val user2 = localRepository.getUser(localRepository.getCurrentUid())!!
+        val user2 = localRepository.getUser(localRepository.getCurrentUid()).getOrThrow()!!
         assertEquals("", user2.username)
         assertEquals("email@email.com", user2.email)
     }
@@ -122,11 +122,11 @@ class LocalRepositoryTest {
             val localRepository = LocalRepository()
             localRepository.setCurrentUid("user1")
             localRepository.users["user1"] = User("user1", "user1", has_profile_photo = true)
-            val url = localRepository.getUserProfilePictureUrl("user1")
+            val url = localRepository.getUserProfilePictureUrl("user1").getOrThrow()
             assertNotNull(url)
 
             localRepository.users["user1"] = User("user1", "user1", has_profile_photo = false)
-            val url2 = localRepository.getUserProfilePictureUrl("user1")
+            val url2 = localRepository.getUserProfilePictureUrl("user1").getOrThrow()
             assertNull(url2)
         }
     }

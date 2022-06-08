@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import ch.epfl.sweng.rps.db.Env
 import ch.epfl.sweng.rps.services.ServiceLocator
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +20,11 @@ import kotlin.test.assertEquals
 class MainActivityTest {
     @get:Rule
     val testRule = ActivityScenarioRuleWithSetup.default(MainActivity::class.java)
+
+    @Before
+    fun setUp() {
+        ServiceLocator.setCurrentEnv(Env.Test)
+    }
 
     @Test
     fun checkFirstFragment() {

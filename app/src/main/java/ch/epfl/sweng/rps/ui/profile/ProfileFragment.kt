@@ -25,10 +25,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenStarted
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
+import ch.epfl.sweng.rps.utils.SuspendResult
+import ch.epfl.sweng.rps.utils.showSnackbarIfError
+import ch.epfl.sweng.rps.utils.whenOrSnackbar
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
 
@@ -40,27 +43,40 @@ class ProfileFragment : Fragment() {
     init {
         lifecycleScope.launch {
             whenStarted {
-                val view = requireView()
-                val cache = Cache.getInstance()
-                cache.getUserDetails()?.let { user ->
-                    setRow(R.id.email_row, "Email", user.email, onTap = null)
-                    setRow(R.id.username_row, "Username", user.username) { setValue ->
-                        showDialog(initialValue = user.username) { value ->
-                            lifecycleScope.launch {
-                                val repo = ServiceLocator.getInstance().repository
-                                repo.updateUser(User.Field.USERNAME to value)
-                                val newUser = repo.getUser(repo.getCurrentUid())
-                                cache.setUserDetails(newUser)
-                                setValue(newUser?.username)
-                            }
+                onStarted()
+            }
+        }
+    }
+
+    private suspend fun onStarted() {
+        val view = requireView()
+        val cache = Cache.getInstance()
+        cache.getUserDetails().whenIs({
+            val user = it.value
+            if (user != null) {
+                setRow(R.id.email_row, "Email", user.email, onTap = null)
+                setRow(R.id.username_row, "Username", user.username) { setValue ->
+                    showDialog(initialValue = user.username) { value ->
+                        lifecycleScope.launch {
+                            val repo = ServiceLocator.getInstance().repository
+                            repo.updateUser(User.Field.USERNAME to value)
+                                .showSnackbarIfError(requireActivity())
+                            repo.getUser(repo.getCurrentUid())
+                                .whenOrSnackbar(requireActivity()) { newUser ->
+                                    cache.setUserDetails(newUser)
+                                    setValue(newUser?.username)
+                                }
                         }
                     }
                 }
-                profileImage = view.findViewById(R.id.profileImage)
-                viewModel.getCachedUserPicture()?.let { profileImage.setImageBitmap(it) }
-                viewModel.getProfilePicture()?.let { profileImage.setImageBitmap(it) }
             }
-        }
+        },
+            SuspendResult.showSnackbar(requireActivity()) {}
+        )
+
+        profileImage = view.findViewById(R.id.profileImage)
+        viewModel.getCachedUserPicture()?.let { profileImage.setImageBitmap(it) }
+        viewModel.getProfilePicture()?.let { profileImage.setImageBitmap(it) }
     }
 
     private fun setRow(

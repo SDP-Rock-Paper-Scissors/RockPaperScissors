@@ -25,9 +25,9 @@ class GameResultFragment : Fragment() {
         _binding = FragmentGameResultBinding.inflate(inflater, container, false)
 
         binding.gameResultCommunicate.text = when (matchViewModel.currentRoundResult) {
-            Hand.Result.WIN -> resources.getString(R.string.win)
-            Hand.Result.LOSS -> resources.getString(R.string.lose)
-            Hand.Result.TIE -> resources.getString(R.string.draw)
+            Hand.Outcome.WIN -> resources.getString(R.string.win)
+            Hand.Outcome.LOSS -> resources.getString(R.string.lose)
+            Hand.Outcome.TIE -> resources.getString(R.string.draw)
             else -> {
                 throw IllegalStateException("Possible results are win, loose, tie.")
             }

@@ -9,16 +9,13 @@ import java.util.*
 object L {
     private val instances = mutableMapOf<String, LogService>()
 
+    fun allInstances(): Map<String, LogService> = instances
+
     fun of(name: String): LogService = instances.getOrPut(name) { LogService(name) }
 
     fun of(activity: Activity): LogService = of(activity::class.java)
     fun of(fragment: Fragment): LogService = of(fragment::class.java)
     fun of(clazz: Class<*>): LogService = of(clazz.simpleName)
-
-    fun Log.of(name: String): LogService = L.of(name)
-    fun Log.of(activity: Activity): LogService = L.of(activity)
-    fun Log.of(fragment: Fragment): LogService = L.of(fragment)
-    fun Log.of(clazz: Class<*>): LogService = L.of(clazz)
 
     // inline fun <reified T> of() = of(T::class.java)
 
@@ -27,11 +24,7 @@ object L {
         instances.remove(name)
     }
 
-    fun unregister(logService: LogService) {
-        instances.remove(logService.name)
-    }
-
-    fun unregisterAll() {
+    fun disposeAll() {
         instances.values.forEach { it.dispose() }
         instances.clear()
     }
@@ -49,7 +42,8 @@ object L {
         val tag: String,
         val message: String,
         val time: Date,
-        val level: Level
+        val level: Level,
+        val throwable: Throwable? = null
     )
 
     class LogService(val name: String) : ChangeNotifier<LogService>() {

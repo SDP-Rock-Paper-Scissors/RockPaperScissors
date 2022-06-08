@@ -45,7 +45,7 @@ class LabelGraphic(
    override fun draw(canvas: Canvas?) {
     // First try to find maxWidth and totalHeight in order to draw to the center of the screen.
     var maxWidth = 0f
-    val totalHeight = labels.size * 2 * TEXT_SIZE
+    val totalHeight = labels.size * TEXT_SIZE
     for (label in labels) {
       val line1Width = textPaint.measureText(label.text)
       val line2Width =
@@ -54,7 +54,6 @@ class LabelGraphic(
             Locale.US,
             LABEL_FORMAT,
             label.confidence * 100,
-            label.index
           )
         )
 
@@ -62,7 +61,7 @@ class LabelGraphic(
     }
 
     val x = max(0f, overlay.width / 2.0f - maxWidth / 2.0f)
-    var y = max(200f, overlay.height / 2.0f - totalHeight / 2.0f)
+    var y = 20f
 
     if (labels.isNotEmpty()) {
       val padding = 20f
@@ -75,13 +74,12 @@ class LabelGraphic(
       )
     }
 
-    for (label in labels) {
-      if (y + TEXT_SIZE * 2 > overlay.height) {
-        break
-      }
-      canvas!!.drawText(label.text, x, y + TEXT_SIZE, textPaint)
+    if (labels.isNotEmpty()) {
+      val label = labels.first()
+
+      canvas?.drawText("Detected: " + label.text, x, y + TEXT_SIZE, textPaint)
       y += TEXT_SIZE
-      canvas!!.drawText(
+      canvas?.drawText(
         String.format(
           Locale.US,
           LABEL_FORMAT,
@@ -94,8 +92,9 @@ class LabelGraphic(
     }
   }
 
+
   companion object {
     private const val TEXT_SIZE = 70.0f
-    private const val LABEL_FORMAT = "%.2f%% confidence (index: %d)"
+    private const val LABEL_FORMAT = "%.2f%% confidence"
   }
 }

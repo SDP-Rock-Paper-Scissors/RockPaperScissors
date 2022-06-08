@@ -1,13 +1,13 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
 enum class Hand(val id: Int) {
     NONE(-1), ROCK(0), PAPER(1), SCISSORS(2);
 
-    infix fun vs(other: Hand): Result {
+    infix fun vs(other: Hand): Outcome {
         return when (winner(this, other)) {
-            this -> Result.WIN
-            other -> Result.LOSS
-            null -> Result.TIE
+            this -> Outcome.WIN
+            other -> Outcome.LOSS
+            null -> Outcome.TIE
             else -> throw IllegalStateException("Impossible")
         }
     }
@@ -26,7 +26,6 @@ enum class Hand(val id: Int) {
         SCISSORS -> "✌️"
     }
 
-
     private fun losesTo(hand: Hand): Boolean {
         val loss = when (this) {
             ROCK -> listOf(PAPER)
@@ -35,6 +34,16 @@ enum class Hand(val id: Int) {
             NONE -> values().filter { it != NONE }
         }
         return loss.contains(hand)
+    }
+
+    enum class Outcome {
+        WIN, LOSS, TIE;
+
+        fun asEmoji(): String = when (this) {
+            WIN -> "🏆"
+            LOSS -> "😢"
+            TIE -> "🤝"
+        }
     }
 
     companion object {
@@ -55,16 +64,6 @@ enum class Hand(val id: Int) {
                 }
             }
             return true
-        }
-    }
-
-    enum class Result {
-        WIN, LOSS, TIE;
-
-        fun asEmoji(): String = when (this) {
-            WIN -> "🏆"
-            LOSS -> "😢"
-            TIE -> "🤝"
         }
     }
 }

@@ -61,7 +61,7 @@ class TicTacToeFragment : Fragment() {
         outcomeText.visibility = View.VISIBLE
         when (winner) {
             MOVES.CROSS -> outcomeText.text = "CROSS WINS"
-            MOVES.CROSS -> outcomeText.text = "CIRCLE WINS"
+            MOVES.CIRCLE -> outcomeText.text = "CIRCLE WINS"
             MOVES.EMPTY -> outcomeText.text = "DRAW"
         }
     }

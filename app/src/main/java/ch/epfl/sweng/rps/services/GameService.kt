@@ -47,6 +47,8 @@ abstract class GameService : ChangeNotifier<GameService>() {
     abstract val currentRound: Round
 
     abstract suspend fun playHand(hand: Hand)
+    abstract suspend fun updateDone()
+    abstract fun roundCountBasedDone(): Boolean
 
     @CallSuper
     override fun dispose() {

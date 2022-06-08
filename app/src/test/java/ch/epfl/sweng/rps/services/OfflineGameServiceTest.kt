@@ -39,7 +39,7 @@ class OfflineGameServiceTest {
         initGameService(1)
         runBlocking {
             gameService?.playHand(Hand.SCISSORS)
-
+            gameService?.updateDone()
         }
         assertThat(gameService?.isGameOver, `is`(true))
     }
@@ -58,6 +58,7 @@ class OfflineGameServiceTest {
             gameService?.playHand(Hand.SCISSORS)
             gameService?.addRound()
             gameService?.playHand(Hand.SCISSORS)
+            gameService?.updateDone()
         }
         assertThat(gameService?.isGameOver, `is`(true))
     }

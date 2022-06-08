@@ -3,20 +3,26 @@ package ch.epfl.sweng.rps.db
 import android.graphics.Bitmap
 import ch.epfl.sweng.rps.models.*
 import java.net.URI
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.remote.friends.FriendsRepository
+import ch.epfl.sweng.rps.remote.games.GamesRepository
+import ch.epfl.sweng.rps.utils.SuspendResult
 
 interface Repository {
-    suspend fun updateUser(vararg pairs: Pair<User.Field, Any>)
+    suspend fun updateUser(vararg pairs: Pair<User.Field, Any>): SuspendResult<Unit>
     fun rawCurrentUid(): String?
     fun getCurrentUid() = rawCurrentUid() ?: throw UserNotLoggedIn()
     val isLoggedIn get() = rawCurrentUid() != null
+      val friends: FriendsRepository
+    val games: GamesRepository
 
-    suspend fun getUser(uid: String): User?
+    suspend fun getUser(uid: String): SuspendResult<User?>
 
-    suspend fun getUserProfilePictureUrl(uid: String): URI?
-    suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean = false)
+    suspend fun getUserProfilePictureUrl(uid: String): SuspendResult<URI?>
+    suspend fun setUserProfilePicture(image: Bitmap, waitForUploadTask: Boolean = false): SuspendResult<Unit>
     suspend fun getUserProfilePictureImage(uid: String): Bitmap?
 
-    suspend fun createThisUser(name: String?, email: String?): User
+  suspend fun createThisUser(name: String?, email: String?): SuspendResult<User>
     suspend fun sendFriendRequestTo(uid: String)
 
     suspend fun listFriendRequests(): List<FriendRequest>
@@ -36,6 +42,8 @@ interface Repository {
     suspend fun statsOfUser(uid: String): UserStats
 
     suspend fun listInvitations(): List<Invitation>
+
+import java.net.URI
 
     class UserNotLoggedIn : Exception {
         constructor() : super("User not logged in")

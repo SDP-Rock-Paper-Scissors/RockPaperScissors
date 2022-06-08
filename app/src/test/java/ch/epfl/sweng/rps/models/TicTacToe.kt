@@ -25,7 +25,7 @@ class TicTacToe {
         assertNull(round3.getWinner())
         val scores = round3.computeScores()
         assertTrue {
-            scores.all { it.results == listOf(Hand.Result.TIE) }
+            scores.all { it.results == listOf(Hand.Outcome.TIE) }
         }
         assertEquals(2, scores.size)
     }
