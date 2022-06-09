@@ -21,19 +21,18 @@ class GameModeDialogFragment: DialogFragment() {
     ): View {
         val rootView: View = inflater.inflate(R.layout.fragment_game_mode_dialog, container, false)
 
-        rootView.findViewById<Button>(R.id.cancelButton).setOnClickListener{
+        rootView.findViewById<Button>(R.id.cancelButton).setOnClickListener {
             dismiss()
         }
-
-        rootView.findViewById<Button>(R.id.confirmButton).setOnClickListener{
+        rootView.findViewById<Button>(R.id.confirmButton).setOnClickListener {
             val radioGroup: RadioGroup = rootView.findViewById(R.id.gameModeRadioGrp)
             val selectedID = radioGroup.checkedRadioButtonId
             val matchFrg = MatchmakingFragment()
             val args = Bundle()
 
-            if (selectedID != -1){
+            if (selectedID != -1) {
                 val radio: RadioButton = rootView.findViewById(selectedID)
-                if (radio.text == "Play one game") {
+                if (radio.text == "1 round") {
 
                     dismiss()
                     args.putInt("rounds", 1)
@@ -41,8 +40,7 @@ class GameModeDialogFragment: DialogFragment() {
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.nav_host_fragment_activity_main, matchFrg).addToBackStack(null)
                         .commit()
-                }
-                else if (radio.text == "Play five games"){
+                } else if (radio.text == "5 rounds") {
                     dismiss()
                     args.putInt("rounds", 5)
                     matchFrg.arguments = args
@@ -50,12 +48,12 @@ class GameModeDialogFragment: DialogFragment() {
                         .replace(R.id.nav_host_fragment_activity_main, matchFrg).addToBackStack(null)
                         .commit()
                 }
+                } else {
+                    Toast.makeText(activity, "Please select a mode", Toast.LENGTH_SHORT).show()
+                }
             }
-            else {
-                Toast.makeText(activity,"Please select a mode", Toast.LENGTH_SHORT).show()
-            }
-        }
         return rootView
+        }
+
     }
-}
 
