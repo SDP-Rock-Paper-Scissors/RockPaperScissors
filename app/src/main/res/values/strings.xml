@@ -127,4 +127,6 @@
     <string name="dump_dbg_infos_pref_text">Dump debug infos</string>
     <string name="dump_sys_settings_key">dump_sys_settings</string>
     <string name="rock_paper_scissors">Rock Paper Scissors</string>
+    <string name="choose_game_mode">Choose Game Mode</string>
+    <string name="confirm">Confirm</string>
 </resources>
