@@ -25,7 +25,7 @@ internal class FirebaseHelperTest {
     fun testProcessUserArgs_empty() {
         assertEquals(
             hashMapOf<String, Any>(),
-            FirebaseHelper.processUserArguments()
+            FirebaseHelper.processUserArguments<Any>()
         )
     }
 

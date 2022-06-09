@@ -41,12 +41,12 @@ class UtilsKtTest {
                 throw AssertionError("Should not be called")
             }
         )
-        guardSuspendable { throw ChangeNotifier.ListenerException("", null) }.whenIs(
+        guardSuspendable { throw ChangeNotifier.ListenerNotFoundException("", null) }.whenIs(
             {
                 throw AssertionError("Should not be called")
             },
             {
-                assertThrows<ChangeNotifier.ListenerException> { it.getOrThrow() }
+                assertThrows<ChangeNotifier.ListenerNotFoundException> { it.getOrThrow() }
             }
         )
     }

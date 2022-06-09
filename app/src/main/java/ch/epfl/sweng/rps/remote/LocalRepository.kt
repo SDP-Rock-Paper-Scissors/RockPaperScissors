@@ -10,21 +10,28 @@ import ch.epfl.sweng.rps.utils.guardSuspendable
 import com.google.firebase.Timestamp
 import java.net.URI
 
+/**
+ * This class is a local implementation of the [Repository] interface.
+ *
+ * It implements the [FriendsRepository] as well as the [GamesRepository] interface.
+ * It can thus be used to access friends and games data.
+ */
 class LocalRepository(private var uid: String? = null) : Repository, GamesRepository,
     FriendsRepository {
 
-    val users = mutableMapOf<String, User>()
+    @VisibleForTesting
+    internal val users = mutableMapOf<String, User>()
     private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
     override val friends: FriendsRepository
         get() = this
     override val games: GamesRepository
         get() = this
-    val gamesMap = mutableMapOf<String, Game>()
-    var leaderBoardScore = mutableListOf<TotalScore>()
+    internal val gamesMap = mutableMapOf<String, Game>()
+    internal var leaderBoardScore = mutableListOf<TotalScore>()
 
     @VisibleForTesting
-    val invitations = mutableMapOf<String, Invitation>()
-    fun setCurrentUid(newUid: String?) {
+    internal val invitations = mutableMapOf<String, Invitation>()
+    internal fun setCurrentUid(newUid: String?) {
         uid = newUid
     }
 

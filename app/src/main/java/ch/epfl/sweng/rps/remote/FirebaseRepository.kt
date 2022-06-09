@@ -21,8 +21,12 @@ import java.net.URI
 import java.net.URL
 
 
+/**
+ * This class is the implementation of the [Repository] interface.
+ * It is used to communicate with the Firebase database.
+ */
 class FirebaseRepository private constructor(
-    val firebase: FirebaseReferences
+    internal val firebase: FirebaseReferences
 ) : Repository {
 
 
