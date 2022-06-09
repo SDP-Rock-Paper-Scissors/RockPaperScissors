@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.utils
 
-import ch.epfl.sweng.rps.utils.ChangeNotifier.ListenerException
+import ch.epfl.sweng.rps.utils.ChangeNotifier.DispatchingNotificationException
 import ch.epfl.sweng.rps.utils.ChangeNotifier.ListenerNotFoundException
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -49,7 +49,7 @@ class ChangeNotifierTest {
         val listener = consume { throw Exception("Ono error") }
         notifier.addListener(listener)
 
-        assertThrows<ListenerException> {
+        assertThrows<DispatchingNotificationException> {
             notifier.notifyListeners()
         }
 

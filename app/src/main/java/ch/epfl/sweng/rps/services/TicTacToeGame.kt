@@ -30,7 +30,8 @@ abstract class TicTacToeGame(var player: MOVES) {
         }
         if (checkCell(2, 0, 0)) return true
         if (checkCell(3, 2, 0)) return true
-        if (!matrix.flatten().filter { it == MOVES.EMPTY }.any()) { //Checks if there is at least 1 free cell
+        if (!matrix.flatten().filter { it == MOVES.EMPTY }
+                .any()) { //Checks if there is at least 1 free cell
             gameOver(MOVES.EMPTY)
             return true
         }

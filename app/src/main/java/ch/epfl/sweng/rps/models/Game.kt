@@ -1,6 +1,6 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
-import ch.epfl.sweng.rps.models.GameMode.GameEdition
+import ch.epfl.sweng.rps.models.remote.GameMode.GameEdition
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import java.util.*
@@ -12,7 +12,7 @@ import java.util.*
  * @property players The players of the game
  * @property gameMode The game mode
  * @property rounds an array of rounds (Note that this is a map, not an actual array)
- * @property current_round This is the current round
+ * @property current_round The current round
  * @property timestamp The timestamp of the game
  */
 sealed class Game {
@@ -58,7 +58,7 @@ sealed class Game {
         override val edition: GameEdition = GameEdition.TicTacToe
     }
 
-    object FIELDS {
+    internal object FIELDS {
         const val STARTED = "started"
         const val PLAYERS = "players"
         const val ROUNDS = "rounds"
@@ -71,6 +71,9 @@ sealed class Game {
 
     companion object {
 
+        /**
+         * Creates a game from a document snapshot
+         */
         fun fromDocumentSnapshot(document: DocumentSnapshot): Game? {
             val editionString = document["edition"] as String?
             val gameMode = document["game_mode"] as String?
@@ -85,7 +88,5 @@ sealed class Game {
             }
             return document.toObject(type)
         }
-
-        fun DocumentSnapshot.toGame(): Game? = fromDocumentSnapshot(this)
     }
 }

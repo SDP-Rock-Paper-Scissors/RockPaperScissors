@@ -5,15 +5,29 @@ import android.net.Uri
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.services.ServiceLocator
+import ch.epfl.sweng.rps.utils.Option
 import java.text.SimpleDateFormat
 import java.util.*
 
 
+/**
+ *  This class is a helper class for to transform the data from the remote database
+ *  to a more usable format.
+ */
 object FirebaseHelper {
-    fun processUserArguments(vararg pairs: Pair<User.Field, Any>): Map<String, Any> {
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
+
+    /**
+     * This function transforms a list of provided [Pair] of [User.Field] and [T]
+     * to a map of [String] and [T] where the key is the [User.Field] value and the value is the [T].
+     */
+    fun <T : Any> processUserArguments(vararg pairs: Pair<User.Field, T>): Map<String, T> {
         return pairs.associate { t -> t.first.value to t.second }
     }
 
+    /**
+     * This function creates a [User] from the provided parameters.
+     */
     fun userFrom(uid: String, name: String?, email: String?): User {
         return User(
             email = email,
@@ -24,13 +38,19 @@ object FirebaseHelper {
         )
     }
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
-
+    /**
+     * This function returns stats for all users.
+     */
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
         val userGameList = firebaseRepository.gamesOfUser(userid)
         val allStatsResult = mutableListOf<UserStat>()
+
+        // We cache the users to avoid multiple calls to the database
+        // We use options to differentiate between the case where the user is not found
+        // and the case where the user hasn't been cached yet
+        val users = mutableMapOf<String, Option<User>>()
         for (userGame in userGameList) {
             val userStat = UserStat()
             val players = userGame.players
@@ -62,10 +82,11 @@ object FirebaseHelper {
 
             for (p in players) {
                 if (p != userid) {
-                    val user = firebaseRepository.getUser(p)
+                    val user =
+                        users.getOrPut(p) { Option.fromNullable(firebaseRepository.getUser(p).getOrThrow()) }
 
-                    if (user != null)
-                        opponents.add(user.username ?: p)
+                    if (user is Option.Some)
+                        opponents.add(user.value.username ?: p)
                 }
             }
 
@@ -96,6 +117,9 @@ object FirebaseHelper {
 
     }
 
+    /**
+     * This function returns the details of a game.
+     */
     suspend fun getMatchDetailData(gid: String): List<RoundStat> {
         val repo = ServiceLocator.getInstance().repository
         val userid = repo.rawCurrentUid()
@@ -111,9 +135,9 @@ object FirebaseHelper {
             val userHand = hand[userid]!!
             val opponentHand = hand[opponentId]!!
             val outcome = when {
-                score[0].uid == userid -> Hand.Result.WIN
-                score[0].points == 0 -> Hand.Result.TIE
-                else -> Hand.Result.LOSS
+                score[0].uid == userid -> Hand.Outcome.WIN
+                score[0].points == 0 -> Hand.Outcome.TIE
+                else -> Hand.Outcome.LOSS
             }
 
             RoundStat(
@@ -128,7 +152,9 @@ object FirebaseHelper {
         return allDetailsList
     }
 
-
+    /**
+     * This function returns the leaderboard.
+     */
     suspend fun getLeaderBoard(selectMode: Int): List<LeaderBoardInfo> {
         val repo = ServiceLocator.getInstance().repository
         val scoreMode: String = when (selectMode) {
@@ -146,18 +172,16 @@ object FirebaseHelper {
             }
             // The *load* function only support "android.net.Uri" but not "java.net.URI" package
             leaderBoardInfo.userProfilePictureUrl =
-                repo.getUserProfilePictureUrl(score.uid)?.let { Uri.parse(it.toString()) }
+                repo.getUserProfilePictureUrl(score.uid).asData?.value.let { Uri.parse(it.toString()) }
             if (leaderBoardInfo.userProfilePictureUrl == null) {
                 leaderBoardInfo.userProfilePictureUrl =
 
                     Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.profile_img)
 
             }
-            leaderBoardInfo.username = repo.getUser(score.uid)!!.username!!
+            leaderBoardInfo.username = repo.getUser(score.uid).asData?.value?.username ?: "Unknown"
             allPlayers.add(leaderBoardInfo)
         }
-
-
         return allPlayers
     }
 

@@ -1,8 +1,13 @@
 package ch.epfl.sweng.rps.utils
 
+import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup
+import ch.epfl.sweng.rps.MainActivity
+import ch.epfl.sweng.rps.ui.game.GameFragment
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class LogServiceTest {
@@ -10,13 +15,25 @@ class LogServiceTest {
 
     @Before
     fun setUp() {
+        L.disposeAll()
         logService = L.of("LogServiceTest")
     }
 
     @After
     fun tearDown() {
-        L.unregister(logService)
-        L.dispose(logService.name)
+        L.disposeAll()
+    }
+
+    @Test
+    fun testOfs() {
+            assertEquals("LogServiceTest", L.of("LogServiceTest").name)
+            assertEquals(SuspendResult::class.java.simpleName, L.of(SuspendResult::class.java).name)
+
+            val activity = mockk<MainActivity>()
+            assertEquals(MainActivity::class.java.simpleName, L.of(activity).name)
+
+            val frag = mockk<GameFragment>()
+            assertEquals(GameFragment::class.java.simpleName, L.of(frag).name)
     }
 
     @Test
@@ -54,6 +71,17 @@ class LogServiceTest {
         logService.v("test")
 
         assertEquals(logService.logs.size, 5)
+    }
+
+    @Test
+    fun unregister() {
+        L.disposeAll()
+        for (i in 0..10) {
+            L.of("LogServiceTest$i").i("test$i")
+        }
+        assertEquals(11, L.allInstances().size)
+        L.disposeAll()
+        assertEquals(0, L.allInstances().size)
     }
 
 }

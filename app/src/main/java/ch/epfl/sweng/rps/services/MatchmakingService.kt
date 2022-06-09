@@ -1,7 +1,8 @@
 package ch.epfl.sweng.rps.services
 
 import android.util.Log
-import ch.epfl.sweng.rps.models.GameMode
+import androidx.annotation.VisibleForTesting
+import ch.epfl.sweng.rps.models.remote.GameMode
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
@@ -9,9 +10,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
+/**
+ * This class is responsible for the communication with the cloud functions managing matchmaking.
+ */
 open class MatchmakingService {
     private val cloudFunctions = CloudFunctions()
 
+    /**
+     * This function is used to create a matchmaking request.
+     */
     open fun queue(gameMode: GameMode): Flow<QueueStatus> = flow {
         Log.i("MatchmakingService", "Queueing for game mode ${gameMode.toGameModeString()}")
         emit(QueueStatus.Queued(gameMode))
@@ -24,14 +31,31 @@ open class MatchmakingService {
         emit(QueueStatus.GameJoined(service))
     }
 
+    /**
+     * This function is used to accept an invitation to a game.
+     */
     suspend fun acceptInvitation(invitationId: String): FirebaseGameService {
         val gameId = cloudFunctions.acceptInvitation(invitationId)
         return ServiceLocator.getInstance().getGameServiceForGame(gameId)
     }
 
+
+    /**
+     * Invites a player to a game of the given [gameMode].
+     */
+    suspend fun invitePlayer(userId: String, gameMode: GameMode): FirebaseGameService {
+        val gameId = cloudFunctions.invitePlayer(userId = userId, gameMode = gameMode)
+        return ServiceLocator.getInstance().getGameServiceForGame(gameId)
+    }
+
+
+    /**
+     * This function returns the current game's [FirebaseGameService]
+     * if there is one game in progress.
+     */
     open suspend fun currentGame(): FirebaseGameService? {
         val repo = ServiceLocator.getInstance().repository
-        val games = repo.gamesOfUser(repo.getCurrentUid())
+        val games = repo.games.myActiveGames()
         if (games.isEmpty()) {
             return null
         }
@@ -51,12 +75,33 @@ open class MatchmakingService {
         delay(100)
     }
 
+    /**
+     * Sealed class used to represent the status of a matchmaking request.
+     */
     sealed class QueueStatus {
-        class Queued(val gameMode: GameMode) : QueueStatus()
-        class GameJoined(val gameService: FirebaseGameService) : QueueStatus()
+        /**
+         * When the user is queued for a game of the given [gameMode].
+         */
+        class Queued(
+            /**
+             * The game mode for which the user is queued.
+             */
+            val gameMode: GameMode
+        ) : QueueStatus()
+
+        /**
+         * When the user has joined a game via [gameService].
+         */
+        class GameJoined(
+            /**
+             * The [FirebaseGameService] for the game.
+             */
+            val gameService: FirebaseGameService
+        ) : QueueStatus()
     }
 
-    class CloudFunctions {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal class CloudFunctions {
         private val functions get() = Firebase.functions("europe-west1")
 
         suspend fun queue(gameMode: GameMode): String {

@@ -113,8 +113,9 @@ class TicTacToeTest {
         onView(withId(R.id.outcomeTTT)).check(matches(isDisplayed()))
         onView(withId(R.id.outcomeTTT)).check(matches(withText("CROSS WINS")))
     }
+
     @Test
-    fun testCompleteMultGameWithDraw(){
+    fun testCompleteMultGameWithDraw() {
         onView(withId(R.id.button_tik_tac_toe)).perform(click())
         onView(withId(R.id.ai_pick_side_cross_radio)).perform(click())
         onView(withId(R.id.multButton)).perform(click())

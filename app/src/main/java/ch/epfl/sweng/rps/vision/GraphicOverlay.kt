@@ -15,16 +15,13 @@
  */
 package ch.epfl.sweng.rps.vision
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.util.AttributeSet
 import android.view.View
 import ch.epfl.sweng.rps.vision.GraphicOverlay.Graphic
-import ch.epfl.sweng.rps.vision.GraphicOverlay
 import com.google.common.base.Preconditions
-import java.util.ArrayList
 
 /**
  * A view which renders a series of custom graphics to be overlayed on top of an associated preview
@@ -47,8 +44,8 @@ import java.util.ArrayList
  * coordinate from the image's coordinate system to the view coordinate system.
  *
  */
-class GraphicOverlay constructor(context: Context, attrs: AttributeSet? = null, )
-    : View(context, attrs) {
+class GraphicOverlay constructor(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
     private val lock = Any()
     val graphics: MutableList<Graphic> = ArrayList()
 

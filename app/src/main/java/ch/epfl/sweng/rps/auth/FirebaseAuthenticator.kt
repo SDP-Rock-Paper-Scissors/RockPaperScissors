@@ -51,9 +51,9 @@ class FirebaseAuthenticator private constructor(
         email: String?
     ): User {
         Log.d("DsName", displayName.orEmpty())
-        var user = repo.getUser(uid)
+        var user = repo.getUser(uid).getOrThrow()
         if (user == null) {
-            user = repo.createThisUser(displayName, email)
+            user = repo.createThisUser(displayName, email).getOrThrow()
         }
         return user
     }

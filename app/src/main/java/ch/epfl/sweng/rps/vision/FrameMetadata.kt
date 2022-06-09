@@ -15,8 +15,6 @@
  */
 package ch.epfl.sweng.rps.vision
 
-import ch.epfl.sweng.rps.vision.FrameMetadata
-
 /** Describing a frame info.  */
 class FrameMetadata private constructor(val width: Int, val height: Int, val rotation: Int) {
 

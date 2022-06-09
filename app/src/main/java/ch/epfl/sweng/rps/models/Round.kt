@@ -1,7 +1,8 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
-import ch.epfl.sweng.rps.models.Hand.Result
-import ch.epfl.sweng.rps.models.PointSystem.DefaultPointSystem
+import ch.epfl.sweng.rps.models.remote.Hand.Outcome
+import ch.epfl.sweng.rps.models.xbstract.PointSystem
+import ch.epfl.sweng.rps.models.xbstract.PointSystem.DefaultPointSystem
 import com.google.firebase.Timestamp
 import java.util.*
 
@@ -16,6 +17,9 @@ sealed class Round {
     abstract val timestamp: Timestamp
     abstract val edition: GameMode.GameEdition
 
+
+    abstract fun computeScores(pointSystem: PointSystem = DefaultPointSystem()): List<Score>
+    abstract fun getWinner(): String?
     data class Rps(
         override val hands: Map<String, Hand> = mapOf(),
         override val timestamp: Timestamp = Timestamp(Date(0))
@@ -23,7 +27,7 @@ sealed class Round {
         override val edition: GameMode.GameEdition = GameMode.GameEdition.RockPaperScissors
         override fun computeScores(pointSystem: PointSystem): List<Score> {
 
-            val points = hashMapOf<String, List<Result>>()
+            val points = hashMapOf<String, List<Outcome>>()
             for ((uid, hand) in hands) {
                 for ((uid2, hand2) in hands) {
                     if (uid != uid2) {
@@ -39,7 +43,7 @@ sealed class Round {
                     res.key,
                     results = res.value,
                     points = res.value.sumOf { pointSystem.getPoints(it) })
-            }.sortedByDescending { score -> score.results.count { it == Result.WIN } }
+            }.sortedByDescending { score -> score.results.count { it == Outcome.WIN } }
                 .sortedByDescending { it.points }
         }
 
@@ -64,13 +68,17 @@ sealed class Round {
         val turn: String = "",
         override val timestamp: Timestamp = Timestamp(Date(0))
     ) : Round() {
+
         override val edition: GameMode.GameEdition = GameMode.GameEdition.TicTacToe
+
+        private val isGameOver: Boolean
+            get() = board.none { it == null }
 
         override fun computeScores(pointSystem: PointSystem): List<Score> {
             val winner = computeWinner()
             when {
                 winner != null -> return players.map {
-                    val result = if (it.value == winner) Result.WIN else Result.LOSS
+                    val result = if (it.value == winner) Outcome.WIN else Outcome.LOSS
                     Score(
                         it.key,
                         listOf(result),
@@ -80,8 +88,8 @@ sealed class Round {
                 isGameOver -> return players.map {
                     Score(
                         it.key,
-                        results = listOf(Result.TIE),
-                        points = pointSystem.getPoints(Result.TIE)
+                        results = listOf(Outcome.TIE),
+                        points = pointSystem.getPoints(Outcome.TIE)
                     )
                 }
                 else -> return emptyList()
@@ -95,11 +103,8 @@ sealed class Round {
             } else {
                 null
             }
-        }
+        }// Look for a diagonal, a row or a column full of the same value
 
-        val isGameOver: Boolean get() = board.none { it == null }
-
-        // Look for a diagonal, a row or a column full of the same value
         // Return the value if found, null otherwise
         private fun computeWinner(): Int? {
             val diag = listOf(0, 4, 8).map { board[it] }
@@ -124,16 +129,11 @@ sealed class Round {
         }
     }
 
-    abstract fun computeScores(pointSystem: PointSystem = DefaultPointSystem()): List<Score>
-
-    abstract fun getWinner(): String?
-
     class Score(
         val uid: String,
-        val results: List<Result>,
+        val results: List<Outcome>,
         val points: Int
     )
-
 
     object FIELDS {
         const val UID = "uid"

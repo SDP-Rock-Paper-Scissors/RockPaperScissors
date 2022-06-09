@@ -2,10 +2,9 @@ package ch.epfl.sweng.rps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.db.Repository
-import ch.epfl.sweng.rps.models.Hand
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.GameService.GameServiceException
 import ch.epfl.sweng.rps.services.ProdServiceLocator
@@ -17,8 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -57,46 +54,6 @@ class FirebaseTests {
     @Test
     fun testEuropeWest1() {
         assertDoesNotThrow { Firebase.europeWest1 }
-    }
-
-    @Test
-    fun testThrowsWhenNotLoggedIn() = runTest(UnconfinedTestDispatcher()) {
-        FirebaseAuth.getInstance().signOut()
-
-        assertEquals(false, db.isLoggedIn)
-        assertThrows(Exception::class.java) {
-            db.getCurrentUid()
-        }
-
-        assertThrows(Exception::class.java) {
-            runBlocking {
-                db.updateUser(User.Field.USERNAME to "test")
-            }
-        }
-
-        assertThrows(Exception::class.java) {
-            runBlocking {
-                db.createThisUser("user1", "test@example.com")
-            }
-        }
-
-        assertThrows(Exception::class.java) {
-            runBlocking {
-                db.sendFriendRequestTo("user1")
-            }
-        }
-
-        assertThrows(Exception::class.java) {
-            runBlocking {
-                db.listFriendRequests()
-            }
-        }
-
-        assertThrows(Exception::class.java) {
-            runBlocking {
-                db.acceptFriendRequest("user1")
-            }
-        }
     }
 
     @Test

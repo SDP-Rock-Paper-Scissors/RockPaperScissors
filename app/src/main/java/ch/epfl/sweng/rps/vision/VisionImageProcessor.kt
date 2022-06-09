@@ -15,13 +15,10 @@
  */
 package ch.epfl.sweng.rps.vision
 
-import android.graphics.Bitmap
-import ch.epfl.sweng.rps.vision.GraphicOverlay
-import androidx.annotation.RequiresApi
 import android.os.Build.VERSION_CODES
-import kotlin.Throws
-import com.google.mlkit.common.MlKitException
+import androidx.annotation.RequiresApi
 import androidx.camera.core.ImageProxy
+import com.google.mlkit.common.MlKitException
 
 /** An interface to process the images with different vision detectors and custom image models.  */
 interface VisionImageProcessor {
