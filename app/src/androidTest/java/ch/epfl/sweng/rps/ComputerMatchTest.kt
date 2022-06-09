@@ -16,6 +16,7 @@ import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -25,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class ComputerMatchTest {
     lateinit var cache: Cache
@@ -53,11 +55,11 @@ class ComputerMatchTest {
     }
 
     private suspend fun run1roundGame() {
-        val radioButtonId = R.id.scissorsRB
+        val buttonId = R.id.paperIM
         Espresso.onView(ViewMatchers.withId(R.id.button_play_1_games_offline))
             .perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(radioButtonId)).perform(ViewActions.click())
-        delay(3_000)
+        Espresso.onView(ViewMatchers.withId(buttonId)).perform(ViewActions.click())
+        delay(3_000L)
     }
 
     @Test

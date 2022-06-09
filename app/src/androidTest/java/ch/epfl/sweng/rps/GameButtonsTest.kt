@@ -13,6 +13,7 @@ import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.persistence.PrivateStorage
 import ch.epfl.sweng.rps.persistence.Storage
 import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,30 +48,33 @@ class GameButtonsTest {
 
     @After
     fun tearDown() {
+        val repo = ServiceLocator.getInstance().repository as LocalRepository
+        repo.setCurrentUid(null)
         ServiceLocator.setCurrentEnv(Env.Prod)
     }
 
-    @Test
-    fun pressedRock() {
-        checkPressedButton(R.id.rockRB)
-    }
 
     @Test
     fun pressedPaper() {
-        checkPressedButton(R.id.paperRB)
+        checkButtonsVisibility(R.id.paperIM)
     }
 
     @Test
-    fun pressedScissors() {
-        checkPressedButton(R.id.scissorsRB)
+    fun checkWinLossComunicate() {
+        runBlocking {
+            onView(withId(R.id.button_play_1_games_offline)).perform(click())
+            onView(withId(R.id.paperIM)).perform(click())
+            delay(3000L)
+            onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
+
+        }
     }
 
-    private fun checkPressedButton(radioButtonId: Int) = runBlocking {
+    private fun checkButtonsVisibility(radioButtonId: Int) {
         onView(withId(R.id.button_play_1_games_offline)).perform(click())
-        onView(withId(radioButtonId)).perform(click())
-        delay(3_000)
-        onView(withId(R.id.game_result_communicate)).check(matches(isDisplayed()))
-
+        onView(withId(radioButtonId)).check(matches(isDisplayed()))
     }
+
+
 }
 

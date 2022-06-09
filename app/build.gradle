@@ -71,6 +71,7 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            animationsDisabled = true
         }
     }
 }
@@ -167,6 +168,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0'
     //Declare the dependency for image labelling
     implementation 'com.google.mlkit:image-labeling-custom:17.0.1'
+
+    //UI loading bar
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
 }
 
