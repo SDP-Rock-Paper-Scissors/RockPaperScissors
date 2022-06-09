@@ -22,6 +22,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.random.Random
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
@@ -30,7 +31,7 @@ class DebugInfoDumpTest {
     @get:Rule
     val rule = ActivityScenarioRuleWithSetup.default(MainActivity::class.java)
 
-    lateinit var expectedIntent: Matcher<Intent>
+    private lateinit var expectedIntent: Matcher<Intent>
 
     @Before
     fun setup() {
@@ -46,18 +47,20 @@ class DebugInfoDumpTest {
 
     @Test
     fun testDebugInfoDump() {
-        val s = System.currentTimeMillis().toHexString()
-        val s2 = System.currentTimeMillis().toHexString()
+        val s = Random.nextInt().toHexString()
+        val s2 = Random.nextInt().toHexString()
+        val s3 = Random.nextInt().toHexString()
 
         rule.scenario.onActivity { a ->
             a.lifecycleScope.launchWhenStarted {
                 L.of("test").i(s)
-                L.of("test").e(s2, Exception(s2))
+                L.of("test").e(s2, Exception(s3))
                 val file = dumpDebugInfos(a, Exception("test"))
                 assertTrue(file.exists())
                 val txt = file.readText()
                 assertTrue(txt.contains(s))
                 assertTrue(txt.contains(s2))
+                assertTrue(txt.contains(s3))
                 openJsonFile(a, file)
             }
         }

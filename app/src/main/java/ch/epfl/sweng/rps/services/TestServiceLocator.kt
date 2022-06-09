@@ -21,12 +21,18 @@ internal class TestServiceLocator : ServiceLocator {
     override fun dispose() {
     }
 
+    private var _gameServiceFn: (gameId: String, start: Boolean) -> FirebaseGameService =
+        { _, _ -> throw IllegalArgumentException() }
+
+
+    fun setGameServiceFn(fn: (gameId: String, start: Boolean) -> FirebaseGameService) {
+        _gameServiceFn = fn
+    }
+
     override fun getGameServiceForGame(
         gameId: String,
         start: Boolean
-    ): FirebaseGameService {
-        TODO("Not yet implemented")
-    }
+    ): FirebaseGameService = _gameServiceFn(gameId, start)
 
     override fun disposeAllGameServices() {
 

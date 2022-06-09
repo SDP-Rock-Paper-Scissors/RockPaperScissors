@@ -1,9 +1,10 @@
 package ch.epfl.sweng.rps.services
 
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.remote.GameMode
-import com.google.firebase.functions.ktx.functions
+import ch.epfl.sweng.rps.utils.L
+import ch.epfl.sweng.rps.utils.europeWest1
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -13,21 +14,24 @@ import kotlinx.coroutines.tasks.await
 /**
  * This class is responsible for the communication with the cloud functions managing matchmaking.
  */
-open class MatchmakingService {
-    private val cloudFunctions = CloudFunctions()
+open class MatchmakingService(
+    @VisibleForTesting internal val cloudFunctions: CloudFunctions = CloudFunctions(),
+    @VisibleForTesting internal val log: L.LogService = L.of(MatchmakingService::class.java)
+) {
+
 
     /**
      * This function is used to create a matchmaking request.
      */
     open fun queue(gameMode: GameMode): Flow<QueueStatus> = flow {
-        Log.i("MatchmakingService", "Queueing for game mode ${gameMode.toGameModeString()}")
+        log.i("Queueing for game mode ${gameMode.toGameModeString()}")
         emit(QueueStatus.Queued(gameMode))
-        Log.i("MatchmakingService", "Sending request to cloud function")
+        log.i("Sending request to cloud function")
         val gameId = cloudFunctions.queue(gameMode)
-        Log.i("MatchmakingService", "Received game id $gameId")
+        log.i("Received game id $gameId")
 
         val service = ServiceLocator.getInstance().getGameServiceForGame(gameId)
-        Log.i("MatchmakingService", "Got service $service")
+        log.i("Got service $service")
         emit(QueueStatus.GameJoined(service))
     }
 
@@ -60,8 +64,7 @@ open class MatchmakingService {
             return null
         }
         if (games.size > 1) {
-            Log.e(
-                "MatchmakingService",
+            log.e(
                 "More than one game for user ${repo.getCurrentUid()}: ${games.map { it.id }}"
             )
         }
@@ -101,8 +104,10 @@ open class MatchmakingService {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal class CloudFunctions {
-        private val functions get() = Firebase.functions("europe-west1")
+    class CloudFunctions(
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) internal val functionsOverride: FirebaseFunctions? = null
+    ) {
+        private val functions: FirebaseFunctions by lazy { functionsOverride ?: Firebase.europeWest1 }
 
         suspend fun queue(gameMode: GameMode): String {
             val res = functions.getHttpsCallable("queue").call(
@@ -113,7 +118,7 @@ open class MatchmakingService {
             return res.data as String
         }
 
-        suspend fun invitePlayer(gameMode: GameMode, userId: String): String {
+        suspend fun invitePlayer(userId: String, gameMode: GameMode): String {
             val res = functions.getHttpsCallable("invite_player").call(
                 hashMapOf(
                     "game_mode" to gameMode.toGameModeString(),

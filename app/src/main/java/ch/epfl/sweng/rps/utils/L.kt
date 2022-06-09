@@ -64,7 +64,7 @@ object L {
             }
 
         fun log(message: String, level: Level = Level.INFO, throwable: Throwable? = null) {
-            val e = LogEntry(name, message, Date(), level)
+            val e = LogEntry(name, message, Date(), level, throwable = throwable)
             val msg = if (throwable != null) {
                 message + '\n' + Log.getStackTraceString(throwable)
             } else {
