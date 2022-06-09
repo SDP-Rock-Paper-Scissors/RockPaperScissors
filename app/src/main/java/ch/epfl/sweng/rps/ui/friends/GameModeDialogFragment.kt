@@ -9,8 +9,8 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.ui.game.MatchmakingFragment
 
 
 class GameModeDialogFragment: DialogFragment() {
@@ -18,8 +18,8 @@ class GameModeDialogFragment: DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        var rootView: View = inflater.inflate(R.layout.fragment_game_mode_dialog, container, false)
+    ): View {
+        val rootView: View = inflater.inflate(R.layout.fragment_game_mode_dialog, container, false)
 
         rootView.findViewById<Button>(R.id.cancelButton).setOnClickListener{
             dismiss()
@@ -28,15 +28,28 @@ class GameModeDialogFragment: DialogFragment() {
         rootView.findViewById<Button>(R.id.confirmButton).setOnClickListener{
             val radioGroup: RadioGroup = rootView.findViewById(R.id.gameModeRadioGrp)
             val selectedID = radioGroup.checkedRadioButtonId
-            val radio: RadioButton = rootView.findViewById(selectedID)
+            val matchFrg = MatchmakingFragment()
+            val args = Bundle()
 
-            if (radio.text == "Play five games"){
-                dismiss()
-                playOnlineGame(5)
-            }
-            else if (radio.text == "Play one game") {
-                dismiss()
-                playOnlineGame(1)
+            if (selectedID != -1){
+                val radio: RadioButton = rootView.findViewById(selectedID)
+                if (radio.text == "Play one game") {
+
+                    dismiss()
+                    args.putInt("rounds", 1)
+                    matchFrg.arguments = args
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main, matchFrg).addToBackStack(null)
+                        .commit()
+                }
+                else if (radio.text == "Play five games"){
+                    dismiss()
+                    args.putInt("rounds", 5)
+                    matchFrg.arguments = args
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main, matchFrg).addToBackStack(null)
+                        .commit()
+                }
             }
             else {
                 Toast.makeText(activity,"Please select a mode", Toast.LENGTH_SHORT).show()
@@ -44,9 +57,5 @@ class GameModeDialogFragment: DialogFragment() {
         }
         return rootView
     }
-}
-
-private fun playOnlineGame(rounds: Int) {
-    findNavController(GameModeDialogFragment()).navigate(GameModeDialogFragmentDirections.actionGameModeDialogFragmentToMatchmakingFragment(rounds))
 }
 
