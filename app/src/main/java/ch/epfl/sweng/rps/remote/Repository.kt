@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.remote
 
 import android.graphics.Bitmap
 import ch.epfl.sweng.rps.models.remote.User

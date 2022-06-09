@@ -4,6 +4,14 @@ package ch.epfl.sweng.rps.remote
 import android.net.Uri
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.remote.FriendRequest
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.FriendRequestInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
+import ch.epfl.sweng.rps.models.ui.RoundStat
+import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.Option
 import java.text.SimpleDateFormat
@@ -44,7 +52,7 @@ object FirebaseHelper {
     suspend fun getStatsData(selectMode: Int): List<UserStat> {
         val firebaseRepository = ServiceLocator.getInstance().repository
         val userid = firebaseRepository.rawCurrentUid() ?: return emptyList()
-        val userGameList = firebaseRepository.gamesOfUser(userid)
+        val userGameList = firebaseRepository.games.gamesOfUser(userid)
         val allStatsResult = mutableListOf<UserStat>()
 
         // We cache the users to avoid multiple calls to the database
@@ -124,7 +132,7 @@ object FirebaseHelper {
         val repo = ServiceLocator.getInstance().repository
         val userid = repo.rawCurrentUid()
 
-        val game = repo.getGame(gid) ?: throw Exception("Game not found")
+        val game = repo.games.getGame(gid) ?: throw Exception("Game not found")
         // note: 1 v 1 db, if we support pvp mode, the table should be iterated to change as well.
         // get opponent user id from player list
         val opponentId: String = game.players.first { it != userid }
@@ -161,7 +169,7 @@ object FirebaseHelper {
             0 -> "RPSScore"
             else -> "TTTScore"
         }
-        val scores = repo.getLeaderBoardScore(scoreMode)
+        val scores = repo.games.getLeaderBoardScore(scoreMode)
         val allPlayers = mutableListOf<LeaderBoardInfo>()
         for (score in scores) {
             val leaderBoardInfo = LeaderBoardInfo()
@@ -184,17 +192,19 @@ object FirebaseHelper {
         }
         return allPlayers
     }
-
+    /**
+     * This function returns the your friends.
+     */
     suspend fun getFriends(): List<FriendsInfo> {
         val fbRepo = ServiceLocator.getInstance().repository
-        val friends = fbRepo.getFriends()
+        val friends = fbRepo.friends.getFriends()
         val friendList = mutableListOf<FriendsInfo>()
 
         for (friend in friends) {
-            val user = fbRepo.getUser(friend)?:continue
-            val userStats = fbRepo.statsOfUser(friend)
+            val user = fbRepo.getUser(friend)
+            val userStats = fbRepo.games.statsOfUser(friend)
             val friendsInfo = FriendsInfo(
-                username = user.username?:"UsernameEmpty",
+                username = user.asData?.value?.username?: "UsernameEmpty",
                 gamesPlayed = userStats.total_games,
                 gamesWon = userStats.wins,
                 winRate = userStats.winRate,
@@ -204,18 +214,20 @@ object FirebaseHelper {
         }
         return friendList
     }
-
+    /**
+     * This function returns your friend requests.
+     */
     suspend fun getFriendReqs(): List<FriendRequestInfo> {
         val fbRepo = ServiceLocator.getInstance().repository
-        val friendRequest = fbRepo.listFriendRequests()
+        val friendRequest = fbRepo.friends.listFriendRequests()
         val reqList = mutableListOf<FriendRequestInfo>()
         val uid = fbRepo.rawCurrentUid()
 
         for (req in friendRequest) {
             if (req.from != uid && req.status == FriendRequest.Status.PENDING) {
-                val user = fbRepo.getUser(req.from) ?: continue
+                val user = fbRepo.getUser(req.from)
                 val friendsReq = FriendRequestInfo(
-                    username = user.username ?: "UsernameEmpty",
+                    username = user.asData?.value?.username?: "UsernameEmpty",
                     uid = req.from
                 )
                 reqList.add(friendsReq)

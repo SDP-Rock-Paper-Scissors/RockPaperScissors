@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.databinding.FragmentMatchmakingBinding
-import ch.epfl.sweng.rps.models.GameMode
+import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.services.FirebaseGameService
 import ch.epfl.sweng.rps.services.FirebaseGameService.PlayerCount.Full
 import ch.epfl.sweng.rps.services.MatchmakingService

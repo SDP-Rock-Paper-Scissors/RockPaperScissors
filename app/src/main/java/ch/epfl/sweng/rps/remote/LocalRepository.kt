@@ -21,7 +21,7 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
 
     @VisibleForTesting
     internal val users = mutableMapOf<String, User>()
-    private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
+    private val friendRequests = mutableListOf<FriendRequest>()
     override val friends: FriendsRepository
         get() = this
     override val games: GamesRepository
@@ -100,24 +100,23 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         friendRequests[i] = friendRequests[i].copy(status = status)
     }
 
-    val games = mutableMapOf<String, Game>()
+    val userGames = mutableMapOf<String, Game>()
 
     override suspend fun getGame(gameId: String): Game? {
-        return games[gameId]
+        return userGames[gameId]
     }
 
-    var leaderBoardScore = mutableListOf<TotalScore>()
     override suspend fun getLeaderBoardScore(scoreMode:String): List<TotalScore> {
         return leaderBoardScore
     }
 
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
-        return games.values.filter { uid in it.players }
+        return userGames.values.filter { uid in it.players }
     }
 
     override suspend fun myActiveGames(): List<Game> {
-        return games.values.filter { it.players.contains(getCurrentUid()) && !it.done }
+        return userGames.values.filter { it.players.contains(getCurrentUid()) && !it.done }
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
@@ -127,9 +126,6 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
             userId = uid
         )
     }
-
-    @VisibleForTesting
-    val invitations = mutableMapOf<String, Invitation>()
 
     override suspend fun listInvitations(): List<Invitation> {
         return invitations.values.toList()

@@ -1,5 +1,6 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.ui
 
+import ch.epfl.sweng.rps.models.remote.Hand
 import java.util.*
 
 data class RoundStat(

@@ -16,8 +16,10 @@ import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.db.Env
+import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.remote.GameMode
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.Timestamp

@@ -1,6 +1,10 @@
 package ch.epfl.sweng.rps.persistence
 import android.graphics.Bitmap
-import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.FriendRequestInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
+import ch.epfl.sweng.rps.models.ui.UserStat
 import java.io.File
 
 interface Storage {

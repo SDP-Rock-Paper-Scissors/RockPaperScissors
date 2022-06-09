@@ -6,6 +6,11 @@ import android.graphics.BitmapFactory
 import ch.epfl.sweng.rps.models.*
 import com.google.gson.Gson
 import android.net.Uri
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.FriendRequestInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
+import ch.epfl.sweng.rps.models.ui.UserStat
 import com.google.gson.*
 import java.io.ByteArrayOutputStream
 import java.io.File

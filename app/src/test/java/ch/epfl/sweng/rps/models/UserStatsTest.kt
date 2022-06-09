@@ -1,5 +1,6 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.remote.UserStats
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 

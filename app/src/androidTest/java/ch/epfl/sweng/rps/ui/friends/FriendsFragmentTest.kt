@@ -15,9 +15,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.*
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.models.remote.FriendRequest
+import ch.epfl.sweng.rps.models.remote.User
 import com.google.firebase.Timestamp
 import ch.epfl.sweng.rps.ActivityScenarioRuleWithSetup
 import ch.epfl.sweng.rps.MainActivity
@@ -88,7 +88,8 @@ class FriendsFragmentTest {
 
         val friends: List<FriendRequest> = listOf(
                 FriendRequest(listOf("player2","player1"), Timestamp.now() , FriendRequest.Status.ACCEPTED, "player2"),
-                FriendRequest(listOf("player3","player1"), Timestamp.now(),FriendRequest.Status.PENDING, "player3"),
+                FriendRequest(listOf("player3","player1"), Timestamp.now(),
+                    FriendRequest.Status.PENDING, "player3"),
                 FriendRequest(listOf("player1","player4"), Timestamp.now(), FriendRequest.Status.ACCEPTED,"player4")
         )
 

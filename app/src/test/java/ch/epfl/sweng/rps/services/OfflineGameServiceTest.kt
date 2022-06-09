@@ -1,8 +1,8 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.db.Repository
-import ch.epfl.sweng.rps.models.ComputerPlayer
-import ch.epfl.sweng.rps.models.GameMode
+import ch.epfl.sweng.rps.remote.Repository
+import ch.epfl.sweng.rps.models.xbstract.ComputerPlayer
+import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.Hand
 import ch.epfl.sweng.rps.models.RandomPlayer
 import kotlinx.coroutines.runBlocking

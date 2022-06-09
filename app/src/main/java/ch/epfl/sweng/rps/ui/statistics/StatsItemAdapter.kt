@@ -12,7 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.UserStat
+import ch.epfl.sweng.rps.models.ui.UserStat
 import coil.load
 
 

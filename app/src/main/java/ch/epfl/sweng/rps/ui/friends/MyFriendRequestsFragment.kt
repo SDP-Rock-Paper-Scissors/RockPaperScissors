@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
 import ch.epfl.sweng.rps.RequestListAdapter
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.FriendRequestInfo
+import ch.epfl.sweng.rps.models.remote.FriendRequest
+import ch.epfl.sweng.rps.models.ui.FriendRequestInfo
 import ch.epfl.sweng.rps.persistence.Cache
 import ch.epfl.sweng.rps.services.ServiceLocator
 import kotlinx.coroutines.launch
@@ -68,7 +68,7 @@ class MyFriendRequestsFragment : Fragment(), RequestListAdapter.OnButtonClickLis
             Toast.makeText(activity, "You have accepted $username's request", Toast.LENGTH_SHORT).show()
             EspressoIdlingResource.increment()
             viewLifecycleOwner.lifecycleScope.launch{
-                ServiceLocator.getInstance().repository.changeFriendRequestToStatus(uid, FriendRequest.Status.ACCEPTED)
+                ServiceLocator.getInstance().repository.friends.changeFriendRequestToStatus(uid, FriendRequest.Status.ACCEPTED)
                 EspressoIdlingResource.decrement()
             }
         }
@@ -78,7 +78,7 @@ class MyFriendRequestsFragment : Fragment(), RequestListAdapter.OnButtonClickLis
             Toast.makeText(activity, "You have rejected $username's request", Toast.LENGTH_SHORT).show()
             EspressoIdlingResource.increment()
             viewLifecycleOwner.lifecycleScope.launch{
-                ServiceLocator.getInstance().repository.changeFriendRequestToStatus(uid, FriendRequest.Status.REJECTED)
+                ServiceLocator.getInstance().repository.friends.changeFriendRequestToStatus(uid, FriendRequest.Status.REJECTED)
                 EspressoIdlingResource.decrement()
             }
         }

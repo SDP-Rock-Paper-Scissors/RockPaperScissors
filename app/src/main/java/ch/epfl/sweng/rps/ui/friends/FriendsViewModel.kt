@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ch.epfl.sweng.rps.models.FriendsInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
 import ch.epfl.sweng.rps.persistence.Cache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

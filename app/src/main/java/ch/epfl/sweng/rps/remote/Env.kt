@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.db
+package ch.epfl.sweng.rps.remote
 
 /**
  * Env is a class that contains the environment variables used by the application.

@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps.models.xbstract
 
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 
 abstract class AbstractUser {
     abstract val username: String?

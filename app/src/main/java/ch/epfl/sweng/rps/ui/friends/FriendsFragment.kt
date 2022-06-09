@@ -6,17 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.FriendsInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
 import ch.epfl.sweng.rps.FriendListAdapter
 import ch.epfl.sweng.rps.persistence.Cache
 

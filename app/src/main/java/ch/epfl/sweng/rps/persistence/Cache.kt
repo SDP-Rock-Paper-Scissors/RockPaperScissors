@@ -3,17 +3,21 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import ch.epfl.sweng.rps.db.FirebaseRepository
 import ch.epfl.sweng.rps.models.*
 import androidx.annotation.VisibleForTesting
-import ch.epfl.sweng.rps.db.Repository
+import ch.epfl.sweng.rps.remote.Repository
+import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
+import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.FriendRequestInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
+import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.remote.FirebaseHelper
+import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.L
 import java.net.InetAddress
 import ch.epfl.sweng.rps.utils.SuspendResult
 import ch.epfl.sweng.rps.utils.guardSuspendable
-import ch.epfl.sweng.rps.utils.isInternetAvailable
 
 /**
  * This class is to be used as the main reference for all data operations.

@@ -47,7 +47,7 @@ class AddFriendFragment : Fragment() {
                         Toast.makeText(activity, "Please enter a user ID", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        ServiceLocator.getInstance().repository.sendFriendRequestTo(uid)
+                        ServiceLocator.getInstance().repository.friends.sendFriendRequestTo(uid)
                         Toast.makeText(activity, "You have sent a request", Toast.LENGTH_SHORT).show()
                         Log.i("IDs", "mine:$myUid, sent to:$uid")
                     }

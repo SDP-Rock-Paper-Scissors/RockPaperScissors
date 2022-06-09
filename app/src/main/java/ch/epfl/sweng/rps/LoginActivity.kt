@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ch.epfl.sweng.rps.auth.FirebaseAuthenticator
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.persistence.Cache
 
 class LoginActivity : AppCompatActivity() {

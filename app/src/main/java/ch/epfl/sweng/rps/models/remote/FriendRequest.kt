@@ -1,4 +1,4 @@
-package ch.epfl.sweng.rps.models
+package ch.epfl.sweng.rps.models.remote
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
@@ -22,12 +22,6 @@ data class FriendRequest(
     @PropertyName(FIELDS.ID)
     val id: String = ""
 ) {
-    companion object {
-        fun build(from: String, to: String, timestamp: Timestamp = Timestamp.now()): FriendRequest {
-            return FriendRequest(listOf(from, to), timestamp, id = "$from-$to")
-        }
-    }
-
     /**
      * The requester of the friend request is the first user in the list.
      */

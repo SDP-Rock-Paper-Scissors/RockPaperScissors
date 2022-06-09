@@ -3,9 +3,7 @@ package ch.epfl.sweng.rps
 import android.content.Intent
 import android.view.View
 import android.widget.ImageButton
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -15,9 +13,9 @@ import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.db.Env
-import ch.epfl.sweng.rps.models.FriendRequest
-import ch.epfl.sweng.rps.models.User
+import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.models.remote.FriendRequest
+import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.friends.EspressoIdlingResource
@@ -91,7 +89,8 @@ class FriendsFragmentTest {
 
         val friends: List<FriendRequest> = listOf(
                 FriendRequest(listOf("player2","player1"), Timestamp.now() , FriendRequest.Status.ACCEPTED, "player2"),
-                FriendRequest(listOf("player3","player1"), Timestamp.now(),FriendRequest.Status.PENDING, "player3"),
+                FriendRequest(listOf("player3","player1"), Timestamp.now(),
+                    FriendRequest.Status.PENDING, "player3"),
                 FriendRequest(listOf("player4","player1"), Timestamp.now(), FriendRequest.Status.ACCEPTED,"player4")
         )
 
