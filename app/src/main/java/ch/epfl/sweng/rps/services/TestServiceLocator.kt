@@ -11,12 +11,12 @@ internal class TestServiceLocator : ServiceLocator {
     override val env: Env = Env.Test
     override val cachedGameServices: List<String>
         get() = listOf()
-    override val matchmakingService: MatchmakingService
-        get() = object : MatchmakingService() {
-            override fun queue(gameMode: GameMode): Flow<QueueStatus> = flow { }
-            override suspend fun currentGame(): FirebaseGameService =
-                throw IllegalArgumentException()
-        }
+
+    override var matchmakingService: MatchmakingService = object : MatchmakingService() {
+        override fun queue(gameMode: GameMode): Flow<QueueStatus> = flow { }
+        override suspend fun currentGame(): FirebaseGameService =
+            throw IllegalArgumentException()
+    }
 
     override fun dispose() {
     }

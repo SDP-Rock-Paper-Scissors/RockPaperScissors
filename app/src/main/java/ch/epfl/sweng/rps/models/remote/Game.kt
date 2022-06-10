@@ -1,8 +1,10 @@
 package ch.epfl.sweng.rps.models.remote
 
+import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.remote.GameMode.GameEdition
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import java.util.*
 
 
@@ -89,6 +91,16 @@ sealed class Game {
                 GameEdition.TicTacToe -> TicTacToe::class.java
             }
             return document.toObject(type)
+        }
+
+        @VisibleForTesting
+        fun QuerySnapshot.toListOfGames(): List<Game> {
+            return this.documents.map { Game.fromDocumentSnapshot(it)!! }
+        }
+
+        @VisibleForTesting
+        fun DocumentSnapshot.toGame(): Game? {
+            return Game.fromDocumentSnapshot(this)
         }
     }
 }
