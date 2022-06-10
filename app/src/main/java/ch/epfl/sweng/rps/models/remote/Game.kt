@@ -67,6 +67,8 @@ sealed class Game {
         const val DONE = "done"
         const val TIMESTAMP = "timestamp"
         const val PLAYER_COUNT = "player_count"
+        const val EDITION = "edition"
+        const val ID = "id"
     }
 
     companion object {
@@ -75,8 +77,8 @@ sealed class Game {
          * Creates a game from a document snapshot
          */
         fun fromDocumentSnapshot(document: DocumentSnapshot): Game? {
-            val editionString = document["edition"] as String?
-            val gameMode = document["game_mode"] as String?
+            val editionString = document[FIELDS.EDITION] as String?
+            val gameMode = document[FIELDS.GAME_MODE] as String?
             val edition =
                 editionString?.let { GameEdition.valueOf(it) }
                     ?: gameMode?.let { GameMode.fromString(it).edition }

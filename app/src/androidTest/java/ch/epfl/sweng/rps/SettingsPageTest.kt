@@ -19,11 +19,15 @@ import ch.epfl.sweng.rps.TestUtils.getActivityInstance
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
 import ch.epfl.sweng.rps.TestUtils.waitFor
 import ch.epfl.sweng.rps.remote.Env
+import ch.epfl.sweng.rps.remote.FirebaseReferences
 import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.settings.SettingsActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.ktx.Firebase
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.instanceOf
 import org.junit.After
@@ -33,6 +37,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
+import kotlin.test.assertTrue
 
 
 @RunWith(AndroidJUnit4::class)
@@ -178,5 +183,22 @@ class SettingsPageTest {
     fun testResetSharedPrefs() {
         onView(withId(R.id.settings)).check(matches(isDisplayed()))
         onView(withText(R.string.clear_shared_prefs_settings_text)).perform(click())
+    }
+
+    @Test
+    fun addArtificialGame() = runBlocking {
+        val firebaseReferences = mockk<FirebaseReferences>()
+        var hasSet = false
+        every { firebaseReferences.gamesCollection.document(any()).set(any()) } answers {
+            hasSet = true
+            Tasks.forResult(null)
+        }
+        SettingsActivity.HeaderFragment.createArtificialGame(
+            firebaseReferences,
+            "game1",
+            "player1",
+            "player2"
+        )
+        assertTrue(hasSet)
     }
 }

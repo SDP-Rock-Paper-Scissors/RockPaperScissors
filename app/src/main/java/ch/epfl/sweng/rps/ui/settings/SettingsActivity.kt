@@ -16,6 +16,7 @@ import ch.epfl.sweng.rps.models.remote.Game
 import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.Round
+import ch.epfl.sweng.rps.remote.FirebaseReferences
 import ch.epfl.sweng.rps.services.ProdServiceLocator
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.onboarding.OnBoardingActivity
@@ -26,6 +27,7 @@ import ch.epfl.sweng.rps.utils.openJsonFile
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 class SettingsActivity : AppCompatActivity(),
@@ -43,12 +45,15 @@ class SettingsActivity : AppCompatActivity(),
                 "light" -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
+
                 "dark" -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 }
+
                 "system" -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 }
+
                 else -> {
                     L.of(SettingsActivity::class.java).e("Unknown theme: $themeKey")
                 }
@@ -218,44 +223,56 @@ class SettingsActivity : AppCompatActivity(),
                 findPreference<Preference>(getString(R.string.add_artificial_game_settings))
 
             gameSettings!!.setOnPreferenceClickListener {
-                val id = "artificial_game_1"
                 val uid = ServiceLocator.getInstance().repository.getCurrentUid()
+                val gameId = "artificial_game_1"
                 val uid2 = "RquV8FkGInaPnyUnqncOZGJjSKJ3"
                 val repo = ServiceLocator.getInstance()
 
                 if (repo is ProdServiceLocator) {
-                    repo.firebaseReferences.gamesCollection.document(id)
-                        .set(
-                            Game.Rps(
-                                id = id,
-                                players = listOf(
-                                    uid,
-                                    uid2
-                                ),
-                                rounds = mapOf(
-                                    "0" to Round.Rps(
-                                        hands = mapOf(
-                                            uid to Hand.PAPER,
-                                            uid2 to Hand.ROCK
-                                        ),
-                                        timestamp = Timestamp.now()
-                                    )
-                                ),
-                                game_mode = GameMode(
-                                    playerCount = 2,
-                                    type = GameMode.Type.PVP,
-                                    rounds = 1,
-                                    timeLimit = 0,
-                                    edition = GameMode.GameEdition.RockPaperScissors
-                                ).toGameModeString(),
-                                current_round = 0,
-                                done = true,
-                                timestamp = Timestamp.now(),
-                                player_count = 2
-                            )
-                        )
+                    lifecycleScope.launch { createArtificialGame(repo.firebaseReferences, gameId, uid, uid2) }
                 }
                 true
+            }
+        }
+
+        companion object {
+            suspend fun createArtificialGame(
+                firebaseReferences: FirebaseReferences,
+                gameId: String,
+                uid: String,
+                uid2: String
+            ) {
+                firebaseReferences.gamesCollection.document(gameId)
+                    .set(
+                        Game.Rps(
+                            id = gameId,
+                            players = listOf(
+                                uid,
+                                uid2
+                            ),
+                            rounds = mapOf(
+                                "0" to Round.Rps(
+                                    hands = mapOf(
+                                        uid to Hand.PAPER,
+                                        uid2 to Hand.ROCK
+                                    ),
+                                    timestamp = Timestamp.now()
+                                )
+                            ),
+                            game_mode = GameMode(
+                                playerCount = 2,
+                                type = GameMode.Type.PVP,
+                                rounds = 1,
+                                timeLimit = 0,
+                                edition = GameMode.GameEdition.RockPaperScissors
+                            ).toGameModeString(),
+                            current_round = 0,
+                            done = true,
+                            timestamp = Timestamp.now(),
+                            player_count = 2
+                        )
+                    ).await()
+
             }
         }
     }
