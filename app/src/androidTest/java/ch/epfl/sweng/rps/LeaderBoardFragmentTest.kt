@@ -10,8 +10,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.models.remote.TotalScore
-import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import org.hamcrest.Matchers.anything
@@ -118,10 +118,6 @@ class LeaderBoardFragmentTest {
         onView(withText("200")).check(matches(isDisplayed()))
 
 
-
-
-
     }
 
 }
-

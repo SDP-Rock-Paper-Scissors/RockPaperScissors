@@ -16,9 +16,8 @@ import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.TestUtils.initializeForTest
-import ch.epfl.sweng.rps.remote.Env
-import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.models.remote.*
+import ch.epfl.sweng.rps.remote.Env
 import ch.epfl.sweng.rps.remote.LocalRepository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import com.google.firebase.Timestamp
@@ -54,9 +53,9 @@ class StatisticsFragmentTest {
         ServiceLocator.setCurrentEnv(Env.Test)
         val repo = ServiceLocator.getInstance().repository as LocalRepository
         repo.setCurrentUid("player1")
-        repo.userGames.clear()
+        repo.gamesMap.clear()
         repo.users.clear()
-        repo.userGames["game1"] = Game.Rps(
+        repo.gamesMap["game1"] = Game.Rps(
             "game1",
             listOf("player1", "player2"),
             mapOf(
@@ -65,7 +64,7 @@ class StatisticsFragmentTest {
                         "player1" to Hand.ROCK,
                         "player2" to Hand.SCISSORS
                     ),
-                        Timestamp(Date(0))
+                    Timestamp(Date(0))
                 ),
                 "1" to Round.Rps(
                     mapOf(
@@ -181,4 +180,3 @@ class StatisticsFragmentTest {
     }
 
 }
-
