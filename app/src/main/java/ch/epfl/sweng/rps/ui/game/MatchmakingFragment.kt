@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps.ui.game
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import ch.epfl.sweng.rps.services.MatchmakingService
 import ch.epfl.sweng.rps.services.MatchmakingService.QueueStatus
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.L
+import ch.epfl.sweng.rps.utils.TEST_MODE
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -63,6 +63,11 @@ class MatchmakingFragment : Fragment() {
             if (loading) View.VISIBLE else View.GONE
     }
 
+    private fun isTest(): Boolean {
+        requireActivity()
+        return requireActivity().intent.getBooleanExtra(TEST_MODE, false)
+    }
+
     private suspend fun startMatchmaking() {
         val mm = ServiceLocator.getInstance().matchmakingService
         var rounds = arguments?.getInt("rounds")
@@ -71,6 +76,7 @@ class MatchmakingFragment : Fragment() {
                 write("Error: rounds is null")
                 return
             }
+
             rounds < 1 -> {
                 write(
                     "WARNING: rounds is less than 1 ($rounds), assuming 1."
@@ -87,24 +93,29 @@ class MatchmakingFragment : Fragment() {
             } else {
                 queueForNewGame(mm, rounds!!)
             }
-            MatchmakingFragmentDirections.actionMatchmakingFragmentToGameFragment(gameId)
-                .also { findNavController().navigate(it) }
-        } catch (e: MatchmakingTimeoutException) {
-            displayCancelButton(mm)
-            write(e.message)
-            setLoading(false)
-        } catch (e: TimeoutCancellationException) {
-            displayCancelButton(mm)
-            write("Timed out: ${e.message}")
-            setLoading(false)
+            write(getString(R.string.ready_to_play))
+            if (!isTest())
+                findNavController().navigate(
+                    MatchmakingFragmentDirections.actionMatchmakingFragmentToGameFragment(
+                        gameId
+                    )
+                )
         } catch (e: Exception) {
             displayCancelButton(mm)
-            write("Error: ${e.message}")
-            Log.e(null, null, e)
+            write(exceptionToString(e))
             setLoading(false)
         }
     }
 
+    companion object {
+        fun exceptionToString(e: Exception): String {
+            return when (e) {
+                is MatchmakingTimeoutException -> return e.message
+                is TimeoutCancellationException -> "Timed out: ${e.message}"
+                else -> "Error: ${e.message}"
+            }
+        }
+    }
 
     class MatchmakingTimeoutException(
         val action: String,
@@ -140,6 +151,7 @@ class MatchmakingFragment : Fragment() {
                         write("Queued for game ${it.gameMode}")
                         wait()
                     }
+
                     is QueueStatus.GameJoined -> {
                     }
                 }

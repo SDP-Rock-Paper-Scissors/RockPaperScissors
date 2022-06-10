@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.View
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -307,5 +308,9 @@ sealed class Option<T> {
     }
 }
 
+inline fun <reified T : Activity> Fragment.getActivityOfType(): T? = activity?.takeIf { it is T } as? T
 
+inline fun <reified T : Activity> Fragment.requireActivityOfType(): T = getActivityOfType()!!
+
+const val TEST_MODE = "test_mode"
 

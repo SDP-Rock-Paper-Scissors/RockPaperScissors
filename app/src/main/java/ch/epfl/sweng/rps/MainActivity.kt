@@ -1,7 +1,6 @@
 package ch.epfl.sweng.rps
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -22,5 +21,4 @@ class MainActivity : AppCompatActivity() {
 
         navView.setupWithNavController(navController)
     }
-
 }

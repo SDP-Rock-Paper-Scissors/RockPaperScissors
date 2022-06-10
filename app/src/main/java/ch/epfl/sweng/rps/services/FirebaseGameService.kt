@@ -156,7 +156,7 @@ class FirebaseGameService(
         super.dispose()
     }
 
-    suspend fun opponentCount(): Flow<PlayerCount> = callbackFlow {
+    fun opponentCount(): Flow<PlayerCount> = callbackFlow {
         if (isGameFull) {
             send(PlayerCount.Full(currentGame.players.size))
             channel.close()

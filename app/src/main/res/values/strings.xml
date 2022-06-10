@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Rock Paper Scissors</string>
-    <string name="default_web_client_id1">896605409351-a1hlsfr6dkigthpbeul0ug46c8774uoa.apps.googleusercontent.com</string>
+    <string name="default_web_client_id1">896605409351-a1hlsfr6dkigthpbeul0ug46c8774uoa.apps.googleusercontent.com
+    </string>
     <string name="title_activity_main">main_activity</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
@@ -15,9 +16,9 @@
     <string name="rock_image">rock image</string>
     <string name="paper_image">paper image</string>
     <string name="scissors_image">scissors image</string>
-    <string name="counter_value" />
+    <string name="counter_value"/>
     <string name="user_username">username</string>
-    <string name="user_rank"> </string>
+    <string name="user_rank"></string>
     <string name="match_result">3:1</string>
     <string name="menu_game">Game</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -39,7 +40,7 @@
 
     <string name="menu_friends">Friends</string>
     <string name="friends">FRIENDS</string>
-    <item name="test_for_stats_row" type="id" />
+    <item name="test_for_stats_row" type="id"/>
 
     <!-- home -->
 
@@ -127,4 +128,5 @@
     <string name="dump_dbg_infos_pref_text">Dump debug infos</string>
     <string name="dump_sys_settings_key">dump_sys_settings</string>
     <string name="rock_paper_scissors">Rock Paper Scissors</string>
+    <string name="ready_to_play">Ready to play!</string>
 </resources>
