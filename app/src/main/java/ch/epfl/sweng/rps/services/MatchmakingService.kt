@@ -125,11 +125,7 @@ open class MatchmakingService(
             ).await()
             return res.data as String
         }
-
-        /**
-         * Invites an invitation to the a player with the given [userId] to a game of the given [gameMode].
-         * @return the game id of the game that the player has been invited to.
-         */
+        
         suspend fun invitePlayer(userId: String, gameMode: GameMode): String {
             val res = functions.getHttpsCallable("invite_player").call(
                 hashMapOf(
