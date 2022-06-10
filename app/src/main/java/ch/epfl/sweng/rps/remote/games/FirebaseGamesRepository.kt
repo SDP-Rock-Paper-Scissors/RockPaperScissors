@@ -1,11 +1,7 @@
 package ch.epfl.sweng.rps.remote.games
 
-import ch.epfl.sweng.rps.models.remote.Game
-import ch.epfl.sweng.rps.models.remote.Invitation
-import ch.epfl.sweng.rps.models.remote.TotalScore
-import ch.epfl.sweng.rps.models.remote.UserStats
+import ch.epfl.sweng.rps.models.remote.*
 import ch.epfl.sweng.rps.remote.FirebaseRepository
-import ch.epfl.sweng.rps.utils.toListOf
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
@@ -50,8 +46,10 @@ class FirebaseGamesRepository(internal val repository: FirebaseRepository) : Gam
     }
 
     override suspend fun listInvitations(): List<Invitation> {
-        return firebase.invitationsOfUid(repository.getCurrentUid()).get()
-            .await().documents.toListOf()
+        return firebase.invitationsCollection
+            .whereArrayContains(Invitation.FIELDS.UIDS, repository.getCurrentUid())
+            .whereEqualTo(Invitation.FIELDS.STATUS, FriendRequest.Status.PENDING)
+            .get().await().toObjects(Invitation::class.java)
     }
 
 }

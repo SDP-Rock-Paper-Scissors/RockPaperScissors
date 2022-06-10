@@ -54,6 +54,14 @@ open class MatchmakingService(
 
 
     /**
+     * Declines an invitation to a game.
+     */
+    suspend fun declineInvitation(invitationId: String) {
+        cloudFunctions.declineInvitation(invitationId)
+    }
+
+
+    /**
      * This function returns the current game's [FirebaseGameService]
      * if there is one game in progress.
      */
@@ -118,6 +126,10 @@ open class MatchmakingService(
             return res.data as String
         }
 
+        /**
+         * Invites an invitation to the a player with the given [userId] to a game of the given [gameMode].
+         * @return the game id of the game that the player has been invited to.
+         */
         suspend fun invitePlayer(userId: String, gameMode: GameMode): String {
             val res = functions.getHttpsCallable("invite_player").call(
                 hashMapOf(
@@ -134,6 +146,14 @@ open class MatchmakingService(
                     "invitation_id" to invitationId
                 )
             ).await().data as String
+        }
+
+        suspend fun declineInvitation(invitationId: String) {
+            functions.getHttpsCallable("decline_invitation").call(
+                hashMapOf(
+                    "invitation_id" to invitationId
+                )
+            ).await()
         }
     }
 }

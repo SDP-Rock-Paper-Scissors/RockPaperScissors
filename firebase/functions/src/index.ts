@@ -101,8 +101,9 @@ export const invite_player = eu.https.onCall(async (data, context) => {
 
   const gamemodes = await get_gamemodes();
 
-  if (!gamemodes.some(gm => gm.name === game_mode)) {
-    throw new https.HttpsError("invalid-argument", `Provided gamemode \`${game_mode}\` is invalid`);
+  if (gamemodes.map(gm => gm.toString()).indexOf(game_mode) === -1) {
+    throw new https.HttpsError("invalid-argument", `Provided gamemode \`${game_mode.toString()
+      }\` is invalid because it is not in the list of available gamemodes : ${gamemodes.map(gm => gm.toString()).join(", ")}`);
   }
 
   const user = await prod.collection("users").doc(user_id).get();
@@ -113,14 +114,16 @@ export const invite_player = eu.https.onCall(async (data, context) => {
   const game = createGame(new GameMode(game_mode));
   addPlayer(game, uid);
 
+  const id = prod.collection("invitations").doc().id;
   const invitation = {
-    game: game.id,
+    game_id: game.id,
     timestamp: Timestamp.now(),
-    inviter: uid,
-    invitation_id: randomUUID()
+    uids: [uid, user_id],
+    id: id,
+    status: Status[Status.PENDING],
   };
 
-  await prod.collection("users").doc(user_id).collection("invitations").doc(invitation.invitation_id).set(invitation);
+  await prod.collection("invitations").doc(invitation.id).set(invitation);
   return game.id;
 })
 
@@ -136,25 +139,45 @@ export const accept_invitation = eu.https.onCall(async (data, context) => {
     throw new https.HttpsError("invalid-argument", "invitation_id is required");
   }
 
-  const invitation = await prod.collection("users").doc(uid).collection("invitations").doc(invitation_id).get();
+  const invitation = await prod.collection("invitations").doc(invitation_id).get();
   if (!invitation.exists) {
     throw new https.HttpsError("not-found", "Invitation not found");
   }
 
-  const game = await prod.collection("games").doc(invitation.data()!.game).get();
-  if (!game.exists) {
+  const gameDoc = await prod.collection("games").doc(invitation.data()!.game_id).get();
+  if (!gameDoc.exists) {
     throw new https.HttpsError("not-found", "Game not found");
   }
+  const game = gameDoc.data() as Game;
 
-  if (game.data()!.player_count >= new GameMode(game.data()!.game_mode).max_player_count) {
+  if (game.player_count >= new GameMode(game.game_mode).max_player_count) {
     throw new https.HttpsError("invalid-argument", "Game is full");
   }
 
-  addPlayer(game.data() as Game, uid);
+  addPlayer(game, uid);
   //! TRANSACTION !!!
-  await prod.collection("games").doc(game.id).set(game.data() as Game);
-  await prod.collection("users").doc(uid).collection("invitations").doc(invitation_id).delete();
+  await prod.collection("games").doc(game.id).set(game);
+  await prod.collection("invitations").doc(invitation_id).update({ status: Status[Status.ACCEPTED] });
   return game.id;
+})
+
+export const decline_invitation = eu.https.onCall(async (data, context) => {
+  const invitation_id = data.invitation_id as string | undefined;
+  const uid = context.auth?.uid;
+  if (uid === undefined) {
+    throw new https.HttpsError("unauthenticated", "User is not authenticated");
+  }
+
+  if (invitation_id === undefined) {
+    throw new https.HttpsError("invalid-argument", "invitation_id is required");
+  }
+
+  const invitation = await prod.collection("invitations").doc(invitation_id).get();
+  if (!invitation.exists) {
+    throw new https.HttpsError("not-found", "Invitation not found");
+  }
+
+  await prod.collection("invitations").doc(invitation_id).update({ status: Status[Status.REJECTED] });
 })
 
 async function get_gamemodes(): Promise<GameMode[]> {
@@ -241,7 +264,7 @@ interface round_map {
 }
 
 interface hands_map {
-  [key: string]: Hand;
+  [key: string]: string;
 }
 
 interface Round {
@@ -251,4 +274,8 @@ interface Round {
 
 enum Hand {
   ROCK, PAPER, SCISSORS, NONE
+}
+
+enum Status {
+  PENDING, ACCEPTED, REJECTED
 }
