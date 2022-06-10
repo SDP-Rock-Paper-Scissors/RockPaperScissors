@@ -63,10 +63,7 @@ class MatchmakingFragment : Fragment() {
             if (loading) View.VISIBLE else View.GONE
     }
 
-    private fun isTest(): Boolean {
-        requireActivity()
-        return requireActivity().intent.getBooleanExtra(TEST_MODE, false)
-    }
+    private fun isTest(): Boolean = requireActivity().intent.getBooleanExtra(TEST_MODE, false)
 
     private suspend fun startMatchmaking() {
         val mm = ServiceLocator.getInstance().matchmakingService
