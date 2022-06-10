@@ -141,7 +141,7 @@ class SettingsPageTest {
         ServiceLocator.setCurrentEnv(Env.Test)
         val repo = ServiceLocator.getInstance().repository as LocalRepository
         repo.setCurrentUid("player1")
-        repo.userGames.clear()
+        repo.gamesMap.clear()
         repo.users.clear()
     }
 
