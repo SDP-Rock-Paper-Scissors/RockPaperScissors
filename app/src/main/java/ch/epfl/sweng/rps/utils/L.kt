@@ -12,6 +12,7 @@ object L {
     fun allInstances(): Map<String, LogService> = instances
 
     fun of(name: String): LogService = instances.getOrPut(name) { LogService(name) }
+
     fun of(activity: Activity): LogService = of(activity::class.java)
     fun of(fragment: Fragment): LogService = of(fragment::class.java)
     fun of(clazz: Class<*>): LogService = of(clazz.simpleName)

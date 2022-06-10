@@ -7,8 +7,8 @@ import com.google.firebase.storage.FirebaseStorage
  * Instantiating this class necessitates the Firebase SDK to be initialized.
  */
 class FirebaseReferences {
-    private val root = FirebaseFirestore.getInstance()
-    private val storageRoot = FirebaseStorage.getInstance().reference
+    val root = FirebaseFirestore.getInstance()
+    val storageRoot = FirebaseStorage.getInstance().reference
 
     /**
      * Thefriend request collection.

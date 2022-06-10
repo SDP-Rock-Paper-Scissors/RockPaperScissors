@@ -1,6 +1,7 @@
-package ch.epfl.sweng.rps.remote
+package ch.epfl.sweng.rps.db
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import ch.epfl.sweng.rps.remote.Env
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class EnvTest {

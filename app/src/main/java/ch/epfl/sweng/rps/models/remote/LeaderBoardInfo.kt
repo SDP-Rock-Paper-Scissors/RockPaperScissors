@@ -18,4 +18,4 @@ data class LeaderBoardInfo(
     var uid: String = "",
     var userProfilePictureUrl: Uri? = null,
     var point: Int = 0
-)
+    )

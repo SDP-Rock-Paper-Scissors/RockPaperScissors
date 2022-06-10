@@ -76,8 +76,14 @@
             android:id="@+id/action_nav_friends_to_infoPage_Fragment3"
             app:destination="@id/infoPage_Fragment" />
         <action
-            android:id="@+id/action_nav_friends_to_gameFragment2"
-            app:destination="@id/gameFragment" />
+            android:id="@+id/action_nav_friends_to_requestFragment"
+            app:destination="@id/requestFragment" />
+        <action
+            android:id="@+id/action_nav_friends_to_matchmakingFragment2"
+            app:destination="@id/matchmakingFragment" />
+        <action
+            android:id="@+id/action_nav_friends_to_gameModeDialogFragment"
+            app:destination="@id/gameModeDialogFragment" />
     </fragment>
 
     <fragment
@@ -103,9 +109,9 @@
         <argument
             android:name="winRateText"
             app:argType="string" />
-        <argument
-            android:name="isOnline"
-            app:argType="boolean" />
+        <action
+            android:id="@+id/action_infoPage_Fragment_to_gameModeDialogFragment"
+            app:destination="@id/gameModeDialogFragment" />
     </fragment>
 
     <activity
@@ -151,6 +157,22 @@
             android:id="@+id/action_matchmakingFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.RequestFragment"
+        android:label="request_fragment"
+        tools:layout="@layout/request_fragment" />
+    <dialog
+        android:id="@+id/gameModeDialogFragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.GameModeDialogFragment"
+        android:label="GameModeDialogFragment" >
+        <action
+            android:id="@+id/action_gameModeDialogFragment_to_matchmakingFragment"
+            app:destination="@id/matchmakingFragment" />
+        <argument
+            android:name="uid"
+            app:argType="string" />
+    </dialog>
 
 
 </navigation>

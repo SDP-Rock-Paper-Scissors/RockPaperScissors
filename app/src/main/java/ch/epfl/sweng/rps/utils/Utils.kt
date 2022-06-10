@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package ch.epfl.sweng.rps.utils
 
 import android.app.Activity

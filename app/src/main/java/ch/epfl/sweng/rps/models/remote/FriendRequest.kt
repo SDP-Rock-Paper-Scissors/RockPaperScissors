@@ -22,7 +22,6 @@ data class FriendRequest(
     @PropertyName(FIELDS.ID)
     val id: String = ""
 ) {
-
     /**
      * The requester of the friend request is the first user in the list.
      */

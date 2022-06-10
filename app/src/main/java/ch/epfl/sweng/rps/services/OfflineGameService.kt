@@ -1,11 +1,12 @@
 package ch.epfl.sweng.rps.services
 
+import ch.epfl.sweng.rps.remote.Repository
+import ch.epfl.sweng.rps.models.*
 import ch.epfl.sweng.rps.models.remote.Game
 import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.remote.Round
 import ch.epfl.sweng.rps.models.xbstract.ComputerPlayer
-import ch.epfl.sweng.rps.remote.Repository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.delay
 
@@ -18,6 +19,9 @@ class OfflineGameService(
     val artificialMovesDelay: Long = DEFAULT_DELAY
 ) : GameService() {
 
+    companion object {
+        private const val DEFAULT_DELAY = 100L
+    }
 
     private var _disposed = false
 
@@ -31,26 +35,8 @@ class OfflineGameService(
         get() {
             return game?.done ?: return false
         }
-    private val currentHands get() = currentRound.hands as MutableMap
-    override val currentGame: Game
-        get() {
-            checkNotDisposed()
-            if (game == null) {
-                throw error
-                    ?: GameServiceException("Game service has not received a game yet")
-            } else {
-                return game!!
-            }
-        }
-    override val currentRound: Round
-        get() = game!!.rounds[game!!.current_round.toString()]!!
-    override val isGameFull: Boolean
-        get() = true
-    override val isDisposed: Boolean
-        get() = _disposed
-    override val started: Boolean
-        get() = game != null
-    override val imTheOwner get() = true
+
+
     override suspend fun addRound(): Round {
         checkNotDisposed()
         val round = Round.Rps(
@@ -62,9 +48,12 @@ class OfflineGameService(
         return round
     }
 
+
     private fun setRound(round: Round) {
         (currentGame.rounds as MutableMap)[game!!.current_round.toString()] = round
     }
+
+    private val currentHands get() = currentRound.hands as MutableMap
 
     override suspend fun playHand(hand: Hand) {
         checkNotDisposed()
@@ -92,6 +81,24 @@ class OfflineGameService(
         }
     }
 
+    override val currentGame: Game
+        get() {
+            checkNotDisposed()
+            if (game == null) {
+                throw error
+                    ?: GameServiceException("Game service has not received a game yet")
+            } else {
+                return game!!
+            }
+        }
+
+    override val currentRound: Round
+        get() = game!!.rounds[game!!.current_round.toString()]!!
+
+    override val isGameFull: Boolean
+        get() = true
+
+
     override fun dispose() {
         checkNotDisposed()
         _disposed = true
@@ -101,7 +108,14 @@ class OfflineGameService(
     override fun stopListening() {
     }
 
+    override val isDisposed: Boolean
+        get() = _disposed
+
+    override val started: Boolean
+        get() = game != null
+
     override suspend fun refreshGame(): Game = game!!
+
     override fun startListening(): GameService {
         checkNotDisposed()
         val round = Round.Rps(
@@ -127,15 +141,13 @@ class OfflineGameService(
         }
     }
 
+    override val imTheOwner get() = true
+
     override suspend fun awaitForAllHands() {
         awaitFor { currentRound.hands.size == 2 }// 2 is the number of players, for now hardcoded
     }
 
     override suspend fun awaitForRoundAdded() {
         awaitFor { true }
-    }
-
-    companion object {
-        private const val DEFAULT_DELAY = 100L
     }
 }

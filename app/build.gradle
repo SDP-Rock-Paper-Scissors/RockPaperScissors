@@ -118,6 +118,7 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-contrib:3.4.0') {
         exclude module: "protobuf-lite"
     }
+    implementation('androidx.test.espresso:espresso-idling-resource:3.4.0')
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:30.0.2')

@@ -23,9 +23,9 @@ class OfflineTicTacToe(val view: TicTacToeFragment, player: MOVES) : TicTacToeGa
         if (calculate()) return
         val opponent = if (player == MOVES.CROSS) MOVES.CIRCLE else MOVES.CROSS
         while (true) {
-            val oppChoice = player2.makeMove()
-            val cell = oppChoice.second
-            val row = oppChoice.first
+            var oppChoice = player2.makeMove()
+            var cell = oppChoice.second
+            var row = oppChoice.first
             if (matrix[row][cell] == MOVES.EMPTY) {
                 matrix[row][cell] = opponent
                 view.updateUI((row * 3) + cell, opponent)

@@ -3,18 +3,21 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
+import ch.epfl.sweng.rps.models.*
 import androidx.annotation.VisibleForTesting
+import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.FriendRequestInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
 import ch.epfl.sweng.rps.models.ui.UserStat
 import ch.epfl.sweng.rps.remote.FirebaseHelper
 import ch.epfl.sweng.rps.remote.FirebaseRepository
-import ch.epfl.sweng.rps.remote.Repository
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.L
+import java.net.InetAddress
 import ch.epfl.sweng.rps.utils.SuspendResult
 import ch.epfl.sweng.rps.utils.guardSuspendable
-import ch.epfl.sweng.rps.utils.isInternetAvailable
 
 /**
  * This class is to be used as the main reference for all data operations.
@@ -32,6 +35,8 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
     private var userPicture: Bitmap? = null
     private var userStatData: List<UserStat>? = null
     private var leaderBoardData: List<LeaderBoardInfo>? = null
+    private lateinit var myFriends: List<FriendsInfo>
+    private lateinit var myFriendReqs: List<FriendRequestInfo>
 
     private val repo get() = repoOverride ?: ServiceLocator.getInstance().repository
     private var repoOverride: Repository? = null
@@ -95,6 +100,7 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         storage.writeBackUser(user)
     }
 
+
     /**
      * Updates the stats data in both firebase and local storage.
      * @param statsData The stats data to be updated
@@ -122,8 +128,9 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         if (!isInternetAvailable()) {
             return getUserPicture()
         }
-        if (user == null)
+        if(user == null)
             return null
+
         userPicture = repo.getUserProfilePictureImage(user!!.uid)
         Log.d("UserPic", userPicture.toString())
         userPicture?.let { storage.writeBackUserPicture(it) }
@@ -139,6 +146,7 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         repo.setUserProfilePicture(bitmap)
         storage.writeBackUserPicture(bitmap)
     }
+
 
     /**
      * Retrieves the stats data from cache or local storage.
@@ -175,15 +183,18 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         }
     }
 
+
     /**
      * MAINLY FOR TESTING
      * Updates the leaderboard data in cache and localStorage
      * @param lBData the new leaderboard data
      */
     fun updateLeaderBoardData(lBData: List<LeaderBoardInfo>) {
+
         leaderBoardData = lBData
         storage.writeBackLeaderBoardData(lBData)
     }
+
 
     /**
      * Gets leaderboard data from cache or local storage
@@ -194,6 +205,7 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         leaderBoardData = storage.getLeaderBoardData() ?: listOf()
         return leaderBoardData!!
     }
+
 
     /**
      * Gets leaderboard data firebase.
@@ -220,6 +232,50 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
         }
     }
 
+    fun getFriends():List<FriendsInfo> {
+        if(::myFriends.isInitialized) return myFriends
+        myFriends = storage.getFriends() ?: listOf()
+        return myFriends
+    }
+
+    suspend fun getFriendsAsync():List<FriendsInfo>{
+        if(!isInternetAvailable()) {
+            Log.d("CACHE", "INTERNET NOT AVAILABLE")
+            return getFriends()
+        }
+        myFriends = FirebaseHelper.getFriends()
+        Log.d("Cache", myFriends.size.toString())
+        storage.writeBackFriends(myFriends)
+        return myFriends
+    }
+
+    fun getFriendReqs():List<FriendRequestInfo> {
+        if(::myFriendReqs.isInitialized) return myFriendReqs
+        myFriendReqs = storage.getFriendReqs() ?: listOf()
+        return myFriendReqs
+    }
+
+    suspend fun getFriendReqsAsync():List<FriendRequestInfo>{
+        if(!isInternetAvailable()) {
+            Log.d("CACHE", "INTERNET NOT AVAILABLE")
+            return getFriendReqs()
+        }
+        myFriendReqs = FirebaseHelper.getFriendReqs()
+        Log.d("Cache", myFriends.size.toString())
+        storage.writeBackFriendReqs(myFriendReqs)
+        return myFriendReqs
+    }
+
+    fun isInternetAvailable(): Boolean {
+        return try {
+            val ipAddr: InetAddress = InetAddress.getByName("www.google.com")
+            //You can replace it with your name
+            !ipAddr.equals("")
+        } catch (e: Exception) {
+            Log.d("Cache", e.toString())
+            false
+        }
+    }
     /**
      * Clears the cache and local storage.
      */
@@ -258,6 +314,5 @@ class Cache private constructor(ctx: Context, val preferFresh: Boolean = false) 
             return cache
         }
     }
-
 
 }

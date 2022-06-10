@@ -15,26 +15,6 @@ data class GameMode(
     val timeLimit: Int,
     val edition: GameEdition
 ) {
-
-
-    override fun toString(): String = toGameModeString()
-    fun toGameModeString(): String {
-        val map = listOf(
-            "P" to playerCount.toString(),
-            "MT" to type.name,
-            "R" to rounds.toString(),
-            "T" to timeLimit.toString(),
-            "GE" to edition.id
-        )
-        return map
-            .sortedBy { it.first }
-            .joinToString(",") { "${it.first}:${it.second}" }
-    }
-
-    fun String.toGameMode(): GameMode {
-        return fromString(this)
-    }
-
     /**
      * The type of opponents.
      *
@@ -60,11 +40,11 @@ data class GameMode(
         TicTacToe("ttt");
 
         companion object {
-
-            private val ids by lazy { values().associateBy { it.id } }
             fun fromId(id: String): GameEdition {
                 return ids[id] ?: throw IllegalArgumentException("Unknown game edition id: $id")
             }
+
+            private val ids by lazy { values().associateBy { it.id } }
         }
     }
 
@@ -102,5 +82,26 @@ data class GameMode(
                 edition = GameEdition.fromId(edition)
             )
         }
+    }
+
+
+    override fun toString(): String = toGameModeString()
+
+    fun toGameModeString(): String {
+        val map = listOf(
+            "P" to playerCount.toString(),
+            "MT" to type.name,
+            "R" to rounds.toString(),
+            "T" to timeLimit.toString(),
+            "GE" to edition.id
+        )
+        return map
+            .sortedBy { it.first }
+            .joinToString(",") { "${it.first}:${it.second}" }
+    }
+
+
+    fun String.toGameMode(): GameMode {
+        return fromString(this)
     }
 }

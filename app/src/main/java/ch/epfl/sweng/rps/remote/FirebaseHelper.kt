@@ -1,12 +1,11 @@
 package ch.epfl.sweng.rps.remote
 
+
 import android.net.Uri
 import ch.epfl.sweng.rps.R
-import ch.epfl.sweng.rps.models.remote.Hand
-import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
-import ch.epfl.sweng.rps.models.remote.User
-import ch.epfl.sweng.rps.models.ui.RoundStat
-import ch.epfl.sweng.rps.models.ui.UserStat
+import ch.epfl.sweng.rps.models.*
+import ch.epfl.sweng.rps.models.remote.*
+import ch.epfl.sweng.rps.models.ui.*
 import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.utils.Option
 import java.text.SimpleDateFormat
@@ -68,6 +67,7 @@ object FirebaseHelper {
                 gameRounds.map { it.value.computeScores() }.filter { it.isNotEmpty() }
             val userScore = allRoundScores.sumOf { scores ->
                 val max = scores.maxOf { it.points }
+
                 if (scores.any { it.points == max && it.uid == userid && !scores.all { score -> score.points == max } })
                     1L
                 else
@@ -177,6 +177,7 @@ object FirebaseHelper {
                 repo.getUserProfilePictureUrl(score.uid).asData?.value.let { Uri.parse(it.toString()) }
             if (leaderBoardInfo.userProfilePictureUrl == null) {
                 leaderBoardInfo.userProfilePictureUrl =
+
                     Uri.parse("android.resource://ch.epfl.sweng.rps/" + R.drawable.profile_img)
 
             }
@@ -185,6 +186,78 @@ object FirebaseHelper {
         }
         return allPlayers
     }
+    /**
+     * This function returns the your friends.
+     */
+    suspend fun getFriends(): List<FriendsInfo> {
+        val fbRepo = ServiceLocator.getInstance().repository
+        val userId = fbRepo.rawCurrentUid()
+        val friends = fbRepo.friends.getFriends()
+        val friendList = mutableListOf<FriendsInfo>()
+
+        for (friend in friends) {
+            val user = fbRepo.getUser(friend)
+            val userStats = fbRepo.games.statsOfUser(friend)
+            val friendsInfo = userId?.let {
+                FriendsInfo(
+                    username = user.asData?.value?.username?: "UsernameEmpty",
+                    uid = it,
+                    gamesPlayed = userStats.total_games,
+                    gamesWon = userStats.wins,
+                    winRate = userStats.winRate,
+                    isOnline = true)
+            }
+
+            if (friendsInfo != null) {
+                friendList.add(friendsInfo)
+            }
+        }
+        return friendList
+    }
+    /**
+     * This function returns your friend requests.
+     */
+    suspend fun getFriendReqs(): List<FriendRequestInfo> {
+        val fbRepo = ServiceLocator.getInstance().repository
+        val friendRequest = fbRepo.friends.listFriendRequests()
+        val reqList = mutableListOf<FriendRequestInfo>()
+        val uid = fbRepo.rawCurrentUid()
+
+        for (req in friendRequest) {
+            if (req.from != uid && req.status == FriendRequest.Status.PENDING) {
+                val user = fbRepo.getUser(req.from)
+                val friendsReq = FriendRequestInfo(
+                    username = user.asData?.value?.username?: "UsernameEmpty",
+                    uid = req.from
+                )
+                reqList.add(friendsReq)
+            }
+        }
+        return reqList
+    }
+
+   /* suspend fun getInvites(): List<InvitationInfo> {
+        val fbRepo = ServiceLocator.getInstance().repository
+        val uid = fbRepo.rawCurrentUid()
+        val friendInvite = uid?.let { fbRepo.friends.listInvitations(it) }
+        val myInvites = mutableListOf<InvitationInfo>()
+
+
+        if (friendInvite != null) {
+            for (invite in friendInvite) {
+                if (invite.from != uid && invite.id == uid){
+                    val user = fbRepo.getUser(invite.from)
+                    val invitation = InvitationInfo(
+                        username = user.asData?.value?.username?: "UsernameEmpty",
+                        uid = invite.from
+                    )
+                    myInvites.add(invitation)
+                }
+            }
+        }
+        return myInvites
+    } */
+
 }
 
 

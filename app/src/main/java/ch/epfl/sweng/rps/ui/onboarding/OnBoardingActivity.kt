@@ -25,7 +25,7 @@ class OnBoardingActivity : AppCompatActivity() {
             )
         }
 
-        private fun setFirstTime(context: Context, isFirstTime: Boolean) {
+        fun setFirstTime(context: Context, isFirstTime: Boolean) {
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
             sharedPref.edit().putBoolean(
                 context.getString(R.string.is_first_time), isFirstTime

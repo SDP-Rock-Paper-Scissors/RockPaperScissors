@@ -21,7 +21,7 @@ class TicTacToeFragment : Fragment() {
     private lateinit var viewModel: TicTacToeViewModel
     private var boxList = mutableListOf<ImageView>()
     lateinit var game: TicTacToeGame
-    private lateinit var outcomeText: TextView
+    lateinit var outcomeText: TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,10 +37,10 @@ class TicTacToeFragment : Fragment() {
             (requireArguments().get("MODE") ?: TicTacToeGame.MODE.PC) as TicTacToeGame.MODE
         val choice: TicTacToeGame.MOVES =
             (requireArguments().get("PLAYER") ?: TicTacToeGame.MOVES.CROSS) as TicTacToeGame.MOVES
-        game = if (mode == TicTacToeGame.MODE.PC)
-            OfflineTicTacToe(this, choice)
+        if (mode == TicTacToeGame.MODE.PC)
+            game = OfflineTicTacToe(this, choice)
         else
-            MultiplayerTicTacToe(this, choice)
+            game = MultiplayerTicTacToe(this, choice)
         val boxMatrix = view.findViewById<LinearLayout>(R.id.matrix)
         val boxes = boxMatrix.children
             .filter { it is LinearLayout }

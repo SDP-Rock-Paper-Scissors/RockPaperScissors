@@ -2,11 +2,11 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/stats_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
     android:orientation="vertical"
+    android:id="@+id/stats_card"
     app:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.widget.Space
+            <Space
                 android:layout_width="145dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -42,7 +42,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <android.widget.Space
+            <Space
                 android:layout_width="250dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -57,7 +57,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <android.widget.Space
+            <Space
                 android:layout_width="145dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.widget.Space
+            <Space
                 android:layout_width="145dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -99,7 +99,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <android.widget.Space
+            <Space
                 android:layout_width="145dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />

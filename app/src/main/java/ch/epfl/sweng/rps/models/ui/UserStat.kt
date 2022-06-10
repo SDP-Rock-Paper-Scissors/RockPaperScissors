@@ -15,6 +15,7 @@ package ch.epfl.sweng.rps.models.ui
  * @constructor Creates an empty group of UserStat data class.
  */
 data class UserStat(
+
     var gameId: String = "",
     var date: String = "",
     var opponents: String = "",
@@ -22,4 +23,5 @@ data class UserStat(
     var userScore: String = "",
     var opponentScore: String = "",
     var outCome: Int = 0,
+
 )

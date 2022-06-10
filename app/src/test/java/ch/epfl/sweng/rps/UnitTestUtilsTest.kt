@@ -1,6 +1,6 @@
 package ch.epfl.sweng.rps
 
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class UnitTestUtilsTest {

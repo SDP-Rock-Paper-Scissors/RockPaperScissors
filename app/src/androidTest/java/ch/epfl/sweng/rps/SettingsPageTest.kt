@@ -92,6 +92,7 @@ class SettingsPageTest {
     }
 
 
+
     @Test
     fun testSettingsPage() {
         onView(withId(R.id.settings)).check(matches(isDisplayed()))

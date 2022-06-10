@@ -3,9 +3,13 @@ package ch.epfl.sweng.rps.persistence
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import ch.epfl.sweng.rps.models.*
+import com.google.gson.Gson
 import android.net.Uri
 import ch.epfl.sweng.rps.models.remote.LeaderBoardInfo
 import ch.epfl.sweng.rps.models.remote.User
+import ch.epfl.sweng.rps.models.ui.FriendRequestInfo
+import ch.epfl.sweng.rps.models.ui.FriendsInfo
 import ch.epfl.sweng.rps.models.ui.UserStat
 import com.google.gson.*
 import java.io.ByteArrayOutputStream
@@ -49,6 +53,47 @@ class PrivateStorage constructor(val context: Context) : Storage {
         val arr = gson.fromJson(json, Array<UserStat>::class.java)
         return arr.toList()
     }
+
+    override fun removeFile(file: Storage.FILES): Boolean {
+        return false
+    }
+
+    override fun getUserDetails(): User? {
+        return null
+    }
+
+    override fun getFriends(): List<FriendsInfo>? {
+        val statsFile = getFile(Storage.FILES.FRIENDS)
+        if (!statsFile.exists())
+            return null
+        val json = statsFile.readText()
+        val arr = Gson().fromJson(json, Array<FriendsInfo>::class.java)
+        return arr.toList()
+    }
+
+    override fun getFriendReqs(): List<FriendRequestInfo>? {
+        val statsFile = getFile(Storage.FILES.REQUESTS)
+        if (!statsFile.exists())
+            return null
+        val json = statsFile.readText()
+        val arr = Gson().fromJson(json, Array<FriendRequestInfo>::class.java)
+        return arr.toList()
+    }
+
+    override fun writeBackFriends(data : List<FriendsInfo>){
+        val gson = Gson()
+        val json = gson.toJson(data.toTypedArray(), Array<UserStat>::class.java)
+        val f = getFile(Storage.FILES.FRIENDS)
+        f.writeText(json)
+    }
+
+    override fun writeBackFriendReqs(data : List<FriendRequestInfo>){
+        val gson = Gson()
+        val json = gson.toJson(data.toTypedArray(), Array<UserStat>::class.java)
+        val f = getFile(Storage.FILES.REQUESTS)
+        f.writeText(json)
+    }
+
 
     override fun getLeaderBoardData(): List<LeaderBoardInfo>? {
         val leaderBoardFile = getFile(Storage.FILES.LEADERBOARDDATA)

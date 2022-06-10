@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.services
 
-import ch.epfl.sweng.rps.services.GameService.GameServiceException
-import org.junit.jupiter.api.Assertions.assertThrows
+import ch.epfl.sweng.rps.services.GameService.*
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class GameServiceTest {

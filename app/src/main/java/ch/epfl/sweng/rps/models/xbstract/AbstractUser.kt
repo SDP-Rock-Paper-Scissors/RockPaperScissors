@@ -8,5 +8,5 @@ abstract class AbstractUser {
     abstract val games_history_privacy: String
     abstract val has_profile_photo: Boolean
 
-    fun gamesHistoryPrivacyEnum(): User.Privacy = User.Privacy.valueOf(games_history_privacy)
+    open fun gamesHistoryPrivacyEnum(): User.Privacy = User.Privacy.valueOf(games_history_privacy)
 }

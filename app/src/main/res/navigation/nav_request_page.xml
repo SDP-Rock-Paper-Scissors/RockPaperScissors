@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_request_page"
+    app:startDestination="@id/addFriendFragment">
+
+    <fragment
+        android:id="@+id/addFriendFragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.AddFriendFragment"
+        android:label="fragment_add_friend"
+        tools:layout="@layout/fragment_add_friend" >
+        <action
+            android:id="@+id/action_addFriendFragment_to_myFriendRequestsFragment"
+            app:destination="@id/myFriendRequestsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myFriendRequestsFragment"
+        android:name="ch.epfl.sweng.rps.ui.friends.MyFriendRequestsFragment"
+        android:label="fragment_my_friend_requests"
+        tools:layout="@layout/fragment_my_friend_requests" >
+        <action
+            android:id="@+id/action_myFriendRequestsFragment_to_addFriendFragment"
+            app:destination="@id/addFriendFragment" />
+    </fragment>
+</navigation>

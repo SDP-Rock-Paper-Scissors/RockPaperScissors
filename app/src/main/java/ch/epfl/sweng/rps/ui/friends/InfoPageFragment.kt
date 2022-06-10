@@ -26,16 +26,11 @@ class InfoPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onlineImage = view.findViewById<ImageView>(R.id.onlineImage_infoPage)
-        val offlineImage = view.findViewById<ImageView>(R.id.offlineImage_infoPage)
         val username = view.findViewById<TextView>(R.id.userName_infoPage)
         val gamesPlayed = view.findViewById<TextView>(R.id.gamesPlayedText_infoPage)
         val gamesWon = view.findViewById<TextView>(R.id.gamesWonText_infoPage)
         val winRate = view.findViewById<TextView>(R.id.winRateText_infoPage)
-        val isOnline = InfoPageFragmentArgs.fromBundle(requireArguments()).isOnline
 
-        onlineImage.visibility = if (isOnline) View.VISIBLE else View.INVISIBLE
-        offlineImage.visibility = if (isOnline) View.INVISIBLE else View.VISIBLE
 
         username.text = InfoPageFragmentArgs.fromBundle(requireArguments()).username
         gamesPlayed.text = InfoPageFragmentArgs.fromBundle(requireArguments()).gamesPlayedText
@@ -50,11 +45,8 @@ class InfoPageFragment : Fragment() {
         }
 
         playButton.setOnClickListener {
-            findNavController().navigate(
-                InfoPageFragmentDirections.actionInfoPageFragmentToGameFragment2(
-                    null
-                )
-            )
+            var dialog = GameModeDialogFragment()
+            dialog.show(parentFragmentManager,"gameModeDialog")
         }
 
     }

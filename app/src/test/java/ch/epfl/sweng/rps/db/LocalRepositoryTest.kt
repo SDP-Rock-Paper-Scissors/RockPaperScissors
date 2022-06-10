@@ -1,10 +1,10 @@
-package ch.epfl.sweng.rps.remote
+package ch.epfl.sweng.rps.db
 
-import ch.epfl.sweng.rps.models.remote.FriendRequest.Status
+import ch.epfl.sweng.rps.remote.Repository.UserNotLoggedIn
 import ch.epfl.sweng.rps.models.remote.Game
 import ch.epfl.sweng.rps.models.remote.Invitation
 import ch.epfl.sweng.rps.models.remote.User
-import ch.epfl.sweng.rps.remote.Repository.UserNotLoggedIn
+import ch.epfl.sweng.rps.remote.LocalRepository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -75,7 +75,7 @@ class LocalRepositoryTest {
         localRepository.sendFriendRequestTo(u2)
 
         localRepository.setCurrentUid(u2)
-        localRepository.friends.changeFriendRequestToStatus(u1, Status.ACCEPTED)
+        localRepository.acceptFriendRequest(u1)
 
         assertTrue(localRepository.getFriends().contains(u1))
         assertEquals(1, localRepository.getFriends().size)
@@ -92,7 +92,7 @@ class LocalRepositoryTest {
 
         localRepository.setCurrentUid(u2)
         val friendRequest = localRepository.listFriendRequests().find { it.from == u1 }
-        localRepository.friends.changeFriendRequestToStatus(friendRequest!!.from, Status.ACCEPTED)
+        localRepository.acceptFriendRequest(friendRequest!!.from)
 
         assertTrue(localRepository.getFriends().contains(u1))
         assertEquals(1, localRepository.getFriends().size)
