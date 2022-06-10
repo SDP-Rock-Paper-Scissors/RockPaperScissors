@@ -59,7 +59,7 @@ class FriendsFragmentTest {
         repo.setCurrentUid("player1")
         repo.users.clear()
         repo.friendRequests.clear()
-        repo.userGames.clear()
+        repo.gamesMap.clear()
 
 
         repo.users["player1"] = User(

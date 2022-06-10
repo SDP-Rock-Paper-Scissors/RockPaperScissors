@@ -46,7 +46,7 @@ class FirebaseGamesRepository(internal val repository: FirebaseRepository) : Gam
 
     override suspend fun statsOfUser(uid: String): UserStats {
         return firebase.usersCollection.document(uid).collection("stats").document("games").get()
-            .await().toObject<UserStats>()!!
+            .await().toObject<UserStats>()?: UserStats(uid,0,0)
     }
 
     override suspend fun listInvitations(): List<Invitation> {
