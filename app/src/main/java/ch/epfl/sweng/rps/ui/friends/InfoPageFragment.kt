@@ -30,7 +30,6 @@ class InfoPageFragment : Fragment() {
         val gamesPlayed = view.findViewById<TextView>(R.id.gamesPlayedText_infoPage)
         val gamesWon = view.findViewById<TextView>(R.id.gamesWonText_infoPage)
         val winRate = view.findViewById<TextView>(R.id.winRateText_infoPage)
-        val isOnline = InfoPageFragmentArgs.fromBundle(requireArguments()).isOnline
 
 
         username.text = InfoPageFragmentArgs.fromBundle(requireArguments()).username

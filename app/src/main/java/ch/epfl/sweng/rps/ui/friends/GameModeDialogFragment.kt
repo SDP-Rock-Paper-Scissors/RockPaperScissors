@@ -9,8 +9,12 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import ch.epfl.sweng.rps.R
+import ch.epfl.sweng.rps.models.remote.GameMode
+import ch.epfl.sweng.rps.services.ServiceLocator
 import ch.epfl.sweng.rps.ui.game.MatchmakingFragment
+import kotlinx.coroutines.launch
 
 
 class GameModeDialogFragment: DialogFragment() {
@@ -29,7 +33,7 @@ class GameModeDialogFragment: DialogFragment() {
             val selectedID = radioGroup.checkedRadioButtonId
             val matchFrg = MatchmakingFragment()
             val args = Bundle()
-
+            val uid = GameModeDialogFragmentArgs.fromBundle(requireArguments()).uid
             if (selectedID != -1) {
                 val radio: RadioButton = rootView.findViewById(selectedID)
                 if (radio.text == "1 round") {
@@ -40,6 +44,15 @@ class GameModeDialogFragment: DialogFragment() {
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.nav_host_fragment_activity_main, matchFrg).addToBackStack(null)
                         .commit()
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        ServiceLocator.getInstance().matchmakingService.invitePlayer(userId = uid, gameMode = GameMode(
+                            2,
+                            GameMode.Type.PVP,
+                            1,
+                            0,
+                            GameMode.GameEdition.RockPaperScissors
+                        ))
+                    }
                 } else if (radio.text == "5 rounds") {
                     dismiss()
                     args.putInt("rounds", 5)
@@ -47,6 +60,15 @@ class GameModeDialogFragment: DialogFragment() {
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.nav_host_fragment_activity_main, matchFrg).addToBackStack(null)
                         .commit()
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        ServiceLocator.getInstance().matchmakingService.invitePlayer(userId = uid, gameMode = GameMode(
+                            2,
+                            GameMode.Type.PVP,
+                            5,
+                            0,
+                            GameMode.GameEdition.RockPaperScissors
+                        ))
+                    }
                 }
                 } else {
                     Toast.makeText(activity, "Please select a mode", Toast.LENGTH_SHORT).show()

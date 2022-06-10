@@ -21,15 +21,14 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
 
     @VisibleForTesting
     internal val users = mutableMapOf<String, User>()
-    private val friendRequests = mutableListOf<FriendRequest>()
+    val friendRequests = mutableListOf<FriendRequest>()
     override val friends: FriendsRepository
         get() = this
     override val games: GamesRepository
         get() = this
     internal val gamesMap = mutableMapOf<String, Game>()
     internal var leaderBoardScore = mutableListOf<TotalScore>()
-
-    @VisibleForTesting
+    internal val userGames = mutableMapOf<String, Game>()
     internal val invitations = mutableMapOf<String, Invitation>()
     internal fun setCurrentUid(newUid: String?) {
         uid = newUid
@@ -99,8 +98,6 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
         val i = friendRequests.indexOfFirst { it.users.contains(userUid) }
         friendRequests[i] = friendRequests[i].copy(status = status)
     }
-
-    val userGames = mutableMapOf<String, Game>()
 
     override suspend fun getGame(gameId: String): Game? {
         return userGames[gameId]

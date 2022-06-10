@@ -52,22 +52,13 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
 
         //Get friends from cache
         EspressoIdlingResource.increment()
-        cache = Cache.getInstance()!!
+        cache = Cache.getInstance()
         model.getFriends().observe(viewLifecycleOwner) { f ->
             recyclerView.adapter = FriendListAdapter(f, this)
             EspressoIdlingResource.decrement()
         }
         recyclerView.adapter?.notifyDataSetChanged()
 
-
-       /* val friends = mutableListOf<FriendsInfo>()
-        viewLifecycleOwner.lifecycleScope.launch{
-            val f = FirebaseHelper.getFriends()
-            Log.i("Friendfragment", "f:${f}")
-            friends.addAll(f)
-            recyclerView.adapter!!.notifyDataSetChanged()
-        }
-        recyclerView.adapter = FriendListAdapter(friends , this) */
     }
     //Button Click Listeners
     override fun onButtonClick(position: Int, friends: List<FriendsInfo>, view: View) {
@@ -75,33 +66,27 @@ class FriendsFragment : Fragment(), FriendListAdapter.OnButtonClickListener {
         val gamesPlayed = friends[position].gamesPlayed
         val gamesWon = friends[position].gamesWon
         val winRate = friends[position].winRate
-        val isOnline = friends[position].isOnline
+        val uid = friends[position].uid
 
 
         //if info button is clicked
         if (view == view.findViewById(R.id.infoButton)) {
             Log.i("Press info", "This is $username's info")
-            Toast.makeText(activity, "This is $username's info", Toast.LENGTH_SHORT).show()
             //Move to infoPage on button click
             findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToInfoPageFragment3(
                 //Passing all the info to be displayed in the Info Page
                 username,
                 "Games Played: $gamesPlayed",
                 "Games Won: $gamesWon",
-                "Win Rate: $winRate%",
-                isOnline))
+                "Win Rate: $winRate%"))
 
 
         }
         //if play button is clicked
         else if (view == view.findViewById(R.id.playButton)){
             Log.i("Press info", "You will play a game with $username")
-            Toast.makeText(activity, "You will play a game with $username", Toast.LENGTH_SHORT).show()
 
-            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameModeDialogFragment())
-
-            //Move to game fragment on button click
-           // findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameFragment2())
+            findNavController().navigate(FriendsFragmentDirections.actionNavFriendsToGameModeDialogFragment(uid))
         }
 
     }

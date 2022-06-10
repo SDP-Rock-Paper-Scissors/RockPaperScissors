@@ -1,6 +1,7 @@
 package ch.epfl.sweng.rps.ui.friends
 
 import android.content.Intent
+import android.service.autofill.Validators.not
 import android.view.View
 import android.widget.ImageButton
 import androidx.test.espresso.Espresso.onView
@@ -9,6 +10,7 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -30,6 +32,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertIsNot
 
 
 class FriendsFragmentTest {
@@ -55,6 +58,7 @@ class FriendsFragmentTest {
         repo.setCurrentUid("player1")
         repo.users.clear()
         repo.friendRequests.clear()
+        repo.userGames.clear()
 
 
         repo.users["player1"] = User(
@@ -88,8 +92,7 @@ class FriendsFragmentTest {
 
         val friends: List<FriendRequest> = listOf(
                 FriendRequest(listOf("player2","player1"), Timestamp.now() , FriendRequest.Status.ACCEPTED, "player2"),
-                FriendRequest(listOf("player3","player1"), Timestamp.now(),
-                    FriendRequest.Status.PENDING, "player3"),
+                FriendRequest(listOf("player3","player1"), Timestamp.now(), FriendRequest.Status.PENDING, "player3"),
                 FriendRequest(listOf("player1","player4"), Timestamp.now(), FriendRequest.Status.ACCEPTED,"player4")
         )
 
@@ -134,31 +137,60 @@ class FriendsFragmentTest {
         onView(withId(R.id.gamesPlayedText_infoPage)).check(matches(withText("Games Played: $gamesPlayed")))
         onView(withId(R.id.gamesWonText_infoPage)).check(matches(withText("Games Won: $gamesWon")))
         onView(withId(R.id.winRateText_infoPage)).check(matches(withText("Win Rate: $winRate%")))
-        onView(withId(R.id.onlineImage_infoPage)).check(matches(isDisplayed()))
 
     }
 
     @Test
-    fun test_GameFragmentShown_onPlayButtonClick() {
+    fun test_goesToGameFragment_onChoosing1GameMode(){
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
 
-        onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
+        onView(withId(R.id.oneGameRadioBtn)).perform(click())
+        onView(withId(R.id.confirmButton)).perform(click())
+
+        onView(withId(R.id.matchmaking_fragment)).check(matches(isDisplayed()))
     }
 
-   /* @Test
-    fun test_goesToGameFragment_onPlayButtonClick(){
+    @Test
+    fun test_goesToGameFragment_onChoosing5GameMode(){
         onView(withId(R.id.nav_friends)).perform(click())
 
         onView(withId(R.id.friendListRecyclerView))
-            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickInfoButton(R.id.infoButton)))
+            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
 
-        onView(withId(R.id.infoPage_playButton)).perform(click())
+        onView(withId(R.id.fiveGameRadioBtn)).perform(click())
+        onView(withId(R.id.confirmButton)).perform(click())
 
-        onView(withId(R.id.fragment_game)).check(matches(isDisplayed()))
-    } */
+        onView(withId(R.id.matchmaking_fragment)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_dialogFragmentCloses_onClickingCancel(){
+        onView(withId(R.id.nav_friends)).perform(click())
+
+        onView(withId(R.id.friendListRecyclerView))
+            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
+
+        onView(withId(R.id.cancelButton)).perform(click())
+
+        onView(withId(R.id.fragment_game_mode_dialog)).check(doesNotExist())
+    }
+
+    @Test
+    fun test_nothingHappens_onClickingSubmitWithoutSelection(){
+        onView(withId(R.id.nav_friends)).perform(click())
+
+        onView(withId(R.id.friendListRecyclerView))
+            .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
+
+        onView(withId(R.id.confirmButton)).perform(click())
+
+        onView(withId(R.id.fragment_game_mode_dialog)).check(matches(isDisplayed()))
+
+    }
+
 
     @Test
     fun test_returnsToFriendFragment_onBackButtonClick(){

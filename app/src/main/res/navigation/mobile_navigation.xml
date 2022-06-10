@@ -109,9 +109,6 @@
         <argument
             android:name="winRateText"
             app:argType="string" />
-        <argument
-            android:name="isOnline"
-            app:argType="boolean" />
         <action
             android:id="@+id/action_infoPage_Fragment_to_gameModeDialogFragment"
             app:destination="@id/gameModeDialogFragment" />
@@ -172,6 +169,9 @@
         <action
             android:id="@+id/action_gameModeDialogFragment_to_matchmakingFragment"
             app:destination="@id/matchmakingFragment" />
+        <argument
+            android:name="uid"
+            app:argType="string" />
     </dialog>
 
 
