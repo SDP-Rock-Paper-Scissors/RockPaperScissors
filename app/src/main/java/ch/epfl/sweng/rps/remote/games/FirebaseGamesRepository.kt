@@ -1,12 +1,13 @@
 package ch.epfl.sweng.rps.remote.games
 
 import ch.epfl.sweng.rps.models.remote.Game
+import ch.epfl.sweng.rps.models.remote.Game.Companion.toGame
+import ch.epfl.sweng.rps.models.remote.Game.Companion.toListOfGames
 import ch.epfl.sweng.rps.models.remote.Invitation
 import ch.epfl.sweng.rps.models.remote.TotalScore
 import ch.epfl.sweng.rps.models.remote.UserStats
 import ch.epfl.sweng.rps.remote.FirebaseRepository
 import ch.epfl.sweng.rps.utils.toListOf
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
@@ -19,9 +20,9 @@ class FirebaseGamesRepository(internal val repository: FirebaseRepository) : Gam
     private val firebase get() = repository.firebase
 
     override suspend fun getGame(gameId: String): Game? {
-        val doc: DocumentSnapshot = firebase.gamesCollection.document(gameId).get().await()
-        return Game.fromDocumentSnapshot(doc)
+        return firebase.gamesCollection.document(gameId).get().await().toGame()
     }
+
 
     override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
         return firebase.scoresCollection.orderBy(scoreMode, Query.Direction.DESCENDING).get()
@@ -34,14 +35,14 @@ class FirebaseGamesRepository(internal val repository: FirebaseRepository) : Gam
 
     override suspend fun gamesOfUser(uid: String): List<Game> {
         return firebase.gamesCollection.whereArrayContains(Game.FIELDS.PLAYERS, uid).get()
-            .await().documents.map { Game.fromDocumentSnapshot(it)!! }
+            .await().toListOfGames()
     }
 
     override suspend fun myActiveGames(): List<Game> {
         return firebase.gamesCollection
             .whereArrayContains(Game.FIELDS.PLAYERS, repository.getCurrentUid())
             .whereEqualTo(Game.FIELDS.DONE, false)
-            .get().await().documents.map { Game.fromDocumentSnapshot(it)!! }
+            .get().await().toListOfGames()
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {

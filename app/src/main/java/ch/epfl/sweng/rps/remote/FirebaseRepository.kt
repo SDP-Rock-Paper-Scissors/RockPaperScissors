@@ -3,6 +3,7 @@ package ch.epfl.sweng.rps.remote
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.remote.friends.FirebaseFriendsRepository
 import ch.epfl.sweng.rps.remote.friends.FriendsRepository
@@ -26,7 +27,8 @@ import java.net.URL
  * It is used to communicate with the Firebase database.
  */
 class FirebaseRepository private constructor(
-    internal val firebase: FirebaseReferences
+    internal val firebase: FirebaseReferences,
+    internal val auth: FirebaseAuth,
 ) : Repository {
 
 
@@ -45,8 +47,7 @@ class FirebaseRepository private constructor(
         }
 
     override suspend fun getUser(uid: String): SuspendResult<User?> = guardSuspendable {
-        val user = firebase.usersCollection.document(uid).get().await()
-        user?.toObject<User>()
+        firebase.usersCollection.document(uid).get().await()?.toObject<User>()
     }
 
     override suspend fun getUserProfilePictureUrl(uid: String): SuspendResult<URI?> =
@@ -91,14 +92,17 @@ class FirebaseRepository private constructor(
         user
     }
 
-    override fun rawCurrentUid(): String? = FirebaseAuth.getInstance().currentUser?.uid
+    override fun rawCurrentUid(): String? = auth.currentUser?.uid
     private fun Uri.toURI(): URI = URI(toString())
     private operator fun <T> List<T>.div(el: T): T = first { it != el }
 
     companion object {
-        internal fun createInstance(firebaseReferences: FirebaseReferences): FirebaseRepository {
-            return FirebaseRepository(firebaseReferences)
-        }
+        @VisibleForTesting
+        internal fun createInstance(
+            firebaseReferences: FirebaseReferences,
+            auth: FirebaseAuth = FirebaseAuth.getInstance()
+        ): FirebaseRepository =
+            FirebaseRepository(firebaseReferences, auth)
     }
 }
 
