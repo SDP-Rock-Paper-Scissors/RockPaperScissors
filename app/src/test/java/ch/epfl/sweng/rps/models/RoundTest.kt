@@ -1,5 +1,8 @@
 package ch.epfl.sweng.rps.models
 
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.Round
+import ch.epfl.sweng.rps.models.xbstract.PointSystem
 import com.google.firebase.Timestamp
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

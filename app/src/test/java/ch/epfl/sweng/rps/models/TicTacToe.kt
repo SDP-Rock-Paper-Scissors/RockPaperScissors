@@ -1,6 +1,8 @@
 package ch.epfl.sweng.rps.models
 
 import ch.epfl.sweng.rps.models.remote.GameMode
+import ch.epfl.sweng.rps.models.remote.Hand
+import ch.epfl.sweng.rps.models.remote.Round
 import com.google.firebase.Timestamp
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
