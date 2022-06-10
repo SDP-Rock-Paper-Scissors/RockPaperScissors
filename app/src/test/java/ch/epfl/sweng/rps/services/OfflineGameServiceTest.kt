@@ -5,13 +5,13 @@ import ch.epfl.sweng.rps.models.remote.GameMode
 import ch.epfl.sweng.rps.models.remote.Hand
 import ch.epfl.sweng.rps.models.xbstract.ComputerPlayer
 import ch.epfl.sweng.rps.remote.Repository
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 import java.util.*
 
 class OfflineGameServiceTest {
@@ -21,8 +21,9 @@ class OfflineGameServiceTest {
         listOf(RandomPlayer(listOf(Hand.PAPER, Hand.ROCK, Hand.SCISSORS)))
 
     private fun initGameService(nEvents: Int) {
-        val repo = mock<Repository> {
-            on { rawCurrentUid() } doReturn "testUserId"
+        val repo = mockk<Repository> {
+            every { rawCurrentUid() } returns "testUserId"
+            every { getCurrentUid() } returns "testUserId"
         }
 
         gameService = OfflineGameService(
@@ -91,7 +92,7 @@ class OfflineGameServiceTest {
     fun `owner is the first player`() {
         val gameService = OfflineGameService(
             gameId,
-            mock(),
+            mockk(),
             computerPlayers,
             GameMode(2, GameMode.Type.PC, 1, 0, GameMode.GameEdition.RockPaperScissors),
         )

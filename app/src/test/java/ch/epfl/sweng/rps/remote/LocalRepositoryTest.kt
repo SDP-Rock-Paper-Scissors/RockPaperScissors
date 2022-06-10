@@ -147,11 +147,12 @@ class LocalRepositoryTest {
             localRepository.setCurrentUid("user1")
             assertEquals(listOf<Invitation>(), localRepository.listInvitations())
             localRepository.invitations["invitation1"] =
-                Invitation("game1", Timestamp.now(), "user2", "invitation1")
+                Invitation("game1", Timestamp.now(), listOf("user1", "user2"), "invitation1")
             assertEquals(1, localRepository.listInvitations().size)
             assertEquals("invitation1", localRepository.listInvitations()[0].id)
             assertEquals("game1", localRepository.listInvitations()[0].game_id)
-            assertEquals("user2", localRepository.listInvitations()[0].from)
+            assertEquals("user1", localRepository.listInvitations()[0].from)
+            assertEquals("user2", localRepository.listInvitations()[0].to)
             assertTrue(localRepository.listInvitations()[0].timestamp.seconds > 0)
         }
     }

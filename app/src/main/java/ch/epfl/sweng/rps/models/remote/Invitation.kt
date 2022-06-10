@@ -10,10 +10,10 @@ data class Invitation(
     val id: String = "",
     val status: FriendRequest.Status = FriendRequest.Status.PENDING,
 ) {
-    val inviter: String
+    val from: String
         get() = uids[0]
 
-    val invitee: String
+    val to: String
         get() = uids[1]
 
     object FIELDS {
