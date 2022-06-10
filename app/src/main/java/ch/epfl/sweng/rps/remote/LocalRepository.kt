@@ -21,14 +21,15 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
 
     @VisibleForTesting
     internal val users = mutableMapOf<String, User>()
-    val friendRequests = mutableListOf<FriendRequest>()
+    private val friendRequests = mutableMapOf<String, MutableMap<String, FriendRequest>>()
     override val friends: FriendsRepository
         get() = this
     override val games: GamesRepository
         get() = this
     internal val gamesMap = mutableMapOf<String, Game>()
     internal var leaderBoardScore = mutableListOf<TotalScore>()
-    internal val userGames = mutableMapOf<String, Game>()
+
+    @VisibleForTesting
     internal val invitations = mutableMapOf<String, Invitation>()
     internal fun setCurrentUid(newUid: String?) {
         uid = newUid
@@ -78,42 +79,46 @@ class LocalRepository(private var uid: String? = null) : Repository, GamesReposi
     }
 
     override suspend fun sendFriendRequestTo(uid: String) {
-        val fr = FriendRequest.build(getCurrentUid(), uid, Timestamp.now())
-        friendRequests.add(fr)
+        val map = (friendRequests[uid] ?: mutableMapOf())
+        map[getCurrentUid()] = FriendRequest.build(getCurrentUid(), uid, Timestamp.now())
+        friendRequests[uid] = map
     }
 
     override suspend fun listFriendRequests(): List<FriendRequest> {
-        return friendRequests
+        return friendRequests[getCurrentUid()]?.entries?.map { it.value } ?: emptyList()
     }
 
     override suspend fun getFriends(): List<String> {
-        return friendRequests.filter { it.status == FriendRequest.Status.ACCEPTED }
-            .map { it.users.first { it != getCurrentUid() } }
+        return friendRequests[getCurrentUid()]
+            ?.filter { it.value.status == FriendRequest.Status.ACCEPTED }
+            ?.map { entry -> entry.value.users.first { it != getCurrentUid() } }
+            ?.toList() ?: emptyList()
     }
 
     override suspend fun changeFriendRequestToStatus(
         userUid: String,
         status: FriendRequest.Status
     ) {
-        val i = friendRequests.indexOfFirst { it.users.contains(userUid) }
-        friendRequests[i] = friendRequests[i].copy(status = status)
+        friendRequests[getCurrentUid()]?.set(
+            userUid,
+            friendRequests[getCurrentUid()]!![userUid]!!.copy(status = status)
+        )
     }
 
     override suspend fun getGame(gameId: String): Game? {
-        return userGames[gameId]
+        return gamesMap[gameId]
     }
 
-    override suspend fun getLeaderBoardScore(scoreMode:String): List<TotalScore> {
+    override suspend fun getLeaderBoardScore(scoreMode: String): List<TotalScore> {
         return leaderBoardScore
     }
 
-
     override suspend fun gamesOfUser(uid: String): List<Game> {
-        return userGames.values.filter { uid in it.players }
+        return gamesMap.values.filter { uid in it.players }
     }
 
     override suspend fun myActiveGames(): List<Game> {
-        return userGames.values.filter { it.players.contains(getCurrentUid()) && !it.done }
+        return gamesMap.values.filter { it.players.contains(getCurrentUid()) && !it.done }
     }
 
     override suspend fun statsOfUser(uid: String): UserStats {
