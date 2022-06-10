@@ -13,6 +13,7 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import ch.epfl.sweng.rps.*
@@ -147,8 +148,8 @@ class FriendsFragmentTest {
         onView(withId(R.id.friendListRecyclerView))
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
 
-        onView(withId(R.id.oneGameRadioBtn)).perform(click())
-        onView(withId(R.id.confirmButton)).perform(click())
+        onView(withId(R.id.oneGameRadioBtn)).inRoot(isDialog()).perform(click())
+        onView(withId(R.id.confirmButton)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.matchmaking_fragment)).check(matches(isDisplayed()))
     }
@@ -160,8 +161,8 @@ class FriendsFragmentTest {
         onView(withId(R.id.friendListRecyclerView))
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
 
-        onView(withId(R.id.fiveGameRadioBtn)).perform(click())
-        onView(withId(R.id.confirmButton)).perform(click())
+        onView(withId(R.id.fiveGameRadioBtn)).inRoot(isDialog()).perform(click())
+        onView(withId(R.id.confirmButton)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.matchmaking_fragment)).check(matches(isDisplayed()))
     }
@@ -173,7 +174,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.friendListRecyclerView))
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
 
-        onView(withId(R.id.cancelButton)).perform(click())
+        onView(withId(R.id.cancelButton)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.fragment_game_mode_dialog)).check(doesNotExist())
     }
@@ -185,7 +186,7 @@ class FriendsFragmentTest {
         onView(withId(R.id.friendListRecyclerView))
             .perform(actionOnItemAtPosition<RequestListAdapter.CardViewHolder>(0,ClickButtonAction.clickPlayButton(R.id.playButton)))
 
-        onView(withId(R.id.confirmButton)).perform(click())
+        onView(withId(R.id.confirmButton)).inRoot(isDialog()).perform(click())
 
         onView(withId(R.id.fragment_game_mode_dialog)).check(matches(isDisplayed()))
 
