@@ -1,7 +1,7 @@
 package ch.epfl.sweng.rps.db
 
 import ch.epfl.sweng.rps.remote.Repository.UserNotLoggedIn
-import ch.epfl.sweng.rps.models.Game
+import ch.epfl.sweng.rps.models.remote.Game
 import ch.epfl.sweng.rps.models.remote.Invitation
 import ch.epfl.sweng.rps.models.remote.User
 import ch.epfl.sweng.rps.remote.LocalRepository
@@ -12,7 +12,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.util.*
 
 @ExperimentalCoroutinesApi
 class LocalRepositoryTest {
